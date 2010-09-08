@@ -8,7 +8,9 @@
 #endif
 
 #ifdef METIL_COMP_DIRECTIVE
+#ifndef WIN32
 #pragma lib_name dl
+#endif
 #endif
 
 BEG_METIL_NAMESPACE;
@@ -32,7 +34,7 @@ bool DynamicLibrary::open( String name ) {
 
     #ifdef WIN32
     TODO;
-    data = LoadLibrary( (const WCHAR *)lib );
+    data = LoadLibrary( name.c_str() );
     #else
     static bool global_opened = 0;
     if ( not global_opened ) {
@@ -59,7 +61,12 @@ DynamicLibrary::operator bool() const {
 }
 
 String DynamicLibrary::error() const {
+#ifdef WIN32
+    TODO;
+    return "";
+#else
     return dlerror();
+#endif
 }
 
 END_METIL_NAMESPACE;
