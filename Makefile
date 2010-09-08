@@ -4,9 +4,14 @@ INSTALL = `pwd`
 
 all: make_metil_comp
 
-make_metil_comp:
+my:
+	echo ${CC}
+
+inst_dir:
 	export D="#define INSTALL_DIR \"${INSTALL}\""; grep "$$D" src/Metil/Level1/InstallDir.h || echo "$$D" > src/Metil/Level1/InstallDir.h
-	make -j8 metil_comp
+
+make_metil_comp: inst_dir
+	${MAKE} -j8 metil_comp
 
 install: ./metil_comp
 	./install.sh

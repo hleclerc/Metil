@@ -3,5 +3,6 @@ alias g++=/C/Qt/2010.05/mingw/bin/g++
 alias gcc=/C/Qt/2010.05/mingw/bin/gcc
 alias python=/C/python27/python
 
+make inst_dir
+make -j8 metil_comp
 
-include Makefile
