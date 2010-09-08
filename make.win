@@ -5,4 +5,5 @@ alias python=/C/python27/python
 
 make inst_dir
 make -j8 metil_comp_win
-
+mkdir -p ~/bin
+cp metil_comp.exe ~/bin
