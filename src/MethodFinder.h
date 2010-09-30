@@ -4,6 +4,7 @@
 #include "TypeConstructor.h"
 #include "MethodCond.h"
 #include "MethodName.h"
+#include "BasicVec.h"
 #include <cstdio>
 
 BEG_METIL_LEVEL1_NAMESPACE;
@@ -13,11 +14,15 @@ class MethodFinder {
 public:
     typedef typename N::TM TM;
     typedef MethodCond Cond;
+    typedef const char *CCHP;
 
     struct Item {
         Item *prev;
         Cond *cond;
         TM   *meth;
+        FP64  pert;
+        CCHP  file;
+        int   line;
     };
 
     ///
@@ -35,11 +40,37 @@ public:
     }
 
     ///
-    static TM *find( Type *type_0, Type *type_1 = 0, Type *type_2 = 0/*, bool abort_if_pb = true*/ ) {
-        //DOUT( );
-        return last->meth;
-        //        abort_msg( "impossible to find definition", type_0, type_1, type_2 );
-        //        return 0;
+    static TM *find( Type *type_0, Type *type_1 = 0, Type *type_2 = 0, bool abort_if_pb = true ) {
+        // find items with greater pertinence and checked cond
+        BasicVec<Item *,-1,4> res;
+        for( Item *item = last; item; item = item->prev ) {
+            if ( item->cond->valid( type_0, type_1, type_2 ) ) {
+                if ( res.size() ) {
+                    if ( item->pert < res[ 0 ]->pert )
+                        continue;
+                    if ( item->pert > res[ 0 ]->pert )
+                        res.resize( 0 );
+                }
+                res << item;
+            }
+        }
+
+        if ( abort_if_pb ) {
+            // first case -> nothing
+            if ( res.size() == 0 )
+                abort_msg( "impossible to find definition", type_0, type_1, type_2 );
+
+            // second case -> Ambiguous overload
+            if ( res.size() >= 2 and abort_if_pb ) {
+                abort_msg( "ambiguous overload", type_0, type_1, type_2, false );
+                for(ST i=0;i<res.size();++i)
+                    std::fprintf( stderr, "%s:%i: possible surdefinition\n", res[ i ]->file, res[ i ]->line );
+                abort_or_throw();
+            }
+        }
+
+        // else -> ok
+        return res.size() == 1 ? res[ 0 ]->meth : 0;
     }
 
     static Item *last;

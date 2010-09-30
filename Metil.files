@@ -35,3 +35,4 @@ src/MethodFinder.h
 src/MethodFinder.cpp
 src/TypeWithoutPtr.h
 src/MethodCond.h
+src/NbArgsMethods.h.py

@@ -1,6 +1,7 @@
 #include "TypeConstructor.h"
-#include "BasicMethods.h"
 #include "MethodGenerator.h"
+#include "NbArgsMethods.h"
+#include "BasicMethods.h"
 #include "MethodName.h"
 #include "BasicVec.h"
 #include "Math.h"

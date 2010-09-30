@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from MethodHelper import *
 
 def make_gene( methods ):
@@ -18,11 +19,6 @@ def make_gene( methods ):
             print '    }'
             print '};'
             print ''
-            
-    # NB_ARGS_METHOD
-    for m in methods:
-        n = m[1:].count( "O" ) + m[1:].count( "o" )
-        print '#define NB_ARGS_METHOD_' + m + ' ' + str( n )
 
 
    
