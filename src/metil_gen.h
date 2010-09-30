@@ -7,6 +7,8 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
+void reg_def();
+
 extern Type metil_type_bas_VoidString;
 
 END_METIL_LEVEL1_NAMESPACE;

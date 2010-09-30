@@ -14,6 +14,7 @@ metil_parse `find . -name "*.cpp"`
 #include <string>
 
 #include <map>
+#include <set>
 #include <cstdio>
 #include <cstring>
 #include <fstream>
@@ -55,6 +56,10 @@ struct Parser {
         os << "\n";
         os << "BEG_METIL_LEVEL1_NAMESPACE;\n";
         os << "\n";
+        // met
+        os << "void reg_def();\n";
+        os << "\n";
+        // types
         for( unsigned i = 0; i < bas.size(); ++i ) os << "extern Type " << bas[ i ] << ";\n";
         for( unsigned i = 0; i < ref.size(); ++i ) os << "extern Type " << ref[ i ] << ";\n";
         for( unsigned i = 0; i < cst.size(); ++i ) os << "extern Type " << cst[ i ] << ";\n";
@@ -65,38 +70,21 @@ struct Parser {
         os << "#endif // METIL_GEN_H\n";
     }
 
-    void write_defi( std::ostream &os, String h ) {
-        os << "// generated file. Do not edit\n";
-        os << "#ifndef AVOID_GEN\n";
-        os << "\n";
-
+    void write_defi_type( std::ostream &os ) {
         typedef std::map<String,BasicVec<String,3> > TM;
         TM types_by_cons_kind;
-        for( unsigned i = 0; i < bas.size(); ++i ) types_by_cons_kind[ bas[ i ] ][ 0 ] = bas[ i ];
-        for( unsigned i = 0; i < ref.size(); ++i ) types_by_cons_kind[ ref[ i ] ][ 1 ] = ref[ i ];
-        for( unsigned i = 0; i < cst.size(); ++i ) types_by_cons_kind[ cst[ i ] ][ 2 ] = cst[ i ];
-
-        // includes
-        os << "#include \"" << h << "\"\n";
-        os << "\n";
         int o = 15 /* length of "metil_type_bas_" */;
+        for( unsigned i = 0; i < bas.size(); ++i ) types_by_cons_kind[ bas[ i ].substr( o ) ][ 0 ] = bas[ i ];
+        for( unsigned i = 0; i < ref.size(); ++i ) types_by_cons_kind[ ref[ i ].substr( o ) ][ 1 ] = ref[ i ];
+        for( unsigned i = 0; i < cst.size(); ++i ) types_by_cons_kind[ cst[ i ].substr( o ) ][ 2 ] = cst[ i ];
+
+        //
+        os << "// Type definition\n";
         for( TM::const_iterator iter = types_by_cons_kind.begin(); iter != types_by_cons_kind.end(); ++iter ) {
             // constructor type (e.f. Array, VoidString...)
-            String type_cons = iter->first.substr( o );
-            type_cons = type_cons.substr( 0, type_cons.find( '_' ) );
-            os << "#include \"TypeConstructor_" << type_cons << ".h\"\n";
-        }
+            String type_cons = iter->first.substr( 0, iter->first.find( '_' ) );
 
-        // type definitions
-        os << "\n";
-        os << "BEG_METIL_LEVEL1_NAMESPACE;\n";
-        os << "\n";
-        for( TM::const_iterator iter = types_by_cons_kind.begin(); iter != types_by_cons_kind.end(); ++iter ) {
-            // constructor type (e.f. Array, VoidString...)
-            String type_cons = iter->first.substr( o );
-            type_cons = type_cons.substr( 0, type_cons.find( '_' ) );
-
-            String cons = "type_constructor_" + iter->first.substr( o );
+            String cons = "type_constructor_" + iter->first;
             os << "static TypeConstructor_" << type_cons << " " << cons << ";\n";
             for( int i = 0; i < iter->second.size(); ++i ) {
                 if ( iter->second[ i ].size() ) {
@@ -109,6 +97,66 @@ struct Parser {
                 }
             }
         }
+    }
+
+    void write_defi_meth( std::ostream &os ) {
+        int o = 10 /* length of "metil_def_" */;
+        os << "// declaration of methods\n";
+        for( int i = 0; i < def.size(); ++i ) {
+            String s = def[ i ].substr( o );
+            String::size_type p = s.find( "__" );
+            if ( p == String::npos )
+                continue;
+            String t = s.substr( 0, p );
+            os << "extern TypeWithoutPtr<MethodName_" + t + "::TM>::T " + def[ i ] + ";\n";
+        }
+
+        os << "\n";
+        os << "// \n";
+        os << "void reg_def() {\n";
+        for( int i = 0; i < def.size(); ++i ) {
+            String s = def[ i ].substr( o );
+            String::size_type p = s.find( "__" );
+            if ( p == String::npos )
+                continue;
+            String t = s.substr( 0, p );
+            if ( i )
+                os << "\n";
+            os << "    static MethodFinder<MethodName_" + t + ">::Item item_" + def[ i ] + ";\n";
+            os << "    item_" + def[ i ] + ".prev = MethodFinder<MethodName_" + t + ">::last;\n";
+            os << "    item_" + def[ i ] + ".cond = 0;\n";
+            os << "    item_" + def[ i ] + ".meth = " + def[ i ] + ";\n";
+            os << "    MethodFinder<MethodName_" + t + ">::last = &item_" + def[ i ] + ";\n";
+        }
+        os << "}\n";
+    }
+
+    void write_defi( std::ostream &os, String h ) {
+        os << "// generated file. Do not edit\n";
+        os << "#ifndef AVOID_GEN\n";
+        os << "\n";
+        os << "#include \"" << h << "\"\n";
+        os << "#include \"MethodFinder.h\"\n";
+        os << "\n";
+
+        // include TypeConstructor_xx.h
+        std::set<String> cons;
+        int o = 15 /* length of "metil_type_bas_" */, l = 10 /* length of "metil_def_" */;
+        for( unsigned i = 0; i < bas.size(); ++i ) cons.insert( bas[ i ].substr( o ) );
+        for( unsigned i = 0; i < ref.size(); ++i ) cons.insert( ref[ i ].substr( o ) );
+        for( unsigned i = 0; i < cst.size(); ++i ) cons.insert( cst[ i ].substr( o ) );
+        //        for( unsigned i = 0; i < def.size(); ++i ) cons.insert( def[ i ].substr( l ) );
+        //        for( unsigned i = 0; i < gen.size(); ++i ) cons.insert( gen[ i ].substr( l ) );
+
+        for( std::set<String>::const_iterator iter = cons.begin(); iter != cons.end(); ++iter )
+            os << "#include \"TypeConstructor_" << *iter << ".h\"\n";
+
+        //
+        os << "\n";
+        os << "BEG_METIL_LEVEL1_NAMESPACE;\n";
+        os << "\n";
+        write_defi_type( os << "\n" );
+        write_defi_meth( os << "\n" );
         os << "\n";
         os << "END_METIL_LEVEL1_NAMESPACE;\n";
         os << "\n";

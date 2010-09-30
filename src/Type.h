@@ -1,7 +1,7 @@
 #ifndef TYPE_H
 #define TYPE_H
 
-#include "Methods.h"
+#include "MO.h"
 #include "Malloc.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
@@ -19,6 +19,7 @@ public:
 
     Type( TypeConstructor *constructor, const char *name, Type *bas, Type *ref, Type *cst, BRC k );
     ~Type();
+    Type *init_if_necessary();    ///< called the first time a method a called
 
     int              number;      ///< id of the type. must be the first attribute of Type
     Type            *prev_type;   ///< prev_type on the list that contains all the types
@@ -30,16 +31,18 @@ public:
     Type            *cst_type;    ///< constant reference (e.g. "const int &")
     BRC             k;
 
-    Type *init_if_necessary(); ///< called the first time a method a called
+    // typedef MO Method_OC( ... );
+    #include "MethodTypes.h"
 
+    // Method_... *add;
     #define DECL_MET( T, N ) Method_##T *N
     #include "DeclMethods.h"
     #undef DECL_MET
 };
 
 /// Call Method
-#define CM_1( M, A ) (A).type->M( A )
-#define CM_2( M, A, B ) (A).type->M[ (B).type->number ]( A, B )
+#define CM_1( M, A, ... ) (A).type->M( A, ##__VA_ARGS__ )
+#define CM_2( M, A, B, ... ) (A).type->M[ (B).type->number ]( A, B, ##__VA_ARGS__ )
 
 END_METIL_LEVEL1_NAMESPACE;
 

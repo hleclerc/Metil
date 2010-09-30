@@ -3,11 +3,17 @@
 using namespace Metil;
 using namespace Level1;
 
-//void una( MO &a ) { DOUT(__LINE__); }
-//void bin_0( MO &a, MO b ) { DOUT(__LINE__); }
-//void bin_1( MO &a, MO b ) { DOUT(__LINE__); }
+namespace Metil {
+    namespace Level1 {
+        MO metil_def_add__VoidString_VoidString( MO a, MO b ) {
+            DOUT( __LINE__ );
+            return MO();
+        }
+    }
+}
 
 int main() {
-    Type t( 0, "toto", 0, 0, 0, Type::Bas );
-
+    String a, b;
+    //    // a.type->del( a );
+    a.type->add[ b.type->number ]( a, b );
 }

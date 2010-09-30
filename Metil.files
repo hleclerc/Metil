@@ -25,9 +25,13 @@ src/MO.h
 src/MO.cpp
 src/Type.h
 src/Type.cpp
-src/Methods.h
 src/TypeConstructor.h
 src/TypeConstructor.cpp
 src/TypeConstructor_VoidString.h
 src/TypeConstructor_VoidString.cpp
-src/MethodInfo.h
+src/MethodGenerator.h
+src/MethodName.h
+src/MethodFinder.h
+src/MethodFinder.cpp
+src/TypeWithoutPtr.h
+src/MethodCond.h
