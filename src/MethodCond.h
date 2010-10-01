@@ -9,6 +9,10 @@ struct MethodCond {
     virtual bool valid( Type *type_0, Type *type_1, Type *type_2 ) const = 0;
 };
 
+struct MethodCond_True {
+    virtual bool valid( Type *, Type *, Type * ) const { return true; }
+};
+
 template<class T>
 struct MethodCond_Cons_0_IsChildOf : public MethodCond {
     virtual bool valid( Type *type_0, Type *, Type * ) const { return dynamic_cast<T *>( type_0->constructor ); }

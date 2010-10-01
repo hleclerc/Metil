@@ -3,7 +3,7 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-MO metil_def_add__VoidString__VoidString( MO a, MO b ) {
+MO metil_def_add__when__a__isa__VoidString__and__b__isa__VoidString( MO a, MO b ) {
     DOUT( __LINE__ );
     return MO();
 }

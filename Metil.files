@@ -35,4 +35,7 @@ src/MethodFinder.h
 src/MethodFinder.cpp
 src/TypeWithoutPtr.h
 src/MethodCond.h
-src/NbArgsMethods.h.py
+src/DefStr.h
+src/DefStr.cpp
+src/BasicSplittedVec.h
+Makefile

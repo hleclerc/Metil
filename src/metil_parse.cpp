@@ -10,6 +10,7 @@ metil_parse `find . -name "*.cpp"`
 #ifndef AVOID_GEN
 #include "NbArgsMethods.h"
 #include "BasicVec.h"
+#include "DefStr.h"
 #include "Dout.h"
 
 #include <string>
@@ -21,6 +22,7 @@ metil_parse `find . -name "*.cpp"`
 #include <fstream>
 
 using namespace Metil;
+using namespace Level1;
 typedef std::string String;
 
 /**
@@ -100,18 +102,6 @@ struct Parser {
         }
     }
 
-    BasicVec<String> tokenize( const String &str, const String &sep ) {
-        BasicVec<String> res;
-        String::size_type old_n = 0;
-        while ( true ) {
-            String::size_type n = str.find( sep, old_n );
-            res.push_back( str.substr( old_n, n - old_n ) );
-            if ( n == String::npos )
-                return res;
-            old_n = n + sep.size();
-        }
-    }
-
     int nb_args( const String &str ) {
         #define DECL_MET( T, N ) if ( str == #N ) return NB_ARGS_METHOD_##T
         #include "DeclMethods.h"
@@ -122,62 +112,32 @@ struct Parser {
 
     void write_defi_meth( std::ostream &os ) {
         // extern metil_def_...
-        int o = 10 /* length of "metil_def_" */;
-        os << "// declaration of methods\n";
-        for( int i = 0; i < def.size(); ++i ) {
-            BasicVec<String> l = tokenize( def[ i ].substr( o ), "__" );
-            if ( not l.size() )
-                continue;
-            os << "extern TypeWithoutPtr<MethodName_" + l[ 0 ] + "::TM>::T " + def[ i ] + ";\n";
-        }
+        os << "// method references\n";
+        for( int i = 0; i < def.size(); ++i )
+            os << "extern MethodName_" << def[ i ].name << "::TM " << def[ i ].orig << ";";
         os << "\n";
 
-        //
-        //        std::set<String> cons_types;
-        //        for( int i = 0; i < def.size(); ++i ) {
-        //            BasicVec<String> l = tokenize( def[ i ].substr( o ), "__" );
-        //            int n = l.size() ? 1 + nb_args( l[ 0 ] ) : 0;
-        //            if ( n >= l.size() )
-        //                continue;
-        //            for( int j = 1; j < 1 + nb_args( l[ 0 ] ); ++j )
-        //                cons_types.insert( l[ j ] );
-        //        }
-        //        for( std::set<String>::const_iterator iter = cons_types.begin(); iter != cons_types.end(); ++iter ) {
-        //            os << "static MethodCond<MethodName_" + t + "::TM>::T " + def[ i ] + ";\n";
-        //
-        //        }
-
-        // conditions
-        //        std::set<String> conds;
-        //        for( int i = 0; i < def.size(); ++i ) {
-        //            BasicVec<String> l = tokenize( def[ i ].substr( o ), "__" );
-        //            int n = l.size() ? 1 + nb_args( l[ 0 ] ) : 0;
-        //            if ( n >= l.size() )
-        //                continue;
-        //            os << "    static MethodFinder<MethodName_" + l[ 0 ] + ">::Item item_" + def[ i ] + ";\n";
-        //        }
-
-
         // reg def
-        os << "// \n";
+        os << "// reg_def\n";
         os << "void reg_def() {\n";
+        std::map<String,String> conds;
         for( int i = 0; i < def.size(); ++i ) {
-            BasicVec<String> l = tokenize( def[ i ].substr( o ), "__" );
-            if ( not l.size() ) continue;
             if ( i ) os << "\n";
 
             // condition
-            if ( nb_args( l[ 0 ] ) == 2 and l.size() >= 2 and l[ 1 ].size() and l[ 2 ].size() )
-                os << "    static MethodCond_And<MethodCond_Cons_0_IsChildOf<TypeConstructor_" + l[ 1 ] + ">,MethodCond_Cons_1_IsChildOf<TypeConstructor_" + l[ 2 ] + "> > cond_" + def[ i ] + ";\n";
-            else
-                TODO;
+            String t_cond = def[ i ].cond();
+            if ( conds.count( t_cond ) == 0 ) {
+                conds[ t_cond ] = def[ i ].orig;
+                os << "    static " << t_cond << " cond_" << def[ i ].orig << ";\n";
+                os << "\n";
+            }
 
             // item
-            os << "    static MethodFinder<MethodName_" + l[ 0 ] + ">::Item item_" + def[ i ] + ";\n";
-            os << "    item_" + def[ i ] + ".prev = MethodFinder<MethodName_" + l[ 0 ] + ">::last;\n";
-            os << "    item_" + def[ i ] + ".cond = &cond_" + def[ i ] + ";\n";
-            os << "    item_" + def[ i ] + ".meth = " + def[ i ] + ";\n";
-            os << "    MethodFinder<MethodName_" + l[ 0 ] + ">::last = &item_" + def[ i ] + ";\n";
+            os << "    static MethodFinder<MethodName_" + def[ i ].name + ">::Item item_" + def[ i ].orig + ";\n";
+            os << "    item_" + def[ i ].orig + ".prev = MethodFinder<MethodName_" + def[ i ].name + ">::last;\n";
+            os << "    item_" + def[ i ].orig + ".cond = &cond_" + conds[ t_cond ] + ";\n";
+            os << "    item_" + def[ i ].orig + ".meth = " + def[ i ].orig + ";\n";
+            os << "    MethodFinder<MethodName_" + def[ i ].name + ">::last = &item_" + def[ i ].orig + ";\n";
         }
         os << "}\n";
     }
@@ -192,12 +152,20 @@ struct Parser {
 
         // include TypeConstructor_xx.h
         std::set<String> cons;
-        int o = 15 /* length of "metil_type_bas_" */, l = 10 /* length of "metil_def_" */;
+        int o = 15 /* length of "metil_type_bas_" */;
         for( int i = 0; i < bas.size(); ++i ) cons.insert( bas[ i ].substr( o ) );
         for( int i = 0; i < ref.size(); ++i ) cons.insert( ref[ i ].substr( o ) );
         for( int i = 0; i < cst.size(); ++i ) cons.insert( cst[ i ].substr( o ) );
-        //        for( unsigned i = 0; i < def.size(); ++i ) cons.insert( def[ i ].substr( l ) );
-        //        for( unsigned i = 0; i < gen.size(); ++i ) cons.insert( gen[ i ].substr( l ) );
+        for( unsigned i = 0; i < def.size(); ++i ) {
+            BasicVec<String> tc = def[ i ].type_constructors();
+            for( unsigned j = 0; j < tc.size(); ++j )
+                cons.insert( tc[ j ] );
+        }
+        for( unsigned i = 0; i < gen.size(); ++i ) {
+            BasicVec<String> tc = gen[ i ].type_constructors();
+            for( unsigned j = 0; j < tc.size(); ++j )
+                cons.insert( tc[ j ] );
+        }
 
         for( std::set<String>::const_iterator iter = cons.begin(); iter != cons.end(); ++iter )
             os << "#include \"TypeConstructor_" << *iter << ".h\"\n";
@@ -217,8 +185,8 @@ struct Parser {
     BasicVec<String> bas;
     BasicVec<String> ref;
     BasicVec<String> cst;
-    BasicVec<String> gen;
-    BasicVec<String> def;
+    BasicSplittedVec<DefStr,64> gen;
+    BasicSplittedVec<DefStr,64> def;
     bool err;
 };
 
@@ -253,8 +221,6 @@ int main( int argc, char **argv ) {
         else
             cmd += ' ' + String( argv[ num_arg ] );
     }
-    // DOUT( hn );
-    // DOUT( cn );
 
     // parse
     Parser parser;
