@@ -5,6 +5,8 @@
 #include "MethodCond.h"
 #include "MethodName.h"
 #include "BasicVec.h"
+#include "Dout.h"
+
 #include <cstdio>
 
 BEG_METIL_LEVEL1_NAMESPACE;

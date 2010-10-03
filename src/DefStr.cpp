@@ -21,34 +21,24 @@ static BasicVec<Str> tokenize( const Str &str, const Str &sep ) {
     }
 }
 
-void DefStr::update_operators() {
-    if ( operators.size() == 0 ) {
-        operators.push_back( "isa" , Operator::lr );
-        operators.push_back( "has" , Operator::lr );
-        operators.push_back( "or"  , Operator::lr );
-        operators.push_back( "and" , Operator::lr );
-        operators.push_back( "when", Operator::r  );
-        operators.push_back( "pert", Operator::r  );
-
-        operators.push_back( "beg" , Operator::n  );
-        operators.push_back( "end" , Operator::n  );
-
-        num_first_n_operator = num_operator( "beg" );
-    }
+DefStr::DefStr( const Str &file, int line, const Str &str ) {
+    init( file, line, str );
 }
 
-int DefStr::num_operator( Str name ) {
-    for( int o = 0; o < operators.size(); ++o )
-        if ( operators[ o ].name == name )
-            return o;
-    return -1;
+DefStr::DefStr( const DefStr &def_str ) {
+    init( def_str.file, def_str.line, def_str.orig );
 }
 
-DefStr::DefStr( const Str &str ) : orig( str ) {
+void DefStr::init( const Str &file, int line, const Str &orig ) {
+    this->file = file;
+    this->line = line;
+    this->orig = orig;
+
+    // DOUT( str );
     update_operators();
 
     // tokenize
-    BasicVec<Str> l = tokenize( str.substr( 10 ), "__" );
+    BasicVec<Str> l = tokenize( orig.substr( 10 ), "__" );
     if ( l.size() == 0 )
         return;
 
@@ -132,6 +122,30 @@ DefStr::DefStr( const Str &str ) : orig( str ) {
     }
 }
 
+
+void DefStr::update_operators() {
+    if ( operators.size() == 0 ) {
+        operators.push_back( "isa" , Operator::lr );
+        operators.push_back( "has" , Operator::lr );
+        operators.push_back( "or"  , Operator::lr );
+        operators.push_back( "and" , Operator::lr );
+        operators.push_back( "when", Operator::r  );
+        operators.push_back( "pert", Operator::r  );
+
+        operators.push_back( "beg" , Operator::n  );
+        operators.push_back( "end" , Operator::n  );
+
+        num_first_n_operator = num_operator( "beg" );
+    }
+}
+
+int DefStr::num_operator( Str name ) {
+    for( int o = 0; o < operators.size(); ++o )
+        if ( operators[ o ].name == name )
+            return o;
+    return -1;
+}
+
 int DefStr::num_child( Str name ) const {
     if ( name == "a" ) return 0;
     if ( name == "b" ) return 1;
@@ -165,6 +179,7 @@ Str DefStr::item_to_cond_str_rec( Item *item ) const {
 
 BasicVec<Str> DefStr::type_constructors() const {
     BasicVec<Str> res;
+    DOUT( orig );
     for( Item *item = byop[ num_operator( "isa" ) ]; item; item = item->sibling )
         res.push_back_unique( item->children[ 1 ]->name );
     return res;

@@ -9,7 +9,9 @@ BEG_METIL_LEVEL1_NAMESPACE;
 
 void reg_def();
 
-extern Type metil_type_bas_VoidString;
+extern Type metil_type_ref_FileWithoutClose;
+extern Type metil_type_cst_VoidString;
+extern Type metil_type_cst_ConstCharPtr;
 
 END_METIL_LEVEL1_NAMESPACE;
 

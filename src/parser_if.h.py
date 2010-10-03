@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import string
 
 def ap( m, c, w ):
@@ -30,12 +31,11 @@ def simplify( split, p = "" ):
 
 def display( split, sp, cpt = 0, acc = "" ):
     if len( split ) == 0:
-        print sp + acc + "( c );"
-        print sp + "c += " + str( len( acc ) - 1 ) + ";"
+        print sp + acc + "( c += 1 );"
         print sp + "continue;"
     else:
         for c, f in split:
-            s = string.join( [ "c[ " + str( n ) +" ] == '" + v + "'" for n, v in zip( range( cpt, cpt + len( c ) ), c ) ], " and " )
+            s = string.join( [ "c[ " + str( n + 1 ) +" ] == '" + v + "'" for n, v in zip( range( cpt, cpt + len( c ) ), c ) ], " and " )
             print sp + "if ( " + s + " ) {"
             display( f, sp + "    ", cpt + len( c ), acc + c )
             print sp + "}"

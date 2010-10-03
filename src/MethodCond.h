@@ -9,7 +9,7 @@ struct MethodCond {
     virtual bool valid( Type *type_0, Type *type_1, Type *type_2 ) const = 0;
 };
 
-struct MethodCond_True {
+struct MethodCond_True : public MethodCond {
     virtual bool valid( Type *, Type *, Type * ) const { return true; }
 };
 

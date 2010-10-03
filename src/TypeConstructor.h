@@ -8,7 +8,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 class TypeConstructor {
 public:
     TypeConstructor();
-    virtual void init( Type *type ) = 0;
+    virtual void init( Type *type );
 
     bool have_been_initialized;
 };

@@ -122,6 +122,7 @@ Type *Type::init_if_necessary() {
 
         //
         update_bin_methods_data( nb_types );
+        init_met_ptr( this, false );
 
         //
         if ( not constructor->have_been_initialized ) {
