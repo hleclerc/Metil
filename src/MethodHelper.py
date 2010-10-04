@@ -19,7 +19,9 @@ methods = [
     "OOO",
     "BOO",
     "VoO",
-    "OoO"
+    "OoO",
+    "OOS",
+    "VoY",
 ]
 
 def cor( c ):
@@ -36,6 +38,7 @@ def cor( c ):
     if c == "p": return "void *"
     if c == "P": return "const void *"
     if c == "t": return "String &"
+    if c == "Y": return "struct OwcpChild *"
     print "unknown char " + c
     return "Bing"
 

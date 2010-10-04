@@ -11,6 +11,5 @@ int main() {
     // DOUT( d.cond() );
     String a;
     a << "a" << "b\n";
-
     cout << a;
 }

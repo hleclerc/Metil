@@ -16,9 +16,9 @@ DECL_MET( OO  , copy                    ); // make a copy of self
 DECL_MET( OO  , copy_ref                ); // make a copy of a data reference @see RefOn
 #endif // DONT_WANT_UNARY_BASIC
 
-DECL_MET( VOt , write_str               ); // string or file output
-DECL_MET( VOt , write_dot               ); // string or file output
-DECL_MET( VOt , write_tex               ); // string or file output
+//DECL_MET( VOt , write_str               ); // string or file output
+//DECL_MET( VOt , write_dot               ); // string or file output
+//DECL_MET( VOt , write_tex               ); // string or file output
 
 DECL_MET( Vot , read_str                ); // string or file input
 
@@ -56,11 +56,11 @@ DECL_MET( DO  , priority                ); // + -> 10, * -> 20, ...
 
 
 //// graph and lazy evaluation
-//DECL_MET( GC<ST>              , nb_children   ); // return -1 if not an Owcp
+DECL_MET( OOS                 , get_child     ); //
+DECL_MET( VoY                 , add_parent    ); // add_parent( OwcpChild )
+DECL_MET( VoY                 , rem_parent    ); // rem_parent( OwcpChild )
+DECL_MET( SO                  , nb_children   ); // return -1 if not an Owcp
 //DECL_MET( GO<MetilException *>, exec_node     ); // exec_node
-//DECL_MET( OCS                 , get_child     ); //
-//DECL_MET( VoY                 , add_parent    ); // add_parent( OwcpChild )
-//DECL_MET( VoY                 , rem_parent    ); // rem_parent( OwcpChild )
 //DECL_MET( YC                  , get_parent    ); // get_parent
 //DECL_MET( GC<MO *>            , get_op_mp     ); // return op_mp if an Owcp, 0 if not
 //DECL_MET( GC<bool>            , cur_op_id     ); //

@@ -21,5 +21,7 @@
 #define NB_ARGS_METHOD_BOO 2
 #define NB_ARGS_METHOD_VoO 2
 #define NB_ARGS_METHOD_OoO 2
+#define NB_ARGS_METHOD_OOS 1
+#define NB_ARGS_METHOD_VoY 1
 
 #endif // NB_ARGS_METHOD_H

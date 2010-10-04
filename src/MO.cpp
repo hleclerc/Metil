@@ -1,9 +1,10 @@
-#include "Type.h"
+#include "String.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
 void MO::write_str( String &os ) const {
-    type->write_str( *this, os );
+    // type->write_str( *this, os );
+    CM_2( self_append, os, *this );
 }
 
 void MO::write_dot( String &/*os*/, bool /*want_parents*/ ) const {

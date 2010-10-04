@@ -1,12 +1,12 @@
 #ifndef TYPECONSTRUCTOR_VOIDSTRING_H
 #define TYPECONSTRUCTOR_VOIDSTRING_H
 
-#include "TypeConstructor.h"
+#include "TypeConstructor_String.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
 /**  */
-class TypeConstructor_VoidString : public TypeConstructor {
+class TypeConstructor_VoidString : public TypeConstructor_String {
 public:
 };
 

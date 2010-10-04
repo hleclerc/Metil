@@ -175,6 +175,24 @@ struct MethodGenerator<Type::Method_OoO,N> {
     }
 };
 
+template<class N>
+struct MethodGenerator<Type::Method_OOS,N> {
+    static MO generator( MO a, ST b ) {
+        a.type->init_if_necessary();
+        N::access( a.type ) = MethodFinder<N>::find( a.type );
+        return N::access( a.type )( a, b );
+    }
+};
+
+template<class N>
+struct MethodGenerator<Type::Method_VoY,N> {
+    static void generator( MO &a, struct OwcpChild *b ) {
+        a.type->init_if_necessary();
+        N::access( a.type ) = MethodFinder<N>::find( a.type );
+        return N::access( a.type )( a, b );
+    }
+};
+
 
 END_METIL_LEVEL1_NAMESPACE;
 
