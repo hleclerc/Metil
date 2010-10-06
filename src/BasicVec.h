@@ -93,6 +93,97 @@ public:
         _data[ 2 ] = v2;
         _data[ 3 ] = v3;
     }
+    
+    template<class T0,class T1,class T2,class T3,class T4>
+    __inline__ BasicVec( const T0 &v0, const T1 &v1, const T2 &v2, const T3 &v3, const T4 &v4 ) {
+        ASSERT_IF_DEBUG( static_size_ == 5 );
+        _data[ 0 ] = v0;
+        _data[ 1 ] = v1;
+        _data[ 2 ] = v2;
+        _data[ 3 ] = v3;
+        _data[ 4 ] = v4;
+    }
+    
+    template<class T0,class T1,class T2,class T3,class T4,class T5>
+    __inline__ BasicVec( const T0 &v0, const T1 &v1, const T2 &v2, const T3 &v3, const T4 &v4, const T5 &v5 ) {
+        ASSERT_IF_DEBUG( static_size_ == 6 );
+        _data[ 0 ] = v0;
+        _data[ 1 ] = v1;
+        _data[ 2 ] = v2;
+        _data[ 3 ] = v3;
+        _data[ 4 ] = v4;
+        _data[ 5 ] = v5;
+    }
+    
+    template<class T0,class T1,class T2,class T3,class T4,class T5,class T6>
+    __inline__ BasicVec( const T0 &v0, const T1 &v1, const T2 &v2, const T3 &v3, const T4 &v4, const T5 &v5 , const T6 &v6) {
+        ASSERT_IF_DEBUG( static_size_ == 7 );
+        _data[ 0 ] = v0;
+        _data[ 1 ] = v1;
+        _data[ 2 ] = v2;
+        _data[ 3 ] = v3;
+        _data[ 4 ] = v4;
+        _data[ 5 ] = v5;
+        _data[ 6 ] = v6;
+    }
+    
+    template<class T0,class T1,class T2,class T3,class T4,class T5,class T6,class T7>
+    __inline__ BasicVec( const T0 &v0, const T1 &v1, const T2 &v2, const T3 &v3, const T4 &v4, const T5 &v5 , const T6 &v6, const T7 &v7) {
+        ASSERT_IF_DEBUG( static_size_ == 8 );
+        _data[ 0 ] = v0;
+        _data[ 1 ] = v1;
+        _data[ 2 ] = v2;
+        _data[ 3 ] = v3;
+        _data[ 4 ] = v4;
+        _data[ 5 ] = v5;
+        _data[ 6 ] = v6;
+        _data[ 7 ] = v7;
+    }
+    
+    template<class T0,class T1,class T2,class T3,class T4,class T5,class T6,class T7,class T8>
+    __inline__ BasicVec( const T0 &v0, const T1 &v1, const T2 &v2, const T3 &v3, const T4 &v4, const T5 &v5 , const T6 &v6, const T7 &v7, const T8 &v8) {
+        ASSERT_IF_DEBUG( static_size_ == 9 );
+        _data[ 0 ] = v0;
+        _data[ 1 ] = v1;
+        _data[ 2 ] = v2;
+        _data[ 3 ] = v3;
+        _data[ 4 ] = v4;
+        _data[ 5 ] = v5;
+        _data[ 6 ] = v6;
+        _data[ 7 ] = v7;
+        _data[ 8 ] = v8;
+    }
+    
+    template<class T0,class T1,class T2,class T3,class T4,class T5,class T6,class T7,class T8,class T9>
+    __inline__ BasicVec( const T0 &v0, const T1 &v1, const T2 &v2, const T3 &v3, const T4 &v4, const T5 &v5 , const T6 &v6, const T7 &v7, const T8 &v8, const T9 &v9) {
+        ASSERT_IF_DEBUG( static_size_ == 10 );
+        _data[ 0 ] = v0;
+        _data[ 1 ] = v1;
+        _data[ 2 ] = v2;
+        _data[ 3 ] = v3;
+        _data[ 4 ] = v4;
+        _data[ 5 ] = v5;
+        _data[ 6 ] = v6;
+        _data[ 7 ] = v7;
+        _data[ 8 ] = v8;
+        _data[ 9 ] = v9;
+    }
+    
+    template<class T0,class T1,class T2,class T3,class T4,class T5,class T6,class T7,class T8,class T9,class T10>
+    __inline__ BasicVec( const T0 &v0, const T1 &v1, const T2 &v2, const T3 &v3, const T4 &v4, const T5 &v5 , const T6 &v6, const T7 &v7, const T8 &v8, const T9 &v9, const T10 &v10) {
+        ASSERT_IF_DEBUG( static_size_ == 11 );
+        _data[ 0 ] = v0;
+        _data[ 1 ] = v1;
+        _data[ 2 ] = v2;
+        _data[ 3 ] = v3;
+        _data[ 4 ] = v4;
+        _data[ 5 ] = v5;
+        _data[ 6 ] = v6;
+        _data[ 7 ] = v7;
+        _data[ 8 ] = v8;
+        _data[ 9 ] = v9;
+        _data[ 10 ] = v10;
+    }
 
     __inline__ BasicVec( Size, int s ) {
         ASSERT_IF_DEBUG( s == static_size );
