@@ -39,5 +39,4 @@
     #define __inline__ inline
 #endif // __CUDACC__
 
-
 #endif // CONFIG_H

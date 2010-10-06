@@ -1,4 +1,11 @@
 #include "TypeConstructor_File.h"
+#include <stdio.h>
+
+BEG_METIL_LEVEL1_NAMESPACE;
+
+void metil_def_del__when__a__isa__File( MO &a ) { fclose( reinterpret_cast<FILE *>( a.data ) ); }
+
+END_METIL_LEVEL1_NAMESPACE;
 
 //#include "MethodFinder.h"
 //#include "BasicMethods.h"

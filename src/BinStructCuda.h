@@ -10,8 +10,6 @@
 
 BEG_METIL_NAMESPACE;
 
-#define APPLY_BS( res, n ) res.apply( #n, n )
-
 template<class TS>
 struct CompactStructAppl {
     template<class T>
@@ -49,6 +47,24 @@ struct CompactStructUpda {
     TS *os;
 };
 
+template<class TS>
+struct CompactStructRoom {
+    template<class T>
+    void apply( const char *name, const BasicVec<T> & ) {
+        *os << "    head += sizeof( Vec<" << TypeInformation<T>::type() << "> );\n";
+        *os << "    data += sizeof( " << TypeInformation<T>::type() << " ) * " << name << ".size();\n";
+        *os << "    data = Metil::ceil( data + sizeof( " << TypeInformation<T>::type() << " ) * " << name << ".size(),  );\n";
+    }
+    template<class T>
+    void apply( const char *name, const BasicVec<BasicVec<T> > & ) {
+        *os << "    head += sizeof( Vec<" << TypeInformation<T>::type() << "> );\n";
+        *os << "    for( int i = 0; i < res->" << name << ".size(); ++i ) {\n";
+        *os << "        res += sizeof( Vec<" << TypeInformation<T>::type() << "> ) + " << name << "[ i ].size() * sizeof( " << TypeInformation<T>::type() << " );\n";
+        *os << "    }\n";
+    }
+    TS *os;
+};
+
 template<class T>
 void compact_struct_decl( const T &str, std::string name, std::string dir = "." ) {
     std::ofstream fh( ( dir + '/' + name + ".h"  ).c_str() );
@@ -58,20 +74,10 @@ void compact_struct_decl( const T &str, std::string name, std::string dir = "." 
     fh << "#ifndef " << name << "_H\n";
     fh << "#define " << name << "_H\n";
     fh << "\n";
-    fh << "#include <TypeConfig.h>\n";
+    fh << "#include <BasicVecRef.h>\n";
     fh << "#include <CudaMetil.h>\n";
     fh << "\n";
     fh << "struct " << name << " {\n";
-    fh << "    template<class T> struct Vec {\n";
-    fh << "        __inline__ T &operator[]( int index ) { return data_[ index ]; }\n";
-    fh << "        __inline__ const T &operator[]( int index ) const { return data_[ index ]; }\n";
-    fh << "        __inline__ int size() const { return size_; }\n";
-    fh << "        __inline__ int rese() const { return rese_; }\n";
-    fh << "        int size_;\n";
-    fh << "        int rese_;\n";
-    fh << "        T  *data_;\n";
-    fh << "    };\n";
-    fh << "    \n";
 
     // apply_bs
     fh << "    template<class TB>\n";
@@ -81,8 +87,9 @@ void compact_struct_decl( const T &str, std::string name, std::string dir = "." 
     fh << "    }\n";
     fh << "    \n";
 
-    // decl of copy, update_pointers
+    // methods
     fh << "    " << name << " *copy( cudaMemcpyKind memcpy_kind ) const;\n";
+    // fh << "    Metil::ST size_in_bytes() const;\n";
     fh << "    static void update_pointers( " << name << " *res, Metil::ST off, bool targets_gpu );\n";
     fh << "    \n";
 
@@ -96,6 +103,11 @@ void compact_struct_decl( const T &str, std::string name, std::string dir = "." 
 
     // src file
     fc << "#include \"" << name << ".h\"\n";
+    // fc << "\n";
+    //    fh << "Metil::ST " << name << "::size_in_bytes() const {\n";
+    //    fh << "    ST data = 0;\n";
+    //    fh << "    return ceil( sizeof( this ) );\n";
+    //    fh << "}\n";
     fc << "\n";
     fc << name << " *" << name << "::copy( cudaMemcpyKind memcpy_kind ) const {\n";
     fc << "    // get size\n";

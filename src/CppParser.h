@@ -12,6 +12,17 @@ BEG_METIL_LEVEL1_NAMESPACE;
 */
 struct CppParser {
     typedef std::string String;
+    struct TypeStr {
+        TypeStr( String name = "" ) : name( name ) {
+            subs = name.size() ? name.substr( 15 ) : "";
+            cons = subs.substr( 0, subs.find( "_" ) );
+        }
+        bool operator==( const TypeStr &t ) const { return name == t.name; }
+        String name;
+        String cons;
+        String subs;
+    };
+
     CppParser();
 
     void parse( char *c );
@@ -33,9 +44,9 @@ private:
 
     String current_file;
     int    current_line;
-    BasicVec<String> bas;
-    BasicVec<String> ref;
-    BasicVec<String> cst;
+    BasicVec<TypeStr> bas;
+    BasicVec<TypeStr> ref;
+    BasicVec<TypeStr> cst;
     BasicSplittedVec<DefStr,64> gen;
     BasicSplittedVec<DefStr,64> def;
 };

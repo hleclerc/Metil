@@ -41,6 +41,8 @@ int main( int argc, char **argv ) {
     String cmd = "g++ -E -DAVOID_GEN";
     String hn, cn;
     BasicVec<String> cpp_files;
+    bool want_h = 1;
+    bool want_c = 1;
     for( int num_arg = 1; num_arg < argc; ++num_arg ) {
         const char *arg = argv[ num_arg ];
         if ( arg[ 0 ] != '-' )
@@ -49,6 +51,10 @@ int main( int argc, char **argv ) {
             hn = argv[ ++num_arg ];
         else if ( arg[ 1 ] == 'c' and arg[ 2 ] == 0 )
             cn = argv[ ++num_arg ];
+        else if ( strcmp( arg, "--no-h" ) == 0 )
+            want_h = 0;
+        else if ( strcmp( arg, "--no-c" ) == 0 )
+            want_c = 0;
         else
             cmd += ' ' + String( argv[ num_arg ] );
     }
@@ -72,12 +78,16 @@ int main( int argc, char **argv ) {
     }
 
     // make .h
-    std::ofstream hf( "src/metil_gen.h" );
-    parser.write_decl( hf );
+    if ( want_h ) {
+        std::ofstream hf( "src/metil_gen.h" );
+        parser.write_decl( hf );
+    }
 
     // make .cpp
-    std::ofstream cf( "src/metil_gen.cpp" );
-    parser.write_defi( cf, "metil_gen.h" );
+    if ( want_c ) {
+        std::ofstream cf( "src/metil_gen.cpp" );
+        parser.write_defi( cf, "metil_gen.h" );
+    }
 
     return parser.err;
 }

@@ -83,9 +83,9 @@ void CppParser::write_decl( std::ostream &os ) {
     os << "void reg_def();\n";
     os << "\n";
     // types
-    for( int i = 0; i < bas.size(); ++i ) os << "extern Type " << bas[ i ] << ";\n";
-    for( int i = 0; i < ref.size(); ++i ) os << "extern Type " << ref[ i ] << ";\n";
-    for( int i = 0; i < cst.size(); ++i ) os << "extern Type " << cst[ i ] << ";\n";
+    for( int i = 0; i < bas.size(); ++i ) os << "extern Type " << bas[ i ].name << ";\n";
+    for( int i = 0; i < ref.size(); ++i ) os << "extern Type " << ref[ i ].name << ";\n";
+    for( int i = 0; i < cst.size(); ++i ) os << "extern Type " << cst[ i ].name << ";\n";
     os << "\n";
     os << "END_METIL_LEVEL1_NAMESPACE;\n";
     os << "\n";
@@ -94,12 +94,11 @@ void CppParser::write_decl( std::ostream &os ) {
 }
 
 void CppParser::write_defi_type( std::ostream &os ) {
-    typedef std::map<String,BasicVec<String,3> > TM;
+    typedef std::map<String,BasicVec<TypeStr,3> > TM;
     TM types_by_cons_kind;
-    int o = 15 /* length of "metil_type_bas_" */;
-    for( int i = 0; i < bas.size(); ++i ) types_by_cons_kind[ bas[ i ].substr( o ) ][ 0 ] = bas[ i ];
-    for( int i = 0; i < ref.size(); ++i ) types_by_cons_kind[ ref[ i ].substr( o ) ][ 1 ] = ref[ i ];
-    for( int i = 0; i < cst.size(); ++i ) types_by_cons_kind[ cst[ i ].substr( o ) ][ 2 ] = cst[ i ];
+    for( int i = 0; i < bas.size(); ++i ) types_by_cons_kind[ bas[ i ].subs ][ 0 ] = bas[ i ];
+    for( int i = 0; i < ref.size(); ++i ) types_by_cons_kind[ ref[ i ].subs ][ 1 ] = ref[ i ];
+    for( int i = 0; i < cst.size(); ++i ) types_by_cons_kind[ cst[ i ].subs ][ 2 ] = cst[ i ];
 
     //
     os << "// Type definition\n";
@@ -110,39 +109,58 @@ void CppParser::write_defi_type( std::ostream &os ) {
         String cons = "type_constructor_" + iter->first;
         os << "static TypeConstructor_" << type_cons << " " << cons << ";\n";
         for( int i = 0; i < iter->second.size(); ++i ) {
-            if ( iter->second[ i ].size() ) {
-                os << "Type " << iter->second[ i ] << "( &" << cons << ", \"" << iter->second[ i ].substr( o ) << '"';
+            if ( iter->second[ i ].name.size() ) {
+                os << "Type " << iter->second[ i ].name << "( &" << cons << ", \"" << iter->second[ i ].subs << '"';
                 for( int j = 0; j < iter->second.size(); ++j )
-                    os << ", " << ( iter->second[ j ].size() ? "&" + iter->second[ j ] : "0" );
+                    os << ", " << ( iter->second[ j ].name.size() ? "&" + iter->second[ j ].name : "0" );
 
                 static const char *t[] = { "Bas", "Cst", "Ref" };
                 os << ", Type::" << t[ i ] << " );\n";
             }
         }
+        os << "\n";
     }
 }
+
+struct VTCond {
+    // VTCond( CppParser::String type, CppParser::String init ) : type( type ), init( init ) {}
+    bool operator<( const VTCond &vt ) const {
+        return vt.str() < str();
+    }
+    CppParser::String str() const {
+        CppParser::String res = type;
+        for( int i = 0; i < init.size(); ++i )
+            res += init[ i ];
+        return res;
+    }
+    CppParser::String type;
+    BasicVec<CppParser::String> init;
+};
 
 void CppParser::write_defi_meth( std::ostream &os ) {
     // extern metil_def_...
     os << "// method references\n";
     for( int i = 0; i < def.size(); ++i )
-        os << "extern MethodName_" << def[ i ].name << "::TM " << def[ i ].orig << ";";
+        os << "extern MethodName_" << def[ i ].name << "::TM " << def[ i ].orig << ";\n";
     os << "\n";
     os << "\n";
 
     // reg def
     os << "// reg_def\n";
     os << "void reg_def() {\n";
-    std::map<String,String> conds;
+    std::map<VTCond,String> conds;
     std::map<String,String> files;
     for( int i = 0; i < def.size(); ++i ) {
         if ( i ) os << "\n";
 
         // condition
-        String t_cond = def[ i ].cond();
-        if ( conds.count( t_cond ) == 0 ) {
-            conds[ t_cond ] = def[ i ].orig;
-            os << "    static " << t_cond << " cond_" << def[ i ].orig << ";\n";
+        VTCond vt_cond;
+        def[ i ].cond( vt_cond.type, vt_cond.init );
+        if ( conds.count( vt_cond ) == 0 ) {
+            conds[ vt_cond ] = def[ i ].orig;
+            os << "    static " << vt_cond.type << " cond_" << def[ i ].orig << ";\n";
+            for( int j = 0; j < vt_cond.init.size(); ++j )
+                os << "    cond_" << def[ i ].orig << vt_cond.init[ j ] << "\n";
             os << "\n";
         }
 
@@ -156,7 +174,7 @@ void CppParser::write_defi_meth( std::ostream &os ) {
         // item
         os << "    static MethodFinder<MethodName_" << def[ i ].name << ">::Item item_" << def[ i ].orig << ";\n";
         os << "    item_" << def[ i ].orig << ".prev = MethodFinder<MethodName_" << def[ i ].name << ">::last;\n";
-        os << "    item_" << def[ i ].orig << ".cond = &cond_" << conds[ t_cond ] << ";\n";
+        os << "    item_" << def[ i ].orig << ".cond = &cond_" << conds[ vt_cond ] << ";\n";
         os << "    item_" << def[ i ].orig << ".meth = " << def[ i ].orig + ";\n";
         os << "    item_" << def[ i ].orig << ".file = " << files[ def[ i ].file ] << ";\n";
         os << "    item_" << def[ i ].orig << ".line = " << def[ i ].line << ";\n";
@@ -176,10 +194,9 @@ void CppParser::write_defi( std::ostream &os, String h ) {
 
     // include TypeConstructor_xx.h
     std::set<String> cons;
-    int o = 15 /* length of "metil_type_bas_" */;
-    for( int i = 0; i < bas.size(); ++i ) cons.insert( bas[ i ].substr( o ) );
-    for( int i = 0; i < ref.size(); ++i ) cons.insert( ref[ i ].substr( o ) );
-    for( int i = 0; i < cst.size(); ++i ) cons.insert( cst[ i ].substr( o ) );
+    for( int i = 0; i < bas.size(); ++i ) cons.insert( bas[ i ].cons );
+    for( int i = 0; i < ref.size(); ++i ) cons.insert( ref[ i ].cons );
+    for( int i = 0; i < cst.size(); ++i ) cons.insert( cst[ i ].cons );
     for( unsigned i = 0; i < def.size(); ++i ) {
         BasicVec<String> tc = def[ i ].type_constructors();
         for( int j = 0; j < tc.size(); ++j )

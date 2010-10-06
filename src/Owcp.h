@@ -46,6 +46,8 @@ struct OwcpAncestor {
 */
 template<int nb_children,class AdditionalData=AdditionalDataVoid>
 struct Owcp : public OwcpAncestor {
+    CANNOT_BE_DERIVED;
+
     Owcp( Type *type ) {
         for( int i = 0; i < nb_children; ++i ) children[ i ].self = MO( this, type );
     }
@@ -79,7 +81,7 @@ struct Owcp : public OwcpAncestor {
     ~Owcp() {
         for( int i = 0; i < nb_children; ++i ) {
             ch( i ).type->rem_parent( ch( i ), children + i );
-            DEL_METIL_OBJECT( ch( i ) );
+            CM_1( del, ch( i ) );
         }
     }
 

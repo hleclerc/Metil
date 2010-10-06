@@ -6,7 +6,6 @@
 #include <stdlib.h>
 
 #include "TypeConfig.h"
-#include "EnableIf.h"
 
 #ifdef METIL_COMP_DIRECTIVE
 #pragma lib_name cudart

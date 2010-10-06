@@ -42,7 +42,7 @@ public:
 
     bool operator==( const DefStr &def_str ) const { return def_str.orig == orig; }
 
-    Str cond() const;
+    void cond( Str &type, BasicVec<Str> &init ) const;
     FP64 pert() const;
     BasicVec<Str> type_constructors() const;
 
@@ -55,7 +55,7 @@ private:
     static int num_operator( Str name );
 
     void init( const Str &file, int line, const Str &orig );
-    Str item_to_cond_str_rec( Item *item ) const;
+    Str item_to_cond_str_rec( Item *item, Str &type, BasicVec<Str> &init, Str arg = "" ) const;
     int num_child( Str name ) const;
 
     BasicSplittedVec<Item,16> items;

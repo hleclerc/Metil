@@ -13,6 +13,7 @@ Concatenation of two string.
 */
 class TypeConstructor_StringConcat : public TypeConstructor_String {
 public:
+    virtual int Owcp_size() const { return 2; }
 };
 
 END_METIL_LEVEL1_NAMESPACE;

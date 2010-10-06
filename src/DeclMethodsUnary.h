@@ -20,11 +20,12 @@ DECL_MET( OO  , copy_ref                ); // make a copy of a data reference @s
 //DECL_MET( VOt , write_dot               ); // string or file output
 //DECL_MET( VOt , write_tex               ); // string or file output
 
-DECL_MET( Vot , read_str                ); // string or file input
+//DECL_MET( Vot , read_str                ); // string or file input
 
 DECL_MET( Vo  , flush                   ); //
 DECL_MET( VoPS, write                   ); // a.write( ptr, size )
 DECL_MET( VOpS, read                    ); // a.read ( ptr, size )
+DECL_MET( VOpS, copy_data               ); // a.copy_data( ptr, size )
 
 // vector
 DECL_MET( OO  , size                    ); // size of data (nb items). Returns a scalar

@@ -125,6 +125,7 @@ void DefStr::init( const Str &file, int line, const Str &orig ) {
 
 void DefStr::update_operators() {
     if ( operators.size() == 0 ) {
+        operators.push_back( "is"  , Operator::lr );
         operators.push_back( "isa" , Operator::lr );
         operators.push_back( "has" , Operator::lr );
         operators.push_back( "or"  , Operator::lr );
@@ -153,51 +154,62 @@ int DefStr::num_child( Str name ) const {
     return -1;
 }
 
-Str DefStr::item_to_cond_str_rec( Item *item ) const {
+Str DefStr::item_to_cond_str_rec( Item *item, Str &type, BasicVec<Str> &init, Str arg ) const {
     if ( item->name == "or" ) {
-        Str s_0 = item_to_cond_str_rec( item->children[ 0 ] );
-        Str s_1 = item_to_cond_str_rec( item->children[ 1 ] );
-        return "MethodCond_Or<" + s_0 + "," + s_1 + ( s_1.size() and s_1[ s_1.size() - 1 ] == '>' ? " " : "" ) + ">";
+        type += "MethodCond_or<";
+        item_to_cond_str_rec( item->children[ 0 ], type, init, arg + ".cond_0" );
+        type += ",";
+        item_to_cond_str_rec( item->children[ 1 ], type, init, arg + ".cond_1" );
+        type += " >";
     }
     if ( item->name == "and" ) {
-        Str s_0 = item_to_cond_str_rec( item->children[ 0 ] );
-        Str s_1 = item_to_cond_str_rec( item->children[ 1 ] );
-        return "MethodCond_And<" + s_0 + "," + s_1 + ( s_1.size() and s_1[ s_1.size() - 1 ] == '>' ? " " : "" ) + ">";
+        type += "MethodCond_and<";
+        item_to_cond_str_rec( item->children[ 0 ], type, init, arg + ".cond_0" );
+        type += ",";
+        item_to_cond_str_rec( item->children[ 1 ], type, init, arg + ".cond_1" );
+        type += " >";
     }
     if ( item->name == "isa" ) {
         std::ostringstream ss;
-        ss << "MethodCond_Cons_" << num_child( item->children[ 0 ]->name ) << "_IsChildOf<TypeConstructor_" << item->children[ 1 ]->name << ">";
-        return ss.str();
+        ss << "MethodCond_" << num_child( item->children[ 0 ]->name ) << "_isa<TypeConstructor_" << item->children[ 1 ]->name << ">";
+        type += ss.str();
+    }
+    if ( item->name == "is" ) {
+        std::ostringstream ss;
+        ss << "MethodCond_" << num_child( item->children[ 0 ]->name ) << "_is";
+        init << arg + ".type = \"" + item->children[ 1 ]->name + "\";";
+        type += ss.str();
     }
     if ( item->name == "has" ) {
         std::ostringstream ss;
-        ss << "MethodCond_" << num_child( item->children[ 0 ]->name ) << "_" << item->children[ 1 ]->name;
-        return ss.str();
+        ss << "TypeConstructor::C" << num_child( item->children[ 0 ]->name ) << "_has_" << item->children[ 1 ]->name;
+        type += ss.str();
     }
     return item->name;
 }
 
 BasicVec<Str> DefStr::type_constructors() const {
     BasicVec<Str> res;
-    DOUT( orig );
     for( Item *item = byop[ num_operator( "isa" ) ]; item; item = item->sibling )
         res.push_back_unique( item->children[ 1 ]->name );
     return res;
 }
 
-Str DefStr::cond() const {
+void DefStr::cond( Str &type, BasicVec<Str> &init ) const {
     // checks
     Item *when = byop[ num_operator( "when" ) ];
 
-    if ( when == 0 )
-        return "MethodCond_True";
+    if ( when == 0 ) {
+        type += "MethodCond_True";
+        return;
+    }
     ASSERT( when, "no declared cond" );
     ASSERT( when->sibling == 0, "two when in the same definition is weird" );
     ASSERT( when->children[ 0 ], "a when without child is weird" );
     ASSERT( when->children[ 0 ]->next == 0, "2 expression above a when is weird" );
 
     // string
-    return item_to_cond_str_rec( when->children[ 0 ] );
+    item_to_cond_str_rec( when->children[ 0 ], type, init );
 }
 
 FP64 DefStr::pert() const {
