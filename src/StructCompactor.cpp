@@ -71,8 +71,17 @@ void StructCompactor::ItemVec::copy_attr( String &os, const String &sp, const St
     String size; size << src << '.' << name << ".size()";
     os << sp << dst << '.' << name << ".size_ = " << size << ";\n";
     os << sp << dst << '.' << name << ".rese_ = " << size << ";\n";
-    data_type->make_copy( os, sp, dst + '.' + name + ".data_", src + '.' + name + ".ptr()", size, par_level );
+    data_type->copy_data( os, sp, dst + '.' + name, src + '.' + name, par_level );
+}
 
+void StructCompactor::ItemSca::copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level ) {
+}
+
+void StructCompactor::ItemStr::copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level ) {
+    os << sp << dst << ".data_ = " << type << "::copy( md, " << src << ".ptr(), " << size << " );\n";
+}
+
+void StructCompactor::ItemVec::copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level ) {
 }
 
 void StructCompactor::make_files() {

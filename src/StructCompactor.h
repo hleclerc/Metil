@@ -24,6 +24,7 @@ public:
         virtual Item *base_str() { return this; }
         virtual void make_copy( String &os, const String &sp, const String &dst, const String &src, const String &num, int par_level ) = 0;
         virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level ) = 0;
+        virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level ) = 0;
         virtual String alig() const = 0;
         // bool is_POD() const;
 
@@ -42,6 +43,7 @@ public:
         virtual void make_decl( String &os, const String &sp = "" );
         virtual void make_copy( String &os, const String &sp, const String &dst, const String &src, const String &num, int par_level );
         virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level );
+        virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level );
         virtual String alig() const { return "16 * 4"; }
     };
 
@@ -60,6 +62,7 @@ public:
         virtual void make_decl( String &os, const String &sp = "" );
         virtual void make_copy( String &os, const String &sp, const String &dst, const String &src, const String &num, int par_level );
         virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level );
+        virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level );
         virtual String alig() const { return "sizeof( ST )"; }
 
         BasicVec<Item *> items;
@@ -79,6 +82,7 @@ public:
         virtual void make_decl( String &os, const String &sp = "" );
         virtual void make_copy( String &os, const String &sp, const String &dst, const String &src, const String &num, int par_level );
         virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level );
+        virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level );
         virtual Item *base_str() { return data_type->base_str(); }
         virtual String alig() const { return "sizeof( ST )"; }
 
