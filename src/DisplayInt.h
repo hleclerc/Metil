@@ -41,7 +41,7 @@ struct BasicBaseNIntNumber {
                 break;
             }
             if ( data[ i ] != 0 ) {
-                ST    len = nb_digits - i;
+                ST len = nb_digits - i;
                 NewString res( len );
                 char *str = res.ptr();
                 for(int j=i,c=0;j<nb_digits;++j,++c)

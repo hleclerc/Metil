@@ -8,4 +8,9 @@ void metil_def_del__when__a__isa__OwcpString( MO &a ) {
     FREE( o, o->rese() );
 }
 
+MO metil_def_copy__when__a__isa__OwcpString( MO a ) {
+    ++reinterpret_cast<OwcpStringData *>( a.data )->cpt_use;
+    return a;
+}
+
 END_METIL_LEVEL1_NAMESPACE;

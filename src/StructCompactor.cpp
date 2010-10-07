@@ -8,6 +8,7 @@ void StructCompactor::ItemSca::make_decl( String &os, const String &sp ) {
 void StructCompactor::ItemStr::make_decl( String &os, const String &sp ) {
     String np = sp + "    ";
     String op = np + "    ";
+    String pp = op + "    ";
     os << sp << "struct " << type << " {\n";
 
     // declarations
@@ -22,8 +23,15 @@ void StructCompactor::ItemStr::make_decl( String &os, const String &sp ) {
 
     // methods
     os << np << "template<class T> static " << type << " *copy( MemoryDriver &md, const T *src, ST num = 1 ) {\n";
-    os << np << "    " << type << " *dst;\n";
-    make_copy( os, op, "dst", "src", "num", 0 );
+    os << np << "    " << type << " *dst, *loc;\n";
+    os << np << "    ST rese = num * sizeof( " << type << " );\n";
+    os << np << "    md.beg_local_data( &dst, &loc, rese, " << alig() << " );\n";
+    os << np << "    for( ST i = 0; i < num; ++i ) {\n";
+    int num_var = 0;
+    for( int i = 0; i < items.size(); ++i )
+        items[ i ]->copy_attr( os, pp, "loc[ i ]", "src[ i ]", 1, num_var );
+    os << np << "    }\n";
+    os << np << "    md.end_local_data( dst, loc, rese );\n";
     os << np << "    return dst;\n";
     os << np << "}\n";
 
@@ -37,51 +45,46 @@ void StructCompactor::ItemStr::make_decl( String &os, const String &sp ) {
 void StructCompactor::ItemVec::make_decl( String &os, const String &sp ) {
 }
 
-void StructCompactor::ItemSca::make_copy( String &os, const String &sp, const String &dst, const String &src, const String &num, int par_level ) {
-}
 
-void StructCompactor::ItemStr::make_copy( String &os, const String &sp, const String &dst, const String &src, const String &num, int par_level ) {
-    os << sp << type << " *loc;\n";
-    os << sp << "md.beg_local_data( &" << dst << ", &loc, " << num << " * sizeof( " << type << " ), " << alig() << " );\n";
-    String i = char( 'i' + par_level );
-    os << sp << "for( ST " << i << " = 0; " << i << " < " << num << "; ++" << i << " ) {\n";
-    String vdst; vdst << dst << "[ " << i << " ]";
-    String vsrc; vsrc << src << "[ " << i << " ]";
-    for( int i = 0; i < items.size(); ++i )
-        items[ i ]->copy_attr( os, sp + "    ", vdst, vsrc, par_level + 1 );
-    os << sp << "}\n";
-    os << sp << "md.end_local_data( " << dst << ", loc, " << num << " * sizeof( " << type << " ) );\n";
-}
-
-void StructCompactor::ItemVec::make_copy( String &os, const String &sp, const String &dst, const String &src, const String &num, int par_level ) {
-}
-
-void StructCompactor::ItemSca::copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level ) {
+void StructCompactor::ItemSca::copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var ) {
     os << sp << dst << '.' << name << " = " << src << '.' << name << ";\n";
 }
 
-void StructCompactor::ItemStr::copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level ) {
+void StructCompactor::ItemStr::copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var ) {
     String vdst; vdst << dst << '.' << name;
-    String vsrc; vsrc << dst << '.' << name;
+    String vsrc; vsrc << src << '.' << name;
     for( int i = 0; i < items.size(); ++i )
-        items[ i ]->copy_attr( os, sp, vdst, vsrc, par_level );
+        items[ i ]->copy_attr( os, sp, vdst, vsrc, par_level, num_var );
 }
 
-void StructCompactor::ItemVec::copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level ) {
-    String size; size << src << '.' << name << ".size()";
-    os << sp << dst << '.' << name << ".size_ = " << size << ";\n";
-    os << sp << dst << '.' << name << ".rese_ = " << size << ";\n";
-    data_type->copy_data( os, sp, dst + '.' + name, src + '.' + name, par_level );
+void StructCompactor::ItemVec::copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var ) {
+    os << sp << dst << '.' << name << ".size_ = " << src << '.' << name << ".size();\n";
+    os << sp << dst << '.' << name << ".rese_ = " << src << '.' << name << ".size();\n";
+    data_type->copy_data( os, sp, dst + '.' + name, src + '.' + name, par_level, num_var );
 }
 
-void StructCompactor::ItemSca::copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level ) {
+void StructCompactor::ItemSca::copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var ) {
+    os << sp << "md.copy( &" << dst << ".data_, " << src << ".ptr(), " << src << ".size() * sizeof( " << type << " ), " << alig() << " );\n";
 }
 
-void StructCompactor::ItemStr::copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level ) {
-    os << sp << dst << ".data_ = " << type << "::copy( md, " << src << ".ptr(), " << size << " );\n";
+void StructCompactor::ItemStr::copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var ) {
+    os << sp << dst << ".data_ = " << type << "::copy( md, " << src << ".ptr(), " << src << ".size() );\n";
 }
 
-void StructCompactor::ItemVec::copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level ) {
+void StructCompactor::ItemVec::copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var ) {
+    // make_copy( os, sp, dst, src, src + ".size()", par_level + 1 );
+    int loc_num = num_var++;
+    String loc; loc << "loc_" << loc_num;
+    os << sp << type << " *loc_" << loc_num << ";\n";
+    os << sp << "ST rese_" << loc_num << " = " << src << ".size() * sizeof( " << type << " );\n";
+    os << sp << "md.beg_local_data( &" << dst << ".data_, &" << loc << ", rese_" << loc_num << ", " << alig() << " );\n";
+    String i = char( 'i' + par_level );
+    os << sp << "for( ST " << i << " = 0; " << i << " < " << src << ".size(); ++" << i << " ) {\n";
+    os << sp << "    " << loc << "[ " << i << " ].size_ = " << src << "[ " + i + " ].size();\n";
+    os << sp << "    " << loc << "[ " << i << " ].rese_ = " << src << "[ " + i + " ].size();\n";
+    data_type->copy_data( os, sp + "    ", loc + "[ " + i + " ]", src + "[ " + i + " ]", par_level + 1, num_var );
+    os << sp << "}\n";
+    os << sp << "md.end_local_data( " << dst << ".data_, loc_" << loc_num << ", rese_" << loc_num << ");\n";
 }
 
 void StructCompactor::make_files() {
@@ -105,55 +108,5 @@ void StructCompactor::make_files() {
     fc << "#include <CudaMetil.h>\n";
     fc << "void f() {}\n";
 }
-
-
-//String StructCompactor::needed_alignement() const {
-//    if ( type == "FP32" or type == "FP64" or type == "SI32" or type == "SI64" )
-//        return "16 * 4";
-//    return "sizeof( ST )";
-//}
-
-//bool StructCompactor::is_POD() const {
-//    for( int i = 0; i < items.size(); ++i )
-//        if ( not items[ i ]->is_POD() )
-//            return 0;
-//    return pointed_type == 0;
-//}
-
-//void StructCompactor::make_copy( String &os, const String &sp, const String &dst, const String &src, int par_lev ) {
-//    for( int i = 0; i < items.size(); ++i ) {
-//        os << sp << "// " << items[ i ]->name << " \n";
-//        if ( items[ i ]->pointed_type ) {
-//            String size; size << src << '.' << items[ i ]->name << ".size()";
-//            String ptr ; ptr  << src << '.' << items[ i ]->name << ".ptr()";
-//            os << sp << dst << '.' << items[ i ]->name << ".size_ = " << size << ";\n";
-//            os << sp << dst << '.' << items[ i ]->name << ".rese_ = " << size << ";\n";
-//            if ( items[ i ]->pointed_type->is_POD() ) { // Vec<POD> (e.g. Vec<FP64>)
-//                os << sp << "md.copy( &" << dst << '.' << items[ i ]->name << ".data_, " << ptr << ", " << size << " * sizeof( " << items[ i ]->pointed_type->type << " ), " << items[ i ]->pointed_type->needed_alignement() << " );\n";
-//            } else if ( items[ i ]->pointed_type->int_type ) { // Vec<LocalStruct>
-//                os << sp << dst << '.' << items[ i ]->name << ".data_ = " << items[ i ]->pointed_type->type << "::push_copy_in( md, " << ptr << ", " << size << " );\n";
-//            } else { // Vec<Vec<...> >
-//                items[ i ]->pointed_type->make_push( os, sp, items[ i ]->name + ".data_", par_lev + 1, '_' + String( par_lev ), size );
-//            }
-//        } else {
-//            if ( items[ i ]->int_type ) // recursive copy
-//                items[ i ]->make_copy( os, sp, dst + '.' + items[ i ]->name, src + '.' + items[ i ]->name, par_lev );
-//            else // simple attibute
-//                os << sp << dst << '.' << items[ i ]->name << " = " << src << '.' << items[ i ]->name << ";\n";
-//        }
-//    }
-//}
-
-//void StructCompactor::make_push( String &os, const String &sp, const String &dst, int par_lev, const String &suf, const String &n ) {
-//    os << sp << type << " *loc" << suf << "; ST rese" << suf << " = " << n << " * sizeof( " << type << " );\n";
-//    os << sp << "md.beg_local_data( &" << dst << ", &loc" << suf << ", rese" << suf << ", " << needed_alignement() << " );\n";
-//    String i = char( 'i' + par_lev );
-//    os << sp << "for( ST " << i << " = 0; " << i << " < n; ++" << i << " ) {\n";
-//    make_copy( os, sp + "    ", "loc" + suf + "[ " + i + " ]", "src[ " + i + " ]", par_lev );
-//    os << sp << "}\n";
-//    os << sp << "md.end_local_data( " << dst << ", loc" << suf << ", rese" << suf << " );\n";
-//}
-
-
 
 END_METIL_NAMESPACE;

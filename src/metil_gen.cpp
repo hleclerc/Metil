@@ -113,6 +113,7 @@ extern MethodName_new_ptr_z::TM metil_def_new_ptr_z__when__a__isa__ConstCharPtr;
 extern MethodName_copy_data::TM metil_def_copy_data__when__a__isa__ConstCharPtr;
 extern MethodName_equal::TM metil_def_equal__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1;
 extern MethodName_del::TM metil_def_del__when__a__isa__OwcpString;
+extern MethodName_copy::TM metil_def_copy__when__a__isa__OwcpString;
 extern MethodName_self_append::TM metil_def_self_append__when__a__isa__FileWithoutClose__and__b__isa__ConstCharPtr__pert__1;
 extern MethodName_self_append::TM metil_def_self_append__when__a__isa__FileWithoutClose__and__b__isa__OwcpString__pert__1;
 extern MethodName_del::TM metil_def_del__when__a__is__Int_s_64;
@@ -139,6 +140,7 @@ extern MethodName_boolean_and::TM metil_def_boolean_and__when__a__is__Int_s_64__
 extern MethodName_boolean_and::TM metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_32;
 extern MethodName_append::TM metil_def_append__when__a__isa__String__and__b__isa__String__pert_0;
 extern MethodName_equal::TM metil_def_equal__when__a__isa__String__and__b__isa__String;
+extern MethodName_self_append::TM metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000;
 extern MethodName_self_append::TM metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1;
 extern MethodName_size::TM metil_def_size__when__a__isa__StringConcat;
 extern MethodName_copy_data::TM metil_def_copy_data__when__a__isa__StringConcat;
@@ -271,6 +273,15 @@ void reg_def() {
     item_metil_def_del__when__a__isa__OwcpString.line = 6;
     item_metil_def_del__when__a__isa__OwcpString.pert = 0;
     MethodFinder<MethodName_del>::last = &item_metil_def_del__when__a__isa__OwcpString;
+
+    static MethodFinder<MethodName_copy>::Item item_metil_def_copy__when__a__isa__OwcpString;
+    item_metil_def_copy__when__a__isa__OwcpString.prev = MethodFinder<MethodName_copy>::last;
+    item_metil_def_copy__when__a__isa__OwcpString.cond = &cond_metil_def_del__when__a__isa__OwcpString;
+    item_metil_def_copy__when__a__isa__OwcpString.meth = metil_def_copy__when__a__isa__OwcpString;
+    item_metil_def_copy__when__a__isa__OwcpString.file = string_3;
+    item_metil_def_copy__when__a__isa__OwcpString.line = 11;
+    item_metil_def_copy__when__a__isa__OwcpString.pert = 0;
+    MethodFinder<MethodName_copy>::last = &item_metil_def_copy__when__a__isa__OwcpString;
 
     static MethodCond_and<MethodCond_0_isa<TypeConstructor_FileWithoutClose>,MethodCond_1_isa<TypeConstructor_ConstCharPtr> > cond_metil_def_self_append__when__a__isa__FileWithoutClose__and__b__isa__ConstCharPtr__pert__1;
 
@@ -538,15 +549,29 @@ void reg_def() {
     item_metil_def_equal__when__a__isa__String__and__b__isa__String.pert = 0;
     MethodFinder<MethodName_equal>::last = &item_metil_def_equal__when__a__isa__String__and__b__isa__String;
 
+    static MethodCond_and<MethodCond_0_isa<TypeConstructor_String>,MethodCond_1_is > cond_metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000;
+    cond_metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000.cond_1.type = "Flt_64";
+
+    static const char *string_7 = "./src/TypeConstructor_Flt.cpp";
+
+    static MethodFinder<MethodName_self_append>::Item item_metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000;
+    item_metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000.prev = MethodFinder<MethodName_self_append>::last;
+    item_metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000.cond = &cond_metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000;
+    item_metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000.meth = metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000;
+    item_metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000.file = string_7;
+    item_metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000.line = 7;
+    item_metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000.pert = 1000;
+    MethodFinder<MethodName_self_append>::last = &item_metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000;
+
     static MethodCond_and<MethodCond_0_isa<TypeConstructor_String>,MethodCond_1_isa<TypeConstructor_StringConcat> > cond_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1;
 
-    static const char *string_7 = "./src/TypeConstructor_StringConcat.cpp";
+    static const char *string_8 = "./src/TypeConstructor_StringConcat.cpp";
 
     static MethodFinder<MethodName_self_append>::Item item_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1;
     item_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1.prev = MethodFinder<MethodName_self_append>::last;
     item_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1.cond = &cond_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1;
     item_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1.meth = metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1;
-    item_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1.file = string_7;
+    item_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1.file = string_8;
     item_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1.line = 10;
     item_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1.pert = 1;
     MethodFinder<MethodName_self_append>::last = &item_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1;
@@ -557,7 +582,7 @@ void reg_def() {
     item_metil_def_size__when__a__isa__StringConcat.prev = MethodFinder<MethodName_size>::last;
     item_metil_def_size__when__a__isa__StringConcat.cond = &cond_metil_def_size__when__a__isa__StringConcat;
     item_metil_def_size__when__a__isa__StringConcat.meth = metil_def_size__when__a__isa__StringConcat;
-    item_metil_def_size__when__a__isa__StringConcat.file = string_7;
+    item_metil_def_size__when__a__isa__StringConcat.file = string_8;
     item_metil_def_size__when__a__isa__StringConcat.line = 15;
     item_metil_def_size__when__a__isa__StringConcat.pert = 0;
     MethodFinder<MethodName_size>::last = &item_metil_def_size__when__a__isa__StringConcat;
@@ -566,7 +591,7 @@ void reg_def() {
     item_metil_def_copy_data__when__a__isa__StringConcat.prev = MethodFinder<MethodName_copy_data>::last;
     item_metil_def_copy_data__when__a__isa__StringConcat.cond = &cond_metil_def_size__when__a__isa__StringConcat;
     item_metil_def_copy_data__when__a__isa__StringConcat.meth = metil_def_copy_data__when__a__isa__StringConcat;
-    item_metil_def_copy_data__when__a__isa__StringConcat.file = string_7;
+    item_metil_def_copy_data__when__a__isa__StringConcat.file = string_8;
     item_metil_def_copy_data__when__a__isa__StringConcat.line = 23;
     item_metil_def_copy_data__when__a__isa__StringConcat.pert = 0;
     MethodFinder<MethodName_copy_data>::last = &item_metil_def_copy_data__when__a__isa__StringConcat;
@@ -575,7 +600,7 @@ void reg_def() {
     item_metil_def_ptr_z__when__a__isa__StringConcat.prev = MethodFinder<MethodName_ptr_z>::last;
     item_metil_def_ptr_z__when__a__isa__StringConcat.cond = &cond_metil_def_size__when__a__isa__StringConcat;
     item_metil_def_ptr_z__when__a__isa__StringConcat.meth = metil_def_ptr_z__when__a__isa__StringConcat;
-    item_metil_def_ptr_z__when__a__isa__StringConcat.file = string_7;
+    item_metil_def_ptr_z__when__a__isa__StringConcat.file = string_8;
     item_metil_def_ptr_z__when__a__isa__StringConcat.line = 32;
     item_metil_def_ptr_z__when__a__isa__StringConcat.pert = 0;
     MethodFinder<MethodName_ptr_z>::last = &item_metil_def_ptr_z__when__a__isa__StringConcat;
@@ -584,20 +609,20 @@ void reg_def() {
     item_metil_def_new_ptr_z__when__a__isa__StringConcat.prev = MethodFinder<MethodName_new_ptr_z>::last;
     item_metil_def_new_ptr_z__when__a__isa__StringConcat.cond = &cond_metil_def_size__when__a__isa__StringConcat;
     item_metil_def_new_ptr_z__when__a__isa__StringConcat.meth = metil_def_new_ptr_z__when__a__isa__StringConcat;
-    item_metil_def_new_ptr_z__when__a__isa__StringConcat.file = string_7;
+    item_metil_def_new_ptr_z__when__a__isa__StringConcat.file = string_8;
     item_metil_def_new_ptr_z__when__a__isa__StringConcat.line = 47;
     item_metil_def_new_ptr_z__when__a__isa__StringConcat.pert = 0;
     MethodFinder<MethodName_new_ptr_z>::last = &item_metil_def_new_ptr_z__when__a__isa__StringConcat;
 
     static TypeConstructor::C0_has_Owcp_size_0 cond_metil_def_del__when__a__has__Owcp_size_0__pert__1;
 
-    static const char *string_8 = "./src/Owcp.cpp";
+    static const char *string_9 = "./src/Owcp.cpp";
 
     static MethodFinder<MethodName_del>::Item item_metil_def_del__when__a__has__Owcp_size_0__pert__1;
     item_metil_def_del__when__a__has__Owcp_size_0__pert__1.prev = MethodFinder<MethodName_del>::last;
     item_metil_def_del__when__a__has__Owcp_size_0__pert__1.cond = &cond_metil_def_del__when__a__has__Owcp_size_0__pert__1;
     item_metil_def_del__when__a__has__Owcp_size_0__pert__1.meth = metil_def_del__when__a__has__Owcp_size_0__pert__1;
-    item_metil_def_del__when__a__has__Owcp_size_0__pert__1.file = string_8;
+    item_metil_def_del__when__a__has__Owcp_size_0__pert__1.file = string_9;
     item_metil_def_del__when__a__has__Owcp_size_0__pert__1.line = 6;
     item_metil_def_del__when__a__has__Owcp_size_0__pert__1.pert = 1;
     MethodFinder<MethodName_del>::last = &item_metil_def_del__when__a__has__Owcp_size_0__pert__1;
@@ -608,7 +633,7 @@ void reg_def() {
     item_metil_def_del__when__a__has__Owcp_size_1__pert__1.prev = MethodFinder<MethodName_del>::last;
     item_metil_def_del__when__a__has__Owcp_size_1__pert__1.cond = &cond_metil_def_del__when__a__has__Owcp_size_1__pert__1;
     item_metil_def_del__when__a__has__Owcp_size_1__pert__1.meth = metil_def_del__when__a__has__Owcp_size_1__pert__1;
-    item_metil_def_del__when__a__has__Owcp_size_1__pert__1.file = string_8;
+    item_metil_def_del__when__a__has__Owcp_size_1__pert__1.file = string_9;
     item_metil_def_del__when__a__has__Owcp_size_1__pert__1.line = 12;
     item_metil_def_del__when__a__has__Owcp_size_1__pert__1.pert = 1;
     MethodFinder<MethodName_del>::last = &item_metil_def_del__when__a__has__Owcp_size_1__pert__1;
@@ -619,7 +644,7 @@ void reg_def() {
     item_metil_def_del__when__a__has__Owcp_size_2__pert__1.prev = MethodFinder<MethodName_del>::last;
     item_metil_def_del__when__a__has__Owcp_size_2__pert__1.cond = &cond_metil_def_del__when__a__has__Owcp_size_2__pert__1;
     item_metil_def_del__when__a__has__Owcp_size_2__pert__1.meth = metil_def_del__when__a__has__Owcp_size_2__pert__1;
-    item_metil_def_del__when__a__has__Owcp_size_2__pert__1.file = string_8;
+    item_metil_def_del__when__a__has__Owcp_size_2__pert__1.file = string_9;
     item_metil_def_del__when__a__has__Owcp_size_2__pert__1.line = 18;
     item_metil_def_del__when__a__has__Owcp_size_2__pert__1.pert = 1;
     MethodFinder<MethodName_del>::last = &item_metil_def_del__when__a__has__Owcp_size_2__pert__1;
@@ -630,7 +655,7 @@ void reg_def() {
     item_metil_def_del__when__a__has__Owcp_size_3__pert__1.prev = MethodFinder<MethodName_del>::last;
     item_metil_def_del__when__a__has__Owcp_size_3__pert__1.cond = &cond_metil_def_del__when__a__has__Owcp_size_3__pert__1;
     item_metil_def_del__when__a__has__Owcp_size_3__pert__1.meth = metil_def_del__when__a__has__Owcp_size_3__pert__1;
-    item_metil_def_del__when__a__has__Owcp_size_3__pert__1.file = string_8;
+    item_metil_def_del__when__a__has__Owcp_size_3__pert__1.file = string_9;
     item_metil_def_del__when__a__has__Owcp_size_3__pert__1.line = 24;
     item_metil_def_del__when__a__has__Owcp_size_3__pert__1.pert = 1;
     MethodFinder<MethodName_del>::last = &item_metil_def_del__when__a__has__Owcp_size_3__pert__1;
@@ -641,20 +666,20 @@ void reg_def() {
     item_metil_def_copy__when__a__has__Owcp_type__pert__1.prev = MethodFinder<MethodName_copy>::last;
     item_metil_def_copy__when__a__has__Owcp_type__pert__1.cond = &cond_metil_def_copy__when__a__has__Owcp_type__pert__1;
     item_metil_def_copy__when__a__has__Owcp_type__pert__1.meth = metil_def_copy__when__a__has__Owcp_type__pert__1;
-    item_metil_def_copy__when__a__has__Owcp_type__pert__1.file = string_8;
+    item_metil_def_copy__when__a__has__Owcp_type__pert__1.file = string_9;
     item_metil_def_copy__when__a__has__Owcp_type__pert__1.line = 30;
     item_metil_def_copy__when__a__has__Owcp_type__pert__1.pert = 1;
     MethodFinder<MethodName_copy>::last = &item_metil_def_copy__when__a__has__Owcp_type__pert__1;
 
     static MethodCond_0_isa<TypeConstructor_VoidString> cond_metil_def_self_append__when__a__isa__VoidString__pert__100;
 
-    static const char *string_9 = "./src/TypeConstructor_VoidString.cpp";
+    static const char *string_10 = "./src/TypeConstructor_VoidString.cpp";
 
     static MethodFinder<MethodName_self_append>::Item item_metil_def_self_append__when__a__isa__VoidString__pert__100;
     item_metil_def_self_append__when__a__isa__VoidString__pert__100.prev = MethodFinder<MethodName_self_append>::last;
     item_metil_def_self_append__when__a__isa__VoidString__pert__100.cond = &cond_metil_def_self_append__when__a__isa__VoidString__pert__100;
     item_metil_def_self_append__when__a__isa__VoidString__pert__100.meth = metil_def_self_append__when__a__isa__VoidString__pert__100;
-    item_metil_def_self_append__when__a__isa__VoidString__pert__100.file = string_9;
+    item_metil_def_self_append__when__a__isa__VoidString__pert__100.file = string_10;
     item_metil_def_self_append__when__a__isa__VoidString__pert__100.line = 6;
     item_metil_def_self_append__when__a__isa__VoidString__pert__100.pert = 100;
     MethodFinder<MethodName_self_append>::last = &item_metil_def_self_append__when__a__isa__VoidString__pert__100;
@@ -665,7 +690,7 @@ void reg_def() {
     item_metil_def_self_append__when__b__isa__VoidString__pert__101.prev = MethodFinder<MethodName_self_append>::last;
     item_metil_def_self_append__when__b__isa__VoidString__pert__101.cond = &cond_metil_def_self_append__when__b__isa__VoidString__pert__101;
     item_metil_def_self_append__when__b__isa__VoidString__pert__101.meth = metil_def_self_append__when__b__isa__VoidString__pert__101;
-    item_metil_def_self_append__when__b__isa__VoidString__pert__101.file = string_9;
+    item_metil_def_self_append__when__b__isa__VoidString__pert__101.file = string_10;
     item_metil_def_self_append__when__b__isa__VoidString__pert__101.line = 7;
     item_metil_def_self_append__when__b__isa__VoidString__pert__101.pert = 101;
     MethodFinder<MethodName_self_append>::last = &item_metil_def_self_append__when__b__isa__VoidString__pert__101;

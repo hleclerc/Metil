@@ -22,9 +22,8 @@ public:
         void set_type( const char *t ) { type = t; }
         virtual void make_decl( String &os, const String &sp = "" ) = 0;
         virtual Item *base_str() { return this; }
-        virtual void make_copy( String &os, const String &sp, const String &dst, const String &src, const String &num, int par_level ) = 0;
-        virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level ) = 0;
-        virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level ) = 0;
+        virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var ) = 0;
+        virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var ) = 0;
         virtual String alig() const = 0;
         // bool is_POD() const;
 
@@ -41,9 +40,8 @@ public:
         }
 
         virtual void make_decl( String &os, const String &sp = "" );
-        virtual void make_copy( String &os, const String &sp, const String &dst, const String &src, const String &num, int par_level );
-        virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level );
-        virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level );
+        virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var );
+        virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var );
         virtual String alig() const { return "16 * 4"; }
     };
 
@@ -60,9 +58,8 @@ public:
         void apply( const String &name, const T &val ) { items << StructCompactor::new_Item( val, name, par_level ); }
 
         virtual void make_decl( String &os, const String &sp = "" );
-        virtual void make_copy( String &os, const String &sp, const String &dst, const String &src, const String &num, int par_level );
-        virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level );
-        virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level );
+        virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var );
+        virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var );
         virtual String alig() const { return "sizeof( ST )"; }
 
         BasicVec<Item *> items;
@@ -74,15 +71,14 @@ public:
 
         template<class T>
         ItemVec( const T &inst, const String &name, int par_level ) {
-            this->data_type = StructCompactor::new_Item( inst[ 0 ], name + '[' + char( 'i' + par_level ) + ']', par_level + 1 );
+            this->data_type = StructCompactor::new_Item( inst[ 0 ], name, par_level + 1 ); //  + '[' + char( 'i' + par_level ) + ']'
             this->type << "BasicVecRef<" << data_type->type << " >";
             this->name = name;
         }
 
         virtual void make_decl( String &os, const String &sp = "" );
-        virtual void make_copy( String &os, const String &sp, const String &dst, const String &src, const String &num, int par_level );
-        virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level );
-        virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level );
+        virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var );
+        virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var );
         virtual Item *base_str() { return data_type->base_str(); }
         virtual String alig() const { return "sizeof( ST )"; }
 
