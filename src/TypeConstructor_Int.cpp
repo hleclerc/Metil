@@ -1,6 +1,6 @@
 #include "TypeConstructor_Int.h"
 #include "DisplayInt.h"
-#include "CppWriter.h"
+#include "MethodWriter.h"
 #include "Tokenize.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
@@ -28,8 +28,10 @@ SI32 metil_def_convert_to_SI32__when__a__is__Int_s_32( MO a ) { return *reinterp
 SI64 metil_def_convert_to_SI64__when__a__is__Int_s_32( MO a ) { return *reinterpret_cast<const SI32 *>( a.data ); }
 
 #define BOP( N, O ) \
-    MO metil_def_##N##__when__a__is__Int_s_64__and__b__is__Int_s_64( MO a, MO b ) { return NEW_Number( *reinterpret_cast<const SI64 *>( a.data ) O *reinterpret_cast<const SI64 *>( b.data ) ); } \
-    MO metil_def_##N##__when__a__is__Int_s_32__and__b__is__Int_s_32( MO a, MO b ) { return NEW_Number( *reinterpret_cast<const SI32 *>( a.data ) O *reinterpret_cast<const SI32 *>( b.data ) ); }
+    MO metil_def_##N##__when__a__is__Int_s_32__and__b__is__Int_s_32( MO a, MO b ) { return NEW_Number( *reinterpret_cast<const SI32 *>( a.data ) O *reinterpret_cast<const SI32 *>( b.data ) ); } \
+    MO metil_def_##N##__when__a__is__Int_s_32__and__b__is__Int_s_64( MO a, MO b ) { return NEW_Number( *reinterpret_cast<const SI32 *>( a.data ) O *reinterpret_cast<const SI64 *>( b.data ) ); } \
+    MO metil_def_##N##__when__a__is__Int_s_64__and__b__is__Int_s_32( MO a, MO b ) { return NEW_Number( *reinterpret_cast<const SI64 *>( a.data ) O *reinterpret_cast<const SI32 *>( b.data ) ); } \
+    MO metil_def_##N##__when__a__is__Int_s_64__and__b__is__Int_s_64( MO a, MO b ) { return NEW_Number( *reinterpret_cast<const SI64 *>( a.data ) O *reinterpret_cast<const SI64 *>( b.data ) ); }
 
 BOP( add, + );
 BOP( sub, - );
@@ -41,7 +43,7 @@ BOP( boolean_and, && );
 #undef BOP
 
 //
-void metil_gen_div__when__a__is__Int_s_64__and__b__is__Int_s_64( CppWriter &cw, MOS *mos ) {
+void metil_gen_div__when__a__is__Int_s_64__and__b__is__Int_s_64( MethodWriter &cw, Mos *mos ) {
 }
 
 //

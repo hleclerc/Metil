@@ -11,7 +11,7 @@ inline BasicVec<String> tokenize( const String &str, const String &sep ) {
     BasicVec<String> res;
     String tmp = str;
     while ( true ) {
-        int n = tmp.find( sep );
+        ST n = tmp.find( sep );
         if ( n < 0 ) {
             res.push_back( tmp );
             return res;

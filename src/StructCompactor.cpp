@@ -10,6 +10,7 @@ void StructCompactor::ItemStr::make_decl( String &os, const String &sp ) {
     String op = np + "    ";
     String pp = op + "    ";
     os << sp << "struct " << type << " {\n";
+    os << sp << "    typedef void HasOffPtr;\n";
 
     // declarations
     BasicVec<String> decl_types;
