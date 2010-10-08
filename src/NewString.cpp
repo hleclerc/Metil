@@ -2,11 +2,13 @@
 #include "StringHelp.h"
 #include "OwcpStringData.h"
 
+#include "Dout.h"
+
 BEG_METIL_NAMESPACE;
 
 NewString::NewString( ST size, ST rese ) {
     rese += sizeof( Level1::OwcpStringData ) + 1;
-    Level1::OwcpStringData *res = reinterpret_cast<Level1::OwcpStringData *>( MALLOC( rese ) );
+    Level1::OwcpStringData *res = new( MALLOC( rese ) ) Level1::OwcpStringData;
     res->data.size = size;
     res->data.rese = rese;
     data = res;
@@ -15,7 +17,7 @@ NewString::NewString( ST size, ST rese ) {
 
 NewString::NewString( ST size ) {
     ST rese = sizeof( Level1::OwcpStringData ) + size + 1;
-    Level1::OwcpStringData *res = reinterpret_cast<Level1::OwcpStringData *>( MALLOC( rese ) );
+    Level1::OwcpStringData *res = new( MALLOC( rese ) ) Level1::OwcpStringData;
     res->data.size = size;
     res->data.rese = rese;
     data = res;
@@ -25,7 +27,7 @@ NewString::NewString( ST size ) {
 NewString::NewString( const char *beg, const char *end ) {
     ST size = end - beg;
     ST rese = sizeof( Level1::OwcpStringData ) + size + 1;
-    Level1::OwcpStringData *res = reinterpret_cast<Level1::OwcpStringData *>( MALLOC( rese ) );
+    Level1::OwcpStringData *res = new( MALLOC( rese ) ) Level1::OwcpStringData;
     res->data.size = size;
     res->data.rese = rese;
     data = res;

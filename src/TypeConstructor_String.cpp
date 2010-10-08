@@ -11,7 +11,7 @@ MO metil_def_append__when__a__isa__String__and__b__isa__String__pert_0( MO a, MO
 }
 
 // String == String
-MO metil_def_equal__when__a__isa__String__and__b__isa__String( MO a, MO b ) { // TODO: optimize
+MO metil_def_equal__when__a__isa__String__and__b__isa__String( MO a, MO b ) { // TODO: optimize !
     char *sa = (char *)CM_1( new_ptr_z, a );
     char *sb = (char *)CM_1( new_ptr_z, b );
     MO res = NEW_Number( equal( sa, sb ) );

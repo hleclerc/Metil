@@ -85,11 +85,11 @@ void StructCompactor::ItemVec::copy_data( String &os, const String &sp, const St
     os << sp << "    " << loc << "[ " << i << " ].rese_ = " << src << "[ " + i + " ].size();\n";
     data_type->copy_data( os, sp + "    ", loc + "[ " + i + " ]", src + "[ " + i + " ]", par_level + 1, num_var );
     os << sp << "}\n";
-    os << sp << "md.end_local_data( " << dst << ".data_, loc_" << loc_num << ", rese_" << loc_num << ");\n";
+    os << sp << "md.end_local_data( " << dst << ".data_, loc_" << loc_num << ", rese_" << loc_num << " );\n";
 }
 
-void StructCompactor::make_files() {
-    File fh( item->type + ".h", "w" );
+void StructCompactor::make_files( const String &dir ) {
+    File fh( dir + '/' + item->type + ".h", "w" );
     fh << "#ifndef " << item->type << "_H\n";
     fh << "#define " << item->type << "_H\n";
     fh << "\n";
@@ -104,7 +104,7 @@ void StructCompactor::make_files() {
     fh << "\n";
     fh << "#endif // " << item->type << "_H\n";
 
-    File fc( item->type + ".cu", "w" );
+    File fc( dir + '/' + item->type + ".cu", "w" );
     // item->make_defi( fc );
     fc << "#include <CudaMetil.h>\n";
     fc << "void f() {}\n";

@@ -11,6 +11,7 @@ struct OwcpStringAdditionalData {
 };
 
 struct OwcpStringData : public Owcp<0,OwcpStringAdditionalData> {
+    OwcpStringData() : Owcp<0,OwcpStringAdditionalData>( &metil_type_bas_OwcpString ) {}
     char *ptr() { return reinterpret_cast<char *>( this + 1 ); }
     char &val( ST i ) { return ptr()[ i ]; }
     ST size() const { return data.size; }

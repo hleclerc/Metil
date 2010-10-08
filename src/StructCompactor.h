@@ -71,7 +71,7 @@ public:
 
         template<class T>
         ItemVec( const T &inst, const String &name, int par_level ) {
-            this->data_type = StructCompactor::new_Item( inst[ 0 ], name, par_level + 1 ); //  + '[' + char( 'i' + par_level ) + ']'
+            this->data_type = StructCompactor::new_Item( *reinterpret_cast<typename T::T *>( 0 ), name, par_level + 1 ); //  + '[' + char( 'i' + par_level ) + ']'
             this->type << "BasicVecRef<" << data_type->type << " >";
             this->name = name;
         }
@@ -112,7 +112,7 @@ public:
     }
 
     // methods
-    void make_files();
+    void make_files( const String &dir = "." );
 
 private:
     // void make_copy( String &os, const String &sp, const String &dst, const String &src, int par_lev );

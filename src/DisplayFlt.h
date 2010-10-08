@@ -83,13 +83,13 @@ struct BasicBaseNFltNumber {
 
     void round_up() {
         int a = 5;
-        for(int i=size-2;i>=0;--i) {
+        for( int i = size - 2; i >= 0; --i ) {
             a += data[ i ];
             data[ i ] = a % base;
             a /= base;
         }
         if ( a ) {
-            for(int i=size-1;i>0;--i)
+            for( int i = size - 1; i > 0; --i )
                 data[ i ] = data[ i - 1 ];
             data[ 0 ] = a;
             ++expo_base;
@@ -101,7 +101,7 @@ struct BasicBaseNFltNumber {
         char *str = res.ptr();
         str[ 0 ] = '0' + data[ 0 ];
         str[ 1 ] = '.';
-        for(int j=1,c=2;j<nb_digits;++j,++c)
+        for(int j = 1, c = 2; j < nb_digits; ++j, ++c )
             str[ c ] = '0' + data[ j ];
         //
         os << String( res );
