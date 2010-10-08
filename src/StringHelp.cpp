@@ -26,6 +26,25 @@ char *strdup( const char *a ) {
     return res;
 }
 
+char *strndup( const char *a, ST s ) {
+    char *res = (char *)std::malloc( s + 1 );
+    memcpy( res, a, s );
+    res[ s ] = 0;
+    return res;
+}
+
+ST find( const char *a, const char *b ) {
+    for( int i = 0; a[ i ]; ++i ) {
+        for( int j = 0; ; ++j ) {
+            if ( b[ j ] == 0 )
+                return i;
+            if ( a[ i + j ] != b[ j ] )
+                break;
+        }
+    }
+    return -1;
+}
+
 void memcpy( void *a, const void *b, ST size ) {
     char *dst = reinterpret_cast<char *>( a );
     const char *src = reinterpret_cast<const char *>( b );

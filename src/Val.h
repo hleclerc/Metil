@@ -22,6 +22,8 @@ public:
     template<class T>
     Val( Ref, T &val ) : Level1::MO( Level1::REF_Number( val ) ) {}
 
+    Val( const String &str );
+    Val( const char   *str );
 
     ~Val() { type->del( *this ); }
 
@@ -90,6 +92,12 @@ template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator>=( T a, c
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T pow       ( T a, const Val &b ) { return pow  ( Val( a ), b ); }
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T mod       ( T a, const Val &b ) { return mod  ( Val( a ), b ); }
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T atan2     ( T a, const Val &b ) { return atan2( Val( a ), b ); }
+
+template<class T> typename EnableIf<IsAScalar<T>::res,T>::T &operator+=( T &a, const Val &b ) { a = a + b; return a; }
+template<class T> typename EnableIf<IsAScalar<T>::res,T>::T &operator-=( T &a, const Val &b ) { a = a - b; return a; }
+template<class T> typename EnableIf<IsAScalar<T>::res,T>::T &operator*=( T &a, const Val &b ) { a = a * b; return a; }
+template<class T> typename EnableIf<IsAScalar<T>::res,T>::T &operator/=( T &a, const Val &b ) { a = a / b; return a; }
+template<class T> typename EnableIf<IsAScalar<T>::res,T>::T &operator%=( T &a, const Val &b ) { a = a % b; return a; }
 
 // function( Val, Scalar )
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator+ ( const Val &a, T b ) { return a + Val( b ); }

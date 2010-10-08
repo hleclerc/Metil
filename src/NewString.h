@@ -12,6 +12,7 @@ class NewString {
 public:
     NewString( ST size ); ///< will reserve 1 additional byte for \0
     NewString( ST rese, ST size ); ///< will reserve 1 additional byte for \0
+    NewString( const char *beg, const char *end ); ///< make a copy
     char *ptr();
     void *data;
 };

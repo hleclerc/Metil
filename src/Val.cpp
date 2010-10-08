@@ -1,12 +1,21 @@
+#include "ValReader.h"
 #include "Val.h"
 
-//BEG_METIL_LEVEL1_NAMESPACE;
-//
-//#ifdef METIL_BOOSTRAP
-//#else
-//#endif
-//
-//#ifndef METIL_BOOSTRAP
+BEG_METIL_NAMESPACE;
+
+Val::Val( const String &str ) {
+    BasicVec<String> sym;
+    Level1::ValReader reader( str, sym );
+    type = reader.res.type;
+    data = reader.res.data;
+    reader.res.type = &Level1::metil_type_cst_Cst__zero;
+}
+
+Val::Val( const char *str ) {
+    new( this ) Val( String( str ) );
+}
+
+
 //static SI32 data_one_half   [] = { 1, 2 };
 //static SI32 data_one_quarter[] = { 1, 4 };
 //static PI32 zero_PI32 = 0;
@@ -29,5 +38,5 @@
 //Val one_as_PI32      ( Level1::MO( &one_PI32        , &Level1::type_PI32_Ref ) );
 //Val minus_one_as_NI32( Level1::MO( &one_PI32        , &Level1::type_NI32_Ref ) );
 //#endif
-//
-//END_METIL_LEVEL1_NAMESPACE
+
+END_METIL_NAMESPACE

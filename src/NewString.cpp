@@ -1,4 +1,5 @@
 #include "NewString.h"
+#include "StringHelp.h"
 #include "OwcpStringData.h"
 
 BEG_METIL_NAMESPACE;
@@ -18,6 +19,17 @@ NewString::NewString( ST size ) {
     res->data.size = size;
     res->data.rese = rese;
     data = res;
+    res->val( size ) = 0;
+}
+
+NewString::NewString( const char *beg, const char *end ) {
+    ST size = end - beg;
+    ST rese = sizeof( Level1::OwcpStringData ) + size + 1;
+    Level1::OwcpStringData *res = reinterpret_cast<Level1::OwcpStringData *>( MALLOC( rese ) );
+    res->data.size = size;
+    res->data.rese = rese;
+    data = res;
+    Level1::memcpy( res->ptr(), beg, size );
     res->val( size ) = 0;
 }
 

@@ -1,5 +1,7 @@
 #include "TypeConstructor_Int.h"
 #include "DisplayInt.h"
+#include "CppWriter.h"
+#include "Tokenize.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
@@ -38,8 +40,23 @@ BOP( boolean_and, && );
 
 #undef BOP
 
-// TypeConstructor_Int
+//
+void metil_gen_div__when__a__is__Int_s_64__and__b__is__Int_s_64( CppWriter &cw, MOS *mos ) {
+}
+
+//
 void TypeConstructor_Int::init( Type *type ) {
+    BasicVec<String> l = tokenize( type->name, "_" );
+    ASSERT( l.size() >= 3, "..." );
+
+    // sign
+    if      ( l[ 1 ] == 'n' ) sign = -1;
+    else if ( l[ 1 ] == 's' ) sign =  0;
+    else if ( l[ 1 ] == 'p' ) sign = +1;
+    else ERROR( "unknown sign description" );
+
+    // mant
+    mant = Val( l[ 2 ] );
 }
 
 END_METIL_LEVEL1_NAMESPACE;

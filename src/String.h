@@ -14,7 +14,7 @@ struct String : public Level1::MO {
     struct Flsh  { void write_str( String &os ) const; }; ///< @see flush
 
     // init
-    explicit String( const MO &o ) : MO( o ) {}
+    String( const MO &o ) : MO( o ) {}
     String() { type = &Level1::metil_type_cst_VoidString; }
     String( const String &s ) : MO( CM_1( copy, s ) ) {}
     String( const char   *a ) { type = &Level1::metil_type_cst_ConstCharPtr; data = (void *)a; }
@@ -72,11 +72,14 @@ struct String : public Level1::MO {
     const char *c_str() { return (const char *)CM_1( ptr_z, *this ); }
     void flush() { type->flush( *this ); }
     void write_separator( int num );
+    Val find( const String &str ) const { return CM_2( find, *this, str ); } ///< return index of first str found in this. Else, return -1
+    String beg_upto( const Val &s ) const { return CM_2( beg_upto, *this, s ); } ///< "abcd".beg_upto( 1 ) -> "a"
+    String end_from( const Val &s ) const { return CM_2( end_from, *this, s ); } ///< "abcd".beg_upto( 1 ) -> "a"
 
     // static attributes
     static Endl endl; ///< file << String::endl; will diplay a carriage return and flush the file
     static Flsh flsh; ///< file << String::flsh; will flush the file
-    static char char_ptr[];
+    static char char_ptr[]; ///< storage...
 };
 
 inline String operator+( char        a, const String &b ) { return String( a ) + b; }

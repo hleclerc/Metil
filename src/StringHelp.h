@@ -9,6 +9,8 @@ BEG_METIL_LEVEL1_NAMESPACE;
 bool equal( const char *a, const char *b );
 ST strlen( const char *a );
 char *strdup( const char *a );
+char *strndup( const char *a, ST s );
+ST find( const char *a, const char *b );
 
 // memcpy
 void memcpy( void *a, const void *b, ST size );

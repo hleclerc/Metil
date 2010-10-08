@@ -8,6 +8,8 @@ BEG_METIL_LEVEL1_NAMESPACE;
 class TypeConstructor_Int : public TypeConstructor {
 public:
     virtual void init( Type *type );
+    int mant;
+    int sign; ///< -1 -> negative, 0 -> signed, 1 -> positive
 };
 
 END_METIL_LEVEL1_NAMESPACE;
