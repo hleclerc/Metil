@@ -9,6 +9,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 
 void reg_def();
 
+extern Type metil_type_bas_OwcpString;
 extern Type metil_type_bas_Int_s_8;
 extern Type metil_type_bas_Int_s_16;
 extern Type metil_type_bas_Int_s_32;
@@ -24,7 +25,6 @@ extern Type metil_type_bas_Int_n_64;
 extern Type metil_type_bas_Flt_32;
 extern Type metil_type_bas_Flt_64;
 extern Type metil_type_bas_Flt_80;
-extern Type metil_type_bas_OwcpString;
 extern Type metil_type_bas_File;
 extern Type metil_type_bas_ConstCharPtrWithSize;
 extern Type metil_type_bas_StringConcat;

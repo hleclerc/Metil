@@ -21,7 +21,7 @@ public:
             C::copy( md, str, n );
 
             MemoryDriver_Cpy mc( md.off );
-            return Ps<C>( C::copy( mc, str, n ), n, md.off );
+            return Ps<C>( C::copy( mc, str, n ), n, md.off, MemoryDriver_Cpy::machine_id() );
         }
 
         const T *str;
@@ -56,6 +56,7 @@ public:
     virtual void beg_local_data( void **dst, void **loc, ST &size, ST alig );
     virtual void end_local_data( void *dst, void *loc, ST size );
     virtual void copy( void **dst, const void *src, ST size, ST alig );
+    static MachineId machine_id() { return MachineId::cpu( 0 ); }
 
     template<class T>
     static CopyCs<T,MemoryDriver_Dry,MemoryDriver_Cpu> copy_cs( const T *str, ST n = 1 ) {
@@ -73,6 +74,7 @@ public:
     virtual void beg_local_data( void **dst, void **loc, ST &size, ST alig );
     virtual void end_local_data( void *dst, void *loc, ST size );
     virtual void copy( void **dst, const void *src, ST size, ST alig );
+    static MachineId machine_id() { return MachineId::gpu( 0 ); }
 
     template<class T>
     static CopyCs<T,MemoryDriver_Dry,MemoryDriver_Gpu> copy_cs( const T *str, ST n = 1 ) {

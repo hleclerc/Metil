@@ -11,6 +11,7 @@ ST strlen( const char *a );
 char *strdup( const char *a );
 char *strndup( const char *a, ST s );
 ST find( const char *a, const char *b );
+ST find( const char *a, const char *b, ST len_a );
 
 // memcpy
 void memcpy( void *a, const void *b, ST size );

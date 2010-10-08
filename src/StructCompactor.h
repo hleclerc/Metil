@@ -21,6 +21,9 @@ public:
 
         void set_type( const char *t ) { type = t; }
         virtual void make_decl( String &os, const String &sp = "" ) = 0;
+        virtual void make_defi( String &os, const String &pr, BasicVec<String> &already_defined ) = 0;
+        virtual void make_uptr( String &os, const String &pr, int par_level, const String &sp ) = 0;
+        virtual void make_uptv( String &os, const String &pr, int par_level, const String &sp ) = 0;
         virtual Item *base_str() { return this; }
         virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var ) = 0;
         virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var ) = 0;
@@ -40,6 +43,9 @@ public:
         }
 
         virtual void make_decl( String &os, const String &sp = "" );
+        virtual void make_defi( String &os, const String &pr, BasicVec<String> &already_defined );
+        virtual void make_uptr( String &os, const String &pr, int par_level, const String &sp );
+        virtual void make_uptv( String &os, const String &pr, int par_level, const String &sp );
         virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var );
         virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var );
         virtual String alig() const { return "16 * 4"; }
@@ -58,6 +64,9 @@ public:
         void apply( const String &name, const T &val ) { items << StructCompactor::new_Item( val, name, par_level ); }
 
         virtual void make_decl( String &os, const String &sp = "" );
+        virtual void make_defi( String &os, const String &pr, BasicVec<String> &already_defined );
+        virtual void make_uptr( String &os, const String &pr, int par_level, const String &sp );
+        virtual void make_uptv( String &os, const String &pr, int par_level, const String &sp );
         virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var );
         virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var );
         virtual String alig() const { return "sizeof( ST )"; }
@@ -77,6 +86,9 @@ public:
         }
 
         virtual void make_decl( String &os, const String &sp = "" );
+        virtual void make_defi( String &os, const String &pr, BasicVec<String> &already_defined );
+        virtual void make_uptr( String &os, const String &pr, int par_level, const String &sp );
+        virtual void make_uptv( String &os, const String &pr, int par_level, const String &sp );
         virtual void copy_attr( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var );
         virtual void copy_data( String &os, const String &sp, const String &dst, const String &src, int par_level, int &num_var );
         virtual Item *base_str() { return data_type->base_str(); }

@@ -22,7 +22,7 @@ void StructCompactor::ItemStr::make_decl( String &os, const String &sp ) {
         }
     }
 
-    // methods
+    // copy method
     os << np << "template<class T> static " << type << " *copy( MemoryDriver &md, const T *src, ST num = 1 ) {\n";
     os << np << "    " << type << " *dst, *loc;\n";
     os << np << "    ST rese = num * sizeof( " << type << " );\n";
@@ -36,12 +36,85 @@ void StructCompactor::ItemStr::make_decl( String &os, const String &sp ) {
     os << np << "    return dst;\n";
     os << np << "}\n";
 
+    // update_ptr method
+    os << np << "void update_ptr_cpu( ST off );\n";
+    os << np << "void update_ptr_gpu( ST off );\n";
+    os << "\n";
+
     // attributes
     for( int i = 0; i < items.size(); ++i )
         os << np << items[ i ]->type << ' ' << items[ i ]->name << ";\n";
 
     os << sp << "};\n";
 }
+
+void StructCompactor::ItemSca::make_defi( String &os, const String &pr, BasicVec<String> &already_defined ) {
+}
+
+void StructCompactor::ItemStr::make_defi( String &os, const String &pr, BasicVec<String> &already_defined ) {
+    if ( already_defined.contains( pr + type ) )
+        return;
+    already_defined << pr + type;
+
+    for( int gpu = 0; gpu < 2; ++gpu ) {
+        if ( gpu ) {
+            os << "__global__\n";
+            os << "void " << pr.replace( ':', '_' ) << type << "__update_ptr_gpu( " << pr << type << " *obj, ST off ) {\n";
+        } else
+            os << "void " << pr << type << "::update_ptr_cpu( ST off ) {\n";
+        //
+        for( int i = 0; i < items.size(); ++i )
+            items[ i ]->make_uptr( os, ( gpu ? "obj->" : "" ) + items[ i ]->name, 0, "    " );
+
+        os << "}\n";
+        os << "\n";
+        if ( gpu ) {
+            os << "void " << pr << type << "::update_ptr_gpu( ST off ) {\n";
+            os << "    " << pr.replace( ':', '_' ) << type << "__update_ptr_gpu<<<1,1>>>( this, off );\n";
+            os << "}\n";
+            os << "\n";
+        }
+    }
+    for( int i = 0; i < items.size(); ++i )
+        items[ i ]->make_defi( os, pr + type + "::", already_defined );
+}
+
+void StructCompactor::ItemVec::make_defi( String &os, const String &pr, BasicVec<String> &already_defined ) {
+    data_type->make_defi( os, pr, already_defined );
+}
+
+
+void StructCompactor::ItemSca::make_uptr( String &os, const String &pr, int par_level, const String &sp ) {
+}
+
+void StructCompactor::ItemStr::make_uptr( String &os, const String &pr, int par_level, const String &sp ) {
+    for( int i = 0; i < items.size(); ++i )
+        items[ i ]->make_uptr( os, pr + '.' + items[ i ]->name, par_level, sp );
+}
+
+void StructCompactor::ItemVec::make_uptr( String &os, const String &pr, int par_level, const String &sp ) {
+    os << sp << "(char *&)" << pr << ".data_ += off;\n";
+    data_type->make_uptv( os, pr, par_level, sp );
+}
+
+void StructCompactor::ItemSca::make_uptv( String &os, const String &pr, int par_level, const String &sp ) {
+}
+
+void StructCompactor::ItemStr::make_uptv( String &os, const String &pr, int par_level, const String &sp ) {
+    String i = char( 'i' + par_level );
+    os << sp << "for( ST " << i << " = 0; " << i << " < " << pr << ".size_; ++" << i << " ) {\n";
+    for( int j = 0; j < items.size(); ++j )
+        items[ j ]->make_uptr( os, pr + ".data_[ " + i + " ]." + items[ j ]->name, par_level + 1, sp + "    " );
+    os << sp << "}\n";
+}
+
+void StructCompactor::ItemVec::make_uptv( String &os, const String &pr, int par_level, const String &sp ) {
+    String i = char( 'i' + par_level );
+    os << sp << "for( ST " << i << " = 0; " << i << " < " << pr << ".size_; ++" << i << " ) {\n";
+    make_uptr( os, pr + ".data_[ " + i + " ]", par_level + 1, sp + "    " );
+    os << sp << "}\n";
+}
+
 
 void StructCompactor::ItemVec::make_decl( String &os, const String &sp ) {
 }
@@ -105,9 +178,14 @@ void StructCompactor::make_files( const String &dir ) {
     fh << "#endif // " << item->type << "_H\n";
 
     File fc( dir + '/' + item->type + ".cu", "w" );
-    // item->make_defi( fc );
-    fc << "#include <CudaMetil.h>\n";
-    fc << "void f() {}\n";
+    fc << "#include \"" << item->type << ".h\"\n";
+    fc << "\n";
+    fc << "BEG_METIL_NAMESPACE\n";
+    fc << "\n";
+    BasicVec<String> already_defined;
+    item->make_defi( fc, "", already_defined );
+    fc << "\n";
+    fc << "END_METIL_NAMESPACE\n";
 }
 
 END_METIL_NAMESPACE;

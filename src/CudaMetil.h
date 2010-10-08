@@ -31,17 +31,26 @@ inline void check_err( const char *file, int line, const char *msg ) {
 
 /// copy data from str to res ( which must be pre-allocated )
 template<class T>
-typename T::HasOffPtr memcpy( Ps<T> &res, const Ps<T> &str, cudaMemcpyKind memcpy_kind ) {
-    cudaMemcpy( &res.data, str.data, str.rese, memcpy_kind );
+typename T::HasOffPtr memcpy( Ps<T> &dst, const Ps<T> &src ) {
+    // dst_id = ;
+    cudaMemcpyKind mc[] = { cudaMemcpyHostToHost, cudaMemcpyHostToDevice, cudaMemcpyDeviceToHost, cudaMemcpyDeviceToDevice };
+    cudaMemcpy( dst.data, src.data, src.rese, mc[ 2 * src.pos.is_a_gpu() + dst.pos.is_a_gpu() ] );
+    if ( dst.pos.is_a_cpu() )
+        dst->update_ptr_cpu( (const char *)dst.data - (const char *)src.data );
+    else
+        dst->update_ptr_gpu( (const char *)dst.data - (const char *)src.data );
 }
 
 /// make a new copy of data from str
 template<class T>
-Ps<T> strdup( const Ps<T> &str, cudaMemcpyKind memcpy_kind ) {
-    Ps<T> res( 0, str.size, str.rese );
-    cudaMalloc( &res.data, str.rese );
-    memcpy( res, str, memcpy_kind );
-    return res;
+Ps<T> strdup( const Ps<T> &src, MachineId dst_id ) {
+    Ps<T> dst( 0, src.size, src.rese, dst_id );
+    if ( dst_id.is_a_cpu() )
+        dst.data = (T *)MALLOC( dst.rese );
+    else
+        cudaMalloc( &dst.data, dst.rese );
+    memcpy( dst, src );
+    return dst;
 }
 
 

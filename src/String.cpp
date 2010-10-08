@@ -26,6 +26,21 @@ void String::write_separator( int num ) {
         operator<<( ' ' );
 }
 
+String String::replace( const String &a, const String &b ) const { // TODO : optimize
+    String res;
+    String tmp = *this;
+    tmp.c_str(); // hum...
+    while ( true ) {
+        ST n = tmp.find( a );
+        if ( n < 0 ) {
+            res << tmp;
+            return res;
+        }
+        res << tmp.beg_upto( n ) << b;
+        tmp = tmp.end_from( n + b.size() );
+    }
+}
+
 /// for i in range( 256 ): print str( i ) + "," + 0 + ","
 char String::char_ptr[] = {
     0  ,0, 1  ,0, 2  ,0, 3  ,0, 4  ,0, 5  ,0, 6  ,0, 7  ,0,

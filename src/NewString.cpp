@@ -25,6 +25,8 @@ NewString::NewString( ST size ) {
 }
 
 NewString::NewString( const char *beg, const char *end ) {
+    if ( end < beg )
+        end = beg;
     ST size = end - beg;
     ST rese = sizeof( Level1::OwcpStringData ) + size + 1;
     Level1::OwcpStringData *res = new( MALLOC( rese ) ) Level1::OwcpStringData;
@@ -33,6 +35,10 @@ NewString::NewString( const char *beg, const char *end ) {
     data = res;
     Level1::memcpy( res->ptr(), beg, size );
     res->val( size ) = 0;
+}
+
+NewString::NewString( const char *str ) {
+    new( this ) NewString( str, str + Level1::strlen( str ) );
 }
 
 char *NewString::ptr() {

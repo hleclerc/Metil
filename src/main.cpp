@@ -4,8 +4,6 @@
 using namespace Metil;
 
 int main() {
-//    Val t( "10" );
-    String t = "45";
-    t << 20;
-    //PRINT( t );
+    String t = NewString( "Level::" );
+    PRINT( t.replace( "::", "__" ) );
 }

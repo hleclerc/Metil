@@ -122,6 +122,11 @@ extern MethodName_end_from::TM metil_def_end_from__when__a__isa__ConstCharPtr__a
 extern MethodName_beg_upto::TM metil_def_beg_upto__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1;
 extern MethodName_del::TM metil_def_del__when__a__isa__OwcpString;
 extern MethodName_copy::TM metil_def_copy__when__a__isa__OwcpString;
+extern MethodName_size::TM metil_def_size__when__a__isa__OwcpString;
+extern MethodName_ptr_z::TM metil_def_ptr_z__when__a__isa__OwcpString;
+extern MethodName_find::TM metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1;
+extern MethodName_beg_upto::TM metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
+extern MethodName_end_from::TM metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
 extern MethodName_self_append::TM metil_def_self_append__when__a__isa__FileWithoutClose__and__b__isa__ConstCharPtr__pert__1;
 extern MethodName_self_append::TM metil_def_self_append__when__a__isa__FileWithoutClose__and__b__isa__OwcpString__pert__1;
 extern MethodName_self_append::TM metil_def_self_append__when__b__isa__ConstCharPtrWithSize__and__a__isa__FileWithoutClose__pert__1;
@@ -330,7 +335,7 @@ void reg_def() {
     item_metil_def_del__when__a__isa__OwcpString.cond = &cond_metil_def_del__when__a__isa__OwcpString;
     item_metil_def_del__when__a__isa__OwcpString.meth = metil_def_del__when__a__isa__OwcpString;
     item_metil_def_del__when__a__isa__OwcpString.file = string_3;
-    item_metil_def_del__when__a__isa__OwcpString.line = 6;
+    item_metil_def_del__when__a__isa__OwcpString.line = 10;
     item_metil_def_del__when__a__isa__OwcpString.pert = 0;
     MethodFinder<MethodName_del>::last = &item_metil_def_del__when__a__isa__OwcpString;
 
@@ -339,9 +344,58 @@ void reg_def() {
     item_metil_def_copy__when__a__isa__OwcpString.cond = &cond_metil_def_del__when__a__isa__OwcpString;
     item_metil_def_copy__when__a__isa__OwcpString.meth = metil_def_copy__when__a__isa__OwcpString;
     item_metil_def_copy__when__a__isa__OwcpString.file = string_3;
-    item_metil_def_copy__when__a__isa__OwcpString.line = 11;
+    item_metil_def_copy__when__a__isa__OwcpString.line = 16;
     item_metil_def_copy__when__a__isa__OwcpString.pert = 0;
     MethodFinder<MethodName_copy>::last = &item_metil_def_copy__when__a__isa__OwcpString;
+
+    static MethodFinder<MethodName_size>::Item item_metil_def_size__when__a__isa__OwcpString;
+    item_metil_def_size__when__a__isa__OwcpString.prev = MethodFinder<MethodName_size>::last;
+    item_metil_def_size__when__a__isa__OwcpString.cond = &cond_metil_def_del__when__a__isa__OwcpString;
+    item_metil_def_size__when__a__isa__OwcpString.meth = metil_def_size__when__a__isa__OwcpString;
+    item_metil_def_size__when__a__isa__OwcpString.file = string_3;
+    item_metil_def_size__when__a__isa__OwcpString.line = 21;
+    item_metil_def_size__when__a__isa__OwcpString.pert = 0;
+    MethodFinder<MethodName_size>::last = &item_metil_def_size__when__a__isa__OwcpString;
+
+    static MethodFinder<MethodName_ptr_z>::Item item_metil_def_ptr_z__when__a__isa__OwcpString;
+    item_metil_def_ptr_z__when__a__isa__OwcpString.prev = MethodFinder<MethodName_ptr_z>::last;
+    item_metil_def_ptr_z__when__a__isa__OwcpString.cond = &cond_metil_def_del__when__a__isa__OwcpString;
+    item_metil_def_ptr_z__when__a__isa__OwcpString.meth = metil_def_ptr_z__when__a__isa__OwcpString;
+    item_metil_def_ptr_z__when__a__isa__OwcpString.file = string_3;
+    item_metil_def_ptr_z__when__a__isa__OwcpString.line = 26;
+    item_metil_def_ptr_z__when__a__isa__OwcpString.pert = 0;
+    MethodFinder<MethodName_ptr_z>::last = &item_metil_def_ptr_z__when__a__isa__OwcpString;
+
+    static MethodCond_and<MethodCond_0_isa<TypeConstructor_OwcpString>,MethodCond_1_isa<TypeConstructor_ConstCharPtr> > cond_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1;
+
+    static MethodFinder<MethodName_find>::Item item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1;
+    item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1.prev = MethodFinder<MethodName_find>::last;
+    item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1.cond = &cond_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1;
+    item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1.meth = metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1;
+    item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1.file = string_3;
+    item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1.line = 31;
+    item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1.pert = 1;
+    MethodFinder<MethodName_find>::last = &item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1;
+
+    static MethodCond_and<MethodCond_0_isa<TypeConstructor_OwcpString>,MethodCond_1_isa<TypeConstructor_Int> > cond_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
+
+    static MethodFinder<MethodName_beg_upto>::Item item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
+    item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1.prev = MethodFinder<MethodName_beg_upto>::last;
+    item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1.cond = &cond_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
+    item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1.meth = metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
+    item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1.file = string_3;
+    item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1.line = 36;
+    item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1.pert = 1;
+    MethodFinder<MethodName_beg_upto>::last = &item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
+
+    static MethodFinder<MethodName_end_from>::Item item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
+    item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1.prev = MethodFinder<MethodName_end_from>::last;
+    item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1.cond = &cond_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
+    item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1.meth = metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
+    item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1.file = string_3;
+    item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1.line = 43;
+    item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1.pert = 1;
+    MethodFinder<MethodName_end_from>::last = &item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
 
     static MethodCond_and<MethodCond_0_isa<TypeConstructor_FileWithoutClose>,MethodCond_1_isa<TypeConstructor_ConstCharPtr> > cond_metil_def_self_append__when__a__isa__FileWithoutClose__and__b__isa__ConstCharPtr__pert__1;
 

@@ -111,3 +111,4 @@ Makefile
 ./src/metil_gen.h
 ./src/MemoryDriver.cpp
 src/Ps.h
+src/MachineId.h

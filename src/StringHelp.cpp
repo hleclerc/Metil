@@ -45,6 +45,20 @@ ST find( const char *a, const char *b ) {
     return -1;
 }
 
+ST find( const char *a, const char *b, ST len_a ) {
+    for( int i = 0; i < len_a; ++i ) {
+        for( int j = 0; ; ++j ) {
+            if ( b[ j ] == 0 )
+                return i;
+            if ( i + j >= len_a )
+                return -1;
+            if ( a[ i + j ] != b[ j ] )
+                break;
+        }
+    }
+    return -1;
+}
+
 void memcpy( void *a, const void *b, ST size ) {
     char *dst = reinterpret_cast<char *>( a );
     const char *src = reinterpret_cast<const char *>( b );
