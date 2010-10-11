@@ -150,7 +150,7 @@ BEG_METIL_NAMESPACE
 //    return st.tv_sec + st.tv_usec / 1e6;
 //}
 
-int create_directory( const String &filename, bool check_if_exists ) {
+int create_directory( String filename, bool check_if_exists ) {
     #ifdef WIN32
     if ( mkdir( filename.c_str()/* , S_IRWXU| S_IRWXG*/ ) ) {
     #else

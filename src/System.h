@@ -13,7 +13,7 @@ BEG_METIL_NAMESPACE
 //String absolute_filename( const String &f ); /// ./grot//toto/ -> /pouet/grot/toto
 //String directory_of( const String &filename );
 //String filename_without_dir_of( const String &filename );
-int create_directory( const String &filename, bool check_if_exists = true );
+int create_directory( String filename, bool check_if_exists = true );
 //SI64 last_modification_time_or_zero_of_file_named( const char   *n );
 //SI64 last_modification_time_or_zero_of_file_named( const String &n );
 //bool file_exists( const String &n );
