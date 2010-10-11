@@ -28,6 +28,16 @@ const char *metil_def_ptr_z__when__a__isa__OwcpString( MO &a ) {
     return o->ptr();
 }
 
+char *metil_def_new_ptr_z__when__a__isa__OwcpString( MO a ) {
+    OwcpStringData *o = reinterpret_cast<OwcpStringData *>( a.data );
+    return strndup( o->ptr(), o->size() );
+}
+
+void metil_def_copy_data__when__a__isa__OwcpString( MO a, void *ptr, ST size ) {
+    OwcpStringData *o = reinterpret_cast<OwcpStringData *>( a.data );
+    memcpy( ptr, o->ptr(), size );
+}
+
 MO metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1( MO a, MO b ) {
     OwcpStringData *o = reinterpret_cast<OwcpStringData *>( a.data );
     return NEW_Number( find( o->ptr(), (const char *)b.data, o->size() ) );
