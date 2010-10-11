@@ -47,8 +47,8 @@ int create_directory( String filename, bool check_if_exists = true );
 //// time
 //double time_of_day_in_sec();
 
-//// execution
-//int exec_cmd( const String &f, bool display = true );
+// execution
+int exec_cmd( String f, bool display = true );
 
 END_METIL_NAMESPACE
 

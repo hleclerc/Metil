@@ -229,10 +229,10 @@ int create_directory( String filename, bool check_if_exists ) {
 //    return NewStringPtr( ((dirent *)dir_ent)->d_name );
 //}
 
-//int exec_cmd( const String &f, bool display ) {
-//    if ( display )
-//        coutn << f;
-//    return system( f.c_str() );
-//}
+int exec_cmd( String f, bool display ) {
+    if ( display )
+        coutn << f;
+    return system( f.c_str() );
+}
 
 END_METIL_NAMESPACE

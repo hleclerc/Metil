@@ -6,12 +6,20 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
+//
 bool equal( const char *a, const char *b );
 ST strlen( const char *a );
 char *strdup( const char *a );
 char *strndup( const char *a, ST s );
 ST find( const char *a, const char *b );
 ST find( const char *a, const char *b, ST len_a );
+
+// char property
+inline bool is_a_number( char a ) { return a >= '0' and a <= '9'; }
+inline bool is_a_lower_letter ( char a ) { return a >= 'a' and a <= 'z'; }
+inline bool is_an_upper_letter( char a ) { return a >= 'A' and a <= 'Z'; }
+inline bool is_a_letter( char a ) { return is_a_lower_letter ( a ) or is_an_upper_letter( a ) or a == '_'; }
+inline bool is_a_space ( char a ) { return a == ' ' or a == '\t' or a == '\n' or a == '\r'; }
 
 // memcpy
 void memcpy( void *a, const void *b, ST size );
