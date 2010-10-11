@@ -76,6 +76,7 @@ struct String : public Level1::MO {
     String beg_upto( const Val &s ) const { return CM_2( beg_upto, *this, s ); } ///< "abcd".beg_upto( 1 ) -> "a"
     String end_from( const Val &s ) const { return CM_2( end_from, *this, s ); } ///< "abcd".beg_upto( 1 ) -> "a"
     String replace( const String &a, const String &b ) const;
+    String &write( const void *ptr, ST len ) { CM_1( write, *this, ptr, len ); return *this; }
 
     // static attributes
     static Endl endl; ///< file << String::endl; will diplay a carriage return and flush the file
