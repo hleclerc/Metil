@@ -11,6 +11,7 @@
 #ifdef METIL_COMP_DIRECTIVE
 #pragma lib_name cudart
 #pragma lib_path /usr/local/cuda/lib64
+#pragma lib_path /usr/local/cuda/lib
 #pragma cpp_path /usr/local/cuda/include
 #endif
 

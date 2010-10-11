@@ -41,6 +41,11 @@ struct String : public Level1::MO {
     String operator+( const char   *b ) const { return *this + String( b ); }
     String operator+( char          b ) const { return *this + String( b ); }
 
+    // +=
+    template<class T>
+    String &operator+=( const T &val ) { return *this << val; }
+
+    // ==
     Val operator==( const String &b ) const { return CM_2( equal, *this, b ); }
 
     // <<
@@ -70,7 +75,7 @@ struct String : public Level1::MO {
     // methods
     Val size() const { return CM_1( size, *this ); }
     const char *c_str() { return (const char *)CM_1( ptr_z, *this ); }
-    void flush() { type->flush( *this ); }
+    void flush() { CM_1( flush, *this ); }
     void write_separator( int num );
     Val find( const String &str ) const { return CM_2( find, *this, str ); } ///< return index of first str found in this. Else, return -1
     String beg_upto( const Val &s ) const { return CM_2( beg_upto, *this, s ); } ///< "abcd".beg_upto( 1 ) -> "a"
