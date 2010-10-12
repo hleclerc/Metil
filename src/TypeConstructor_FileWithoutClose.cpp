@@ -8,7 +8,14 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
+// flush
 void metil_def_flush__when__a__isa__FileWithoutClose__pert__1( MO &a ) { fflush( reinterpret_cast<FILE *>( a.data ) ); }
+
+// write
+void metil_def_write__when__a__isa__FileWithoutClose__pert__1( MO &a, const void *ptr, ST len ) {
+    if ( a.data )
+        std::fwrite( ptr, 1, len, reinterpret_cast<FILE *>( a.data ) );
+}
 
 // const char *
 void metil_def_self_append__when__a__isa__FileWithoutClose__and__b__isa__ConstCharPtr__pert__1( MO &a, MO b ) {
