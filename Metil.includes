@@ -1,2 +1,4 @@
 src
 /usr/include/python2.6/
+/usr/local/cuda/include
+

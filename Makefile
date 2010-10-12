@@ -1,4 +1,4 @@
-all: valgrind
+all: std
 
 std:
 	metil_comp -g3 -Isrc src/main.cpp

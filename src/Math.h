@@ -190,6 +190,8 @@ template<class T> __inline__ T max( const T &a, const T &b ) { return ::max( a, 
 
 template<class T> __inline__ T tan( const T &a ) { return ::tan( a ); }
 
+template<class T> __inline__ T sqrt( const T &a ) { return ::sqrt( a ); }
+
 #endif // __CUDACC__
 
 template<class T0,class T1> inline T0 pow_by_positive_integer( T0 m, T1 e ) {

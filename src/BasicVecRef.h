@@ -13,6 +13,8 @@ struct BasicVecRef {
     __inline__ const T &operator[]( ST index ) const { return data_[ index ]; }
     __inline__ ST size() const { return size_; }
     __inline__ ST rese() const { return rese_; }
+    __inline__ const T *ptr() const { return data_; }
+    __inline__ T *ptr() { return data_; }
 
     template<class TS>
     void write_str( TS &os ) const {
