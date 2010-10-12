@@ -57,9 +57,11 @@ template<class T0,class T1> __inline__ T0 ceil( T0 a, T1 m ) {
 }
 
 template<class T0,class T1>
-T0 iDivUp( T0 a, T1 b ) {
+__inline__ T0 iDivUp( T0 a, T1 b ) {
     return ( a + b - 1 ) / b;
 }
+
+#ifndef __CUDACC__
 
 template<class T> T abs( T a ) { return a >= 0 ? a : -a; }
 inline FP32 abs( FP32  a ) { return __builtin_fabsf( a ); }
@@ -175,6 +177,21 @@ inline FP32 pow( FP80 a, FP32 b ) { return __builtin_powf( a, b ); }
 inline FP64 pow( FP80 a, FP64 b ) { return __builtin_pow ( a, b ); }
 inline FP80 pow( FP80 a, FP80 b ) { return __builtin_powl( a, b ); }
 
+#define MAX( a, b ) ( (a) < (b) ? (b) : (a) )
+#define MIN( a, b ) ( (a) > (b) ? (b) : (a) )
+
+template<class T> __inline__ T min( const T &a, const T &b ) { return MIN( a, b ); }
+template<class T> __inline__ T max( const T &a, const T &b ) { return MAX( a, b ); }
+
+#else // __CUDACC__
+
+template<class T> __inline__ T min( const T &a, const T &b ) { return ::min( a, b ); }
+template<class T> __inline__ T max( const T &a, const T &b ) { return ::max( a, b ); }
+
+template<class T> __inline__ T tan( const T &a ) { return ::tan( a ); }
+
+#endif // __CUDACC__
+
 template<class T0,class T1> inline T0 pow_by_positive_integer( T0 m, T1 e ) {
     if ( is_equal_to_0( e ) ) return 1;
     if ( is_equal_to_1( e ) ) return m;
@@ -202,12 +219,6 @@ T1 gcd( T1 a, T2 b ) {
     }
     return a;
 }
-
-#define MAX( a, b ) ( (a) < (b) ? (b) : (a) )
-#define MIN( a, b ) ( (a) > (b) ? (b) : (a) )
-
-template<class T> T min( const T &a, const T &b ) { return MIN( a, b ); }
-template<class T> T max( const T &a, const T &b ) { return MAX( a, b ); }
 
 template<class T> __inline__ void swap( T &a, T &b ) { T c = a; a = b; b = c; }
 template<class T> __inline__ void swap_if( T &v_0, T &v_1, bool cond ) { if ( cond ) swap( v_0, v_1 ); }

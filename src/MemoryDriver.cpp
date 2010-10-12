@@ -4,14 +4,15 @@
 BEG_METIL_NAMESPACE;
 
 // MemoryDriver_Dry
-MemoryDriver_Dry::MemoryDriver_Dry() : off( 0 ) {
+void MemoryDriver_Dry::init( ST &size ) {
+    off = &size;
 }
 
 void MemoryDriver_Dry::MemoryDriver_Dry::beg_local_data( void **dst, void **loc, ST &size, ST alig ) {
-    off = ceil( off, alig );
-    *dst = (void *)off;
+    *off = ceil( *off, alig );
+    *dst = (void *)*off;
     *loc = MALLOC( size );
-    off += size;
+    *off += size;
 }
 
 void MemoryDriver_Dry::end_local_data( void *dst, void *loc, ST size ) {
@@ -20,12 +21,12 @@ void MemoryDriver_Dry::end_local_data( void *dst, void *loc, ST size ) {
 
 void MemoryDriver_Dry::copy( void **dst, const void *src, ST size, ST alig ) {
     *dst = (void *)off;
-    off = ceil( off, alig ) + size;
+    *off = ceil( *off, alig ) + size;
 }
 
 
 // MemoryDriver_Cpu
-MemoryDriver_Cpu::MemoryDriver_Cpu( ST &size ) {
+void MemoryDriver_Cpu::init( ST &size ) {
     res = (char *)MALLOC( size );
     off = 0;
 }
@@ -48,7 +49,7 @@ void MemoryDriver_Cpu::copy( void **dst, const void *src, ST size, ST alig ) {
 }
 
 // MemoryDriver_Gpu
-MemoryDriver_Gpu::MemoryDriver_Gpu( ST &size ) {
+void MemoryDriver_Gpu::init( ST &size ) {
     cudaMalloc( &res, size );
     off = 0;
 }
