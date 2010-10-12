@@ -37,9 +37,9 @@ typename T::HasOffPtr memcpy( Ps<T> &dst, const Ps<T> &src ) {
     cudaMemcpyKind mc[] = { cudaMemcpyHostToHost, cudaMemcpyHostToDevice, cudaMemcpyDeviceToHost, cudaMemcpyDeviceToDevice };
     cudaMemcpy( dst.data, src.data, src.rese, mc[ 2 * src.pos.is_a_gpu() + dst.pos.is_a_gpu() ] );
     if ( dst.pos.is_a_cpu() )
-        dst->update_ptr_cpu( (const char *)dst.data - (const char *)src.data );
+        dst->update_ptr_cpu_save( (const char *)dst.data - (const char *)src.data );
     else
-        dst->update_ptr_gpu( (const char *)dst.data - (const char *)src.data );
+        dst->update_ptr_gpu_save( (const char *)dst.data - (const char *)src.data );
 }
 
 /// make a new copy of data from str

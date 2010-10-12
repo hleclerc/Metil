@@ -37,8 +37,10 @@ void StructCompactor::ItemStr::make_decl( String &os, const String &sp ) {
     os << np << "}\n";
 
     // update_ptr method
-    os << np << "void update_ptr_cpu( ST off );\n";
-    os << np << "void update_ptr_gpu( ST off );\n";
+    os << np << "void update_ptr_cpu_load( ST off );\n";
+    os << np << "void update_ptr_cpu_save( ST off );\n";
+    os << np << "void update_ptr_gpu_load( ST off );\n";
+    os << np << "void update_ptr_gpu_save( ST off );\n";
     os << "\n";
 
     // attributes
@@ -56,23 +58,27 @@ void StructCompactor::ItemStr::make_defi( String &os, const String &pr, BasicVec
         return;
     already_defined << pr + type;
 
-    for( int gpu = 0; gpu < 2; ++gpu ) {
-        if ( gpu ) {
-            os << "__global__\n";
-            os << "void " << pr.replace( ':', '_' ) << type << "__update_ptr_gpu( " << pr << type << " *obj, ST off ) {\n";
-        } else
-            os << "void " << pr << type << "::update_ptr_cpu( ST off ) {\n";
-        //
-        for( int i = 0; i < items.size(); ++i )
-            items[ i ]->make_uptr( os, ( gpu ? "obj->" : "" ) + items[ i ]->name, 0, "    " );
+    static const char *lsl[] = { "_load", "_save" };
+    for( int save = 0; save < 2; ++save ) {
+        const char *ls = lsl[ save ];
+        for( int gpu = 0; gpu < 2; ++gpu ) {
+            if ( gpu ) {
+                os << "__global__\n";
+                os << "void " << pr.replace( ':', '_' ) << type << "__update_ptr_gpu" << ls << "( " << pr << type << " *obj, ST off ) {\n";
+            } else
+                os << "void " << pr << type << "::update_ptr_cpu" << ls << "( ST off ) {\n";
+            //
+            for( int i = 0; i < items.size(); ++i )
+                items[ i ]->make_uptr( os, ( gpu ? "obj->" : "" ) + items[ i ]->name, 0, "    ", save );
 
-        os << "}\n";
-        os << "\n";
-        if ( gpu ) {
-            os << "void " << pr << type << "::update_ptr_gpu( ST off ) {\n";
-            os << "    " << pr.replace( ':', '_' ) << type << "__update_ptr_gpu<<<1,1>>>( this, off );\n";
             os << "}\n";
             os << "\n";
+            if ( gpu ) {
+                os << "void " << pr << type << "::update_ptr_gpu" << ls << "( ST off ) {\n";
+                os << "    " << pr.replace( ':', '_' ) << type << "__update_ptr_gpu" << ls << "<<<1,1>>>( this, off );\n";
+                os << "}\n";
+                os << "\n";
+            }
         }
     }
     for( int i = 0; i < items.size(); ++i )
@@ -84,34 +90,37 @@ void StructCompactor::ItemVec::make_defi( String &os, const String &pr, BasicVec
 }
 
 
-void StructCompactor::ItemSca::make_uptr( String &os, const String &pr, int par_level, const String &sp ) {
+void StructCompactor::ItemSca::make_uptr( String &os, const String &pr, int par_level, const String &sp, bool save ) {
 }
 
-void StructCompactor::ItemStr::make_uptr( String &os, const String &pr, int par_level, const String &sp ) {
+void StructCompactor::ItemStr::make_uptr( String &os, const String &pr, int par_level, const String &sp, bool save ) {
     for( int i = 0; i < items.size(); ++i )
-        items[ i ]->make_uptr( os, pr + '.' + items[ i ]->name, par_level, sp );
+        items[ i ]->make_uptr( os, pr + '.' + items[ i ]->name, par_level, sp, save );
 }
 
-void StructCompactor::ItemVec::make_uptr( String &os, const String &pr, int par_level, const String &sp ) {
-    os << sp << "(char *&)" << pr << ".data_ += off;\n";
-    data_type->make_uptv( os, pr, par_level, sp );
+void StructCompactor::ItemVec::make_uptr( String &os, const String &pr, int par_level, const String &sp, bool save ) {
+    if ( not save ) // load
+        os << sp << "(char *&)" << pr << ".data_ += off;\n";
+    data_type->make_uptv( os, pr, par_level, sp, save );
+    if ( save )
+        os << sp << "(char *&)" << pr << ".data_ += off;\n";
 }
 
-void StructCompactor::ItemSca::make_uptv( String &os, const String &pr, int par_level, const String &sp ) {
+void StructCompactor::ItemSca::make_uptv( String &os, const String &pr, int par_level, const String &sp, bool save ) {
 }
 
-void StructCompactor::ItemStr::make_uptv( String &os, const String &pr, int par_level, const String &sp ) {
+void StructCompactor::ItemStr::make_uptv( String &os, const String &pr, int par_level, const String &sp, bool save ) {
     String i = char( 'i' + par_level );
     os << sp << "for( ST " << i << " = 0; " << i << " < " << pr << ".size_; ++" << i << " ) {\n";
     for( int j = 0; j < items.size(); ++j )
-        items[ j ]->make_uptr( os, pr + ".data_[ " + i + " ]." + items[ j ]->name, par_level + 1, sp + "    " );
+        items[ j ]->make_uptr( os, pr + ".data_[ " + i + " ]." + items[ j ]->name, par_level + 1, sp + "    ", save );
     os << sp << "}\n";
 }
 
-void StructCompactor::ItemVec::make_uptv( String &os, const String &pr, int par_level, const String &sp ) {
+void StructCompactor::ItemVec::make_uptv( String &os, const String &pr, int par_level, const String &sp, bool save ) {
     String i = char( 'i' + par_level );
     os << sp << "for( ST " << i << " = 0; " << i << " < " << pr << ".size_; ++" << i << " ) {\n";
-    make_uptr( os, pr + ".data_[ " + i + " ]", par_level + 1, sp + "    " );
+    make_uptr( os, pr + ".data_[ " + i + " ]", par_level + 1, sp + "    ", save );
     os << sp << "}\n";
 }
 
