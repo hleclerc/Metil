@@ -130,3 +130,7 @@ Makefile
 ./src/parser_if.h
 ./src/metil_gen.h
 ./src/MemoryDriver.cpp
+src/Lst.h
+src/Array.h
+src/TypeConstructor_Array.h
+src/TypeConstructor_Array.cpp
