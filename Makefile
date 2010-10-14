@@ -1,4 +1,8 @@
-all: std
+all:
+	make -C examples/server
+
+server:
+	metil_comp -g3 -Isrc examples/server/main.cpp
 
 std:
 	metil_comp -g3 -Isrc src/main.cpp

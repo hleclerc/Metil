@@ -6,9 +6,9 @@
 BEG_METIL_NAMESPACE
 
 // files
-//String cur_dir(); // current directory
-//String get_env( const String &var ); //
-//void set_env( const String &var, const String &val ); //
+String cur_dir(); // current directory
+String get_env( String var ); //
+void set_env( String var, String val ); //
 //String canonicalize_filename( const String &f ); /// /tata/../grot\toto/ -> /grot/toto
 //String absolute_filename( const String &f ); /// ./grot//toto/ -> /pouet/grot/toto
 //String directory_of( const String &filename );

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<html>
+    <head>
+        <title>Img server</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+        <!--<link rel="stylesheet" type="text/css" href="simple.css"/> -->
+        <script type="text/javascript" src="img_server.js"></script>
+    </head>
+    <body onload='img_init( document.getElementById("mainimg") );' onunload='close_all();'>
+        <canvas id="mainimg" width="480" height="400" z_index="10">canvas</canvas>
+
+        Remark : To use with mozilla / firefox, you will have to remove default action for middle button. about:config -> middlemouse.contentLoadURL;false
+
+        <div onmousedown='rot_img( document.getElementById("mainimg"), 0.1, 0, 0 )'>ROT X</div>
+        <div onmousedown='rot_img( document.getElementById("mainimg"), 0, 0.1, 0 )'>ROT Y</div>
+        <div onmousedown='rot_img( document.getElementById("mainimg"), 0, 0, 0.01 )'>ROT Z</div>
+        <div id="com">...</div>
+    </body>
+</html>

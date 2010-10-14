@@ -45,4 +45,13 @@ char *NewString::ptr() {
     return reinterpret_cast<Level1::OwcpStringData *>( data )->ptr();
 }
 
+void NewString::set_size( ST size ) {
+    reinterpret_cast<Level1::OwcpStringData *>( data )->data.size = size;
+}
+
+void NewString::del() {
+    Level1::OwcpStringData *o = reinterpret_cast<Level1::OwcpStringData *>( data );
+    FREE( o, o->rese() );
+}
+
 END_METIL_NAMESPACE;

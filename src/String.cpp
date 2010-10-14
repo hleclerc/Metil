@@ -41,6 +41,14 @@ String String::replace( const String &a, const String &b ) const { // TODO : opt
     }
 }
 
+Val String::begins_by( const String &str ) const {
+    return size() >= str.size() and beg_upto( str.size() ) == str; // TODO: optimize
+}
+
+Val String::ends_with( const String &str ) const {
+    return size() >= str.size() and end_from( size() - str.size() ) == str; // TODO: optimize
+}
+
 /// for i in range( 256 ): print str( i ) + "," + 0 + ","
 char String::char_ptr[] = {
     0  ,0, 1  ,0, 2  ,0, 3  ,0, 4  ,0, 5  ,0, 6  ,0, 7  ,0,

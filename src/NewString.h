@@ -14,7 +14,11 @@ public:
     NewString( ST rese, ST size ); ///< will reserve 1 additional byte for \0
     NewString( const char *beg, const char *end ); ///< make a copy
     NewString( const char *str ); ///< make a copy
+
     char *ptr();
+    void set_size( ST size );
+    void del();
+
     void *data;
 };
 

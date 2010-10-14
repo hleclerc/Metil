@@ -22,9 +22,6 @@ ValReader::ValReader( String str, BasicVec<String> &symbols ) : symbols( symbols
 
     // number
     if ( is_a_number( *s ) ) {
-        PRINT( str );
-        PRINT( s );
-        PRINT( *s - '0' );
         res = *s - '0';
         while ( is_a_number( *(++s) ) )
             res = 10 * res + ( *s - '0' );

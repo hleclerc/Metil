@@ -7,9 +7,9 @@ void TypeConstructor_Array::init( Type *type ) {
     PRINT( type->name );
     BasicVec<String> lst = tokenize( type->name, '_' );
 
-    PRINT( lst[ 1 ] );
+    //PRINT( lst[ 1 ] );
     int dim = Val( lst[ 1 ] );
-    PRINT( dim );
+    //PRINT( dim );
 }
 
 END_METIL_LEVEL1_NAMESPACE;

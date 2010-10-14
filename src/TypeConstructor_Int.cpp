@@ -37,6 +37,11 @@ BOP( add, + );
 BOP( sub, - );
 BOP( mul, * );
 
+BOP( sup  , >  );
+BOP( supeq, >= );
+BOP( inf  , <  );
+BOP( infeq, <= );
+
 BOP( boolean_or , || );
 BOP( boolean_and, && );
 

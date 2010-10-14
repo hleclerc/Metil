@@ -5,7 +5,7 @@
 #include "CudaMetil.h"
 
 #define NB_PIX_RASTER_BOX 32
-#define NB_BLOCKS_FOR_ELEM_COUNT 1
+#define NB_BLOCKS_FOR_ELEM_COUNT 32
 #define MAX_WH ( 1600 * 1200 )
 #define NB_THREADS_FOR_RASTER 64
 
@@ -20,7 +20,7 @@ DisplayItem_BasicMesh::DisplayItem_BasicMesh( Ps<BasicMesh_Compacted> mesh ) : m
 }
 
 __inline__ ST rese_elem_count_for_one_group( int sb ) {
-    return ( NB_BLOCKS_FOR_ELEM_COUNT + 1 ) * sb + 1 /*offset list need n+1 terms...*/;
+    return ( NB_BLOCKS_FOR_ELEM_COUNT + 1 ) * sb + 1 /*offset list needs n + 1 terms...*/;
 }
 
 unsigned *DisplayItem_BasicMesh::get_elem_count_gpu_ptr( ST nb_types, int sb ) {
@@ -340,8 +340,8 @@ void raster_gpu_kernel( unsigned *res, const DisplayTrans *trans_ptr, int wb, in
             float cx_2 = dx_21 / float( dy_21 + not dy_21 ), cz_2 = dz_21 / float( dy_21 + not dy_21 );
             float cx_3 = dx_22 / float( dy_22 + not dy_22 ), cz_3 = dz_22 / float( dy_22 + not dy_22 );
             bool cond_1 = cx_2 < cx_3;
-            Metil::swap_if( cx_2, cx_3, cond_1 );
-            Metil::swap_if( cz_2, cz_3, cond_1 );
+            swap_if( cx_2, cx_3, cond_1 );
+            swap_if( cz_2, cz_3, cond_1 );
 
             for( int y_b = max( 0, y_1 ); y_b < min( NB_PIX_RASTER_BOX, y_2 + 1 ); ++y_b ) {
                 int xl_0 = x_2 + ( y_b - y_2 ) * cx_2;
@@ -391,7 +391,7 @@ void raster_gpu_kernel( unsigned *res, const DisplayTrans *trans_ptr, int wb, in
 
     // save z_min z_max
     for( int m = NB_THREADS_FOR_RASTER / 2; m; m /= 2 ) {
-        syncthreads();
+        __syncthreads();
         if ( threadIdx.x < m ) {
             local_z_min[ threadIdx.x ] = min( local_z_min[ threadIdx.x ], local_z_min[ threadIdx.x + m ] );
             local_z_max[ threadIdx.x ] = max( local_z_max[ threadIdx.x ], local_z_max[ threadIdx.x + m ] );
@@ -436,9 +436,6 @@ void DisplayItem_BasicMesh::render_to( BitmapDisplay *display ) {
                       sizeof( unsigned ), cudaMemcpyDeviceToHost ) ));
 
 
-
-
-    //CSC(( DisplayItem_BasicMesh_render_kernel<<<1,1>>>( display->get_img_gpu_ptr(), elem_count, w, h, wb, hb ) ));
     // fill elem_data
     int *elem_data = get_elem_data_gpu_ptr( tot_nb_elems );
     CSC(( make_elem_data_kernel<<<NB_BLOCKS_FOR_ELEM_COUNT,128>>>( elem_count, elem_data, trans, wb, hb, sb, w, h, mesh.ptr() ) ));

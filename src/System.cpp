@@ -14,30 +14,30 @@
 
 BEG_METIL_NAMESPACE
 
-//String get_env( const String &var ) {
-//    const char *res = getenv( var.c_str() );
-//    return res ? String( res ) : String();
-//}
+String cur_dir() {
+    for( ST rese = 128; ; rese *= 2 ) {
+        NewString res( rese );
+        if ( getcwd( res.ptr(), rese ) ) {
+            res.set_size( strlen( res.ptr() ) );
+            return res;
+        }
+        res.del();
+    }
+    return String();
+}
 
-//void set_env( const String &var, const String &val ) {
-//    #ifdef WIN32
-//    putenv( ( var + "=" + val ).c_str() );
-//    #else
-//    setenv( var.c_str(), val.c_str(), true );
-//    #endif
-//}
+String get_env( String var ) {
+    const char *res = getenv( var.c_str() );
+    return res ? String( res ) : String();
+}
 
-//String cur_dir() {
-//    for( ST rese = 128; ; rese *= 2 ) {
-//        NewStringPtr res( rese );
-//        if ( getcwd( res.ptr(), rese ) ) {
-//            res.set_size( strlen( res.ptr() ) );
-//            return res;
-//        }
-//        res.del();
-//    }
-//    return String();
-//}
+void set_env( String var, String val ) {
+    #ifdef WIN32
+    putenv( ( var + "=" + val ).c_str() );
+    #else
+    setenv( var.c_str(), val.c_str(), true );
+    #endif
+}
 
 //inline static bool sep( char s ) {
 //    return s == '/' or s == '\\';

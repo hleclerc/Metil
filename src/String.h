@@ -47,6 +47,7 @@ struct String : public Level1::MO {
 
     // ==
     Val operator==( const String &b ) const { return CM_2( equal, *this, b ); }
+    Val operator==( char b ) const { return operator==( String( b ) ); }
 
     // <<
     String &operator<<( const char *s ) { CM_2( self_append, *this, MO( (char *)s, &Level1::metil_type_cst_ConstCharPtr ) ); return *this; }
@@ -82,6 +83,15 @@ struct String : public Level1::MO {
     String end_from( const Val &s ) const { return CM_2( end_from, *this, s ); } ///< "abcd".beg_upto( 1 ) -> "a"
     String replace( const String &a, const String &b ) const;
     String &write( const void *ptr, ST len ) { CM_1( write, *this, ptr, len ); return *this; }
+    Val begins_by( const String &str ) const;
+    Val ends_with( const String &str ) const;
+
+    operator bool() const { return CM_1( convert_to_Bool, *this ); }
+    operator SI32() const { return CM_1( convert_to_SI32, *this ); }
+    operator SI64() const { return CM_1( convert_to_SI64, *this ); }
+    operator FP32() const { return CM_1( convert_to_FP32, *this ); }
+    operator FP64() const { return CM_1( convert_to_FP64, *this ); }
+    operator FP80() const { return CM_1( convert_to_FP80, *this ); }
 
     // static attributes
     static Endl endl; ///< file << String::endl; will diplay a carriage return and flush the file

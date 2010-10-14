@@ -39,7 +39,7 @@ public:
     }
 
     void add_node( T x, T y, T z );
-    void add_elem( const ElemType *elem_type, T x, T y, T z );
+    void add_elem( const ElemType *elem_type, I x, I y, I z );
     ElemGroup *find_group( const ElemType *elem_type );
 
     BasicVec<BasicVec<T> > pos_nodes;

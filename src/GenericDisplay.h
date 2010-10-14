@@ -27,6 +27,9 @@ public:
     void set_O( T Ox, T Oy, T Oz );
     void set_X( T Xx, T Xy, T Xz );
     void set_Y( T Yx, T Yy, T Yz );
+    void set_O( T3 O );
+    void set_X( T3 X );
+    void set_Y( T3 Y );
     void set_d( T d );
     void set_a( T a );
 
@@ -37,6 +40,7 @@ public:
 
     DisplayTrans *get_trans_gpu();
     void update_p_min_p_max();
+    void fit();
 
     T3 p_min; ///< after projection
     T3 p_max; ///< after projection

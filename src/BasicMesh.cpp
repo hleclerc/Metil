@@ -10,7 +10,7 @@ void BasicMesh::add_node( T x, T y, T z ) {
     pos_nodes[ 2 ] << z;
 }
 
-void BasicMesh::add_elem( const ElemType *elem_type, T x, T y, T z ) {
+void BasicMesh::add_elem( const ElemType *elem_type, I x, I y, I z ) {
     ElemGroup *eg = find_group( elem_type );
     eg->connec.resize( 3 );
     eg->connec[ 0 ] << x;

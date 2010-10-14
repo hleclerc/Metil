@@ -9,4 +9,9 @@ void metil_def_self_append__when__a__isa__String__and__b__is__Flt_64__pert__1000
     DisplayFlt< 64-1-11, 11, 0, 63, 63 - 11, -1023 >::display( static_cast<String &>( a ), (const PI8 *)b.data );
 }
 
+void metil_def_self_append__when__a__isa__String__and__b__is__Flt_32__pert__1000( MO &a, MO b ) {
+    // DEFI_FLT( Fp, 32, 8, -127  );
+    DisplayFlt< 32-1-8, 8, 0, 31, 31 - 8, -127 >::display( static_cast<String &>( a ), (const PI8 *)b.data );
+}
+
 END_METIL_LEVEL1_NAMESPACE;
