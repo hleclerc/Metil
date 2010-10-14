@@ -6,6 +6,8 @@
 using namespace Metil;
 
 int main() {
+    // Array<String> a( 2 );
+    // PRINT( a.size() );
     cudaSetDevice( 1 );
 
     // user

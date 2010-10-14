@@ -35,7 +35,6 @@ void GenericDisplay::update_p_min_p_max() {
     p_max = -std::numeric_limits<T>::max();
     for( int n = 0; n < items.size(); ++n )
         items[ n ]->update_p_min_p_max( this, p_min, p_max );
-    p_min[2]=0;
 }
 
 DisplayTrans *GenericDisplay::get_trans_gpu() {
