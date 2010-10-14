@@ -13,7 +13,7 @@ BEG_METIL_NAMESPACE;
 */
 class Val : public Level1::MO {
 public:
-    Val() { type = &Level1::metil_type_cst_Cst__zero; }
+    Val() { type = &Level1::metil_type_cst_Cst_zero; }
     Val( const Level1::MO &mo ) : Level1::MO( mo ) {}
 
     template<class T>

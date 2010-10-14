@@ -8,7 +8,7 @@ Val::Val( const String &str ) {
     Level1::ValReader reader( str, sym );
     type = reader.res.type;
     data = reader.res.data;
-    reader.res.type = &Level1::metil_type_cst_Cst__zero;
+    reader.res.type = &Level1::metil_type_cst_Cst_zero;
 }
 
 Val::Val( const char *str ) {

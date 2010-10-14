@@ -50,7 +50,7 @@ extern Type metil_type_ref_Array_3_1_0_0_0_0_0_0_0;
 extern Type metil_type_ref_Array_4_1_0_0_0_0_0_0_0_0_0;
 extern Type metil_type_ref_Array_5_1_0_0_0_0_0_0_0_0_0_0_0;
 extern Type metil_type_ref_FileWithoutClose;
-extern Type metil_type_cst_Cst__zero;
+extern Type metil_type_cst_Cst_zero;
 extern Type metil_type_cst_VoidString;
 extern Type metil_type_cst_ConstCharPtr;
 
