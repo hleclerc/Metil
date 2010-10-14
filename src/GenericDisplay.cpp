@@ -1,9 +1,12 @@
 #include "GenericDisplay.h"
 #include "CudaMetil.h"
 
+#include <limits>
+
 BEG_METIL_NAMESPACE;
 
 GenericDisplay::GenericDisplay( int w, int h ) : w( w ), h( h ) {
+    trans_gpu = 0;
 }
 
 GenericDisplay::~GenericDisplay() {
@@ -26,6 +29,14 @@ int GenericDisplay::get_w() const { return w; }
 int GenericDisplay::get_h() const { return h; }
 void GenericDisplay::set_w( int w ) { this->w = w; }
 void GenericDisplay::set_h( int h ) { this->h = h; }
+
+void GenericDisplay::update_p_min_p_max() {
+    p_min = +std::numeric_limits<T>::max();
+    p_max = -std::numeric_limits<T>::max();
+    for( int n = 0; n < items.size(); ++n )
+        items[ n ]->update_p_min_p_max( this, p_min, p_max );
+    p_min[2]=0;
+}
 
 DisplayTrans *GenericDisplay::get_trans_gpu() {
     if ( not trans_gpu ) {

@@ -14,7 +14,9 @@ BEG_METIL_NAMESPACE;
 */
 class BitmapDisplay : public GenericDisplay {
 public:
+    typedef BasicVec<float,3> T3;
     static const int nb_img = 3;
+
     BitmapDisplay( int w = 400, int h = 400 );
 
     void render();
@@ -27,8 +29,10 @@ public:
 
     ST rese_img(); ///< size of image in bytes
     ST nb_lines(); ///< total nb lines in img
+    bool first_item(); ///< return true if rendering first item in the img and set first item to 0
 
 protected:
+    bool first_item_; ///<
     unsigned *img_cpu; //
     unsigned *img_gpu; //
 };

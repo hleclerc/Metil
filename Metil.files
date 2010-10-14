@@ -130,3 +130,5 @@ Makefile
 ./src/parser_if.h
 ./src/metil_gen.h
 ./src/MemoryDriver.cpp
+src/GetSurroundingBox_BasicMesh.h
+src/GetSurroundingBox_BasicMesh.cu

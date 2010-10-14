@@ -1,10 +1,13 @@
 #include "DisplayItem_BasicMesh.h"
 #include "BitmapDisplay.h"
 #include "BasicMesh.h"
+#include "CudaMetil.h"
 
 using namespace Metil;
 
 int main() {
+    cudaSetDevice( 1 );
+
     // user
     BasicMesh mesh;
     mesh.add_node(  0,  0, 0 );
@@ -19,6 +22,9 @@ int main() {
     // display
     BitmapDisplay display;
     display << NEW( DisplayItem_BasicMesh, m );
+
+    display.set_d( 50 );
+    display.set_O( 5, 5, 0 );
 
     display.render();
     display.copy_gpu_to_cpu();

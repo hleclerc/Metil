@@ -10,8 +10,19 @@ BitmapDisplay::BitmapDisplay( int w, int h ) : GenericDisplay( w, h ) {
 }
 
 void BitmapDisplay::render() {
+    update_p_min_p_max();
+    DOUT( p_min[2] );
+    DOUT( p_max[2] );
+    //
+    first_item_ = true;
     for( ST i = 0; i < items.size(); ++i )
         items[ i ]->render_to( this );
+}
+
+bool BitmapDisplay::first_item() {
+    bool res = first_item_;
+    first_item_ = false;
+    return res;
 }
 
 Ps<char> BitmapDisplay::make_png() {

@@ -12,6 +12,7 @@ BEG_METIL_NAMESPACE;
 class GenericDisplay {
 public:
     typedef float T;
+    typedef BasicVec<T,3> T3;
 
     GenericDisplay( int w = 400, int h = 400 );
     ~GenericDisplay();
@@ -35,7 +36,10 @@ public:
     void set_h( int h );
 
     DisplayTrans *get_trans_gpu();
+    void update_p_min_p_max();
 
+    T3 p_min; ///< after projection
+    T3 p_max; ///< after projection
 protected:
     int w, h;
     BasicVec<DisplayItem *> items;

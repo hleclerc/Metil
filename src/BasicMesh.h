@@ -13,6 +13,8 @@ class DisplayItem;
 class BasicMesh {
 public:
     typedef float T;
+    typedef int I;
+
     struct ElemGroup {
         ElemGroup( const ElemType *elem_type ) : elem_type( elem_type ), elem_id( elem_type->elem_id() ) {
         }
@@ -24,9 +26,9 @@ public:
             APPLY_WN( res, elem_id );
         }
 
-        BasicVec<BasicVec<ST> > connec;
+        BasicVec<BasicVec<I> > connec;
         const ElemType *elem_type;
-        ST elem_id;
+        I elem_id;
     };
 
     template<class TB,class TP>
