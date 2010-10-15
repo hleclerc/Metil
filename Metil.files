@@ -161,3 +161,8 @@ Makefile
 ./examples/server/server_objects.i
 ./examples/server/test.py
 ./examples/server/server_objects.py
+src/Base64.h
+src/Base64.cpp
+src/TypeConstructor_Socket.h
+src/TypeConstructor_Socket.cpp
+src/Socket.i

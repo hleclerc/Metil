@@ -21,8 +21,10 @@ public:
 
     void render();
     void copy_gpu_to_cpu(); ///< after render()
-    Ps<char> make_png(); ///< after copy_gpu_to_cpu()
+    Ps<char> make_png( const char *prelim = 0, ST prelim_size = 0 ); ///< after copy_gpu_to_cpu()
     void save_png( const String &filename ); ///< make and save png to a file
+    void save_png_in_sock( int socket_id, const char *name ); ///< make and save png to a file
+    void write_to_sockect( int socket_id, const char *txt ); ///< HUM. convenience function but...
 
     unsigned *get_img_gpu_ptr();
     unsigned *get_img_cpu_ptr();

@@ -97,11 +97,7 @@ bool MetilServer::run( int port ) {
     //
     Py_Initialize();
     PyRun_SimpleString("from StringIO import StringIO\n"
-                       "import sys\n"
-                       "sys.stdout = StringIO()\n"
-                       "sys.stderr = StringIO()\n"
-                       "def t(): execfile('test.py')\n"
-                       );
+                       "import sys\n" );
 
 
     while ( true ) {
@@ -189,45 +185,57 @@ bool MetilServer::get_page( String addr, String data, int sd_current ) {
         return get_page( "/index.html", data, sd_current );
 
     if ( addr == "/exec.py" ) {
+        const char header[] =
+                "HTTP/1.0 200 Ok\r\n"
+                "Content-Type: text/javascript\r\n"
+                "\r\n";
+        send( sd_current, header, sizeof( header ) - 1, 0 );
+
+
+        // prepare python environment
+        PyObject *pName = PyString_FromString("__main__");
+        PyObject *pModule = pName ? PyImport_Import( pName ) : 0;
+        PyObject *pSocketId = PyInt_FromLong( sd_current );
+        if( pModule )
+            PyObject_SetAttrString( pModule, "socket_id", pSocketId );
+
+        PyRun_SimpleString(
+            "sys.stdout = StringIO()\n"
+            "sys.stderr = StringIO()\n"
+        );
+
         // execution
-        PRINT( data );
         PyRun_SimpleString( data.c_str() );
         if ( PyErr_Occurred() )
             PyErr_Print();
 
-        // get stdout / stderr
-        String retr;
-        retr << "\n";
-        retr << "__stdout__ = sys.stdout.getvalue()\n";
-        retr << "__stderr__ = sys.stderr.getvalue()\n";
-        retr << "sys.stdout = StringIO()\n";
-        retr << "sys.stderr = StringIO()\n";
-        PyRun_SimpleString( retr.c_str() );
+        // get stdout / stderr / js_out
+        PyRun_SimpleString(
+            "__stdout__ = sys.stdout.getvalue()\n"
+            "__stderr__ = sys.stderr.getvalue()\n"
+        );
 
         // get result
-        PyObject *pName = PyString_FromString("__main__");
-        PyObject *pModule = pName ? PyImport_Import( pName ) : 0;
         PyObject *pOut = pModule ? PyObject_GetAttrString( pModule, "__stdout__" ) : 0;
         PyObject *pErr = pModule ? PyObject_GetAttrString( pModule, "__stderr__" ) : 0;
         String out = NewString( pOut ? PyString_AsString( pOut ) : "" );
         String err = NewString( pErr ? PyString_AsString( pErr ) : "" );
-        Py_DECREF( pName );
-        Py_DECREF( pModule );
-        Py_DECREF( pOut );
         Py_DECREF( pErr );
+        Py_DECREF( pOut );
 
         // returned javascript program
         String txt;
-        txt << "HTTP/1.0 200 Ok\r\n";
-        txt << "Content-Type: text/javascript\r\n";
-        txt << "\r\n";
         txt << "c.out = '";
         disp_js( txt, out );
         txt << "';\r\n";
         txt << "c.err = '";
         disp_js( txt, err );
         txt << "';\r\n";
-        send( sd_current, txt.c_str(), (ST)txt.size(), 0 );
+        send( sd_current, txt.c_str(), ST( txt.size() ), 0 );
+
+        Py_DECREF( pSocketId );
+        Py_DECREF( pModule );
+        Py_DECREF( pName );
         return true;
     }
 

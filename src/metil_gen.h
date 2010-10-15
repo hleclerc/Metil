@@ -26,6 +26,7 @@ extern Type metil_type_bas_Flt_32;
 extern Type metil_type_bas_Flt_64;
 extern Type metil_type_bas_Flt_80;
 extern Type metil_type_bas_File;
+extern Type metil_type_bas_Socket;
 extern Type metil_type_bas_ConstCharPtrWithSize;
 extern Type metil_type_bas_StringConcat;
 extern Type metil_type_ref_Int_s_8;

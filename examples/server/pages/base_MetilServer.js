@@ -25,9 +25,10 @@ function queue_python_cmd( cmd ) {
     python_commands += cmd + "\n";
 }
 
-function send_python_cmds() {
+function exec_python_cmds() {
     send_async_xml_http_request( "exec.py", python_commands, function( rep ) {
         c = {};
+        alert( rep );
         eval( rep );
         if ( c.err && c.err.length )
             alert( c.err );

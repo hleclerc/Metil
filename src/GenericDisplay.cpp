@@ -35,21 +35,18 @@ int GenericDisplay::get_h() const { return h; }
 void GenericDisplay::set_w( int w ) { this->w = w; }
 void GenericDisplay::set_h( int h ) { this->h = h; }
 
-void GenericDisplay::update_p_min_p_max() {
+void GenericDisplay::update_p_min_p_max( bool use_trans ) {
     p_min = +std::numeric_limits<T>::max();
     p_max = -std::numeric_limits<T>::max();
-    PRINT( items.size() );
     for( int n = 0; n < items.size(); ++n )
-        items[ n ]->update_p_min_p_max( this, p_min, p_max );
+        items[ n ]->update_p_min_p_max( this, p_min, p_max, use_trans );
 }
 
 void GenericDisplay::fit() {
-    update_p_min_p_max();
+    update_p_min_p_max( false );
     T3 C = T( 0.5 ) * ( p_min + p_max );
     set_O( C );
-    set_d( 1.0 * max( p_max[ 0 ] - p_min[ 0 ], p_max[ 1 ] - p_min[ 1 ] ) );
-    PRINT( trans_cpu.O );
-    PRINT( trans_cpu.d );
+    set_d( 1.5 * max( p_max[ 0 ] - p_min[ 0 ], p_max[ 1 ] - p_min[ 1 ] ) );
 }
 
 DisplayTrans *GenericDisplay::get_trans_gpu() {

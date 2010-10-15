@@ -59,7 +59,7 @@ static void png_append( char *&dst, const T &src ) {
         *(dst++) = tmp[ i ];
 }
 
-Ps<char> make_png( unsigned *img, int w, int h ) {
+Ps<char> make_png( unsigned *img, int w, int h, const char *prelim, ST prelim_size ) {
     int ws = 1 + sizeof( unsigned ) * w;
     ST tmp_rese = ws * h;
     Bytef *tmp = (Bytef *)MALLOC( tmp_rese );
@@ -78,7 +78,8 @@ Ps<char> make_png( unsigned *img, int w, int h ) {
 
     // allocation
     Ps<char> res;
-    res.rese  = sizeof( header );
+    res.rese = prelim_size;
+    res.rese += sizeof( header );
     res.rese += 8 +      13 + 4;
     res.rese += 8 + dst_len + 4;
     res.rese += 8 +       0 + 4;
@@ -87,6 +88,7 @@ Ps<char> make_png( unsigned *img, int w, int h ) {
 
     // streaming
     char *ptr = res.data, *beg;
+    png_memcpy( ptr, prelim, prelim_size );
 
     // header
     png_memcpy( ptr, header, sizeof( header ) );

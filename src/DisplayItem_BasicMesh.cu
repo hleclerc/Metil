@@ -45,10 +45,10 @@ int *DisplayItem_BasicMesh::get_elem_data_gpu_ptr( ST needed_size ) {
     return elem_data_gpu;
 }
 
-void DisplayItem_BasicMesh::update_p_min_p_max( GenericDisplay *display, T3 &p_min, T3 &p_max ) {
+void DisplayItem_BasicMesh::update_p_min_p_max( GenericDisplay *display, T3 &p_min, T3 &p_max, bool use_trans ) {
     T3 t_min;
     T3 t_max;
-    get_surrounding_box( t_min.ptr(), t_max.ptr(), mesh.ptr(), display->get_trans_gpu(), display->get_w(), display->get_h() );
+    get_surrounding_box( t_min.ptr(), t_max.ptr(), mesh.ptr(), use_trans ? display->get_trans_gpu() : 0, display->get_w(), display->get_h() );
     for( int i = 0; i < 3; ++i ) {
         p_min[ i ] = min( p_min[ i ], t_min[ i ] );
         p_max[ i ] = max( p_max[ i ], t_max[ i ] );

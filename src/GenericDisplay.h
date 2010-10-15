@@ -19,11 +19,6 @@ public:
 
     GenericDisplay &operator<<( DisplayItem *item ); ///< item will be owned by this
 
-    //    template<class T>
-    //    GenericDisplay &operator<<( T &val ) { ///< we assume that val will exist until this will be destroyed
-    //        return operator<<( val.NEW_DisplayItem() );
-    //    }
-
     void set_O( T Ox, T Oy, T Oz );
     void set_X( T Xx, T Xy, T Xz );
     void set_Y( T Yx, T Yy, T Yz );
@@ -39,7 +34,7 @@ public:
     void set_h( int h );
 
     DisplayTrans *get_trans_gpu();
-    void update_p_min_p_max();
+    void update_p_min_p_max( bool use_trans = true );
     void fit();
 
     T3 p_min; ///< after projection

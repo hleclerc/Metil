@@ -10,6 +10,7 @@ namespace Metil {
     struct Ps {
         Metil_ST nb_items();
         Metil_ST size_mem();
+        void free();
         T *ptr();
 
         MachineId pos; ///< machine id (-1 -> cpu, 0 -> gpu board 0, ...)

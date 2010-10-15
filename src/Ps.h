@@ -1,8 +1,8 @@
 #ifndef PS_H
 #define PS_H
 
-#include "TypeConfig.h"
 #include "MachineId.h"
+#include "Malloc.h"
 
 BEG_METIL_NAMESPACE;
 
@@ -28,6 +28,13 @@ struct Ps {
 
     ST nb_items() const { return size; }
     ST size_mem() const { return rese; }
+
+    void free() {
+        //if ( pos.is_a_gpu() )
+        //    cudaFree( data );
+        //else
+            FREE( data, rese );
+    }
 
     T *data;
     ST size; ///< nb (consecutive) pointed items

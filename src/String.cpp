@@ -90,5 +90,9 @@ File::File( String filename, String mode ) {
     type = &Level1::metil_type_bas_File;
 }
 
+Socket::Socket( int socket_id ) {
+    data = (void *)socket_id;
+    type = &Level1::metil_type_bas_Socket;
+}
 
 END_METIL_NAMESPACE;

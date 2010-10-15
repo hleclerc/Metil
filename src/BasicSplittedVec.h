@@ -39,6 +39,8 @@ public:
 
         const T &val( int n ) const { return reinterpret_cast<T *>( beg )[ n ]; }
         T &val( int n ) { return reinterpret_cast<T *>( beg )[ n ]; }
+
+        ST size() const { return cur - ptr(); }
     };
     static const int base_item_size = sizeof( Item ) - sizeof( size_first_item );
 
@@ -188,12 +190,6 @@ public:
         last->cur += nb_elements;
         return res;
     }
-
-protected:
-    //    struct Disp {
-    //        void operator()( const T &r ) { *os << r; os->write_separator( 0 ); }
-    //        Stream *os;
-    //    };
 
     T *get_room_in_new_Item( ST nb_elements ) {
         Item *old_last = last;

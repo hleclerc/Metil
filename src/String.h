@@ -113,6 +113,13 @@ struct File : public String {
     File( String filename, String mode = "r" );
 };
 
+/**
+  @brief I/O file
+*/
+struct Socket : public String {
+    Socket( int socket_id );
+};
+
 #define PRINT( A ) \
     Metil::coutn << "  " << #A << " -> " << (A)
 #define PRINTN( A ) \
