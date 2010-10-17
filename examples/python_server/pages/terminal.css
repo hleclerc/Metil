@@ -24,3 +24,7 @@
     left: 25%;
     z-index: 99;
 }
+
+.selected_line {
+    background: #AAAAAA;
+}

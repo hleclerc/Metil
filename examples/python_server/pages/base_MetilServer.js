@@ -89,18 +89,44 @@ function dialog_key_down( evt ) {
     var doc = this;
     
     var caught  = false;
-    var repaint = false;
-    var end_dia = false;
+    var end_dialog = false;
     switch ( event.keyCode ) {
+        case 38: // up
+            if ( doc.selected_line > 0 ) {
+                doc.dialog.childNodes[ doc.selected_line ].setAttribute( 'class', '' );
+                doc.selected_line -= 1;
+                doc.dialog.childNodes[ doc.selected_line ].setAttribute( 'class', 'selected_line' );
+            }
+            caught = true;
+            break;
+        case 40: // down
+            if ( doc.selected_line < doc.dialog.childNodes.length - 1 ) {
+                doc.dialog.childNodes[ doc.selected_line ].setAttribute( 'class', '' );
+                doc.selected_line += 1;
+                doc.dialog.childNodes[ doc.selected_line ].setAttribute( 'class', 'selected_line' );
+            }
+            caught = true;
+            break;
         case 13: // CR
+            if ( doc.lines.length > 0 ) {
+                current_line = doc.lines[ doc.lines.length - 1 ];
+                current_line.cmd = doc.lst_cmd[ doc.selected_line ];
+                current_line.cursor = current_line.cmd.length;
+                update_text( doc );
+            }
         case 27: // ESC
-            end_dia = true;
+            end_dialog = true;
+            break;
+        case 8 : // backspace
+            doc.lst_cmd_filter = doc.lst_cmd_filter.slice( 0, doc.lst_cmd_filter.length - 1 );
+            update_lst_cmd( doc );
+            caught = true;
             break;
         default:
     }
 
     // end dialog
-    if ( end_dia ) {
+    if ( end_dialog ) {
         doc.overlay.style.display = "none";
         doc.dialog. style.display = "none";
         doc.onkeydown  = key_down;
@@ -110,25 +136,74 @@ function dialog_key_down( evt ) {
     }
     
     //
-    if ( caught || repaint ) {
+    if ( caught ) {
         doc.onkeydown  = dialog_key_down;
         doc.onkeypress = null;
-        // this.onkeyup    = key_up;
+        doc.onkeyup    = key_up;
         event.preventDefault();
         
-        //         dur = timer_key_down != null ? key_down_con_repeat : key_down_beg_repeat;
-        //         timer_key_down = setTimeout( function() {
-        //             if ( timer_key_down != null )
-        //                 doc.onkeydown( evt );
-        //         }, dur );
+        dur = timer_key_down != null ? key_down_con_repeat : key_down_beg_repeat;
+        timer_key_down = setTimeout( function() {
+            if ( timer_key_down != null )
+                doc.onkeydown( evt );
+        }, dur );
         return false;
     }
 
     doc.onkeydown  = dialog_key_down;
-    doc.onkeypress = null;
+    doc.onkeypress = dialog_key_press;
     event.preventDefault();
     return true; // because we want keypress
     
+}
+
+function update_dialog_lst( doc ) {
+    // delete old children
+    dialog = doc.dialog;
+    if ( dialog.hasChildNodes() )
+        while ( dialog.childNodes.length >= 1 )
+            dialog.removeChild( dialog.firstChild );
+    // make elements
+    for( var i = doc.lst_cmd.length - 1; i >= 0; i -= 1 ) {
+        div = doc.dialog.appendChild( document.createElement( 'div' ) );
+        div.appendChild( document.createTextNode( "> " + doc.lst_cmd[ i ] ) );
+        dialog.appendChild( div );
+    }
+    // selected_line
+    if ( doc.selected_line >= doc.lst_cmd.length )
+        doc.selected_line = doc.lst_cmd.length - 1;
+    if ( doc.selected_line >= 0 )
+        dialog.childNodes[ doc.selected_line ].setAttribute( 'class', 'selected_line' );
+    
+    // filter
+    div = doc.dialog.appendChild( document.createElement( 'div' ) );
+    div.appendChild( document.createTextNode( "filter: " + doc.lst_cmd_filter ) );
+    div.setAttribute( 'class', 'dialog_filter' );
+    dialog.appendChild( div );
+}
+
+function update_lst_cmd( doc ) {
+    // lst_cmd from lst_cmd_full
+    doc.lst_cmd = [];
+    for( var i in doc.lst_cmd_full )
+        if ( doc.lst_cmd_full[ i ].indexOf( doc.lst_cmd_filter ) >= 0 )
+            doc.lst_cmd.push( doc.lst_cmd_full[ i ] );
+
+    // update display
+    update_dialog_lst( doc );
+}
+
+function dialog_key_press( evt ) {
+    var event = evt || window.event;
+    var doc = this;
+    
+    doc.lst_cmd_filter += String.fromCharCode( event.which || event.charCode );
+    update_lst_cmd( doc );
+
+    this.onkeydown  = dialog_key_down ;
+    this.onkeypress = dialog_key_press;
+    event.preventDefault();
+    return false;
 }
 
 function list_has_not( lst, key ) {
@@ -147,24 +222,20 @@ function show_history( doc ) {
     } else {
         doc.overlay.style.display = "block";
         doc.dialog. style.display = "block";
-        // delete old children
-        dialog = doc.dialog;
-        if ( dialog.hasChildNodes() )
-            while ( dialog.childNodes.length >= 1 )
-                dialog.removeChild( dialog.firstChild );       
     }
 
+    // content
     var lst = [];
     for( var i = doc.lines.length - 1; i >= 0; i -= 1 )
         if ( doc.lines[ i ].cmd.length >= 1 && list_has_not( lst, doc.lines[ i ].cmd ) )
             lst.push( doc.lines[ i ].cmd );
-            
-    //    
-    for( var i = lst.length - 1; i >= 0; i -= 1 ) {
-        if ( i != lst.length - 1 )
-            doc.dialog.appendChild( document.createElement( 'br' ) );
-        doc.dialog.appendChild( document.createTextNode( "> " + lst[ i ] ) ); 
-    }
+    doc.lst_cmd = lst.reverse();
+    doc.lst_cmd_full = doc.lst_cmd;
+    doc.lst_cmd_filter = '';
+    doc.selected_line = doc.lst_cmd.length - 1;
+    
+    //
+    update_dialog_lst( doc );
     
     doc.onkeydown  = dialog_key_down;
     doc.onkeypress = null;
@@ -215,6 +286,7 @@ function key_down( evt ) {
 //                 doc.onkeydown  = key_down;
 //                 doc.onkeypress = null;
 //             } );
+            update_text( doc );
         case 0 : // ?
         case 16: // shift
         case 17: // ctrl
