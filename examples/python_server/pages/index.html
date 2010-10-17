@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<html>
+    <head>
+        <link href="terminal.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="img_server.js"></script>
+        <script type="text/javascript" src="base_MetilServer.js"></script>
+        <script type="text/javascript">
+            function init_all() {
+                //queue_python_cmd( "from server_objects import *" );
+                //exec_python_cmds();
+
+                init_frame_as_terminal( "my_frame" );
+                //init_canvas_as_imgserv( "my_canvas" );
+                //append_mesh_to_imgserv( "my_canvas", "toto.unv" );
+                //fit_objects_in_imgserv( "my_canvas" );
+                //update_data_in_imgserv( "my_canvas" );
+                //                 var dialog = new Element('div');
+                //                 dialog.insert( new Element('h2').insert('Dialogue') );
+                //                 var overlay = new DialogOverlay( dialog );
+            }
+            //             function close_all() {
+            //                 var xhr_object = my_xml_http_request();
+            //                 xhr_object.open( "GET", "exit.html", false );
+            //                 xhr_object.send( null );
+            //             }  onunload="close_all();"
+        </script>
+    </head>
+    <body onload="init_all();" id="my_body">
+        Peoutou
+<!--        <div class="overlay">
+            <div class="dialog">
+                <h2>TODO<h2/>
+            <div/>
+        <div/>-->
+        <iframe id="my_frame" width="100%" height="100" frameborder="1"></iframe>
+        <!--         <canvas id="my_canvas" width="400" height="400"></canvas> -->
+    </body>
+</html>
