@@ -1,11 +1,11 @@
 #ifndef TYPECONSTRUCTOR_SOCKET_H
 #define TYPECONSTRUCTOR_SOCKET_H
 
-#include "TypeConstructor.h"
+#include "TypeConstructor_String.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-class TypeConstructor_Socket : public TypeConstructor {
+class TypeConstructor_Socket : public TypeConstructor_String {
 public:
 };
 

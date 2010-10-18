@@ -32,6 +32,7 @@ public:
     int get_h() const;
     void set_w( int w );
     void set_h( int h );
+    void get_trans_data( struct String &res, const struct String &name );
 
     DisplayTrans *get_trans_gpu();
     void update_p_min_p_max( bool use_trans = true );

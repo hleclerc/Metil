@@ -59,15 +59,16 @@ static void png_append( char *&dst, const T &src ) {
         *(dst++) = tmp[ i ];
 }
 
-Ps<char> make_png( unsigned *img, int w, int h, const char *prelim, ST prelim_size ) {
-    int ws = 1 + sizeof( unsigned ) * w;
+Ps<char> make_png( unsigned char *img, int w, int h, bool gray_only, const char *prelim, ST prelim_size ) {
+    int size_pix = gray_only ? 1 : 4;
+    int ws = 1 + size_pix * w;
     ST tmp_rese = ws * h;
     Bytef *tmp = (Bytef *)MALLOC( tmp_rese );
 
     // filter
     for( int y = 0; y < h; ++y ) {
         tmp[ ws * y + 0 ] = 0; // filter type
-        Level1::memcpy( tmp + ws * y + 1, img + w * y, w * sizeof( unsigned ) ); // data
+        Level1::memcpy( tmp + ws * y + 1, img + size_pix * w * y, size_pix * w ); // data
     }
 
     // compression
@@ -100,7 +101,7 @@ Ps<char> make_png( unsigned *img, int w, int h, const char *prelim, ST prelim_si
     png_append( ptr, w ); // width
     png_append( ptr, h ); // height
     png_append( ptr, SI8( 8 ) ); // bit_depth
-    png_append( ptr, SI8( 6 ) ); // color_type = 6; // RGBA ( RGB -> 2 )
+    png_append( ptr, SI8( gray_only ? 0 : 6 ) ); // color_type = 6; // RGBA ( RGB -> 2 )
     png_append( ptr, SI8( 0 ) ); // compression_method = 0;
     png_append( ptr, SI8( 0 ) ); // filter_method = 0;
     png_append( ptr, SI8( 0 ) ); // interlace_method = 0;

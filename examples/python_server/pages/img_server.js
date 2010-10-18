@@ -1,18 +1,6 @@
 var old_x = 0, old_y = 0;
 var button = "none";
-var delay_send = 2000; ///< nb msec to send an img request to the server
-
-//Object.prototype.clone = function() {
-//   var newObj = ( this instanceof Array ) ? [] : {};
-//   for ( i in this ) {
-//       if ( i == 'clone' )
-//           continue;
-//       if ( this[ i ] && typeof this[ i ] == 'object' )
-//           newObj[ i ] = this[ i ].clone();
-//       else
-//           newObj[ i ] = this[ i ];
-//   } return newObj;
-//};
+var delay_send = 1000; ///< nb msec to send an img request to the server
 
 function equal_obj( a, b ) {
    if( typeof( a ) != 'object' || a == null )
@@ -66,8 +54,19 @@ function rot_3( V, R ) {
     ];
 }
 
+function s_to_w_vec( cd, V ) { ///< screen orientation to real world.
+    var Z = cro_3( cd.Y, cd.X );
+    return [
+        V[ 0 ] * cd.X[ 0 ] + V[ 1 ] * cd.Y[ 0 ] + V[ 2 ] * Z[ 0 ],
+        V[ 0 ] * cd.X[ 1 ] + V[ 1 ] * cd.Y[ 1 ] + V[ 2 ] * Z[ 1 ],
+        V[ 0 ] * cd.X[ 2 ] + V[ 1 ] * cd.Y[ 2 ] + V[ 2 ] * Z[ 2 ]
+    ];
+}
+
 function rotate_cam( cam_data, x, y, z ) {
-    var R = cam_data.IP.s_to_w_vec( [ x, y, z ] );
+    var R = s_to_w_vec( cam_data.IP, [ x, y, z ] );
+    if ( cam_data.C == undefined )
+        cam_data.C = cam_data.IP.O;
 
     cam_data.IP.X = rot_3( cam_data.IP.X, R );
     cam_data.IP.Y = rot_3( cam_data.IP.Y, R );
@@ -75,15 +74,17 @@ function rotate_cam( cam_data, x, y, z ) {
 
 }
 
-function get_T_from_I( src, oi ) {
-    var m = src[ oi + 0 ] / 16777216 + src[ oi + 1 ] / 65536 + src[ oi + 2 ] / 256;
-    var e = ( 256 * src[ oi + 5 ] + src[ oi + 4 ] ) - 32768;
-    var s = src[ oi + 6 ];
-    return ( s ? -1.0 : 1.0 ) * m * Math.pow( 2.0, e );
-}
-
-function get_I_from_I( src, oi ) {
-    return src[ oi + 0 ] + src[ oi + 1 ] * 256 + src[ oi + 2 ] * 65536;
+function get_img_data( canvas, img, num ) {
+    if ( img.data == undefined ) {
+        var hidden_src_canvas = canvas.cam_data.hidden_src_canvas[ num ];
+        hidden_src_canvas.width  = img.width;
+        hidden_src_canvas.height = img.height;
+        var ctx = hidden_src_canvas.getContext( '2d' );
+        ctx.drawImage( img, 0, 0 );
+        var src_pix = ctx.getImageData( 0, 0, img.width, img.height );
+        img.data = src_pix.data;
+    }
+    return img.data;
 }
 
 function draw_img_on_canvas( canvas_name ) {
@@ -91,7 +92,6 @@ function draw_img_on_canvas( canvas_name ) {
     var w = canvas.width;
     var h = canvas.height;
     var mwh = Math.min( w, h );
-    var off_zznv = 4 * w * h;
 
     var ctx = canvas.getContext( '2d' );
     var lineargradient = ctx.createLinearGradient( 0, 0, 0, h );
@@ -101,169 +101,112 @@ function draw_img_on_canvas( canvas_name ) {
     ctx.fillStyle = lineargradient;
     ctx.fillRect( 0, 0, w, h );
 
-    ctx.drawImage(
-        canvas.cam_data.img_rgba,
-        0, 0, w, 3 * h + 1
-    );
-//    if ( equal_obj( canvas.cam_data.IP, canvas.cam_data.RP ) ) {
-//        ctx.drawImage(
-//            canvas.cam_data.img_rgba,
-//            0, 0, w, 3 * h + 1
-//        );
-//    } else {
-//        // copy img in hidden canvas
-//        var hidden_src_canvas = canvas.cam_data.hidden_src_canvas;
-//        var hidden_ctx = hidden_src_canvas.getContext('2d');
-//        if ( hidden_src_canvas.there_s_a_new_img ) {
-//            hidden_src_canvas.there_s_a_new_img = false;
-//            hidden_src_canvas.width  = w;
-//            hidden_src_canvas.height = 3 * h + 1;
-//            hidden_ctx.drawImage( canvas.cam_data.img_rgba, 0, 0 );
-//        }
-//        var src_pix = hidden_ctx.getImageData( 0, 0, w, 3 * h + 1 );
-//        var src_data = src_pix.data;
+    if ( equal_obj( canvas.cam_data.IP, canvas.cam_data.RP ) ) {
+        ctx.drawImage(
+            canvas.cam_data.img_rgba,
+            0, 0, w, h
+        );
+    } else {
+        var rgba_data = get_img_data( canvas, canvas.cam_data.img_rgba, 0 );
+        var zznv_data = get_img_data( canvas, canvas.cam_data.img_zznv, 1 );
+        var nnnn_data = get_img_data( canvas, canvas.cam_data.img_nnnn, 2 );
 
-//        var old_d = canvas.cam_data.RP.d;
-//        var new_d = canvas.cam_data.IP.d;
-//        var old_p = Math.tan( canvas.cam_data.RP.a * 3.14159 / 180 ) / mwh;
-//        var new_p = Math.tan( canvas.cam_data.IP.a * 3.14159 / 180 ) / mwh;
-//        var old_O = canvas.cam_data.RP.O, old_X = canvas.cam_data.RP.X, old_Y = canvas.cam_data.RP.Y, old_Z = cro_3( old_Y, old_X );
-//        var new_O = canvas.cam_data.IP.O, new_X = canvas.cam_data.IP.X, new_Y = canvas.cam_data.IP.Y, new_Z = cro_3( new_Y, new_X );
+        var old_d = canvas.cam_data.RP.d;
+        var new_d = canvas.cam_data.IP.d;
+        var old_p = Math.tan( canvas.cam_data.RP.a * 3.14159 / 180 ) / mwh;
+        var new_p = Math.tan( canvas.cam_data.IP.a * 3.14159 / 180 ) / mwh;
+        var old_O = canvas.cam_data.RP.O, old_X = canvas.cam_data.RP.X, old_Y = canvas.cam_data.RP.Y, old_Z = cro_3( old_Y, old_X );
+        var new_O = canvas.cam_data.IP.O, new_X = canvas.cam_data.IP.X, new_Y = canvas.cam_data.IP.Y, new_Z = cro_3( new_Y, new_X );
 
-//        var oi = 4 * 3 * w * h;
-//        var z_min = get_T_from_I( src_data, oi + 0  );
-//        var z_max = get_T_from_I( src_data, oi + 8  );
-//        var rz_mi = get_I_from_I( src_data, oi + 16 );
-//        var rz_ma = get_I_from_I( src_data, oi + 20 );
-//        var z_mi  = ( ( rz_mi - 1.0 ) / 65534.0 * ( z_max - z_min ) + z_min ); // screen space
-//        var z_ma  = ( ( rz_ma - 1.0 ) / 65534.0 * ( z_max - z_min ) + z_min );
+        var z_min = canvas.cam_data.z_min;
+        var z_max = canvas.cam_data.z_max;
+//         var rz_mi = get_I_from_I( src_data, oi + 16 );
+//         var rz_ma = get_I_from_I( src_data, oi + 20 );
+//         var z_mi  = ( ( rz_mi - 1.0 ) / 65534.0 * ( z_max - z_min ) + z_min ); // screen space
+//         var z_ma  = ( ( rz_ma - 1.0 ) / 65534.0 * ( z_max - z_min ) + z_min );
+        var z_mi  = canvas.cam_data.z_min; // screen space
+        var z_ma  = canvas.cam_data.z_max;
 
-//        var t0 = new Date().getTime();
-//        var size_rect = canvas.cam_data.size_disp_rect;
-//        for( var y = 0; y < h; y += size_rect ) {
-//            var y_s = y - h / 2 + size_rect / 2.0;
-//            var y_r = y_s * new_d / mwh;
-//            for( var x = 0; x < w; x += size_rect ) {
-//                var x_s = ( x - w / 2 + size_rect / 2.0 );
-//                var x_r = x_s * new_d / mwh;
+        var t0 = new Date().getTime();
+        var size_rect = canvas.cam_data.size_disp_rect;
+        for( var y = 0; y < h; y += size_rect ) {
+            var y_s = y - h / 2 + size_rect / 2.0;
+            var y_r = y_s * new_d / mwh;
+            for( var x = 0; x < w; x += size_rect ) {
+                var x_s = ( x - w / 2 + size_rect / 2.0 );
+                var x_r = x_s * new_d / mwh;
 
-//                //
-//                var new_P = [
-//                    new_O[ 0 ] + x_r * new_X[ 0 ] + y_r * new_Y[ 0 ],
-//                    new_O[ 1 ] + x_r * new_X[ 1 ] + y_r * new_Y[ 1 ],
-//                    new_O[ 2 ] + x_r * new_X[ 2 ] + y_r * new_Y[ 2 ]
-//                ];
-//                var new_D = nor_3( [
-//                    new_Z[ 0 ] + new_p * ( x_s * new_X[ 0 ] + y_s * new_Y[ 0 ] ),
-//                    new_Z[ 1 ] + new_p * ( x_s * new_X[ 1 ] + y_s * new_Y[ 1 ] ),
-//                    new_Z[ 2 ] + new_p * ( x_s * new_X[ 2 ] + y_s * new_Y[ 2 ] )
-//                ] );
+                //
+                var new_P = [
+                    new_O[ 0 ] + x_r * new_X[ 0 ] + y_r * new_Y[ 0 ],
+                    new_O[ 1 ] + x_r * new_X[ 1 ] + y_r * new_Y[ 1 ],
+                    new_O[ 2 ] + x_r * new_X[ 2 ] + y_r * new_Y[ 2 ]
+                ];
+                var new_D = nor_3( [
+                    new_Z[ 0 ] + new_p * ( x_s * new_X[ 0 ] + y_s * new_Y[ 0 ] ),
+                    new_Z[ 1 ] + new_p * ( x_s * new_X[ 1 ] + y_s * new_Y[ 1 ] ),
+                    new_Z[ 2 ] + new_p * ( x_s * new_X[ 2 ] + y_s * new_Y[ 2 ] )
+                ] );
 
-//                // new_P
-//                var d_mi = ( z_mi * old_d / mwh - dot_3( new_P, old_Z ) ) / dot_3( new_D, old_Z );
-//                var d_ma = ( z_ma * old_d / mwh - dot_3( new_P, old_Z ) ) / dot_3( new_D, old_Z );
+                // new_P
+                var d_mi = ( z_mi * old_d / mwh - dot_3( new_P, old_Z ) ) / dot_3( new_D, old_Z );
+                var d_ma = ( z_ma * old_d / mwh - dot_3( new_P, old_Z ) ) / dot_3( new_D, old_Z );
 
-//                var inter_mi = [
-//                    new_P[ 0 ] + d_mi * new_D[ 0 ] - old_O[ 0 ],
-//                    new_P[ 1 ] + d_mi * new_D[ 1 ] - old_O[ 1 ],
-//                    new_P[ 2 ] + d_mi * new_D[ 2 ] - old_O[ 2 ]
-//                ];
+                var inter_mi = [
+                    new_P[ 0 ] + d_mi * new_D[ 0 ] - old_O[ 0 ],
+                    new_P[ 1 ] + d_mi * new_D[ 1 ] - old_O[ 1 ],
+                    new_P[ 2 ] + d_mi * new_D[ 2 ] - old_O[ 2 ]
+                ];
 
-//                var inter_ma = [
-//                    new_P[ 0 ] + d_ma * new_D[ 0 ] - old_O[ 0 ],
-//                    new_P[ 1 ] + d_ma * new_D[ 1 ] - old_O[ 1 ],
-//                    new_P[ 2 ] + d_ma * new_D[ 2 ] - old_O[ 2 ]
-//                ];
+                var inter_ma = [
+                    new_P[ 0 ] + d_ma * new_D[ 0 ] - old_O[ 0 ],
+                    new_P[ 1 ] + d_ma * new_D[ 1 ] - old_O[ 1 ],
+                    new_P[ 2 ] + d_ma * new_D[ 2 ] - old_O[ 2 ]
+                ];
 
-//                var x_mi = w / 2 + dot_3( inter_mi, old_X ) * mwh / old_d, y_mi = h / 2 + dot_3( inter_mi, old_Y ) * mwh / old_d;
-//                var x_ma = w / 2 + dot_3( inter_ma, old_X ) * mwh / old_d, y_ma = h / 2 + dot_3( inter_ma, old_Y ) * mwh / old_d;
-//                x_mi /= 1.0 + old_p * z_mi; y_mi /= 1.0 + old_p * z_mi;
-//                x_ma /= 1.0 + old_p * z_ma; y_ma /= 1.0 + old_p * z_ma;
+                var x_mi = w / 2 + dot_3( inter_mi, old_X ) * mwh / old_d, y_mi = h / 2 + dot_3( inter_mi, old_Y ) * mwh / old_d;
+                var x_ma = w / 2 + dot_3( inter_ma, old_X ) * mwh / old_d, y_ma = h / 2 + dot_3( inter_ma, old_Y ) * mwh / old_d;
+                x_mi /= 1.0 + old_p * z_mi; y_mi /= 1.0 + old_p * z_mi;
+                x_ma /= 1.0 + old_p * z_ma; y_ma /= 1.0 + old_p * z_ma;
 
-//                var d_mm = Math.max( Math.abs( x_ma - x_mi ), Math.abs( y_ma - y_mi ) ) + 1e-40;
-//                for( var i = 0.0; i <= d_mm; i += 1.0 ) {
-//                    var x_md = Math.round( x_mi + i / d_mm * ( x_ma - x_mi ) );
-//                    var y_md = Math.round( y_mi + i / d_mm * ( y_ma - y_mi ) );
-//                    var z_md = z_mi + i / d_mm * ( z_ma - z_mi );
-//                    if ( x_md >= 0 && x_md < w && y_md >= 0 && y_md < h ) {
-//                        var o = 4 * ( y_md * w + x_md );
-//                        var zu = src_data[ off_zznv + o + 0 ] + src_data[ off_zznv + o + 1 ] * 256;
-//                        if ( zu != 65535 ) {
-//                            var z = z_min + zu / 65534.0 * ( z_max - z_min );
-//                            if ( z <= z_md ) {
-//                                var r = src_data[ off_zznv + o + 1 ], g = r, b = r;
-//                                // var r = src_data[ o + 0 ];
-//                                // var g = src_data[ o + 1 ];
-//                                // var b = src_data[ o + 2 ];
-//                                // var a = src_data[ o + 3 ];
-//                                ctx.fillStyle = "rgb( " + r + ", " + g + ", " + b + " )";
-//                                ctx.fillRect( x, y, size_rect, size_rect );
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
+                var d_mm = Math.max( Math.abs( x_ma - x_mi ), Math.abs( y_ma - y_mi ) ) + 1e-40;
+                for( var i = 0.0; i <= d_mm; i += 1.0 ) {
+                    var x_md = Math.round( x_mi + i / d_mm * ( x_ma - x_mi ) );
+                    var y_md = Math.round( y_mi + i / d_mm * ( y_ma - y_mi ) );
+                    var z_md = z_mi + i / d_mm * ( z_ma - z_mi );
+                    if ( x_md >= 0 && x_md < w && y_md >= 0 && y_md < h ) {
+                        var o = 4 * ( y_md * w + x_md );
+                        var zu = zznv_data[ o + 0 ] + zznv_data[ o + 1 ] * 256;
+                        if ( zu != 65535 ) {
+                            var z = z_min + zu / 65534.0 * ( z_max - z_min );
+                            if ( z <= z_md ) {
+                                var r = rgba_data[ o + 1 ], g = r, b = r;
+                                // var r = src_data[ o + 0 ];
+                                // var g = src_data[ o + 1 ];
+                                // var b = src_data[ o + 2 ];
+                                // var a = src_data[ o + 3 ];
+                                ctx.fillStyle = "rgb( " + r + ", " + g + ", " + b + " )";
+                                ctx.fillRect( x, y, size_rect, size_rect );
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-//        var t1 = new Date().getTime() - t0;
-//        document.getElementById("com").firstChild.data = pz_mi + " <> " + pz_ma + " <> " + t1;
-//    }
-
+        var t1 = new Date().getTime() - t0;
+        // document.getElementById("com").firstChild.data = pz_mi + " <> " + pz_ma + " <> " + t1;
+    }
 }
 
 function update_img_src( canvas ) { // draw_canvas
-    // update transformation matrix
-    if ( ! canvas.cam_data.C ) {
-        var c_x = 0.5 * ( canvas.cam_data.max_pos[ 0 ] + canvas.cam_data.min_pos[ 0 ] );
-        var c_y = 0.5 * ( canvas.cam_data.max_pos[ 1 ] + canvas.cam_data.min_pos[ 1 ] );
-        var c_z = 0.5 * ( canvas.cam_data.max_pos[ 2 ] + canvas.cam_data.min_pos[ 2 ] );
-        var d_x = canvas.cam_data.max_pos[ 0 ] - canvas.cam_data.min_pos[ 0 ];
-        var d_y = canvas.cam_data.max_pos[ 1 ] - canvas.cam_data.min_pos[ 1 ];
-        var d_z = canvas.cam_data.max_pos[ 2 ] - canvas.cam_data.min_pos[ 2 ];
-        var d_m = Math.max( d_x, Math.max( d_y, d_z ) );
-        if ( ! d_m )
-            d_m = 1.0;
-
-        canvas.cam_data.C = [ c_x, c_y, c_z ];
-
-        canvas.cam_data.IP = {
-            O : [ c_x, c_y, c_z ],
-            X : [ 1.0, 0.0, 0.0 ],
-            Y : [ 0.0, 1.0, 0.0 ],
-            d : 1.5 * d_m,
-            a : 10,
-            s_to_w_vec : function( V ) { ///< screen orientation to real world.
-                var Z = cro_3( this.Y, this.X );
-                return [
-                    V[ 0 ] * this.X[ 0 ] + V[ 1 ] * this.Y[ 0 ] + V[ 2 ] * Z[ 0 ],
-                    V[ 0 ] * this.X[ 1 ] + V[ 1 ] * this.Y[ 1 ] + V[ 2 ] * Z[ 1 ],
-                    V[ 0 ] * this.X[ 2 ] + V[ 1 ] * this.Y[ 2 ] + V[ 2 ] * Z[ 2 ]
-                ];
-            }
-        };
-    }
-
-    //
-    var img_src = "img?mode=get_img";
-    img_src += "&counter=" + new Date().getTime();
-    img_src += "&s=" + canvas.cam_data.img_session_id;
-    img_src += "&w=" + canvas.width;
-    img_src += "&h=" + canvas.height;
-    img_src += "&O=" + canvas.cam_data.IP.O;
-    img_src += "&X=" + canvas.cam_data.IP.X;
-    img_src += "&Y=" + canvas.cam_data.IP.Y;
-    img_src += "&d=" + canvas.cam_data.IP.d;
-    img_src += "&a=" + canvas.cam_data.IP.a;
-
-    //
-    canvas.cam_data.img_rgba = new Image();
-    canvas.cam_data.img_rgba.onload = function() {
-        canvas.cam_data.hidden_src_canvas.there_s_a_new_img = true;
-        canvas.cam_data.RP = canvas.cam_data.IP.clone();
-        draw_img_on_canvas( canvas );
-    }
-    canvas.cam_data.img_rgba.src = img_src;
+    queue_python_cmd( canvas.id + '.set_O( ' + canvas.cam_data.IP.O + ' )' );
+    queue_python_cmd( canvas.id + '.set_X( ' + canvas.cam_data.IP.X + ' )' );
+    queue_python_cmd( canvas.id + '.set_Y( ' + canvas.cam_data.IP.Y + ' )' );
+    queue_python_cmd( canvas.id + '.set_d( ' + canvas.cam_data.IP.d + ' )' );
+    queue_python_cmd( canvas.id + '.set_a( ' + canvas.cam_data.IP.a + ' )' );
+    update_data_in_imgserv( canvas.id );
 }
 
 
@@ -326,7 +269,7 @@ function img_mouse_move( evt ) {
             this.cam_data.IP.O[ d ] -= x * this.cam_data.IP.X[ d ] + y * this.cam_data.IP.Y[ d ];
     }
 
-    draw_img_on_canvas( this );
+    draw_img_on_canvas( this.id );
     restart_timer_until_src_update( this );
 
     old_x = new_x;
@@ -363,7 +306,7 @@ function img_mouse_wheel( evt ) {
         this.cam_data.IP.O[ d ] = P[ d ] + ( O[ d ] - P[ d ] ) / coeff;
 
     // redraw
-    draw_img_on_canvas( this );
+    draw_img_on_canvas( this.id );
     restart_timer_until_src_update( this );
 
     if( evt.preventDefault ) evt.preventDefault();
@@ -395,51 +338,19 @@ function fit_objects_in_imgserv( canvas_name ) {
 }
 
 function update_data_in_imgserv( canvas_name ) {
+    queue_python_cmd( 'request.send( "canvas = document.getElementById( \'' + canvas_name + '\' );\\n" )' );
+    queue_python_cmd( 'request.send( "canvas.cam_data.img_rgba = new Image();\\n" )' );
+    queue_python_cmd( 'request.send( "canvas.cam_data.img_zznv = new Image();\\n" )' );
+    queue_python_cmd( 'request.send( "canvas.cam_data.img_nnnn = new Image();\\n" )' );
+    queue_python_cmd( 'request.send( "canvas.cam_data.img_rgba.onload = function() { draw_img_on_canvas( \'' + canvas_name + '\' ); };\\n" )' );
     queue_python_cmd( canvas_name + '.render()' );
     queue_python_cmd( canvas_name + '.copy_gpu_to_cpu()' );
-    queue_python_cmd( canvas_name + '.write_to_sockect( socket_id, "toto = 654;\\n" )' );
-    queue_python_cmd( canvas_name + '.write_to_sockect( socket_id, "img = new Image();\\n" )' );
-    queue_python_cmd( canvas_name + '.save_png_in_sock( socket_id, "img.src" )' );
-    queue_python_cmd( canvas_name + '.write_to_sockect( socket_id, "img.onload = function() { alert( img.src ); };\\n" )' );
+    queue_python_cmd( canvas_name + '.save_png_in_sock( request.fileno(), "canvas.cam_data" )' );
     exec_python_cmds();
 
-    // draw_img_on_canvas( "' + canvas_name + '" )
-    //        //draw_img_on_canvas( document.getElementById( canvas_name ) )
-    //        img = new Image();
-    //        img.src = "data:image/gif;base64,R0lGODdhMAAwAPAAAAAAAP///ywAAAAAMAAwAAAC8IyPqcvt3wCcDkiLc7C0qwyGHhSWpjQu5yqmCYsapyuvUUlvONmOZtfzgFzByTB10QgxOR0TqBQejhRNzOfkVJ+5YiUqrXF5Y5lKh/DeuNcP5yLWGsEbtLiOSpa/TPg7JpJHxyendzWTBfX0cxOnKPjgBzi4diinWGdkF8kjdfnycQZXZeYGejmJlZeGl9i2icVqaNVailT6F5iJ90m6mvuTS4OK05M0vDk0Q4XUtwvKOzrcd3iq9uisF81M1OIcR7lEewwcLp7tuNNkM3uNna3F2JQFo97Vriy/Xl4/f1cf5VWzXyym7PHhhx4dbgYKAAA7";
-    //        img.onload = function() {
-    //            // canvas.cam_data.hidden_src_canvas.there_s_a_new_img = true;
-    //            // canvas.cam_data.RP = canvas.cam_data.IP.clone();
-    //            // draw_img_on_canvas( canvas );
-    //            alert( img.width );
-    //        }
-    //        canvas = document.getElementById( canvas_name );
-    //        var w = canvas.width;
-    //        var h = canvas.height;
-
-    //        var ctx = canvas.getContext( '2d' );
-    //        var lineargradient = ctx.createLinearGradient( 0, 0, 0, h );
-    //        lineargradient.addColorStop( 0.0, "rgb( 0, 0, 0 )" );
-    //        lineargradient.addColorStop( 0.5, "rgb( 0, 0, 40 )" );
-    //        lineargradient.addColorStop( 1.0, "rgb( 0, 0, 150 )" );
-    //        ctx.fillStyle = lineargradient;
-    //        ctx.fillRect( 0, 0, w, h );
-
-    //        ctx.drawImage(
-    //            img,
-    //            // 0, 0, w, 3 * h + 1
-    //             0, 0, w, h
-    //        );
-
-    //
-    //    canvas.cam_data.img_rgba = new Image();
     //    canvas.cam_data.img_rgba.onload = function() {
     //        canvas.cam_data.hidden_src_canvas.there_s_a_new_img = true;
-    //        canvas.cam_data.RP = canvas.cam_data.IP.clone();
-    //        draw_img_on_canvas( canvas );
     //    }
-    //    canvas.cam_data.img_rgba.src = img_src;
-    // send_async_xml_http_request( "exec.py", src, function ( rep ) { c = {}; eval( rep ); } );
 }
 
 function init_canvas_as_imgserv( canvas_name ) {
@@ -452,13 +363,19 @@ function init_canvas_as_imgserv( canvas_name ) {
     canvas.onmousewheel = img_mouse_wheel;
     canvas.onkeypress   = function ( evt ) { rot_img( canvas, 0, 0, 0.1 ); }
 
+    // canvas.cam_data
     canvas.cam_data = {
-        size_disp_rect : 5,
+        size_disp_rect : 10,
     };
-
-    canvas.cam_data.hidden_src_canvas = document.createElement("canvas");
-    canvas.cam_data.hidden_src_canvas.style.display = "none";
-    document.body.appendChild( canvas.cam_data.hidden_src_canvas );
+    
+    // hidden canvas
+    canvas.cam_data.hidden_src_canvas = [];
+    for( var i = 0; i < 3; i += 1 ) {
+        hc = document.createElement( "canvas" );
+        hc.style.display = "none";
+        document.body.appendChild( hc );
+        canvas.cam_data.hidden_src_canvas.push( hc );
+    }
 
     // first python commands
     queue_python_cmd( "from server_objects import *" );

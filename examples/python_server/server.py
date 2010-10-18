@@ -8,6 +8,8 @@ def content_type( addr ):
         return "text/html"
     if addr.endswith( ".js" ):
         return "text/javascript"
+    if addr.endswith( ".css" ):
+        return "text/css"
     if addr.endswith( ".png" ):
         return "image/png"
     return "text/plain"
@@ -69,10 +71,10 @@ for PORT in range( 8000, 8010 ):
         socket_server = SocketServer.TCPServer( ( "", PORT ), MetilServer )
         
         print PORT
-        os.system( "chromium-browser --app=http://localhost:" + str( PORT ) + " &" )
+        # os.system( "chromium-browser --app=http://localhost:" + str( PORT ) + " &" )
+        os.system( "firefox -jsconsole http://localhost:" + str( PORT ) + " &" )
         socket_server.serve_forever()
     except SocketServer.socket.error:
         continue
     break
 
-print a + 100

@@ -30,6 +30,16 @@ void GenericDisplay::set_O( T3 O ) { set_O( O[ 0 ], O[ 1 ], O[ 2 ] ); }
 void GenericDisplay::set_X( T3 X ) { set_X( X[ 0 ], X[ 1 ], X[ 2 ] ); }
 void GenericDisplay::set_Y( T3 Y ) { set_Y( Y[ 0 ], Y[ 1 ], Y[ 2 ] ); }
 
+void GenericDisplay::get_trans_data( String &res, const String &name ) {
+    res << name << " = {\n";
+    res << "  O : [ " << trans_cpu.O[ 0 ] << ", " << trans_cpu.O[ 1 ] << ", " << trans_cpu.O[ 2 ] << " ],\n";
+    res << "  X : [ " << trans_cpu.X[ 0 ] << ", " << trans_cpu.X[ 1 ] << ", " << trans_cpu.X[ 2 ] << " ],\n";
+    res << "  Y : [ " << trans_cpu.Y[ 0 ] << ", " << trans_cpu.Y[ 1 ] << ", " << trans_cpu.Y[ 2 ] << " ],\n";
+    res << "  a : " << trans_cpu.a << ",\n";
+    res << "  d : " << trans_cpu.d << "\n";
+    res << "};\n";
+}
+
 int GenericDisplay::get_w() const { return w; }
 int GenericDisplay::get_h() const { return h; }
 void GenericDisplay::set_w( int w ) { this->w = w; }

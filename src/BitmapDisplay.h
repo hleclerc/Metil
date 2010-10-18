@@ -15,7 +15,18 @@ BEG_METIL_NAMESPACE;
 class BitmapDisplay : public GenericDisplay {
 public:
     typedef BasicVec<float,3> T3;
-    static const int nb_img = 3;
+
+    struct Img {
+        Img( BitmapDisplay *d ) : cpu( 0 ), gpu( 0 ), d( d ) {}
+        unsigned *get_cpu_ptr();
+        unsigned *get_gpu_ptr();
+        void copy_gpu_to_cpu();
+        ST rese();
+
+        unsigned *cpu;
+        unsigned *gpu;
+        BitmapDisplay *d;
+    };
 
     BitmapDisplay( int w = 400, int h = 400 );
 
@@ -24,19 +35,13 @@ public:
     Ps<char> make_png( const char *prelim = 0, ST prelim_size = 0 ); ///< after copy_gpu_to_cpu()
     void save_png( const String &filename ); ///< make and save png to a file
     void save_png_in_sock( int socket_id, const char *name ); ///< make and save png to a file
-    void write_to_sockect( int socket_id, const char *txt ); ///< HUM. convenience function but...
-
-    unsigned *get_img_gpu_ptr();
-    unsigned *get_img_cpu_ptr();
-
-    ST rese_img(); ///< size of image in bytes
-    ST nb_lines(); ///< total nb lines in img
     bool first_item(); ///< return true if rendering first item in the img and set first item to 0
 
+    Img img_rgba; ///<
+    Img img_zznv; ///<
+    Img img_nnnn; ///<
 protected:
     bool first_item_; ///<
-    unsigned *img_cpu; //
-    unsigned *img_gpu; //
 };
 
 END_METIL_NAMESPACE;

@@ -112,7 +112,9 @@ Type metil_type_cst_VoidString( &type_constructor_VoidString, "VoidString", 0, 0
 // method references
 extern MethodName_del::TM metil_def_del__when__a__isa__File;
 extern MethodName_del::TM metil_def_del__when__a__isa__Socket__pert__1;
-extern MethodName_self_append::TM metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__1;
+extern MethodName_self_append::TM metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2;
+extern MethodName_self_append::TM metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2;
+extern MethodName_self_append::TM metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2;
 extern MethodName_write::TM metil_def_write__when__a__isa__Socket__pert__1;
 extern MethodName_self_append::TM metil_def_self_append__pert_0;
 extern MethodName_reassign::TM metil_def_reassign__pert_0;
@@ -238,27 +240,49 @@ void reg_def() {
     item_metil_def_del__when__a__isa__Socket__pert__1.cond = &cond_metil_def_del__when__a__isa__Socket__pert__1;
     item_metil_def_del__when__a__isa__Socket__pert__1.meth = metil_def_del__when__a__isa__Socket__pert__1;
     item_metil_def_del__when__a__isa__Socket__pert__1.file = string_1;
-    item_metil_def_del__when__a__isa__Socket__pert__1.line = 8;
+    item_metil_def_del__when__a__isa__Socket__pert__1.line = 11;
     item_metil_def_del__when__a__isa__Socket__pert__1.pert = 1;
     MethodFinder<MethodName_del>::last = &item_metil_def_del__when__a__isa__Socket__pert__1;
 
-    static MethodCond_and<MethodCond_0_isa<TypeConstructor_Socket>,MethodCond_1_isa<TypeConstructor_ConstCharPtr> > cond_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__1;
+    static MethodCond_and<MethodCond_0_isa<TypeConstructor_Socket>,MethodCond_1_isa<TypeConstructor_ConstCharPtr> > cond_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2;
 
-    static MethodFinder<MethodName_self_append>::Item item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__1;
-    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__1.prev = MethodFinder<MethodName_self_append>::last;
-    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__1.cond = &cond_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__1;
-    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__1.meth = metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__1;
-    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__1.file = string_1;
-    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__1.line = 12;
-    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__1.pert = 1;
-    MethodFinder<MethodName_self_append>::last = &item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__1;
+    static MethodFinder<MethodName_self_append>::Item item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2.prev = MethodFinder<MethodName_self_append>::last;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2.cond = &cond_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2.meth = metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2.file = string_1;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2.line = 15;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2.pert = 2;
+    MethodFinder<MethodName_self_append>::last = &item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2;
+
+    static MethodCond_and<MethodCond_0_isa<TypeConstructor_Socket>,MethodCond_1_isa<TypeConstructor_OwcpString> > cond_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2;
+
+    static MethodFinder<MethodName_self_append>::Item item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2.prev = MethodFinder<MethodName_self_append>::last;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2.cond = &cond_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2.meth = metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2.file = string_1;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2.line = 22;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2.pert = 2;
+    MethodFinder<MethodName_self_append>::last = &item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2;
+
+    static MethodCond_and<MethodCond_0_isa<TypeConstructor_Socket>,MethodCond_1_isa<TypeConstructor_ConstCharPtrWithSize> > cond_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2;
+
+    static MethodFinder<MethodName_self_append>::Item item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2.prev = MethodFinder<MethodName_self_append>::last;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2.cond = &cond_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2.meth = metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2.file = string_1;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2.line = 28;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2.pert = 2;
+    MethodFinder<MethodName_self_append>::last = &item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2;
 
     static MethodFinder<MethodName_write>::Item item_metil_def_write__when__a__isa__Socket__pert__1;
     item_metil_def_write__when__a__isa__Socket__pert__1.prev = MethodFinder<MethodName_write>::last;
     item_metil_def_write__when__a__isa__Socket__pert__1.cond = &cond_metil_def_del__when__a__isa__Socket__pert__1;
     item_metil_def_write__when__a__isa__Socket__pert__1.meth = metil_def_write__when__a__isa__Socket__pert__1;
     item_metil_def_write__when__a__isa__Socket__pert__1.file = string_1;
-    item_metil_def_write__when__a__isa__Socket__pert__1.line = 19;
+    item_metil_def_write__when__a__isa__Socket__pert__1.line = 40;
     item_metil_def_write__when__a__isa__Socket__pert__1.pert = 1;
     MethodFinder<MethodName_write>::last = &item_metil_def_write__when__a__isa__Socket__pert__1;
 

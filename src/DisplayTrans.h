@@ -66,7 +66,7 @@ struct DisplayTrans {
     T3 O; ///< position of center of the screen in the real world
     T3 X; ///< normalized axis
     T3 Y; ///< normalized axis
-    T3 d; ///< diameter of the viewed sphere centered in O in the real world.
+    T  d; ///< diameter of the viewed sphere centered in O in the real world.
     T  a; ///< perspective angle (according to min(w,h)). 0 means no perspective
 };
 

@@ -21,6 +21,7 @@ function send_async_xml_http_request( url, data, func ) {
     xhr_object.send( data );
 }
 
+
 function queue_python_cmd( cmd ) {
     python_commands += cmd + "\n";
 }
@@ -28,7 +29,7 @@ function queue_python_cmd( cmd ) {
 function exec_python_cmds() {
     send_async_xml_http_request( "exec.py", python_commands, function( rep ) {
         c = {};
-        alert( rep );
+        // alert( rep ); // .slice( rep.length - 100 )
         eval( rep );
         if ( c.err && c.err.length )
             alert( c.err );

@@ -205,14 +205,6 @@ void DisplayItem_BasicMesh_render_kernel( unsigned *img, const unsigned *elem_co
             img[ y * w + x ] = 0xFF000000 + elem_count[ y / NB_PIX_RASTER_BOX * wb + x / NB_PIX_RASTER_BOX ] * 25;
 }
 
-__global__
-void init_raster_GPU_kernel( unsigned *res, int w, int h ) {
-    unsigned *info = res + 3 * w * h;
-    info[ 4 ] = 0xFFFFFFFF;
-    info[ 5 ] = 0xFF000000;
-}
-
-
 __inline__
 unsigned shader( float z_n ) {
     int r = z_n * 200;
@@ -222,26 +214,20 @@ unsigned shader( float z_n ) {
     return ( r << 0 ) + ( g << 8 ) + ( b << 16 ) + ( a << 24 );
 }
 
-/// use 2 unsigned to store a T ( 2 because of tha alpha chanel that must be == 0xFF )
-__inline__ void copy_T_as_I( unsigned *res, float src ) {
-    int e, s = src < 0;
-    unsigned m = abs( frexpf( src, &e ) * 0x01000000 );
-    res[ 0 ] = 0xFF000000 + m;
-    res[ 1 ] = 0xFF000000 + ( s << 16 ) + ( e + 32768 );
-}
+///// use 2 unsigned to store a T ( 2 because of tha alpha chanel that must be == 0xFF )
+//__inline__ void copy_T_as_I( unsigned *res, float src ) {
+//    int e, s = src < 0;
+//    unsigned m = abs( frexpf( src, &e ) * 0x01000000 );
+//    res[ 0 ] = 0xFF000000 + m;
+//    res[ 1 ] = 0xFF000000 + ( s << 16 ) + ( e + 32768 );
+//}
 
 __global__
-void raster_gpu_kernel( unsigned *res, const DisplayTrans *trans_ptr, int wb, int hb, int sb, int w, int h, const unsigned *elem_offsets, const int *elem_data, const BasicMesh_Compacted *m, float z_min, float z_max, bool first_item ) {
+void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, const DisplayTrans *trans_ptr, int wb, int hb, int sb, int w, int h, const unsigned *elem_offsets, const int *elem_data, const BasicMesh_Compacted *m, float z_min, float z_max, bool first_item ) {
     typedef DisplayTrans::T3 T3;
 
     int bx = blockIdx.x * NB_PIX_RASTER_BOX;
     int by = blockIdx.y * NB_PIX_RASTER_BOX;
-
-    unsigned *rgba = res + 0 * w * h;
-    unsigned *zznv = res + 1 * w * h;
-    unsigned *nnnn = res + 2 * w * h;
-    unsigned *info = res + 3 * w * h;
-
 
     // initialization of the z buffer
     __shared__ unsigned rgba_buffer[ NB_PIX_RASTER_BOX * NB_PIX_RASTER_BOX ];
@@ -380,7 +366,7 @@ void raster_gpu_kernel( unsigned *res, const DisplayTrans *trans_ptr, int wb, in
         if ( x < w and y < h ) {
             rgba[ w * y + x ] = rgba_buffer[ i ];
             zznv[ w * y + x ] = 0xFF000000 + zznv_buffer[ i ];
-            nnnn[ w * y + x ] = 0xFF000000 + nnnn_buffer[ i ];
+            nnnn[ w * y + x ] = nnnn_buffer[ i ];
             //
             if ( zznv_buffer[ i ] != 0xFFFFFFFF ) {
                 local_z_min[ threadIdx.x ] = min( local_z_min[ threadIdx.x ], zznv_buffer[ i ] );
@@ -396,17 +382,6 @@ void raster_gpu_kernel( unsigned *res, const DisplayTrans *trans_ptr, int wb, in
             local_z_min[ threadIdx.x ] = min( local_z_min[ threadIdx.x ], local_z_min[ threadIdx.x + m ] );
             local_z_max[ threadIdx.x ] = max( local_z_max[ threadIdx.x ], local_z_max[ threadIdx.x + m ] );
         }
-    }
-
-    if ( threadIdx.x == 0 ) {
-        if ( blockIdx.x == 0 ) {
-            copy_T_as_I( info + 0, z_min );
-            copy_T_as_I( info + 2, z_max );
-        }
-        if ( *local_z_min != 0xFFFFFFFF )
-            atomicMin( info + 4, 0xFF000000 + ( *local_z_min/* >> 8*/ ) );
-        if ( *local_z_max != 0x0 )
-            atomicMax( info + 5, 0xFF000000 + ( *local_z_max/* >> 8*/ ) );
     }
 }
 
@@ -440,13 +415,13 @@ void DisplayItem_BasicMesh::render_to( BitmapDisplay *display ) {
     int *elem_data = get_elem_data_gpu_ptr( tot_nb_elems );
     CSC(( make_elem_data_kernel<<<NB_BLOCKS_FOR_ELEM_COUNT,128>>>( elem_count, elem_data, trans, wb, hb, sb, w, h, mesh.ptr() ) ));
 
-    // init info structure at the end of the image
-    init_raster_GPU_kernel<<<1,1>>>( display->get_img_gpu_ptr(), w, h );
-
     // fill image
     dim3 grid_size_raster( wb, hb );
     CSC(( raster_gpu_kernel<<<grid_size_raster,NB_THREADS_FOR_RASTER>>>(
-            display->get_img_gpu_ptr(), trans, wb, hb, sb, w, h,
+            display->img_rgba.get_gpu_ptr(),
+            display->img_zznv.get_gpu_ptr(),
+            display->img_nnnn.get_gpu_ptr(),
+            trans, wb, hb, sb, w, h,
             elem_count + sb * NB_BLOCKS_FOR_ELEM_COUNT,
             elem_data, mesh.ptr(), display->p_min[ 2 ], display->p_max[ 2 ], display->first_item()
     ) ));
