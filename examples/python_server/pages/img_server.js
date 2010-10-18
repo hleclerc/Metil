@@ -1,6 +1,7 @@
 var old_x = 0, old_y = 0;
 var button = "none";
-var delay_send = 1000; ///< nb msec to send an img request to the server
+var delay_send = 100; ///< nb msec to send an img request to the server
+var want_fps = 20;
 
 function equal_obj( a, b ) {
    if( typeof( a ) != 'object' || a == null )
@@ -66,7 +67,7 @@ function s_to_w_vec( cd, V ) { ///< screen orientation to real world.
 function rotate_cam( cam_data, x, y, z ) {
     var R = s_to_w_vec( cam_data.IP, [ x, y, z ] );
     if ( cam_data.C == undefined )
-        cam_data.C = cam_data.IP.O;
+        cam_data.C = [ cam_data.IP.O[ 0 ], cam_data.IP.O[ 1 ], cam_data.IP.O[ 2 ] ];
 
     cam_data.IP.X = rot_3( cam_data.IP.X, R );
     cam_data.IP.Y = rot_3( cam_data.IP.Y, R );
@@ -85,6 +86,10 @@ function get_img_data( canvas, img, num ) {
         img.data = src_pix.data;
     }
     return img.data;
+}
+
+function p1i0( x ) {
+    return x + ( x == 0 );
 }
 
 function draw_img_on_canvas( canvas_name ) {
@@ -117,18 +122,21 @@ function draw_img_on_canvas( canvas_name ) {
         var new_p = Math.tan( canvas.cam_data.IP.a * 3.14159 / 180 ) / mwh;
         var old_O = canvas.cam_data.RP.O, old_X = canvas.cam_data.RP.X, old_Y = canvas.cam_data.RP.Y, old_Z = cro_3( old_Y, old_X );
         var new_O = canvas.cam_data.IP.O, new_X = canvas.cam_data.IP.X, new_Y = canvas.cam_data.IP.Y, new_Z = cro_3( new_Y, new_X );
+        var inv_z = dot_3( old_Z, new_Z ) < 0;
 
+        var oi = 4 * 3 * w * h;
         var z_min = canvas.cam_data.z_min;
         var z_max = canvas.cam_data.z_max;
-//         var rz_mi = get_I_from_I( src_data, oi + 16 );
-//         var rz_ma = get_I_from_I( src_data, oi + 20 );
-//         var z_mi  = ( ( rz_mi - 1.0 ) / 65534.0 * ( z_max - z_min ) + z_min ); // screen space
-//         var z_ma  = ( ( rz_ma - 1.0 ) / 65534.0 * ( z_max - z_min ) + z_min );
-        var z_mi  = canvas.cam_data.z_min; // screen space
-        var z_ma  = canvas.cam_data.z_max;
+        var rz_mi = 0; // get_I_from_I( src_data, oi + 16 ); // min z in zznv
+        var rz_ma = 65534; // get_I_from_I( src_data, oi + 20 ); // max z in zznv
+        var z_mis = ( ( rz_mi - 1.0 ) / 65534.0 * ( z_max - z_min ) + z_min ); // min z in screen space
+        var z_mas = ( ( rz_ma - 1.0 ) / 65534.0 * ( z_max - z_min ) + z_min ); // max z in screen space
+        var z_mir = z_mis * old_d / mwh; // min z in real space from old_O
+        var z_mar = z_mas * old_d / mwh; // max z in real space from old_O
 
         var t0 = new Date().getTime();
         var size_rect = canvas.cam_data.size_disp_rect;
+        var strzs = "";
         for( var y = 0; y < h; y += size_rect ) {
             var y_s = y - h / 2 + size_rect / 2.0;
             var y_r = y_s * new_d / mwh;
@@ -136,55 +144,106 @@ function draw_img_on_canvas( canvas_name ) {
                 var x_s = ( x - w / 2 + size_rect / 2.0 );
                 var x_r = x_s * new_d / mwh;
 
-                //
+                // starting point for the ray (in th Oxy plane) - old_O
                 var new_P = [
-                    new_O[ 0 ] + x_r * new_X[ 0 ] + y_r * new_Y[ 0 ],
-                    new_O[ 1 ] + x_r * new_X[ 1 ] + y_r * new_Y[ 1 ],
-                    new_O[ 2 ] + x_r * new_X[ 2 ] + y_r * new_Y[ 2 ]
+                    new_O[ 0 ] + x_r * new_X[ 0 ] + y_r * new_Y[ 0 ] - old_O[ 0 ],
+                    new_O[ 1 ] + x_r * new_X[ 1 ] + y_r * new_Y[ 1 ] - old_O[ 1 ],
+                    new_O[ 2 ] + x_r * new_X[ 2 ] + y_r * new_Y[ 2 ] - old_O[ 2 ]
                 ];
+
+                // dir of the ray
                 var new_D = nor_3( [
                     new_Z[ 0 ] + new_p * ( x_s * new_X[ 0 ] + y_s * new_Y[ 0 ] ),
                     new_Z[ 1 ] + new_p * ( x_s * new_X[ 1 ] + y_s * new_Y[ 1 ] ),
                     new_Z[ 2 ] + new_p * ( x_s * new_X[ 2 ] + y_s * new_Y[ 2 ] )
                 ] );
 
-                // new_P
-                var d_mi = ( z_mi * old_d / mwh - dot_3( new_P, old_Z ) ) / dot_3( new_D, old_Z );
-                var d_ma = ( z_ma * old_d / mwh - dot_3( new_P, old_Z ) ) / dot_3( new_D, old_Z );
+                var div_m = dot_3( new_D, old_Z );
+                div_m += div_m == 0;
 
-                var inter_mi = [
-                    new_P[ 0 ] + d_mi * new_D[ 0 ] - old_O[ 0 ],
-                    new_P[ 1 ] + d_mi * new_D[ 1 ] - old_O[ 1 ],
-                    new_P[ 2 ] + d_mi * new_D[ 2 ] - old_O[ 2 ]
+                // intersection of the ray / first z plane - old_O
+                var d_mir = ( z_mir - dot_3( new_P, old_Z ) ) / div_m;
+                var inter_mir = [
+                    new_P[ 0 ] + d_mir * new_D[ 0 ],
+                    new_P[ 1 ] + d_mir * new_D[ 1 ],
+                    new_P[ 2 ] + d_mir * new_D[ 2 ]
                 ];
-
-                var inter_ma = [
-                    new_P[ 0 ] + d_ma * new_D[ 0 ] - old_O[ 0 ],
-                    new_P[ 1 ] + d_ma * new_D[ 1 ] - old_O[ 1 ],
-                    new_P[ 2 ] + d_ma * new_D[ 2 ] - old_O[ 2 ]
+                
+                // intersection of the ray / second z plane - old_O
+                var div_m = dot_3( new_D, old_Z );
+                var d_mar = ( z_mar - dot_3( new_P, old_Z ) ) / div_m;
+                var inter_mar = [
+                    new_P[ 0 ] + d_mar * new_D[ 0 ],
+                    new_P[ 1 ] + d_mar * new_D[ 1 ],
+                    new_P[ 2 ] + d_mar * new_D[ 2 ]
                 ];
+                
+                // position of the rays in the 2 z planes
+                var x_mis = dot_3( inter_mir, old_X ) * mwh / old_d, y_mis = dot_3( inter_mir, old_Y ) * mwh / old_d;
+                var x_mas = dot_3( inter_mar, old_X ) * mwh / old_d, y_mas = dot_3( inter_mar, old_Y ) * mwh / old_d;
+                x_mis /= 1.0 + old_p * z_mis; y_mis /= 1.0 + old_p * z_mis;
+                x_mas /= 1.0 + old_p * z_mas; y_mas /= 1.0 + old_p * z_mas;
+                x_mis = Math.ceil( x_mis + w / 2 ); y_mis = Math.ceil( y_mis + h / 2 );
+                x_mas = Math.ceil( x_mas + w / 2 ); y_mas = Math.ceil( y_mas + h / 2 );
 
-                var x_mi = w / 2 + dot_3( inter_mi, old_X ) * mwh / old_d, y_mi = h / 2 + dot_3( inter_mi, old_Y ) * mwh / old_d;
-                var x_ma = w / 2 + dot_3( inter_ma, old_X ) * mwh / old_d, y_ma = h / 2 + dot_3( inter_ma, old_Y ) * mwh / old_d;
-                x_mi /= 1.0 + old_p * z_mi; y_mi /= 1.0 + old_p * z_mi;
-                x_ma /= 1.0 + old_p * z_ma; y_ma /= 1.0 + old_p * z_ma;
+                // totally out of the (old) screen ?
+                if ( x_mis <  0 && x_mas <  0 ) continue;
+                if ( x_mis >= w && x_mas >= w ) continue;
+                if ( y_mis <  0 && y_mas <  0 ) continue;
+                if ( y_mis >= h && y_mas >= h ) continue;
 
-                var d_mm = Math.max( Math.abs( x_ma - x_mi ), Math.abs( y_ma - y_mi ) ) + 1e-40;
-                for( var i = 0.0; i <= d_mm; i += 1.0 ) {
-                    var x_md = Math.round( x_mi + i / d_mm * ( x_ma - x_mi ) );
-                    var y_md = Math.round( y_mi + i / d_mm * ( y_ma - y_mi ) );
-                    var z_md = z_mi + i / d_mm * ( z_ma - z_mi );
-                    if ( x_md >= 0 && x_md < w && y_md >= 0 && y_md < h ) {
+                // bounds for the ray
+                var s_mm = 1.0 / ( Math.max( Math.abs( x_mas - x_mis ), Math.abs( y_mas - y_mis ) ) + 1e-40 );
+                var b_mm = 0.0, e_mm = 1.0;
+                if ( x_mis < x_mas ) {
+                    if ( x_mis < 0     ) b_mm = Math.max( b_mm, ( 0 -     x_mis ) / p1i0( x_mas - x_mis ) );
+                    if ( x_mas > w - 1 ) e_mm = Math.min( e_mm, ( w - 1 - x_mis ) / p1i0( x_mas - x_mis ) );
+                } else {
+                    if ( x_mas < 0     ) e_mm = Math.min( e_mm, ( x_mis - 0     ) / p1i0( x_mis - x_mas ) );
+                    if ( x_mis > w - 1 ) b_mm = Math.max( b_mm, ( x_mis - w + 1 ) / p1i0( x_mis - x_mas ) );
+                }
+                if ( y_mis < y_mas ) {
+                    if ( y_mis < 0     ) b_mm = Math.max( b_mm, ( 0 -     y_mis ) / p1i0( y_mas - y_mis ) );
+                    if ( y_mas > h - 1 ) e_mm = Math.min( e_mm, ( h - 1 - y_mis ) / p1i0( y_mas - y_mis ) );
+                } else {
+                    if ( y_mas < 0     ) e_mm = Math.min( e_mm, ( y_mis - 0     ) / p1i0( y_mis - y_mas ) );
+                    if ( y_mis > h - 1 ) b_mm = Math.max( b_mm, ( y_mis - h + 1 ) / p1i0( y_mis - y_mas ) );
+                }
+
+                if ( inv_z ) {
+                    for( var i = e_mm; i >= b_mm; i -= s_mm ) {
+                        var x_md = Math.ceil( x_mis + i * ( x_mas - x_mis ) );
+                        var y_md = Math.ceil( y_mis + i * ( y_mas - y_mis ) );
                         var o = 4 * ( y_md * w + x_md );
-                        var zu = zznv_data[ o + 0 ] + zznv_data[ o + 1 ] * 256;
+                        var zu = 256 * zznv_data[ o + 1 ] + zznv_data[ o + 0 ];
                         if ( zu != 65535 ) {
-                            var z = z_min + zu / 65534.0 * ( z_max - z_min );
-                            if ( z <= z_md ) {
-                                var r = rgba_data[ o + 1 ], g = r, b = r;
-                                // var r = src_data[ o + 0 ];
-                                // var g = src_data[ o + 1 ];
-                                // var b = src_data[ o + 2 ];
-                                // var a = src_data[ o + 3 ];
+                            var z = z_min + zu / 65534.0 * ( z_max - z_min ); // screen space
+                            var z_md_0 = z_mis + ( i - 2 * s_mm ) * ( z_mas - z_mis );
+                            var z_md_1 = z_mis + ( i + 3 * s_mm ) * ( z_mas - z_mis );
+                            if ( z <= z_md_1 && z >= z_md_0 ) {
+                                var r = rgba_data[ o + 0 ];
+                                var g = rgba_data[ o + 1 ];
+                                var b = rgba_data[ o + 2 ];
+                                ctx.fillStyle = "rgb( " + r + ", " + g + ", " + b + " )";
+                                ctx.fillRect( x, y, size_rect, size_rect );
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    for( var i = b_mm; i <= e_mm; i += s_mm ) {
+                        var x_md = Math.ceil( x_mis + i * ( x_mas - x_mis ) );
+                        var y_md = Math.ceil( y_mis + i * ( y_mas - y_mis ) );
+                        var o = 4 * ( y_md * w + x_md );
+                        var zu = 256 * zznv_data[ o + 1 ] + zznv_data[ o + 0 ];
+                        if ( zu != 65535 ) {
+                            var z = z_min + zu / 65534.0 * ( z_max - z_min ); // screen space
+                            var z_md_0 = z_mis + ( i - 2 * s_mm ) * ( z_mas - z_mis );
+                            var z_md_1 = z_mis + ( i + 3 * s_mm ) * ( z_mas - z_mis );
+                            if ( z <= z_md_1 && z >= z_md_0 ) {
+                                var r = rgba_data[ o + 0 ];
+                                var g = rgba_data[ o + 1 ];
+                                var b = rgba_data[ o + 2 ];
                                 ctx.fillStyle = "rgb( " + r + ", " + g + ", " + b + " )";
                                 ctx.fillRect( x, y, size_rect, size_rect );
                                 break;
@@ -196,6 +255,8 @@ function draw_img_on_canvas( canvas_name ) {
         }
 
         var t1 = new Date().getTime() - t0;
+        size_rect = Math.ceil( size_rect * Math.pow( want_fps * t1 / 1000.0, 0.5 ) );
+        // document.getElementById("com").firstChild.data = t1 + " <> " + size_rect;
         // document.getElementById("com").firstChild.data = pz_mi + " <> " + pz_ma + " <> " + t1;
     }
 }
@@ -325,7 +386,11 @@ function append_mesh_to_imgserv( canvas_name, name ) {
     queue_python_cmd( 'b.add_node( 0, 0, 0 )' );
     queue_python_cmd( 'b.add_node( 1, 0, 0 )' );
     queue_python_cmd( 'b.add_node( 0, 1, 0 )' );
+    queue_python_cmd( 'b.add_node( 0, 0, 1 )' );
     queue_python_cmd( 'b.add_triangle( 0, 1, 2 )' );
+    queue_python_cmd( 'b.add_triangle( 0, 1, 3 )' );
+    queue_python_cmd( 'b.add_triangle( 0, 2, 3 )' );
+    queue_python_cmd( 'b.add_triangle( 1, 2, 3 )' );
     queue_python_cmd( 'c = make_cs( b, MachineId.gpu( 0 ) )' );
     queue_python_cmd( 'd = DisplayItem_BasicMesh( c )' );
     queue_python_cmd( 'cst_obj.append( c )' );

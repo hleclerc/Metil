@@ -4,6 +4,7 @@
 #include "Base64.h"
 #include "Png.h"
 
+#include <limits>
 #include <sys/socket.h>
 
 BEG_METIL_NAMESPACE;
@@ -13,6 +14,8 @@ BitmapDisplay::BitmapDisplay( int w, int h ) : GenericDisplay( w, h ), img_rgba(
 
 void BitmapDisplay::render() {
     update_p_min_p_max();
+    rz_min_max[ 0 ] = 65535;
+    rz_min_max[ 1 ] = 0;
     //
     first_item_ = true;
     for( ST i = 0; i < items.size(); ++i )

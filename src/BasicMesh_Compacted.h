@@ -26,6 +26,17 @@ struct BasicMesh_Compacted {
                     md.copy( &loc_0[ j ].data_, src[ i ].connec[ j ].ptr(), src[ i ].connec[ j ].size() * sizeof( SI32 ), 16 * 4 );
                 }
                 md.end_local_data( loc[ i ].connec.data_, loc_0, rese_0 );
+                loc[ i ].pos_nodes.size_ = src[ i ].pos_nodes.size();
+                loc[ i ].pos_nodes.rese_ = src[ i ].pos_nodes.size();
+                BasicVecRef<FP32 > *loc_1;
+                ST rese_1 = src[ i ].pos_nodes.size() * sizeof( BasicVecRef<FP32 > );
+                md.beg_local_data( &loc[ i ].pos_nodes.data_, &loc_1, rese_1, sizeof( ST ) );
+                for( ST j = 0; j < src[ i ].pos_nodes.size(); ++j ) {
+                    loc_1[ j ].size_ = src[ i ].pos_nodes[ j ].size();
+                    loc_1[ j ].rese_ = src[ i ].pos_nodes[ j ].size();
+                    md.copy( &loc_1[ j ].data_, src[ i ].pos_nodes[ j ].ptr(), src[ i ].pos_nodes[ j ].size() * sizeof( FP32 ), 16 * 4 );
+                }
+                md.end_local_data( loc[ i ].pos_nodes.data_, loc_1, rese_1 );
                 loc[ i ].elem_id = src[ i ].elem_id;
             }
             md.end_local_data( dst, loc, rese );
@@ -37,6 +48,7 @@ struct BasicMesh_Compacted {
         void update_ptr_gpu_save( ST off );
 
         BasicVecRef<BasicVecRef<SI32 > > connec;
+        BasicVecRef<BasicVecRef<FP32 > > pos_nodes;
         SI32 elem_id;
     };
     template<class T> static BasicMesh_Compacted *copy( MemoryDriver &md, const T *src, ST num = 1 ) {

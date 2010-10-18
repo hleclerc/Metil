@@ -17,6 +17,8 @@ int main() {
     mesh.add_node(  0, 10, 0 );
 
     mesh.add_elem( elem_type_Triangle, 0, 1, 2 );
+    mesh.elem_groups[ 0 ].pos_nodes.resize( 3 );
+    mesh.elem_groups[ 0 ].pos_nodes[ 0 ] << 666;
 
     Ps<BasicMesh_Compacted> m = make_cs( &mesh, 1, MachineId::cpu( 0 ) );
     Ps<BasicMesh_Compacted> g = strdup( m, MachineId::gpu( 0 ) );
@@ -24,6 +26,8 @@ int main() {
 
     PRINT( m->pos_nodes.size() );
     PRINT( m->pos_nodes[ 0 ].size() );
+    PRINT( m->pos_nodes[ 0 ][ 1 ] );
+    PRINT( m->elem_groups[ 0 ].pos_nodes );
 
     // compacted version
 //    Ps<BasicMesh_Compacted> m = make_cs( &mesh, 1, MachineId::gpu( 0 ) );

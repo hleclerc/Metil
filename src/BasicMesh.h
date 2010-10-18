@@ -23,10 +23,12 @@ public:
         void apply_bs( TB &res, TP ) const {
             res.set_type( "ElemGroup" );
             APPLY_WN( res, connec );
+            APPLY_WN( res, pos_nodes );
             APPLY_WN( res, elem_id );
         }
 
         BasicVec<BasicVec<I> > connec;
+        BasicVec<BasicVec<T> > pos_nodes;
         const ElemType *elem_type;
         I elem_id;
     };

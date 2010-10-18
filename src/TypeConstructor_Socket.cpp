@@ -30,12 +30,6 @@ void metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithS
     send( ST( a.data ), o->data, o->size, 0 );
 }
 
-// << ???
-//void metil_def_self_append__when__a__isa__Socket__pert__1( MO &a, MO b ) {
-//    PRINT( b.type->name );
-//    TODO;
-//}
-
 // write
 void metil_def_write__when__a__isa__Socket__pert__1( MO &a, const void *data, ST size ) {
     send( ST( a.data ), data, size, 0 );

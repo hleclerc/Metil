@@ -42,6 +42,7 @@ public:
     Img img_nnnn; ///<
 protected:
     bool first_item_; ///<
+    float rz_min_max[ 2 ]; ///<
 };
 
 END_METIL_NAMESPACE;
