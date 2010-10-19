@@ -142,3 +142,6 @@ Makefile
 ./src/NewString.h
 ./src/TypeConstructor_File.cpp
 ./src/DeclMethodsBinaryArithmetic.h
+src/Limits.h
+src/BasicRectIter.h
+src/BasicMat.h

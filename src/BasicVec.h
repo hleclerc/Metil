@@ -717,11 +717,35 @@ bool all( const TV &vec ) {
     return true;
 }
 
+template<class TV>
+bool any( const TV &vec ) {
+    for(ST i=0;i<vec.size();++i)
+        if ( vec[ i ] )
+            return true;
+    return false;
+}
+
 template<class T_,int s_,int p_,class T2>
 BasicVec<bool,s_,p_> operator>=( const BasicVec<T_,s_,p_> &a, const T2 &b ) {
     BasicVec<bool,s_,p_> res( Size(), a.size() );
     for(ST i = 0; i < a.size(); ++i )
         res[ i ] = a[ i ] >= b;
+    return res;
+}
+
+template<class T_,int s_,int p_,class T2,int s2,int p2>
+BasicVec<bool,s_,p_> operator<( const BasicVec<T_,s_,p_> &a, const BasicVec<T2,s2,p2> &b ) {
+    BasicVec<bool,s_,p_> res( Size(), a.size() );
+    for(ST i = 0; i < a.size(); ++i )
+        res[ i ] = a[ i ] < b[ i ];
+    return res;
+}
+
+template<class T_,int s_,int p_,class T2,int s2,int p2>
+BasicVec<bool,s_,p_> operator>=( const BasicVec<T_,s_,p_> &a, const BasicVec<T2,s2,p2> &b ) {
+    BasicVec<bool,s_,p_> res( Size(), a.size() );
+    for(ST i = 0; i < a.size(); ++i )
+        res[ i ] = a[ i ] >= b[ i ];
     return res;
 }
 
