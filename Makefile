@@ -1,17 +1,18 @@
+all: make_metil_comp
 
-all: std
-# 	make -C examples/python_server
+install: all
+	sudo ln -s `pwd`/metil_comp/metil_comp /usr/bin/
 
-server:
-	metil_comp -g3 -Isrc examples/server/main.cpp
+make_metil_comp:
+	make -C metil_comp
 
-std:
+test:
 	metil_comp -g3 -Isrc src/main.cpp
 
-gdb:
+test_gdb:
 	metil_comp --exec-using gdb -g3 -Isrc src/main.cpp
 
-valgrind:
+test_valgrind:
 	metil_comp --exec-using valgrind -g3 -Isrc src/main.cpp
 
 metil_gen:
