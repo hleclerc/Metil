@@ -261,14 +261,14 @@ void CompilationGraphProgram::add_src_file( const String &src_file ) {
     }
 
     // .h.met
-    for(int i=0;i<ccp_parser.hdotme_files.size();++i) {
-        String hdotme_file = ccp_parser.hdotme_files[ i ];
-        String header_file = hdotme_file.rstrip( 3 );
-        CompilationGraph *header_item = new CompilationGraphGeneratedHeaderFile( ce, header_file, hdotme_file );
-        CompilationGraph *metil_item = new CompilationGraphMeFile( hdotme_file );
-        obj_item   ->add_child( header_item );
-        header_item->add_child( metil_item  );
-    }
+    //    for(int i=0;i<ccp_parser.hdotme_files.size();++i) {
+    //        String hdotme_file = ccp_parser.hdotme_files[ i ];
+    //        String header_file = hdotme_file.rstrip( 3 );
+    //        CompilationGraph *header_item = new CompilationGraphGeneratedHeaderFile( ce, header_file, hdotme_file );
+    //        CompilationGraph *metil_item = new CompilationGraphMeFile( hdotme_file );
+    //        obj_item   ->add_child( header_item );
+    //        header_item->add_child( metil_item  );
+    //    }
 
     // -l
     for(int i=0;i<ccp_parser.extlib_names.size();++i)

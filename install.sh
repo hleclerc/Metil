@@ -7,5 +7,5 @@ then
     INSTALL_DIR="/usr/bin"
 fi
 
-echo ln -s `pwd`/metil_comp/metil_comp $INSTALL_DIR
+ln -s `pwd`/metil_comp/metil_comp $INSTALL_DIR
 
