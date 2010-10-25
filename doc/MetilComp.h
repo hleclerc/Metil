@@ -44,6 +44,15 @@ metil_comp --exec-using "valgrind --leak-check=full" ex1.cpp
         - @p --exec-using prg : execute using prg. Example : --exec-using valgrind or --exec-using gdb to use valgrind or gdb
         - @p --valgrind : execute using valgrind
         - @p --gdb : execute using gdb
-        
+        - @p --device-emulation : device emulation for cuda";
+        - @p --maxrregcount n : device emulation for cuda";
+    
+    Possible pragma in .h/.cpp/.cu files:";
+        - @p src_file additionnal cpp / cu files";
+        - @p cpp_path additionnal include path";
+        - @p lnk_flag additionnal flags explicitly passed to the linker";
+        - @p gpu_flag additionnal flags explicitly passed to nvcc";
+        - @p lib_path additionnal library (.so/.a) path, like e.g. /usr/local/lib";
+        - @p lib_name additionnal library name (.so/.a), like e.g. pthread";
 
 */
