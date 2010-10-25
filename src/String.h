@@ -54,6 +54,7 @@ struct String : public Level1::MO {
     String &operator<<(       char *s ) { TODO; return *this; }
     String &operator<<(       char  s ) { CM_2( self_append, *this, MO( char_ptr + 2 * (unsigned char)s, &Level1::metil_type_cst_ConstCharPtr ) ); return *this; }
     String &operator<<( MO          s ) { CM_2( self_append, *this, s ); return *this; }
+    String &operator<<( bool        v ) { return operator<<( int( v ) ); }
 
     template<class T>
     String &operator<<( const T &val ) { val.write_str( *this ); return *this; }
@@ -75,7 +76,7 @@ struct String : public Level1::MO {
 
     // methods
     Val size() const { return CM_1( size, *this ); }
-    const char *c_str() { return (const char *)CM_1( ptr_z, *this ); }
+    const char *c_str() const { return (const char *)CM_1( ptr_z, *const_cast<String *>( this ) ); }
     void flush() { CM_1( flush, *this ); }
     void write_separator( int num );
     Val find( const String &str ) const { return CM_2( find, *this, str ); } ///< return index of first str found in this. Else, return -1

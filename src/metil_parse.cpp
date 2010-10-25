@@ -38,7 +38,7 @@ char *get_data( FILE *f ) {
 }
 
 int main( int argc, char **argv ) {
-    String cmd = "g++ -E -DAVOID_GEN";
+    String cmd = "g++ -Isrc -E -DAVOID_GEN";
     String hn, cn;
     BasicVec<String> cpp_files;
     bool want_h = 1;
@@ -64,7 +64,7 @@ int main( int argc, char **argv ) {
     for( int num = 0; num < cpp_files.size(); ++num ) {
         // get result from g++ -E ...
         String exe = cmd + ' ' + cpp_files[ num ];
-        DOUT( exe );
+        // DOUT( exe );
 
         FILE *f = popen( exe.c_str(), "r" );
         if ( not f )

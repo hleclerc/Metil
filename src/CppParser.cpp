@@ -3,7 +3,6 @@
 #include "CppParser.h"
 
 #include <sstream>
-#include <map>
 #include <set>
 
 BEG_METIL_LEVEL1_NAMESPACE;
@@ -122,26 +121,50 @@ void CppParser::write_defi_type( std::ostream &os ) {
     }
 }
 
-struct VTCond {
-    // VTCond( CppParser::String type, CppParser::String init ) : type( type ), init( init ) {}
-    bool operator<( const VTCond &vt ) const {
-        return vt.str() < str();
+void CppParser::write_defi_meth( std::ostream &os, const DefStr &def, bool gen, std::map<VTCond,String> &conds, std::map<String,String> &files ) {
+    // condition
+    VTCond vt_cond;
+    def.cond( vt_cond.type, vt_cond.init );
+    if ( conds.count( vt_cond ) == 0 ) {
+        conds[ vt_cond ] = def.orig;
+        os << "    static " << vt_cond.type << " cond_" << def.orig << ";\n";
+        for( int j = 0; j < vt_cond.init.size(); ++j )
+            os << "    cond_" << def.orig << vt_cond.init[ j ] << "\n";
+        os << "\n";
     }
-    CppParser::String str() const {
-        CppParser::String res = type;
-        for( int i = 0; i < init.size(); ++i )
-            res += init[ i ];
-        return res;
+
+    if ( files.count( def.file ) == 0 ) {
+        std::ostringstream ss; ss << "string_" << files.size();
+        files[ def.file ] = ss.str();
+        os << "    static const char *" << ss.str() << " = \"" << def.file << "\";\n";
+        os << "\n";
     }
-    CppParser::String type;
-    BasicVec<CppParser::String> init;
-};
+
+    // item
+    os << "    static MethodFinder<MethodName_" << def.name << ">::Item item_" << def.orig << ";\n";
+    os << "    item_" << def.orig << ".prev = MethodFinder<MethodName_" << def.name << ">::last;\n";
+    os << "    item_" << def.orig << ".cond = &cond_" << conds[ vt_cond ] << ";\n";
+    if ( gen ) {
+        os << "    item_" << def.orig << ".meth = 0;\n";
+        os << "    item_" << def.orig << ".gene = " << def.orig + ";\n";
+    } else {
+        os << "    item_" << def.orig << ".meth = " << def.orig + ";\n";
+        os << "    item_" << def.orig << ".gene = 0;\n";
+    }
+    os << "    item_" << def.orig << ".file = " << files[ def.file ] << ";\n";
+    os << "    item_" << def.orig << ".line = " << def.line << ";\n";
+    os << "    item_" << def.orig << ".pert = " << def.pert() << ";\n";
+    os << "    MethodFinder<MethodName_" << def.name << ">::last = &item_" << def.orig << ";\n";
+    os << "\n";
+}
 
 void CppParser::write_defi_meth( std::ostream &os ) {
-    // extern metil_def_...
+    // extern metil_def_... metil_gen_...
     os << "// method references\n";
     for( int i = 0; i < def.size(); ++i )
         os << "extern MethodName_" << def[ i ].name << "::TM " << def[ i ].orig << ";\n";
+    for( int i = 0; i < gen.size(); ++i )
+        os << "extern MethodMaker " << gen[ i ].orig << ";\n";
     os << "\n";
     os << "\n";
 
@@ -150,37 +173,10 @@ void CppParser::write_defi_meth( std::ostream &os ) {
     os << "void reg_def() {\n";
     std::map<VTCond,String> conds;
     std::map<String,String> files;
-    for( int i = 0; i < def.size(); ++i ) {
-        if ( i ) os << "\n";
-
-        // condition
-        VTCond vt_cond;
-        def[ i ].cond( vt_cond.type, vt_cond.init );
-        if ( conds.count( vt_cond ) == 0 ) {
-            conds[ vt_cond ] = def[ i ].orig;
-            os << "    static " << vt_cond.type << " cond_" << def[ i ].orig << ";\n";
-            for( int j = 0; j < vt_cond.init.size(); ++j )
-                os << "    cond_" << def[ i ].orig << vt_cond.init[ j ] << "\n";
-            os << "\n";
-        }
-
-        if ( files.count( def[ i ].file ) == 0 ) {
-            std::ostringstream ss; ss << "string_" << files.size();
-            files[ def[ i ].file ] = ss.str();
-            os << "    static const char *" << ss.str() << " = \"" << def[ i ].file << "\";\n";
-            os << "\n";
-        }
-
-        // item
-        os << "    static MethodFinder<MethodName_" << def[ i ].name << ">::Item item_" << def[ i ].orig << ";\n";
-        os << "    item_" << def[ i ].orig << ".prev = MethodFinder<MethodName_" << def[ i ].name << ">::last;\n";
-        os << "    item_" << def[ i ].orig << ".cond = &cond_" << conds[ vt_cond ] << ";\n";
-        os << "    item_" << def[ i ].orig << ".meth = " << def[ i ].orig + ";\n";
-        os << "    item_" << def[ i ].orig << ".file = " << files[ def[ i ].file ] << ";\n";
-        os << "    item_" << def[ i ].orig << ".line = " << def[ i ].line << ";\n";
-        os << "    item_" << def[ i ].orig << ".pert = " << def[ i ].pert() << ";\n";
-        os << "    MethodFinder<MethodName_" << def[ i ].name << ">::last = &item_" << def[ i ].orig << ";\n";
-    }
+    for( int i = 0; i < def.size(); ++i )
+        write_defi_meth( os, def[ i ], false, conds, files );
+    for( int i = 0; i < gen.size(); ++i )
+        write_defi_meth( os, gen[ i ], true , conds, files );
     os << "}\n";
 }
 

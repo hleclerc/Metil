@@ -2,6 +2,7 @@
 #define METHODFINDER_H
 
 #include "TypeConstructor.h"
+#include "MethodWriter.h"
 #include "MethodCond.h"
 #include "MethodName.h"
 #include "BasicVec.h"
@@ -14,6 +15,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 template<class N>
 class MethodFinder {
 public:
+    typedef MethodMaker TG;
     typedef typename N::TM TM;
     typedef MethodCond Cond;
     typedef const char *CCHP;
@@ -22,6 +24,7 @@ public:
         Item *prev;
         Cond *cond;
         TM   *meth;
+        TG   *gene;
         FP64  pert;
         CCHP  file;
         int   line;
@@ -42,7 +45,7 @@ public:
     }
 
     ///
-    static TM *find( Type *type_0, Type *type_1 = 0, Type *type_2 = 0, bool abort_if_pb = true ) {
+    static Item *find_item( Type *type_0, Type *type_1 = 0, Type *type_2 = 0, bool abort_if_pb = true ) {
         // find items with greater pertinence and checked cond
         BasicVec<Item *,-1,4> res;
         for( Item *item = last; item; item = item->prev ) {
@@ -72,7 +75,20 @@ public:
         }
 
         // else -> ok
-        return res.size() == 1 ? res[ 0 ]->meth : 0;
+        return res.size() == 1 ? res[ 0 ] : 0;
+    }
+
+    ///
+    static TM *find( Type *type_0, Type *type_1 = 0, Type *type_2 = 0, bool abort_if_pb = true ) {
+        Item *item = find_item( type_0, type_1, type_2, abort_if_pb );
+
+        // maybe we have to generate / load the code
+        if ( not item->meth ) {
+            DynamicLibrary &dl = MethodWriter::get_lib_for_types( type_0, type_1, type_2 );
+            item->meth = (TM *)dl.get_sym( MethodWriter::name_for( N::get_name(), type_0, type_1, type_2 ) );
+        }
+
+        return item->meth;
     }
 
     static Item *last;

@@ -4,7 +4,8 @@
 
 #include "BasicVec.h"
 #include "DefStr.h"
-#include "Dout.h"
+
+#include <map>
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
@@ -21,6 +22,19 @@ struct CppParser {
         String name;
         String cons;
         String subs;
+    };
+    struct VTCond {
+        bool operator<( const VTCond &vt ) const {
+            return vt.str() < str();
+        }
+        String str() const {
+            String res = type;
+            for( int i = 0; i < init.size(); ++i )
+                res += init[ i ];
+            return res;
+        }
+        String type;
+        BasicVec<String> init;
     };
 
     CppParser();
@@ -39,6 +53,7 @@ private:
     void metil_gen_( char *&c );
     void metil_def_( char *&c );
 
+    void write_defi_meth( std::ostream &os, const DefStr &def, bool gen, std::map<VTCond,String> &conds, std::map<String,String> &files );
     void write_defi_type( std::ostream &os );
     void write_defi_meth( std::ostream &os );
 

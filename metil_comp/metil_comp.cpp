@@ -177,6 +177,9 @@ int main( int argc, char **argv ) {
             }
             setenv( "LD_LIBRARY_PATH", LD_LIB.data(), true );
 
+            //
+            setenv( "METIL_COMP_DIR", ce.get_comp_dir(), true );
+
 
             if ( out_file.size() and out_file[0] != '/' and out_file[0] != '\\' )
                 out_file = "./" + out_file;

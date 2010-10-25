@@ -20,9 +20,11 @@ const void *metil_def_new_ptr_z__when__a__isa__ConstCharPtrWithSize( MO a ) {
     return strndup( o->data, o->size );
 }
 
-void metil_def_ptr_z__when__a__isa__ConstCharPtrWithSize( MO &a ) {
+const void *metil_def_ptr_z__when__a__isa__ConstCharPtrWithSize( MO &a ) {
     const TD *o = reinterpret_cast<const TD *>( a.data );
-    static_cast<String &>( a ) = NewString( o->data, o->data + o->size );
+    NewString res( o->data, o->data + o->size );
+    static_cast<String &>( a ) = res;
+    return res.ptr();
 }
 
 END_METIL_LEVEL1_NAMESPACE;

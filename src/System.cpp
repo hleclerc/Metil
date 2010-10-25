@@ -150,7 +150,7 @@ double time_of_day_in_sec() {
     return st.tv_sec + st.tv_usec / 1e6;
 }
 
-int create_directory( String filename, bool check_if_exists ) {
+int create_directory( const String &filename, bool check_if_exists ) {
     #ifdef WIN32
     if ( mkdir( filename.c_str()/* , S_IRWXU| S_IRWXG*/ ) ) {
     #else
@@ -163,21 +163,21 @@ int create_directory( String filename, bool check_if_exists ) {
     return 0;
 }
 
-//SI64 last_modification_time_or_zero_of_file_named( const char *n ) {
-//    struct stat stat_file;
-//    if ( stat( n, &stat_file ) )
-//        return 0;
-//    return stat_file.st_mtime;
-//}
+SI64 last_modification_time_or_zero_of_file_named( const char *n ) {
+    struct stat stat_file;
+    if ( stat( n, &stat_file ) )
+        return 0;
+    return stat_file.st_mtime;
+}
 
-//SI64 last_modification_time_or_zero_of_file_named( const String &n ) {
-//    return last_modification_time_or_zero_of_file_named( n.c_str() );
-//}
+SI64 last_modification_time_or_zero_of_file_named( const String &n ) {
+    return last_modification_time_or_zero_of_file_named( n.c_str() );
+}
 
-//bool file_exists( const String &n ) {
-//    struct stat stat_file;
-//    return ( stat( n.c_str(), &stat_file ) == 0 );
-//}
+bool file_exists( const String &n ) {
+    struct stat stat_file;
+    return ( stat( n.c_str(), &stat_file ) == 0 );
+}
 
 //void rm( const String &n ) {
 //    unlink( n.c_str() );
