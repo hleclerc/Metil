@@ -17,3 +17,6 @@ valgrind:
 metil_gen:
 	metil_comp -g3 -Isrc src/metil_parse.cpp `find . -name "*.cpp"`
 # 	metil_comp -g3 --valgrind -Isrc src/metil_parse.cpp `find . -name "*.cpp"`
+
+comp:
+	metil_comp src/make_compressed_struct.cpp

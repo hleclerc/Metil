@@ -112,6 +112,8 @@ function draw_img_on_canvas( canvas_name ) {
             0, 0, w, h
         );
     } else {
+        restart_timer_until_src_update( canvas );
+        
         var rgba_data = get_img_data( canvas, canvas.cam_data.img_rgba, 0 );
         var zznv_data = get_img_data( canvas, canvas.cam_data.img_zznv, 1 );
         var nnnn_data = get_img_data( canvas, canvas.cam_data.img_nnnn, 2 );
@@ -272,7 +274,7 @@ function update_img_src( canvas ) { // draw_canvas
 
 
 function restart_timer_until_src_update( canvas ) {
-    if ( canvas.cam_data.current_timer_until_src_update )
+    if ( canvas.cam_data.current_timer_until_src_update != undefined )
         clearTimeout( canvas.cam_data.current_timer_until_src_update );
     canvas.cam_data.current_timer_until_src_update = setTimeout( function() { update_img_src( canvas ); }, delay_send );
 }
@@ -331,7 +333,6 @@ function img_mouse_move( evt ) {
     }
 
     draw_img_on_canvas( this.id );
-    restart_timer_until_src_update( this );
 
     old_x = new_x;
     old_y = new_y;
@@ -368,7 +369,6 @@ function img_mouse_wheel( evt ) {
 
     // redraw
     draw_img_on_canvas( this.id );
-    restart_timer_until_src_update( this );
 
     if( evt.preventDefault ) evt.preventDefault();
     evt.returnValue = false;

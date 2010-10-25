@@ -14,16 +14,20 @@ struct BasicMat<T_,dim,true> {
     typedef T_ T;
     static const int size = dim * ( dim + 1 ) / 2;
 
-    BasicMat() {}
-    BasicMat( T val ) : data( val ) {}
+    __inline__ BasicMat() {}
+    __inline__ BasicMat( T val ) : data( val ) {}
 
-    const T &sel_sec( int r, int c ) const { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c < r
-    T &sel_sec( int r, int c ) { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c < r
+    __inline__ const T &sel_sec( int r, int c ) const { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c < r
+    __inline__ T &sel_sec( int r, int c ) { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c < r
 
-    const T &operator()( int r, int c ) const { if ( r < c ) return sel_sec( c, r ); return sel_sec( r, c ); }
-    T &operator()( int r, int c ) { if ( r < c ) return sel_sec( c, r ); return sel_sec( r, c ); }
+    __inline__ const T &operator()( int r, int c ) const { if ( r < c ) return sel_sec( c, r ); return sel_sec( r, c ); }
+    __inline__ T &operator()( int r, int c ) { if ( r < c ) return sel_sec( c, r ); return sel_sec( r, c ); }
 
-    void chol() {
+    __inline__ void operator+=( const BasicMat &m ) {
+        data += m.data;
+    }
+
+    __inline__ void chol() {
         for( int r = 0; r < dim; ++r ) {
             for( int c = 0; c < r; ++c ) {
                 T val = sel_sec( r, c );
@@ -39,7 +43,7 @@ struct BasicMat<T_,dim,true> {
 
     }
 
-    BasicVec<T,dim> solve_using_cholesky( BasicVec<T,dim> sol ) {
+    __inline__ BasicVec<T,dim> solve_using_cholesky( BasicVec<T,dim> sol ) {
         BasicVec<T,dim> res;
         for( int r = 0; r < dim; ++r ) {
             T v = sol[ r ];
@@ -58,12 +62,12 @@ struct BasicMat<T_,dim,true> {
         return res;
     }
 
-    void add_l_Id( T l ) {
+    __inline__ void add_l_Id( T l ) {
         for( int c = 0; c < dim; ++c )
             sel_sec( c, c ) += l;
     }
 
-    BasicVec<T,dim> operator*( const BasicVec<T,dim> &vec ) const {
+    __inline__ BasicVec<T,dim> operator*( const BasicVec<T,dim> &vec ) const {
         BasicVec<T,dim> res( 0 );
         for( int r = 0; r < dim; ++r )
             for( int c = 0; c < dim; ++c )

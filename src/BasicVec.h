@@ -213,6 +213,11 @@ public:
         _init_using_1_arg( v0, Number<TensorOrder<T0>::res>() );
     }
 
+    __inline__ void operator+=( const BasicVec &v ) {
+        for( int i = 0; i < static_size; ++i )
+            _data[ i ] += v[ i ];
+    }
+
     __inline__ int size() const {
         return static_size;
     }
@@ -426,12 +431,12 @@ public:
     }
 
 
-    inline const T &operator[]( ST i ) const { ASSERT_IF_DEBUG( i < _size ); return _data[ i ]; }
-    inline T &operator[]( ST i ) { ASSERT_IF_DEBUG( i < _size ); return _data[ i ]; }
+    __inline__ const T &operator[]( ST i ) const { ASSERT_IF_DEBUG( i < _size ); return _data[ i ]; }
+    __inline__ T &operator[]( ST i ) { ASSERT_IF_DEBUG( i < _size ); return _data[ i ]; }
 
-    ST size() const { return _size; }
+    __inline__ ST size() const { return _size; }
 
-    bool empty() const { return size() == 0; }
+    __inline__ bool empty() const { return size() == 0; }
 
     template<class T2>
     BasicVec &operator<<( const T2 &val ) {
@@ -621,6 +626,13 @@ public:
             return true;
     }
 
+    bool operator!=( const T &v ) const {
+        for(int i=0;i<_size;++i)
+            if ( _data[ i ] != v )
+                return true;
+            return false;
+    }
+
     BasicVec operator+( const BasicVec &vec ) const {
         BasicVec res( Size(), ( size() < vec.size() ? size() : vec.size() ) );
         for(int i=0;i<res.size();++i)
@@ -733,6 +745,14 @@ BasicVec<bool,s_,p_> operator>=( const BasicVec<T_,s_,p_> &a, const T2 &b ) {
     return res;
 }
 
+template<class T_,int s_,int p_,class T2>
+BasicVec<bool,s_,p_> operator<( const BasicVec<T_,s_,p_> &a, const T2 &b ) {
+    BasicVec<bool,s_,p_> res( Size(), a.size() );
+    for(ST i = 0; i < a.size(); ++i )
+        res[ i ] = a[ i ] < b;
+    return res;
+}
+
 template<class T_,int s_,int p_,class T2,int s2,int p2>
 BasicVec<bool,s_,p_> operator<( const BasicVec<T_,s_,p_> &a, const BasicVec<T2,s2,p2> &b ) {
     BasicVec<bool,s_,p_> res( Size(), a.size() );
@@ -746,6 +766,22 @@ BasicVec<bool,s_,p_> operator>=( const BasicVec<T_,s_,p_> &a, const BasicVec<T2,
     BasicVec<bool,s_,p_> res( Size(), a.size() );
     for(ST i = 0; i < a.size(); ++i )
         res[ i ] = a[ i ] >= b[ i ];
+    return res;
+}
+
+template<class T_,int s_,int p_,class T2,int s2,int p2>
+BasicVec<bool,s_,p_> operator!=( const BasicVec<T_,s_,p_> &a, const BasicVec<T2,s2,p2> &b ) {
+    BasicVec<bool,s_,p_> res( Size(), a.size() );
+    for(ST i = 0; i < a.size(); ++i )
+        res[ i ] = a[ i ] != b[ i ];
+    return res;
+}
+
+template<class T_,int s_,int p_,class T2,int s2,int p2>
+BasicVec<bool,s_,p_> operator==( const BasicVec<T_,s_,p_> &a, const BasicVec<T2,s2,p2> &b ) {
+    BasicVec<bool,s_,p_> res( Size(), a.size() );
+    for(ST i = 0; i < a.size(); ++i )
+        res[ i ] = a[ i ] == b[ i ];
     return res;
 }
 

@@ -185,6 +185,9 @@ template<class T> __inline__ T max( const T &a, const T &b ) { return MAX( a, b 
 
 #else // __CUDACC__
 
+template<class T> __inline__ T pow( const T &a, const T &b ) { return ::pow( a, b ); }
+template<class T> __inline__ T pow( const T &a, int b ) { return ::pow( a, b ); }
+
 template<class T> __inline__ T min( const T &a, const T &b ) { return ::min( a, b ); }
 template<class T> __inline__ T max( const T &a, const T &b ) { return ::max( a, b ); }
 
@@ -192,6 +195,7 @@ template<class T> __inline__ T abs( const T &a ) { return ::abs( a ); }
 template<class T> __inline__ T tan( const T &a ) { return ::tan( a ); }
 
 template<class T> __inline__ T sqrt( const T &a ) { return ::sqrt( a ); }
+
 
 #endif // __CUDACC__
 

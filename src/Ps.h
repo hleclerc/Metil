@@ -14,6 +14,8 @@ struct Ps {
     Ps() : data( 0 ), size( 1 ), rese( 0 ), pos( MachineId::cpu( 0 ) ) {}
     Ps( T *data, ST size, ST rese, MachineId pos ) : data( data ), size( size ), rese( rese ), pos( pos ) {}
 
+    void clear() { data = 0; size = 1; rese = 0; }
+
     const T &operator[]( ST i ) const { return data[ i ]; }
     T &operator[]( ST i ) { return data[ i ]; }
 
@@ -28,6 +30,8 @@ struct Ps {
 
     ST nb_items() const { return size; }
     ST size_mem() const { return rese; }
+
+    operator bool() const { return data; }
 
     void free() {
         //if ( pos.is_a_gpu() )
