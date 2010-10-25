@@ -13,8 +13,8 @@ struct ElemTypeTriangle : public ElemType {
         ST os = pos_nodes[ 0 ].size();
         for( int y = 0; y < Xd[ 1 ]; ++y ) {
             for( int x = 0; x < Xd[ 0 ]; ++x ) {
-                pos_nodes[ 0 ] << X0[ 0 ] + ( X1[ 0 ] - X0[ 0 ] ) * x / Xd[ 0 ];
-                pos_nodes[ 1 ] << X0[ 1 ] + ( X1[ 1 ] - X0[ 1 ] ) * y / Xd[ 1 ];
+                pos_nodes[ 0 ] << X0[ 0 ] + ( X1[ 0 ] - X0[ 0 ] ) * x / ( Xd[ 0 ] - 1 );
+                pos_nodes[ 1 ] << X0[ 1 ] + ( X1[ 1 ] - X0[ 1 ] ) * y / ( Xd[ 1 ] - 1 );
             }
         }
         // elems

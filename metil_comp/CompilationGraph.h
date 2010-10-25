@@ -99,7 +99,7 @@ class CompilationGraphWithFilenameAndEnvironment : public CompilationGraphWithFi
 public:
     CompilationGraphWithFilenameAndEnvironment( const CompilationEnvironment &ce, const String &filename ) : CompilationGraphWithFilename( filename ), ce( ce ) {}
 
-protected:
+// protected:
     CompilationEnvironment ce;
 };
 
@@ -188,18 +188,11 @@ protected:
 */
 class CompilationGraphPyFile : public CompilationGraphWithFilename {
 public:
-    CompilationGraphPyFile( const String &filename ) : CompilationGraphWithFilename( filename ) {}
-    virtual void write_to_stream( Stream &gf ) const { gf << "  python " << filename; }
-protected:
-    virtual int make_node() { return 0; }
-};
+    CompilationGraphPyFile( const String &filename ) : CompilationGraphWithFilename( filename ) {
+        // coutn << filename;
+    }
 
-/**
-*/
-class CompilationGraphMeFile : public CompilationGraphWithFilename {
-public:
-    CompilationGraphMeFile( const String &filename ) : CompilationGraphWithFilename( filename ) {}
-    virtual void write_to_stream( Stream &gf ) const { gf << "  metil " << filename; }
+    virtual void write_to_stream( Stream &gf ) const { gf << "  python " << filename; }
 protected:
     virtual int make_node() { return 0; }
 };

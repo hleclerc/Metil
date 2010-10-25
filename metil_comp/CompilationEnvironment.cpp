@@ -29,12 +29,12 @@ CompilationEnvironment::CompilationEnvironment() {
     LD = "g++";
     CPPFLAGS = "-Wall";
     NVCC = "/usr/local/cuda/bin/nvcc";
-
+    
     device_emulation = 0;
+    maxrregcount = 0;
     // set_comp_dir( "." );
-
     #ifdef INSTALL_DIR
-    add_include_dir( INSTALL_DIR );
+        add_include_dir( INSTALL_DIR );
     #endif
 }
 
@@ -60,12 +60,12 @@ String CompilationEnvironment::find_src( const String &filename, const String &c
     // absolute path ?
     if ( filename[ 0 ] == '/' or filename[ 0 ] == '\\' )
         return ( file_exists( filename ) ? filename : "" );
-
+    
     // try with current_dir
     String trial = current_dir + filename;
     if ( file_exists( trial ) )
         return trial;
-
+        
     // try with include_dirs
     for(int i=0;i<include_dirs.size();++i) {
         if ( include_dirs[ i ][ include_dirs[ i ].size() - 1 ] != '/' )
@@ -74,7 +74,7 @@ String CompilationEnvironment::find_src( const String &filename, const String &c
         if ( file_exists( trial ) )
             return trial;
     }
-
+    
     // not found :(
     return "";
 }
@@ -84,7 +84,7 @@ void CompilationEnvironment::set_comp_dir( String dir ) {
     dir = absolute_filename( dir );
     if ( not dir.ends_with( '/' ) )
         dir += '/';
-
+        
     // try /path_of_filename/compilations
     comp_dir_ = dir + "compilations";
     if ( create_directory( comp_dir_, false ) ) { // else, try /tmp/compilations/path_of_filename/
@@ -99,7 +99,7 @@ void CompilationEnvironment::set_comp_dir( String dir ) {
         }
     }
     comp_dir_ += '/';
-
+    
     create_directory( comp_dir_ + "base", false );
 }
 
@@ -208,6 +208,8 @@ String CompilationEnvironment::cmd_cpp_comp( const String &obj, const String &cp
     cmd += " -c -o " + obj;
     for(int i=0;i<include_dirs.size();++i)
         cmd += " -I" + include_dirs[ i ];
+    for(int i=0;i<cpp_flags.size();++i)
+        cmd += " " + cpp_flags[ i ];
     return cmd + " " + cpp;
 }
 
@@ -217,13 +219,17 @@ String CompilationEnvironment::cmd_cu_comp( const String &obj, const String &cu,
     //    cmd += " " + CPPFLAGS;
     //if ( dynamic )
     //    cmd += " -fpic";
+    if ( maxrregcount )
+        cmd += " --maxrregcount=" + String( maxrregcount );
     if ( device_emulation )
         cmd += " --device-emulation -g";
     else
-        cmd += " -O3 --gpu-architecture=compute_13";
+        cmd += " -w -g -O3 --gpu-architecture=compute_13";
     cmd += " -c -o " + obj;
     if ( dynamic )
         cmd += " -Xcompiler -fPIC";
+    for(int i=0;i<gpu_flags.size();++i)
+        cmd += " " + gpu_flags[ i ];
     for(int i=0;i<include_dirs.size();++i)
         cmd += " -I" + include_dirs[ i ];
     #ifdef INSTALL_DIR
@@ -242,6 +248,8 @@ String CompilationEnvironment::cmd_exe_or_lib_link( const String &prg, const Bas
         cmd += " -L" + library_dirs[ i ];
     for(int i=0;i<lib_names.size();++i)
         cmd += " -l" + lib_names[ i ];
+    for(int i=0;i<lnk_flags.size();++i)
+        cmd += " " + lnk_flags[ i ];
     cmd += " -o " + prg;
     for(int i=0;i<obj.size();++i)
         cmd += " " + obj[ i ];
@@ -256,7 +264,7 @@ String CompilationEnvironment::cmd_lib_link( const String &prg, const BasicVec<S
     return cmd_exe_or_lib_link( prg, obj, true, dynamic );
 }
 
-
+    
 BasicVec<String> CompilationEnvironment::get_include_dirs() const {
     return include_dirs;
 }

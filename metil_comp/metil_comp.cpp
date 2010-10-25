@@ -36,7 +36,8 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  -Iincludedir : append an include dir to environnement";
     cerrn << "  --exec-using prg : execute using prg. Example : --exec-using valgrind or --exec-using gdb to use valgrind or gdb";
     cerrn << "  --valgrind : execute using valgrind";
-
+    cerrn << "  --device-emulation : device emulation for cuda";
+    cerrn << "  --maxrregcount n : device emulation for cuda";
 }
 
 bool is_a_CPPFLAG( const String &arg ) {
@@ -84,6 +85,8 @@ int main( int argc, char **argv ) {
                 ce.add_to_CPPFLAGS( arg );
             } else if ( arg == "--device-emulation" ) {
                 ce.want_device_emulation();
+            } else if ( arg == "--maxrregcount" ) {
+                ce.maxrregcount = atoi( argv[ ++i ] );
             } else if ( arg == "-mex" ) {
                 want_mex   = true;
                 want_dylib = true;
@@ -104,12 +107,10 @@ int main( int argc, char **argv ) {
                 }
                 out_file = argv[ ++i ];
             } else { // -> program name (assuming a .cpp file)
-                if ( cpp_files.size() == 0 )
-                    ce.set_comp_dir( directory_of( arg ) );
-                if ( cpp_files.size() == 0 )
-                    cpp_files.push_back( arg );
-                else
-                    exec_args << arg;
+                ce.set_comp_dir( directory_of( arg ) );
+                cpp_files.push_back( arg );
+                for( ++i; i < argc; ++i )
+                    exec_args << argv[ i ];
             }
         }
 
@@ -130,11 +131,11 @@ int main( int argc, char **argv ) {
         }
 
         // compilation
+        AutoPtr<CompilationGraphProgram> cg;
         if ( compilation ) {
             String dep_file = out_file_if_not_specified + ".dep";
 
             // try to load CompilationGraphProgram
-            AutoPtr<CompilationGraphProgram> cg;
             CompilationGraph *tmp_cg = CompilationGraph::load( dep_file );
             if ( dynamic_cast<CompilationGraphProgram *>( tmp_cg ) )
                 cg = static_cast<CompilationGraphProgram *>( tmp_cg );
@@ -150,8 +151,7 @@ int main( int argc, char **argv ) {
             }
 
             // do it
-            int res_make = cg->make();
-            if ( res_make )
+            if ( int res_make = cg->make() )
                 return res_make;
         }
 
@@ -159,6 +159,17 @@ int main( int argc, char **argv ) {
         if ( execution ) {
             String base_dylib = ce.lib_file_for( cpp_files[ 0 ], true );
             setenv( "METIL_BASE_DYLIB", base_dylib.data(), true );
+
+            // add dirs to LD_LIBRARY_PATH
+            const char *l = getenv( "LD_LIBRARY_PATH" );
+            String LD_LIB = l ? l : "";
+            for( int i = 0; i < cg->ce.library_dirs.size(); ++i ) {
+                if ( LD_LIB.size() )
+                    LD_LIB += ":";
+                LD_LIB += cg->ce.library_dirs[ i ];
+            }
+            setenv( "LD_LIBRARY_PATH", LD_LIB.data(), true );
+
 
             if ( out_file.size() and out_file[0] != '/' and out_file[0] != '\\' )
                 out_file = "./" + out_file;
@@ -169,7 +180,7 @@ int main( int argc, char **argv ) {
                 cmd += ' ' + exec_args[ i ];
             return exec_cmd( cmd );
         }
-    } catch ( const CompilationError &e ) { PRINT( e.msg ); }
+    } catch ( const CompilationError &e ) { PRINT( e.msg ); return 1; }
     return 0;
 }
 

@@ -32,27 +32,29 @@ namespace Metil {
 class CompilationCppParser {
 public:
     CompilationCppParser( const CompilationEnvironment &ce, const String &filename );
-
+    
     BasicVec<String> header_files;
     BasicVec<String> hdotpy_files;
-    BasicVec<String> hdotme_files;
     BasicVec<String> extcpp_files;
     BasicVec<String> extlib_names;
     BasicVec<String> cpp_paths;
+    BasicVec<String> cpp_flags;
+    BasicVec<String> lnk_flags;
+    BasicVec<String> gpu_flags;
     BasicVec<String> lib_paths;
     BasicVec<String> files_to_moc;
     bool need_compilation_environment;
-
+    
 private:
     struct Define {
         BasicVec<String> args;
         String val;
     };
-
+    
     void parse_src_file_rec( const CompilationEnvironment &ce, String filename );
-
+    
     static String filename_from_directive( const char *b );
-
+    
     std::map<String,Define> defines;
 };
 

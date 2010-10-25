@@ -72,7 +72,12 @@ public:
     int exec_cmd( const String &cmd ) const;
     
     void add_to_CPPFLAGS( const String &s );
-private:
+    int maxrregcount;
+    BasicVec<String> cpp_flags;
+    BasicVec<String> lnk_flags;
+    BasicVec<String> gpu_flags;
+
+// private:
     String cmd_exe_or_lib_link( const String &prg, const BasicVec<String> &obj, bool want_lib, bool want_shared ) const;
     static String to_filename_compatible_string( const String &str );
     

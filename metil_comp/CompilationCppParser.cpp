@@ -57,7 +57,7 @@ void skip_lines_until_endif_or_else( Stream &is ) {
         // skip spaces
         const char *line_c = line.data();
         skip_spaces( line_c );
-        //
+        // 
         if ( String::strncmp( line_c, "#endif", 6 ) == 0 )
             return;
         else if ( String::strncmp( line_c, "#else", 5 ) == 0 )
@@ -102,7 +102,7 @@ void CompilationCppParser::parse_src_file_rec( const CompilationEnvironment &ce,
         if ( file_exists( cu_filename ) )
             extcpp_files << cu_filename;
     }
-
+    
     // sweep lines
     File is( filename.data() );
     String line;
@@ -119,12 +119,7 @@ void CompilationCppParser::parse_src_file_rec( const CompilationEnvironment &ce,
                 String header_file_rel = filename_from_directive( line_c + 8  );
                 String hdotpy_file_rel = header_file_rel + ".py";
                 String hdotpy_file_abs = ce.find_src( hdotpy_file_rel, current_dir );
-                String hdotme_file_rel = header_file_rel + ".met";
-                String hdotme_file_abs = ce.find_src( hdotme_file_rel, current_dir );
-                if ( hdotme_file_abs.size() ) { // .h.met
-                    hdotme_files << hdotme_file_abs;
-                    parse_src_file_rec( ce, hdotme_file_abs.rstrip( 3 ) );
-                } else if ( hdotpy_file_abs.size() ) { // .h.py
+                if ( hdotpy_file_abs.size() ) { // .h.py
                     hdotpy_files << hdotpy_file_abs;
                     parse_src_file_rec( ce, hdotpy_file_abs.rstrip( 3 ) );
                 } else { // only .h
@@ -140,6 +135,12 @@ void CompilationCppParser::parse_src_file_rec( const CompilationEnvironment &ce,
                     extcpp_files << extcpp_file;
             } else if ( String::strncmp( line_c, "#pragma cpp_path", 16 ) == 0 ) {
                 cpp_paths << get_next_word( line_c += 16 );
+            } else if ( String::strncmp( line_c, "#pragma cpp_flag", 16 ) == 0 ) {
+                cpp_flags << get_next_word( line_c += 16 );
+            } else if ( String::strncmp( line_c, "#pragma lnk_flag", 16 ) == 0 ) {
+                lnk_flags << get_next_word( line_c += 16 );
+            } else if ( String::strncmp( line_c, "#pragma gpu_flag", 16 ) == 0 ) {
+                gpu_flags << get_next_word( line_c += 16 );
             } else if ( String::strncmp( line_c, "#pragma lib_path", 16 ) == 0 ) {
                 lib_paths << get_next_word( line_c += 16 );
             } else if ( String::strncmp( line_c, "#pragma lib_name", 16 ) == 0 ) {

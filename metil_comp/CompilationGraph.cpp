@@ -242,6 +242,14 @@ void CompilationGraphProgram::add_src_file( const String &src_file ) {
     for(int i=0;i<ccp_parser.lib_paths.size();++i)
         ce.add_library_dir( ccp_parser.lib_paths[ i ] );
 
+    // flags
+    for(int i=0;i<ccp_parser.cpp_flags.size();++i)
+        ce.cpp_flags << ccp_parser.cpp_flags[ i ];
+    for(int i=0;i<ccp_parser.lnk_flags.size();++i)
+        ce.lnk_flags << ccp_parser.lnk_flags[ i ];
+    for(int i=0;i<ccp_parser.gpu_flags.size();++i)
+        ce.gpu_flags << ccp_parser.gpu_flags[ i ];
+
     // add .o
     CompilationGraphObjFile *obj_item = new CompilationGraphObjFile( ce, ce.obj_file_for( src_file, dynamic_lib ), new CompilationGraphCppFile( src_file ), dynamic_lib );
     add_child( obj_item );
@@ -260,16 +268,6 @@ void CompilationGraphProgram::add_src_file( const String &src_file ) {
         header_item->add_child( python_item );
     }
 
-    // .h.met
-    //    for(int i=0;i<ccp_parser.hdotme_files.size();++i) {
-    //        String hdotme_file = ccp_parser.hdotme_files[ i ];
-    //        String header_file = hdotme_file.rstrip( 3 );
-    //        CompilationGraph *header_item = new CompilationGraphGeneratedHeaderFile( ce, header_file, hdotme_file );
-    //        CompilationGraph *metil_item = new CompilationGraphMeFile( hdotme_file );
-    //        obj_item   ->add_child( header_item );
-    //        header_item->add_child( metil_item  );
-    //    }
-
     // -l
     for(int i=0;i<ccp_parser.extlib_names.size();++i)
         ce.add_library( ccp_parser.extlib_names[ i ] );
@@ -281,7 +279,7 @@ void CompilationGraphProgram::add_src_file( const String &src_file ) {
         if ( fn.ends_with(".cpp") )
             ccp_parser.extcpp_files << base_dir + '/' + fn;
     }
-
+    
     // .cpp
     String dylib_file;
     if ( ccp_parser.extcpp_files.size() ) {
