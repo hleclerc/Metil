@@ -18,30 +18,30 @@
     To get the latest production version with @subpage GitInstallation "Git", simply type:
 
     \code
-git clone git://gitosis.lmt.ens-cachan.fr/met
+git clone git://gitosis.lmt.ens-cachan.fr/Metil
     \endcode
 
     (if you do not have git on your machine, @subpage GitInstallation "this link" contains installation instructions)
 
-    The test version is in the same host and is named <tt>met_test</tt>. The patches are send to the production repository only if they pass all the unit tests (located in the <tt>unit_tests</tt> directory of the sources).
+    The test version is in the same host and is named <tt>MetilTest</tt>. The patches are send to the production repository only if they pass all the unit tests (located in the <tt>unit_tests</tt> directory of the sources).
 
-    To facilitate compilation of your code or of the examples, you iirst need to generate the <tt>met_comp</tt> executable:
+    To facilitate compilation of your code or of the examples, you first need to generate the <tt>metil_comp</tt> executable:
 
     \code
-cd met # or where the sources are
+cd Metil # or where the sources are
 make
-sudo ln -s metil_comp /usr/bin # or add the source location in the PATH environment variable, or...
+sudo make install # with or without sudo
     \endcode
 
-    You are no ready to start the @subpage Tutorials "tutorials".
+    You are now ready to start the @subpage Tutorials "tutorials".
 
 \section DirectoryOrganisation Organisation of the sources
 
     Directories are organized in the following way:
     - src/*.[h,cpp]: the main source files
     - doc/*.h: documentation specific files
-    - html_Level0: generated documentation for user level (using <tt>make documentation</tt>)
-    - html_Level1: generated documentation for developpers (using <tt>make documentation</tt>)
+    - html_Level0: generated documentation for user level (using <tt>make doc</tt>)
+    - html_Level1: generated documentation for developpers (using <tt>make doc</tt>)
     - unit_tests/*.cpp: gathers unit_tests
     - examples/*.cpp: contains a lot of (documented) examples
 
