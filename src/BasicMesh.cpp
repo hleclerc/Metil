@@ -49,4 +49,20 @@ void BasicMesh::make_rect( const ElemType *elem_type, BasicVec<T> X0, BasicVec<T
     elem_type->make_rect( X0, X1, Xd, pos_nodes, eg->connec );
 }
 
+ST BasicMesh::nb_nodes() const {
+    return pos_nodes.size() ? pos_nodes[ 0 ].size() : 0;
+}
+
+void BasicMesh::update_node_to_elem() {
+    node_to_elem.resize( nb_nodes() );
+    for( ST i = 0; i < node_to_elem.size(); ++i )
+        node_to_elem[ i ].resize( 0 );
+    //
+    for( ST i = 0; i < elem_groups.size(); ++i )
+        for( ST j = 0; j < elem_groups[ i ].nb_elements(); ++j )
+            for( ST k = 0; k < elem_groups[ i ].connec.size(); ++k )
+                node_to_elem[ elem_groups[ i ].connec[ k ][ j ] ].push_back( i, j, k );
+}
+
 END_METIL_NAMESPACE;
+

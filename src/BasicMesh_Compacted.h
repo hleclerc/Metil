@@ -48,6 +48,7 @@ struct BasicMesh_Compacted {
             for( ST i = 0; i < num; ++i ) {
                 loc[ i ].num_group = src[ i ].num_group;
                 loc[ i ].num_elem = src[ i ].num_elem;
+                loc[ i ].num_in_elem = src[ i ].num_in_elem;
             }
             md.end_local_data( dst, loc, rese );
             return dst;
@@ -59,6 +60,7 @@ struct BasicMesh_Compacted {
 
         SI32 num_group;
         SI32 num_elem;
+        SI32 num_in_elem;
     };
     template<class T> static BasicMesh_Compacted *copy( MemoryDriver &md, const T *src, ST num = 1 ) {
         BasicMesh_Compacted *dst, *loc;

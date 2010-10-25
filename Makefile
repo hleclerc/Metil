@@ -1,7 +1,7 @@
 all: make_metil_comp
 
 install: all
-	sudo ln -s `pwd`/metil_comp/metil_comp /usr/bin/
+	./install.sh
 
 make_metil_comp:
 	make -C metil_comp

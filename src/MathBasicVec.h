@@ -78,6 +78,9 @@ template<class T,int dim>
 __inline__ BasicVec<T,dim> ceil( const BasicVec<T,dim> &a ) { using namespace std; BasicVec<T,dim> res; for( int i = 0; i < a.size(); ++i ) res[ i ] = ceil( a[ i ] ); return res; }
 
 template<class T,int dim>
+__inline__ BasicVec<T,dim> abs( const BasicVec<T,dim> &a ) { using namespace std; BasicVec<T,dim> res; for( int i = 0; i < a.size(); ++i ) res[ i ] = abs( a[ i ] ); return res; }
+
+template<class T,int dim>
 __inline__ BasicVec<T,dim> min( const BasicVec<T,dim> &a, const BasicVec<T,dim> &b ) { using namespace std; BasicVec<T,dim> res; for( int i = 0; i < a.size(); ++i ) res[ i ] = min( a[ i ], b[ i ] ); return res; }
 
 template<class T,int dim>

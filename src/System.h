@@ -44,8 +44,8 @@ int create_directory( String filename, bool check_if_exists = true );
 //    void *dir_ent;
 //};
 
-//// time
-//double time_of_day_in_sec();
+// time
+double time_of_day_in_sec();
 
 // execution
 int exec_cmd( String f, bool display = true );

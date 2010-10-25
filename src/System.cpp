@@ -143,12 +143,12 @@ void set_env( String var, String val ) {
 //    return filename.right_from( pos + 1 );
 //}
 
-//double time_of_day_in_sec() {
-//    struct timeval st;
-//    struct timezone toto;
-//    gettimeofday( &st, &toto );
-//    return st.tv_sec + st.tv_usec / 1e6;
-//}
+double time_of_day_in_sec() {
+    struct timeval st;
+    struct timezone toto;
+    gettimeofday( &st, &toto );
+    return st.tv_sec + st.tv_usec / 1e6;
+}
 
 int create_directory( String filename, bool check_if_exists ) {
     #ifdef WIN32
