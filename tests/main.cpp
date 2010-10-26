@@ -1,6 +1,4 @@
-#include <String.h>
 #include <Array.h>
-
 using namespace Metil;
 
 int main() {

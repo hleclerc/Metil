@@ -19,6 +19,14 @@ void metil_def_self_append__when__a__isa__String__and__b__is__Int_s_32__pert__10
     DisplayInt<31,1,0,31>::display( static_cast<String &>( a ), (const PI8 *)b.data );
 }
 
+void metil_def_self_append__when__a__isa__String__and__b__is__Int_p_64__pert__1000( MO &a, MO b ) {
+    DisplayInt<64,0,0,0>::display( static_cast<String &>( a ), (const PI8 *)b.data );
+}
+
+void metil_def_self_append__when__a__isa__String__and__b__is__Int_p_32__pert__1000( MO &a, MO b ) {
+    DisplayInt<32,0,0,0>::display( static_cast<String &>( a ), (const PI8 *)b.data );
+}
+
 bool metil_def_convert_to_Bool__when__a__is__Int_s_64( MO a ) { return *reinterpret_cast<const SI64 *>( a.data ); }
 SI32 metil_def_convert_to_SI32__when__a__is__Int_s_64( MO a ) { return *reinterpret_cast<const SI64 *>( a.data ); }
 SI64 metil_def_convert_to_SI64__when__a__is__Int_s_64( MO a ) { return *reinterpret_cast<const SI64 *>( a.data ); }

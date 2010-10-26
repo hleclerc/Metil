@@ -15,7 +15,12 @@ TypeConstructor::TypeConstructor() {
     have_been_initialized = false;
 }
 
-void TypeConstructor::init( Type *type ) {
-}
+int TypeConstructor::Owcp_size() const { return -1; }
+void TypeConstructor::default_mw( MethodWriter &mw ) const {}
+void TypeConstructor::init( Type *type ) {}
+int TypeConstructor::static_size_in_bytes() const { return ( static_size_in_bits() + 7 ) / 8; }
+int TypeConstructor::static_size_in_bits() const { return -1; }
+int TypeConstructor::tensor_order() const { return 0; }
+int TypeConstructor::needed_alignement_in_bits() const { return 8; }
 
 END_METIL_LEVEL1_NAMESPACE;

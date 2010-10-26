@@ -6,20 +6,28 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-MethodWriter::MethodWriter( Type *type_0, Type *type_1, Type *type_2 ) {
+MethodWriter::MethodWriter( Type *type_0, Type *type_1, Type *type_2 ) : n( code ) {
     type[ 0 ] = type_0;
     type[ 1 ] = type_1;
     type[ 2 ] = type_2;
+    includes << "Type.h";
 }
 
 MethodWriter &MethodWriter::operator<<( const String &str ) {
-    cout << str;
     code << str;
     return *this;
 }
 
+void MethodWriter::add_include( const String &include ) {
+    if ( not includes.contains( include ) )
+        includes << include;
+}
+
 void MethodWriter::beg_def( const String &def_name ) {
-    code << name_for( def_name, type[ 0 ], type[ 1 ], type[ 2 ] ) << " {\n";
+    code << "#ifdef METIL_GENE_DYLIB\n";
+    code << "extern \"C\"\n";
+    code << "#endif\n";
+    code << decl_of( def_name, type[ 0 ], type[ 1 ], type[ 2 ] ) << " {\n";
 }
 
 void MethodWriter::end_def() {
@@ -32,7 +40,8 @@ int MethodWriter::nb_types() const {
 
 void MethodWriter::write_to( String &os ) {
     StringWithSepInCppLineMaker on( os );
-    on << "#include <Type.h>";
+    for( int i = 0; i < includes.size(); ++i )
+        on << "#include <" + includes[ i ] + ">";
     on << "BEG_METIL_LEVEL1_NAMESPACE;";
     on << code;
     on << "END_METIL_LEVEL1_NAMESPACE;";
@@ -41,7 +50,7 @@ void MethodWriter::write_to( String &os ) {
 
 
 
-String MethodWriter::name_for( const String &def_name, Type *type_0, Type *type_1, Type *type_2 ) {
+String MethodWriter::decl_of( const String &def_name, Type *type_0, Type *type_1, Type *type_2 ) {
     String type;
     #define DECL_MET( T, N ) if ( def_name == #N ) type = #T
     #include "DeclMethods.h"
@@ -55,8 +64,25 @@ String MethodWriter::name_for( const String &def_name, Type *type_0, Type *type_
     return String();
 }
 
-String MethodWriter::c_name_for( const String &method_name, Type *type_0, Type *type_1, Type *type_2 ) {
-    return name_for( method_name, type_0, type_1, type_2 );
+String MethodWriter::symb_of( const String &def_name, Type *type_0, Type *type_1, Type *type_2, bool cpp ) {
+    if ( not cpp )
+        return "metil_def_" + def_name;
+
+    // cpp mangling
+    String type;
+    #define DECL_MET( T, N ) if ( def_name == #N ) type = #T
+    #include "DeclMethods.h"
+    #undef DECL_MET
+    ASSERT( type.size(), "method '%s' not found", def_name.c_str() );
+
+    // if ( type == ... ) { args = ...; }
+    String args;
+    #include "MethodWriterSymb.h"
+
+    ASSERT( args.size(), "-> %s", type.c_str() );
+    String bas = "metil_def_" + def_name, res;
+    res << "_ZN5Metil6Level1" << bas.size() << bas << args;
+    return res;
 }
 
 template<class MethodName>
@@ -74,6 +100,10 @@ void try_to_generate( MethodWriter &mw ) {
 
 void MethodWriter::make_cpp_for_types( const String cpp_name, Type *type_0, Type *type_1, Type *type_2 ) {
     MethodWriter mw( type_0, type_1, type_2 );
+    if ( type_0 ) type_0->constructor->default_mw( mw );
+    if ( type_1 ) type_1->constructor->default_mw( mw );
+    if ( type_2 ) type_2->constructor->default_mw( mw );
+
     #define DECL_MET( T, N ) try_to_generate<MethodName_##N>( mw )
     if ( mw.nb_types() == 1 ) {
         #include "DeclMethodsUnary.h"
@@ -86,9 +116,12 @@ void MethodWriter::make_cpp_for_types( const String cpp_name, Type *type_0, Type
 
     File c( cpp_name, "w" );
     mw.write_to( c );
+    c.close();
+
+    exec_cmd( "indent --k-and-r-style -brf " + cpp_name, false );
 }
 
-DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Type *type_2 ) {
+DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Type *type_2, const char *dep_file ) {
     static std::map<SI64,DynamicLibrary> libs;
     SI64 n = type_0->number + ( SI64( type_1 ? type_1->number : 0 ) << 24 ) + ( SI64( type_2 ? type_2->number : 0 ) << 48 );
     std::map<SI64,DynamicLibrary>::iterator iter = libs.find( n );
@@ -109,13 +142,15 @@ DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Typ
 
     // if lib exists, load it
     String lib_name = bas_name + ".so";
-    if ( not file_exists( lib_name ) ) { // make cpp, compile and load it
+    SI64 date_dep = dep_file ? last_modification_time_or_zero_of_file_named( dep_file ) : 0;
+    SI64 date_lib = last_modification_time_or_zero_of_file_named( lib_name );
+    if ( date_lib <= date_dep ) { // make cpp, compile and load it
         String cpp_name = bas_name + ".cpp";
         make_cpp_for_types( cpp_name, type_0, type_1, type_2 );
 
         String cmd = get_env( "METIL_CXX_CMD" );
         ASSERT( cmd.size(), "METIL_CXX_CMD is not defined in env var" );
-        cmd << " -shared -o "  << lib_name << " "  << cpp_name;
+        cmd << " -DMETIL_GENE_DYLIB -shared -o "  << lib_name << " "  << cpp_name;
         if ( exec_cmd( cmd ) )
             ERROR( "Pb during compilation of %s", cpp_name.c_str() );
     }

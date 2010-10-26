@@ -86,6 +86,7 @@ struct String : public Level1::MO {
     String &write( const void *ptr, ST len ) { CM_1( write, *this, ptr, len ); return *this; }
     Val begins_by( const String &str ) const;
     Val ends_with( const String &str ) const;
+    void close() { CM_1( close, *this ); }
 
     operator bool() const { return CM_1( convert_to_Bool, *this ); }
     operator SI32() const { return CM_1( convert_to_SI32, *this ); }

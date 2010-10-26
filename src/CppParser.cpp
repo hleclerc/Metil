@@ -29,12 +29,12 @@ static void end_var( char *&c ) {
 //}
 
 
-void CppParser::metil_type_bas_( char *&c ) { char *b = c; end_var( c ); bas.push_back_unique( String( b, c ) ); }
-void CppParser::metil_type_ref_( char *&c ) { char *b = c; end_var( c ); ref.push_back_unique( String( b, c ) ); }
-void CppParser::metil_type_cst_( char *&c ) { char *b = c; end_var( c ); cst.push_back_unique( String( b, c ) ); }
+void CppParser::metil_type_bas_( char *&c ) { char *b = c; end_var( c ); if ( c - b > 15 ) bas.push_back_unique( String( b, c ) ); }
+void CppParser::metil_type_ref_( char *&c ) { char *b = c; end_var( c ); if ( c - b > 15 ) ref.push_back_unique( String( b, c ) ); }
+void CppParser::metil_type_cst_( char *&c ) { char *b = c; end_var( c ); if ( c - b > 15 ) cst.push_back_unique( String( b, c ) ); }
 
-void CppParser::metil_gen_( char *&c ) { char *b = c; end_var( c ); gen.push_back_unique( DefStr( current_file, current_line, String( b, c ) ) ); }
-void CppParser::metil_def_( char *&c ) { char *b = c; end_var( c ); def.push_back_unique( DefStr( current_file, current_line, String( b, c ) ) ); }
+void CppParser::metil_gen_( char *&c ) { char *b = c; end_var( c ); if ( c - b > 10 ) gen.push_back_unique( DefStr( current_file, current_line, String( b, c ) ) ); }
+void CppParser::metil_def_( char *&c ) { char *b = c; end_var( c ); if ( c - b > 10 ) def.push_back_unique( DefStr( current_file, current_line, String( b, c ) ) ); }
 
 
 void CppParser::parse( char *c ) {

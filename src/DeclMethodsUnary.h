@@ -22,6 +22,7 @@ DECL_MET( OO  , copy_ref                ); // make a copy of a data reference @s
 
 //DECL_MET( Vot , read_str                ); // string or file input
 
+DECL_MET( Vo  , close                   ); //
 DECL_MET( Vo  , flush                   ); //
 DECL_MET( VoPS, write                   ); // a.write( ptr, size )
 DECL_MET( VOpS, read                    ); // a.read ( ptr, size )

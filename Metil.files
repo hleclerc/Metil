@@ -50,7 +50,6 @@ Makefile
 ./src/Number.h
 ./src/GenericDisplay.cpp
 ./src/MachineId.h
-./src/main.cpp
 ./src/Tokenize.h
 ./src/String.cpp
 ./src/MethodFinder.h
@@ -197,3 +196,6 @@ Makefile
 ./doc/MetilComp.h
 ./doc/WhatsNew.h
 ./doc/PartnerShip.h
+./src/MethodWriterSymb.h.py
+./src/ArrayHeader.h
+./tests/main.cpp

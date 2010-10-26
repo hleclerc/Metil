@@ -2,6 +2,7 @@
 #define METHODWRITER_H
 
 #include "DynamicLibrary.h"
+#include "BasicVec.h"
 #include "Mos.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
@@ -17,14 +18,18 @@ public:
     void end_def();
     int nb_types() const;
     void write_to( String &os );
+    void add_include( const String &include );
 
-    static String name_for( const String &method_name, Type *type_0, Type *type_1, Type *type_2 );
-    static String c_name_for( const String &method_name, Type *type_0, Type *type_1, Type *type_2 );
-    static DynamicLibrary &get_lib_for_types( Type *type_0, Type *type_1, Type *type_2 );
+
+    static String decl_of( const String &method_name, Type *type_0, Type *type_1, Type *type_2 );
+    static String symb_of( const String &method_name, Type *type_0, Type *type_1, Type *type_2, bool cpp );
+    static DynamicLibrary &get_lib_for_types( Type *type_0, Type *type_1, Type *type_2, const char *dep_file );
     static void make_cpp_for_types( const String cpp_name, Type *type_0, Type *type_1, Type *type_2 );
 
     String code;
+    StringWithSepInCppLineMaker n;
     Type *type[ 3 ];
+    BasicVec<String> includes;
 };
 
 typedef void MethodMaker( MethodWriter &mw, Mos *mos );

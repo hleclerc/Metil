@@ -1,7 +1,7 @@
 #ifndef ARRAY_H
 #define ARRAY_H
 
-#include "Val.h"
+#include "String.h"
 
 BEG_METIL_NAMESPACE;
 

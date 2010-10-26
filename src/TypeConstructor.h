@@ -2,6 +2,7 @@
 #define TYPECONSTRUCTOR_H
 
 #include "MethodCond.h"
+#include "MethodWriter.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
@@ -24,7 +25,12 @@ public:
 
     #undef DECL_COND
 
-    virtual int Owcp_size() const { return -1; }
+    virtual int Owcp_size() const;
+    virtual void default_mw( MethodWriter &mw ) const;
+    virtual int static_size_in_bytes() const;
+    virtual int static_size_in_bits() const;
+    virtual int tensor_order() const;
+    virtual int needed_alignement_in_bits() const;
 
     bool have_been_initialized;
 };

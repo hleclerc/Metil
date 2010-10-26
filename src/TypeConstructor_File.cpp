@@ -8,6 +8,12 @@ void metil_def_del__when__a__isa__File( MO &a ) {
         fclose( reinterpret_cast<FILE *>( a.data ) );
 }
 
+void metil_def_close__when__a__isa__File( MO &a ) {
+    if ( a.data )
+        fclose( reinterpret_cast<FILE *>( a.data ) );
+    a.data = 0;
+}
+
 END_METIL_LEVEL1_NAMESPACE;
 
 //#include "MethodFinder.h"
