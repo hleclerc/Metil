@@ -31,7 +31,11 @@ int MethodWriter::nb_types() const {
 }
 
 void MethodWriter::write_to( String &os ) {
-    os << code;
+    StringWithSepInCppLineMaker on( os );
+    on << "#include <Type.h>";
+    on << "BEG_METIL_LEVEL1_NAMESPACE;";
+    on << code;
+    on << "END_METIL_LEVEL1_NAMESPACE;";
 }
 
 
@@ -59,7 +63,7 @@ template<class MethodName>
 void try_to_generate( MethodWriter &mw ) {
     typedef MethodFinder<MethodName> MF;
     typename MF::Item *item = MF::find_item( mw.type[ 0 ], mw.type[ 1 ], mw.type[ 2 ], false );
-    if ( item->gene and not item->meth ) {
+    if ( item and item->gene and not item->meth ) {
         BasicVec<Mos> mos( "a", "b", "c" );
         mw.beg_def( MethodName::get_name() );
         item->gene( mw, mos.ptr() );
@@ -80,7 +84,7 @@ void MethodWriter::make_cpp_for_types( const String cpp_name, Type *type_0, Type
     }
     #undef DECL_MET
 
-    File c( cpp_name, "w" ); // StringWithSepInCppLineMaker cn( c );
+    File c( cpp_name, "w" );
     mw.write_to( c );
 }
 
@@ -108,9 +112,17 @@ DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Typ
     if ( not file_exists( lib_name ) ) { // make cpp, compile and load it
         String cpp_name = bas_name + ".cpp";
         make_cpp_for_types( cpp_name, type_0, type_1, type_2 );
-        exec_cmd( "g++ -shared -o " + lib_name + " " + cpp_name );
+
+        String cmd = get_env( "METIL_CXX_CMD" );
+        ASSERT( cmd.size(), "METIL_CXX_CMD is not defined in env var" );
+        cmd << " -shared -o "  << lib_name << " "  << cpp_name;
+        if ( exec_cmd( cmd ) )
+            ERROR( "Pb during compilation of %s", cpp_name.c_str() );
     }
-    res = lib_name;
+
+    res.open( lib_name );
+    if ( not res )
+        ERROR( "Error durig lib lod %s", res.error().c_str() );
 
     //
     return res;

@@ -86,6 +86,7 @@ public:
         if ( not item->meth ) {
             DynamicLibrary &dl = MethodWriter::get_lib_for_types( type_0, type_1, type_2 );
             item->meth = (TM *)dl.get_sym( MethodWriter::name_for( N::get_name(), type_0, type_1, type_2 ) );
+            PRINT( (bool)item->meth );
         }
 
         return item->meth;

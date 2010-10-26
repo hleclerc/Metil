@@ -179,6 +179,7 @@ int main( int argc, char **argv ) {
 
             //
             setenv( "METIL_COMP_DIR", ce.get_comp_dir(), true );
+            setenv( "METIL_CXX_CMD" , ce.get_cxx_cmd (), true );
 
 
             if ( out_file.size() and out_file[0] != '/' and out_file[0] != '\\' )

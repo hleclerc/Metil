@@ -17,14 +17,13 @@ DynamicLibrary::DynamicLibrary() {
     data = 0;
 }
 
-DynamicLibrary::DynamicLibrary( String name ) {
+bool DynamicLibrary::open( String name ) {
     #ifdef WIN32
     data = LoadLibrary( (const WCHAR *)lib );
     #else
     data = dlopen( name.c_str(), RTLD_LAZY );
     #endif
-    if ( not data )
-        cerrn << dlerror();
+    return data;
 }
 
 DynamicLibrary::~DynamicLibrary() {
@@ -34,6 +33,14 @@ DynamicLibrary::~DynamicLibrary() {
 
 void *DynamicLibrary::get_sym( String name ) {
     return data ? dlsym( data, name.c_str() ) : 0;
+}
+
+DynamicLibrary::operator bool() const {
+    return data;
+}
+
+String DynamicLibrary::error() const {
+    return dlerror();
 }
 
 END_METIL_NAMESPACE;

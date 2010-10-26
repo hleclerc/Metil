@@ -29,7 +29,7 @@ CompilationEnvironment::CompilationEnvironment() {
     LD = "g++";
     CPPFLAGS = "-Wall";
     NVCC = "/usr/local/cuda/bin/nvcc";
-    
+
     device_emulation = 0;
     maxrregcount = 0;
     // set_comp_dir( "." );
@@ -60,12 +60,12 @@ String CompilationEnvironment::find_src( const String &filename, const String &c
     // absolute path ?
     if ( filename[ 0 ] == '/' or filename[ 0 ] == '\\' )
         return ( file_exists( filename ) ? filename : "" );
-    
+
     // try with current_dir
     String trial = current_dir + filename;
     if ( file_exists( trial ) )
         return trial;
-        
+
     // try with include_dirs
     for(int i=0;i<include_dirs.size();++i) {
         if ( include_dirs[ i ][ include_dirs[ i ].size() - 1 ] != '/' )
@@ -74,7 +74,7 @@ String CompilationEnvironment::find_src( const String &filename, const String &c
         if ( file_exists( trial ) )
             return trial;
     }
-    
+
     // not found :(
     return "";
 }
@@ -84,7 +84,7 @@ void CompilationEnvironment::set_comp_dir( String dir ) {
     dir = absolute_filename( dir );
     if ( not dir.ends_with( '/' ) )
         dir += '/';
-        
+
     // try /path_of_filename/compilations
     comp_dir_ = dir + "compilations";
     if ( create_directory( comp_dir_, false ) ) { // else, try /tmp/compilations/path_of_filename/
@@ -99,8 +99,8 @@ void CompilationEnvironment::set_comp_dir( String dir ) {
         }
     }
     comp_dir_ += '/';
-    
-    create_directory( comp_dir_ + "base", false );
+
+    // create_directory( comp_dir_ + "base", false );
 }
 
 String CompilationEnvironment::get_comp_dir() const {
@@ -200,16 +200,10 @@ int CompilationEnvironment::exec_cmd( const String &cmd ) const {
 }
 
 String CompilationEnvironment::cmd_cpp_comp( const String &obj, const String &cpp, bool dynamic ) const {
-    String cmd = CXX;
-    if ( CPPFLAGS.size() )
-        cmd += " " + CPPFLAGS;
+    String cmd = get_cxx_cmd();
     if ( dynamic )
         cmd += " -fpic";
     cmd += " -c -o " + obj;
-    for(int i=0;i<include_dirs.size();++i)
-        cmd += " -I" + include_dirs[ i ];
-    for(int i=0;i<cpp_flags.size();++i)
-        cmd += " " + cpp_flags[ i ];
     return cmd + " " + cpp;
 }
 
@@ -264,7 +258,7 @@ String CompilationEnvironment::cmd_lib_link( const String &prg, const BasicVec<S
     return cmd_exe_or_lib_link( prg, obj, true, dynamic );
 }
 
-    
+
 BasicVec<String> CompilationEnvironment::get_include_dirs() const {
     return include_dirs;
 }
@@ -315,6 +309,17 @@ String CompilationEnvironment::make_ExternCompilationEnvironment_file( const Str
     }
 
     return res;
+}
+
+String CompilationEnvironment::get_cxx_cmd() const {
+    String cmd = CXX;
+    if ( CPPFLAGS.size() )
+        cmd += " " + CPPFLAGS;
+    for(int i=0;i<include_dirs.size();++i)
+        cmd += " -I" + include_dirs[ i ];
+    for(int i=0;i<cpp_flags.size();++i)
+        cmd += " " + cpp_flags[ i ];
+    return cmd;
 }
 
 } // namespace Metil

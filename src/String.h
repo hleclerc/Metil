@@ -51,7 +51,7 @@ struct String : public Level1::MO {
 
     // <<
     String &operator<<( const char *s ) { CM_2( self_append, *this, MO( (char *)s, &Level1::metil_type_cst_ConstCharPtr ) ); return *this; }
-    String &operator<<(       char *s ) { TODO; return *this; }
+    String &operator<<(       char *s ) { return operator<<( String( NewString( s ) ) ); }
     String &operator<<(       char  s ) { CM_2( self_append, *this, MO( char_ptr + 2 * (unsigned char)s, &Level1::metil_type_cst_ConstCharPtr ) ); return *this; }
     String &operator<<( MO          s ) { CM_2( self_append, *this, s ); return *this; }
     String &operator<<( bool        v ) { return operator<<( int( v ) ); }
