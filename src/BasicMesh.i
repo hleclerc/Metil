@@ -6,6 +6,8 @@ namespace Metil {
     class BasicMesh {
     public:
         void add_node( float x, float y, float z );
+        int nb_nodes() const;
+        int nb_elements() const;
         // void add_elem( const ElemType *elem_type, T x, T y, T z );
         // ElemGroup *find_group( const ElemType *elem_type );
     };

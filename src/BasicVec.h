@@ -785,6 +785,16 @@ BasicVec<bool,s_,p_> operator==( const BasicVec<T_,s_,p_> &a, const BasicVec<T2,
     return res;
 }
 
+///
+template<class T>
+__inline__ void make_vec_from_xyz_struct( BasicVec<int,1> &vec, const T &val ) { vec[ 0 ] = val.x; }
+
+template<class T>
+__inline__ void make_vec_from_xyz_struct( BasicVec<int,2> &vec, const T &val ) { vec[ 0 ] = val.x; vec[ 1 ] = val.y; }
+
+template<class T>
+__inline__ void make_vec_from_xyz_struct( BasicVec<int,3> &vec, const T &val ) { vec[ 0 ] = val.x; vec[ 1 ] = val.y; vec[ 2 ] = val.z; }
+
 END_METIL_NAMESPACE
 
 #endif // METIL_VEC_H

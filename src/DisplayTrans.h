@@ -45,7 +45,7 @@ struct DisplayTrans {
         O = T3( 0, 0, 0 );
         X = T3( 1, 0, 0 );
         Y = T3( 0, 1, 0 );
-        a = 0;
+        a = 20;
         d = 1;
     }
 

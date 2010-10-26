@@ -12,4 +12,5 @@
 
         The project is managed using the software interface redmine, so that user can see ongoing developments, can commit critical problems...
 
+        @see <a href="http://www/redmine/projects/metil">The Metil redmine site</a>
 */

@@ -3,6 +3,8 @@
     @section GenericPrinciples Principles 
     
         Metil is a set of libraries (@p so) and C++ source files (@p h @p cpp).
+        
+        <a href="http://www.lmt.ens-cachan.fr/redmine/projects/metil">This link</a> points to the redmine site, containing news, issues, ...
 
         It contains modules for:
             - @subpage LinearAlgebra (vectors, matrices, direct or iterative solvers, ...),
