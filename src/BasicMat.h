@@ -27,8 +27,8 @@ struct BasicMat<T_,dim,true> {
         data += m.data;
     }
 
-    __inline__ void chol() {
-        for( int r = 0; r < dim; ++r ) {
+    __inline__ void chol( int d = dim ) {
+        for( int r = 0; r < d; ++r ) {
             for( int c = 0; c < r; ++c ) {
                 T val = sel_sec( r, c );
                 for( int i = 0; i < c; ++i )
@@ -43,18 +43,18 @@ struct BasicMat<T_,dim,true> {
 
     }
 
-    __inline__ BasicVec<T,dim> solve_using_cholesky( BasicVec<T,dim> sol ) {
+    __inline__ BasicVec<T,dim> solve_using_cholesky( BasicVec<T,dim> sol, int d = dim ) {
         BasicVec<T,dim> res;
-        for( int r = 0; r < dim; ++r ) {
+        for( int r = 0; r < d; ++r ) {
             T v = sol[ r ];
             for( int c = 0; c < r; ++c )
                 v -= sel_sec( r, c ) * res[ c ];
             res[ r ] = v * sel_sec( r, r );
         }
 
-        for( int r = dim - 1; r >= 0; --r ) {
+        for( int r = d- 1; r >= 0; --r ) {
             T v = res[ r ];
-            for( int c = r + 1; c < dim; ++c )
+            for( int c = r + 1; c < d; ++c )
                 v -= sel_sec( c, r ) * res[ c ];
             res[ r ] = v * sel_sec( r, r );
         }

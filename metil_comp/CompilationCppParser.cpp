@@ -21,7 +21,7 @@
 
 namespace Metil {
 
-CompilationCppParser::CompilationCppParser( const CompilationEnvironment &ce, const String &filename ) {
+CompilationCppParser::CompilationCppParser( CompilationEnvironment &ce, const String &filename ) {
     defines[ "METIL_COMP_DIRECTIVE" ];
     need_compilation_environment = false;
     //
@@ -88,7 +88,7 @@ String rl_strip( const char *b, const char *e ) {
     return String( b, e );
 }
 
-void CompilationCppParser::parse_src_file_rec( const CompilationEnvironment &ce, String filename ) {
+void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, String filename ) {
     filename = absolute_filename( filename );
     String current_dir = directory_of( filename );
 
@@ -135,6 +135,7 @@ void CompilationCppParser::parse_src_file_rec( const CompilationEnvironment &ce,
                     extcpp_files << extcpp_file;
             } else if ( String::strncmp( line_c, "#pragma cpp_path", 16 ) == 0 ) {
                 cpp_paths << get_next_word( line_c += 16 );
+                ce.add_include_dir( cpp_paths.back() );
             } else if ( String::strncmp( line_c, "#pragma cpp_flag", 16 ) == 0 ) {
                 cpp_flags << get_next_word( line_c += 16 );
             } else if ( String::strncmp( line_c, "#pragma lnk_flag", 16 ) == 0 ) {

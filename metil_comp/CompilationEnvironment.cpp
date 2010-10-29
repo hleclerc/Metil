@@ -216,7 +216,7 @@ String CompilationEnvironment::cmd_cu_comp( const String &obj, const String &cu,
     if ( maxrregcount )
         cmd += " --maxrregcount=" + String( maxrregcount );
     if ( device_emulation )
-        cmd += " --device-emulation -g";
+        cmd += " --device-emulation -G -g";
     else
         cmd += " -w -g -O3 --gpu-architecture=compute_13";
     cmd += " -c -o " + obj;

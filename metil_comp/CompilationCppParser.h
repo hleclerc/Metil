@@ -31,7 +31,7 @@ namespace Metil {
 */
 class CompilationCppParser {
 public:
-    CompilationCppParser( const CompilationEnvironment &ce, const String &filename );
+    CompilationCppParser( CompilationEnvironment &ce, const String &filename );
     
     BasicVec<String> header_files;
     BasicVec<String> hdotpy_files;
@@ -51,7 +51,7 @@ private:
         String val;
     };
     
-    void parse_src_file_rec( const CompilationEnvironment &ce, String filename );
+    void parse_src_file_rec( CompilationEnvironment &ce, String filename );
     
     static String filename_from_directive( const char *b );
     
