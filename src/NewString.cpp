@@ -1,8 +1,6 @@
 #include "NewString.h"
-#include "StringHelp.h"
-#include "OwcpStringData.h"
-
-#include "Dout.h"
+#include "Level1/StringHelp.h"
+#include "Level1/OwcpStringData.h"
 
 BEG_METIL_NAMESPACE;
 

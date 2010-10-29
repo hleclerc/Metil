@@ -26,14 +26,14 @@ void metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1( M
     } else
         cw << "os << *d;\n";
     for(int d = 0; d < c->dim(); ++d )
-        c->write_end_loop( cw, "h", d );
+        c->write_end_loop( cw, "h", d, "d" );
 }
 
 
 void TypeConstructor_Array::default_mw( MethodWriter &mw ) const {
     TypeConstructor::default_mw( mw );
     mw.add_include( "String.h" );
-    mw.add_include( "ArrayHeader.h" );
+    mw.add_include( "Level1/ArrayHeader.h" );
 }
 
 int TypeConstructor_Array::dim() const {
@@ -92,7 +92,7 @@ int TypeConstructor_Array::static_size_in_bits() const {
 
 void TypeConstructor_Array::write_get_header( MethodWriter &cw, const String &name_header, const String &data ) const {
     if ( len_size() or len_rese() or want_CptUse or want_ExtPtr )  {
-        String h; h << "TypeConstructor_Array::DynArrayHeader<" << len_size() << "," << len_rese() << "," << want_CptUse << "," << want_ExtPtr << ">";
+        String h; h << "ArrayHeader<" << len_size() << "," << len_rese() << "," << want_CptUse << "," << want_ExtPtr << ">";
         cw << h << " *" << name_header << " = reinterpret_cast<" << h << " *>( " << data << " );\n";
     }
 }
@@ -125,24 +125,20 @@ void TypeConstructor_Array::write_beg_loop( MethodWriter &cw, const String &name
     cw << "for( ST i_" << d << " = 0; i_" << d << " < " << ( size[ d ] < 0 ? name_header + "->size[ " + String( c-- )  + " ]" : String( size[ d ] ) ) << "; ++i_" << d << " ) {\n";
 }
 
-void TypeConstructor_Array::write_end_loop( MethodWriter &cw, const String &name_header, int d ) const {
+void TypeConstructor_Array::write_end_loop( MethodWriter &cw, const String &name_header, int d, const String &ptr_on_data, const String &inc ) const {
+    if ( d and ptr_on_data.size() ) {
+        cw << ptr_on_data << " += " << inc << " * ( " <<
+                ( rese[ d - 1 ] >= 0 ? String( rese[ d - 1 ] ) : name_header + "->rese[ " + String( r++ ) + " ]" ) << " - " <<
+                ( size[ d - 1 ] >= 0 ? String( size[ d - 1 ] ) : name_header + "->size[ " + String( s++ ) + " ]" ) << " );\n";
+    }
+
     cw << "}\n";
 }
 
-void TypeConstructor_Array::write_add_ptrd( MethodWriter &cw, const String &name_header, const String &name_data, int d ) const {
-    // cw << name_data << " += " << inc << ";\n";
-
-    //    if ( item_type_bas )
-    //        ASSERT( item_type_bas->constructor->static_size_in_bytes() == item_type_bas->constructor->static_size_in_bits() / 8, "TODO" );
-    //    int inc = item_type_bas ? item_type_bas->constructor->static_size_in_bytes() : 1;
-    //    for(int d = 0, r = 0, s = 0; d < dim(); ++d ) {
-    //        if ( d ) {
-    //            cw << name_data << " += " << inc << " * ( " <<
-    //                    ( rese[ d - 1 ] >= 0 ? String( rese[ d - 1 ] ) : name_header + "->rese[ " + String( r++ ) + " ]" ) << " - " <<
-    //                    ( size[ d - 1 ] >= 0 ? String( size[ d - 1 ] ) : name_header + "->size[ " + String( s++ ) + " ]" ) << " );\n";
-    //        }
-    //        cw << "}\n";
-    //    }
+static int read_int( const String &str ) {
+    if ( str == "m" )
+        return -1;
+    return Val( str );
 }
 
 void TypeConstructor_Array::init( Type *type ) {
@@ -150,18 +146,27 @@ void TypeConstructor_Array::init( Type *type ) {
     want_ExtPtr = false;
     item_type_bas = 0;
 
-    BasicVec<String> lst = tokenize( type->name, '_' );
+    const char *name = type->name + 6;
 
-    int dim = Val( lst[ 1 ] );
+    // type_name
+    int len_name_sub_type = 0;
+    for( ; is_a_number( *name ); ++name )
+        len_name_sub_type = 10 * len_name_sub_type + ( *name - '0' );
+    String type_name = NewString( name, name + len_name_sub_type );
+    name += len_name_sub_type;
+
+    BasicVec<String> lst = tokenize( name + 1, '_' );
+
+    int dim = Val( lst[ 0 ] );
     size.resize( dim );
     rese.resize( dim );
     for( int d = 0; d < dim; ++d ) {
-        size[ d ] = Val( lst[ 2 + 2 * d ] );
-        rese[ d ] = Val( lst[ 3 + 2 * d ] );
+        size[ d ] = read_int( lst[ 1 + 2 * d ] );
+        rese[ d ] = read_int( lst[ 2 + 2 * d ] );
     }
 
-    for( int d = 2 + 2 * dim; d < lst.size(); ++d ) {
-        if ( lst[ d ] == "Owcp"   ) want_CptUse = true;
+    for( int d = 1 + 2 * dim; d < lst.size(); ++d ) {
+        if ( lst[ d ] == "CptUse" ) want_CptUse = true;
         if ( lst[ d ] == "ExtPtr" ) want_ExtPtr = true;
     }
 }

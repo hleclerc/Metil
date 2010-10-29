@@ -37,7 +37,7 @@ public:
     void write_get_data_ptr( MethodWriter &cw, bool want_const, const String &name_data = "d", const String &name_header = "h" ) const;
     void write_get_len     ( MethodWriter &cw, const String &name_res, const String &name_header = "h" ) const;
     void write_beg_loop    ( MethodWriter &cw, const String &name_header, int d, int &l ) const;
-    void write_end_loop    ( MethodWriter &cw, const String &name_header, int d ) const;
+    void write_end_loop    ( MethodWriter &cw, const String &name_header, int d, const String &ptr_on_data = "", const String &inc = "1" ) const;
     void write_add_ptrd    ( MethodWriter &cw, const String &name_header, const String &name_data, int d ) const;
 
     BasicVec<ST> size;

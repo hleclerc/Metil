@@ -21,6 +21,7 @@ public:
     void add_include( const String &include );
 
 
+    static String def_str( const String &method_name, Type *type_0, Type *type_1, Type *type_2 );
     static String decl_of( const String &method_name, Type *type_0, Type *type_1, Type *type_2 );
     static String symb_of( const String &method_name, Type *type_0, Type *type_1, Type *type_2, bool cpp );
     static DynamicLibrary &get_lib_for_types( Type *type_0, Type *type_1, Type *type_2, const char *dep_file );

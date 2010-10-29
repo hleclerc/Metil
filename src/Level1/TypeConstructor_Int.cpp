@@ -1,7 +1,7 @@
 #include "TypeConstructor_Int.h"
 #include "DisplayInt.h"
 #include "MethodWriter.h"
-#include "Tokenize.h"
+#include "../Tokenize.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

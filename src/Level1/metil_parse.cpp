@@ -79,13 +79,13 @@ int main( int argc, char **argv ) {
 
     // make .h
     if ( want_h ) {
-        std::ofstream hf( "src/metil_gen.h" );
+        std::ofstream hf( "src/Level1/metil_gen.h" );
         parser.write_decl( hf );
     }
 
     // make .cpp
     if ( want_c ) {
-        std::ofstream cf( "src/metil_gen.cpp" );
+        std::ofstream cf( "src/Level1/metil_gen.cpp" );
         parser.write_defi( cf, "metil_gen.h" );
     }
 

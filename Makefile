@@ -7,7 +7,7 @@ make_metil_comp:
 	make -C metil_comp
 
 test:
-	metil_comp -g3 -Isrc src/main.cpp
+	metil_comp -g3 -Isrc tests/main.cpp
 
 test_gdb:
 	metil_comp --exec-using gdb -g3 -Isrc src/main.cpp
@@ -16,7 +16,7 @@ test_valgrind:
 	metil_comp --exec-using valgrind -g3 -Isrc src/main.cpp
 
 metil_gen:
-	metil_comp -g3 -Isrc src/metil_parse.cpp `find . -name "*.cpp"`
+	metil_comp -g3 -Isrc src/Level1/metil_parse.cpp `find src -name "*.cpp" -o -name "*.h"`
 # 	metil_comp -g3 --valgrind -Isrc src/metil_parse.cpp `find . -name "*.cpp"`
 
 comp:

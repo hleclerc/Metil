@@ -4,7 +4,7 @@
 #include "EnableIf.h"
 #include "IsAScalar.h"
 #include "IsAnInteger.h"
-#include "NewAndRefNumber.h"
+#include "Level1/NewAndRefNumber.h"
 
 BEG_METIL_NAMESPACE;
 
@@ -116,7 +116,7 @@ template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T atan2     ( const 
 
 // function( Val )
 #define DECL_MET( T, N ) inline Val N( const Val &v ) { return v.type->N( v ); }
-#include "DeclMethodsUnaryArithmetic.h"
+#include "Level1/DeclMethodsUnaryArithmetic.h"
 #undef DECL_MET
 
 template<class T> typename EnableIf<IsAnInteger<T>::res,Val>::T inv ( T b ) { return inv ( Val( b ) ); }

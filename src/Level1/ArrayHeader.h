@@ -2,12 +2,14 @@
 #define ARRAYDATA_H
 
 #include "ClassOrVoid.h"
+#include "MO.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
 struct ArrayHeader_CptUse {
+    ArrayHeader_CptUse() : cpt_use( 0 ), parent( 0 ) {}
     ST cpt_use;
-    MO *parent;
+    Level1::MO *parent;
 };
 
 template<int len_size,int len_rese>
