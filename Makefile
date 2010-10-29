@@ -35,3 +35,8 @@ documentation:
 	sed -e "s/ = html/ = html\/Level1/g; s/= Level1/= /g" doc/Doxyfile > html/Doxyfile_Level1
 	doxygen html/Doxyfile_Level1
 	mkdir -p html/Level1/images; cp doc/images/* html/Level1/images
+
+archive:
+	git archive -o Metil-0.0.0.tgz --prefix=Metil-0.0.0/ HEAD
+# 	git archive -oo -format=tar --prefix=Metil-0.0.0/ HEAD | gzip > Metil-0.0.0.tgz
+	
