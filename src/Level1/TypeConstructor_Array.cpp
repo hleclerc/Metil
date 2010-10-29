@@ -15,16 +15,19 @@ void metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1( M
         cw << "Type *type = reinterpret_cast<TypeConstructor_Array *>( " << args[ 1 ].type << "->constructor )->item_type_bas;\n";
     cw << "String &os = static_cast<String &>( a );\n";
 
-    // loop
-    for(int d = c->dim() - 1, l = c->len_size() - 1; d >= 0; --d ) {
-        c->write_beg_loop( cw, "h", d, l );
+    // beg loop
+    for(int d = c->dim() - 1; d >= 0; --d ) {
+        c->write_beg_loop( cw, "h", d );
         cw << "if ( i_" << d << " ) os.write_separator( " << d << " );\n";
     }
+
     if ( c->item_type_bas ) {
         // item_type_bas->constructor->write_write_str( cw, MOS( "d", "type" ) );
         TODO;
     } else
         cw << "os << *d;\n";
+
+    // end loop
     for(int d = 0; d < c->dim(); ++d )
         c->write_end_loop( cw, "h", d, "d" );
 }
@@ -121,18 +124,34 @@ void TypeConstructor_Array::write_get_len( MethodWriter &cw, const String &name_
     cw << ";\n";
 }
 
-void TypeConstructor_Array::write_beg_loop( MethodWriter &cw, const String &name_header, int d, int &c ) const {
-    cw << "for( ST i_" << d << " = 0; i_" << d << " < " << ( size[ d ] < 0 ? name_header + "->size[ " + String( c-- )  + " ]" : String( size[ d ] ) ) << "; ++i_" << d << " ) {\n";
+void TypeConstructor_Array::write_beg_loop( MethodWriter &cw, const String &name_header, int d ) const {
+    cw << "for( ST i_" << d << " = 0; i_" << d << " < " << get_size_n( name_header, d ) << "; ++i_" << d << " ) {\n";
 }
 
 void TypeConstructor_Array::write_end_loop( MethodWriter &cw, const String &name_header, int d, const String &ptr_on_data, const String &inc ) const {
-    if ( d and ptr_on_data.size() ) {
+    if ( d and ptr_on_data.size() )
         cw << ptr_on_data << " += " << inc << " * ( " <<
-                ( rese[ d - 1 ] >= 0 ? String( rese[ d - 1 ] ) : name_header + "->rese[ " + String( r++ ) + " ]" ) << " - " <<
-                ( size[ d - 1 ] >= 0 ? String( size[ d - 1 ] ) : name_header + "->size[ " + String( s++ ) + " ]" ) << " );\n";
-    }
-
+              get_rese_n( name_header, d - 1 ) << " - " <<
+              get_size_n( name_header, d - 1 ) << " );\n";
     cw << "}\n";
+}
+
+String TypeConstructor_Array::get_size_n( const String &name_header, int d ) const {
+    int c = 0;
+    for( int n = 0; n < d; ++n )
+        c += size[ n ] < 0;
+    if ( size[ d ] < 0 )
+        return name_header + "->size[ " + String( c )  + " ]";
+    return size[ d ];
+}
+
+String TypeConstructor_Array::get_rese_n( const String &name_header, int d ) const {
+    int c = 0;
+    for( int n = 0; n < d; ++n )
+        c += rese[ n ] < 0;
+    if ( rese[ d ] < 0 )
+        return name_header + "->rese[ " + String( c )  + " ]";
+    return rese[ d ];
 }
 
 static int read_int( const String &str ) {
