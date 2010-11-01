@@ -1,4 +1,5 @@
 #include "String.h"
+#include "Level1/StringHelp.h"
 #include "Level1/Owcp.h"
 
 #include <stdio.h>
@@ -47,6 +48,21 @@ Val String::begins_by( const String &str ) const {
 
 Val String::ends_with( const String &str ) const {
     return size() >= str.size() and end_from( size() - str.size() ) == str; // TODO: optimize
+}
+
+Val String::find( const String &str, const Val &starting_from ) const {
+    String tmp = end_from( starting_from );
+    Val res = tmp.find( str );
+    return res >= 0 ? res + starting_from : minus_one;
+}
+
+String String::read_sized( const char *&str ) {
+    int len = 0;
+    for( ; Level1::is_a_number( *str ); ++str )
+        len = 10 * len + ( *str - '0' );
+    NewString ns( str, str + len );
+    str += len;
+    return ns;
 }
 
 /// for i in range( 256 ): print str( i ) + "," + 0 + ","

@@ -1,36 +1,126 @@
+#include "TypeConstructor_Select.h"
 #include "TypeConstructor_Array.h"
 #include "Tokenize.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
+static TypeConstructor_Array *sc( Type *type ) {
+    return static_cast<TypeConstructor_Array *>( type->constructor );
+}
+
 void metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1( MethodWriter &cw, Mos *args ) {
-    TypeConstructor_Array *c = static_cast<TypeConstructor_Array *>( cw.type[ 1 ]->constructor );
+    TypeConstructor_Array *c = sc( cw.type[ 1 ] );
     if ( c->len() == 0 ) // nothing to display
         return;
 
     // header
     c->write_get_header( cw, "h", args[ 1 ].data );
-    c->write_get_data_ptr( cw, true, "d", "h" );
+    c->write_get_data_ptr( cw, true, "d", "h", args[ 1 ].data );
     if ( c->item_type_bas )
-        cw << "Type *type = reinterpret_cast<TypeConstructor_Array *>( " << args[ 1 ].type << "->constructor )->item_type_bas;\n";
-    cw << "String &os = static_cast<String &>( a );\n";
+        cw.n << "Type *type = reinterpret_cast<TypeConstructor_Array *>( " << args[ 1 ].type << "->constructor )->item_type_bas;";
+    cw.n << "String &os = static_cast<String &>( a );";
 
     // beg loop
     for(int d = c->dim() - 1; d >= 0; --d ) {
         c->write_beg_loop( cw, "h", d );
-        cw << "if ( i_" << d << " ) os.write_separator( " << d << " );\n";
+        cw.n << "if ( i_" << d << " ) os.write_separator( " << d << " );";
     }
 
     if ( c->item_type_bas ) {
         // item_type_bas->constructor->write_write_str( cw, MOS( "d", "type" ) );
         TODO;
     } else
-        cw << "os << *d;\n";
+        cw.n << "os << *d;";
 
     // end loop
     for(int d = 0; d < c->dim(); ++d )
         c->write_end_loop( cw, "h", d, "d" );
 }
+
+void TypeConstructor_Array::write_get_index( MethodWriter &cw, const String &name_res, const TypeConstructor *c_1, const Mos &d_1, const String &name_header ) const {
+    int to = c_1->tensor_order();
+    if ( to == 0 ) {
+        cw.n << "ST index = static_cast<const Val &>( " << d_1 << " );";
+    } else if ( to == 1 ) {
+        cw.n << "ST i = 0, c = 1, index = 0;";
+        for( int d = 0; d < tensor_order(); ++d ) {
+            if ( d )
+                cw.n << "i = " << d << ";";
+            cw.n << "index += c * static_cast<const Val &>( CM_2( select_C, " << d_1 << ", REF_Number( i ) ) );";
+            if ( d < tensor_order() - 1 )
+                cw.n << "c *= " << get_rese_n( "h", d ) << ";";
+        }
+    }
+}
+
+void metil_gen_select_C__when__a__isa__Array__pert__1( MethodWriter &cw, Mos *args ) {
+    TypeConstructor_Array *c = sc( cw.type[ 0 ] );
+
+    // header
+    c->write_get_header( cw, "h", args[ 0 ].data );
+    c->write_get_data_ptr( cw, true, "d", "h", args[ 0 ].data );
+    c->write_get_index( cw, "index", cw.type[ 1 ]->constructor, args[ 1 ], "h" );
+
+    if ( c->item_type_bas ) {
+        // item_type_bas->constructor->write_write_str( cw, MOS( "d", "type" ) );
+        TODO;
+    } else
+        cw.n << "return CM_1( copy, d[ index ] );";
+}
+
+void metil_gen_select__when__a__isa__Array__pert__1( MethodWriter &cw, Mos *args ) {
+    cw.add_include( "Pair.h" );
+    cw.add_include( "Level1/TypeConstructor_Select.h" );
+    TypeConstructor_Array *c_0 = static_cast<TypeConstructor_Array *>( cw.type[ 0 ]->constructor );
+    TypeConstructor *c_1 = cw.type[ 1 ]->constructor;
+
+    String select_type = "Select_";
+    select_type << strlen( cw.type[ 0 ]->name ) << cw.type[ 0 ]->name;
+    select_type << "8Int_s_64";
+
+    c_0->write_get_header( cw, "h", args[ 0 ].data );
+    c_0->write_get_index( cw, "index", c_1, args[ 1 ], "h" );
+
+    cw.add_preliminary( "DECL_TYPE( " + select_type + " );\n" );
+    cw.add_preliminary( "DEFI_TYPE( Select, " + select_type + " );\n" );
+    cw.n << "typedef Pair<void *,ST> P;";
+    cw.n << "return MO( NEW( P, " << args[ 0 ].data << ", index ), &metil_type_bas_" << select_type << " );";
+}
+
+void metil_gen_del__when__a__isa__Array( MethodWriter &cw, Mos *args ) {
+    TypeConstructor_Array *c = sc( cw.type[ 0 ] );
+    if ( c->len() == 0 ) // nothing to del
+        return;
+    if ( c->want_CptUse or c->dyn() )
+        c->write_get_header( cw, "h", args[ 0 ].data );
+
+    //
+    if ( c->want_CptUse ) {
+        cw.n << "if ( --h->cpt_use >= 0 )";
+        cw.n << "return;";
+    }
+
+    // destroy items
+    if ( c->item_type_bas ) {
+        TODO;
+    } else {
+        c->write_get_data_ptr( cw, false, "d", "h", args[ 0 ].data );
+        for(int d = c->dim() - 1; d >= 0; --d )
+            c->write_beg_loop( cw, "h", d );
+        cw.n << "CM_1( del, *d );";
+        for(int d = 0; d < c->dim(); ++d )
+            c->write_end_loop( cw, "h", d, "d" );
+    }
+
+    // free data
+    if ( c->dyn() ) {
+        cw.n << "FREE( h, h->rese_mem );";
+    } else {
+        TODO;
+    }
+}
+
+
 
 
 void TypeConstructor_Array::default_mw( MethodWriter &mw ) const {
@@ -45,6 +135,29 @@ int TypeConstructor_Array::dim() const {
 
 int TypeConstructor_Array::tensor_order() const {
     return dim();
+}
+
+void TypeConstructor_Array::write_select_op( MethodWriter &mw, const Mos *a, TypeConstructor *index_type, const String &op ) const {
+    mw.add_include("Level1/ArrayHeader.h");
+    mw.add_include("String.h");
+    mw.add_include("Pair.h");
+    if ( index_type->tensor_order() == 0 ) {
+        mw.n << "typedef Pair<void *,ST> P;";
+        mw.n << "P *select_data = reinterpret_cast<P *>( " << a[ 0 ].data << " );";
+        write_get_header( mw, "h", "select_data->a" );
+        write_get_data_ptr( mw, false, "d", "h", "select_data->a" );
+        mw.n << "ST index = select_data->b;";
+        if ( item_type_bas ) {
+            TODO;
+        } else {
+            if ( op == "copy" )
+                mw.n << "return CM_1( " << op << ", d[ index ] );";
+            else
+                mw.n << "CM_2( " << op << ", d[ index ], " << a[ 1 ] << " );";
+        }
+    } else {
+        TODO;
+    }
 }
 
 int TypeConstructor_Array::len() const {
@@ -100,13 +213,17 @@ void TypeConstructor_Array::write_get_header( MethodWriter &cw, const String &na
     }
 }
 
-void TypeConstructor_Array::write_get_data_ptr( MethodWriter &cw, bool want_const, const String &name_data, const String &name_header ) const {
-    String type = String( want_const ? "const " : "" ) + ( item_type_bas ? "void" : "MO" ) + " *";
+void TypeConstructor_Array::write_get_data_ptr( MethodWriter &cw, bool want_const, const String &name_data, const String &name_header, const String &data ) const {
+    String type; type << ( want_const ? "const " : "" ) << ( item_type_bas ? "void" : "MO" ) << " *";
     if ( want_ExtPtr ) {
         cw << type << name_data << " = reinterpret_cast<" << type << ">( " << name_header << "->ext_ptr );\n";
     } else {
-        String offset; offset << "sizeof( *" << name_header << " )";
-        cw << type << name_data << " = reinterpret_cast<" << type << ">( (char *)" << name_header << " + " << offset << " );\n";
+        if ( dyn() ) {
+            String offset; offset << "sizeof( *" << name_header << " )";
+            cw << type << name_data << " = reinterpret_cast<" << type << ">( (char *)" << name_header << " + " << offset << " );\n";
+        } else {
+            cw << type << name_data << " = reinterpret_cast<" << type << ">( " << data << " );\n";
+        }
     }
 }
 
@@ -129,10 +246,14 @@ void TypeConstructor_Array::write_beg_loop( MethodWriter &cw, const String &name
 }
 
 void TypeConstructor_Array::write_end_loop( MethodWriter &cw, const String &name_header, int d, const String &ptr_on_data, const String &inc ) const {
-    if ( d and ptr_on_data.size() )
-        cw << ptr_on_data << " += " << inc << " * ( " <<
-              get_rese_n( name_header, d - 1 ) << " - " <<
-              get_size_n( name_header, d - 1 ) << " );\n";
+    if ( ptr_on_data.size() ) {
+        if ( d )
+            cw << ptr_on_data << " += " << inc << " * ( " <<
+                  get_rese_n( name_header, d - 1 ) << " - " <<
+                  get_size_n( name_header, d - 1 ) << " );\n";
+        else
+            cw << "++" << ptr_on_data << ";\n";
+    }
     cw << "}\n";
 }
 
@@ -161,6 +282,8 @@ static int read_int( const String &str ) {
 }
 
 void TypeConstructor_Array::init( Type *type ) {
+    TypeConstructor::init( type );
+
     want_CptUse = false;
     want_ExtPtr = false;
     item_type_bas = 0;
@@ -168,11 +291,7 @@ void TypeConstructor_Array::init( Type *type ) {
     const char *name = type->name + 6;
 
     // type_name
-    int len_name_sub_type = 0;
-    for( ; is_a_number( *name ); ++name )
-        len_name_sub_type = 10 * len_name_sub_type + ( *name - '0' );
-    String type_name = NewString( name, name + len_name_sub_type );
-    name += len_name_sub_type;
+    String type_name = String::read_sized( name );
 
     BasicVec<String> lst = tokenize( name + 1, '_' );
 

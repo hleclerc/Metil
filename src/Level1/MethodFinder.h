@@ -45,6 +45,10 @@ public:
 
     ///
     static Item *find_item( Type *type_0, Type *type_1 = 0, Type *type_2 = 0, bool abort_if_pb = true ) {
+        if ( type_0 ) type_0->init_if_necessary();
+        if ( type_1 ) type_1->init_if_necessary();
+        if ( type_2 ) type_2->init_if_necessary();
+
         // find items with greater pertinence and checked cond
         BasicVec<Item *,-1,4> res;
         for( Item *item = last; item; item = item->prev ) {
@@ -85,8 +89,9 @@ public:
         if ( not item->meth ) {
             DynamicLibrary &dl = MethodWriter::get_lib_for_types( type_0, type_1, type_2, item->file );
             String sym = MethodWriter::symb_of( N::get_name(), type_0, type_1, type_2, false );
-            item->meth = (TM *)dl.get_sym( sym );
-            ASSERT( item->meth, "%s not found", sym.c_str() );
+            TM *res = (TM *)dl.get_sym( sym );
+            ASSERT( res, "%s not found", sym.c_str() );
+            return res;
         }
 
         return item->meth;

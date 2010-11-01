@@ -19,6 +19,7 @@ public:
     int nb_types() const;
     void write_to( String &os );
     void add_include( const String &include );
+    void add_preliminary( const String &txt ); ///< after includes and namespace
 
 
     static String def_str( const String &method_name, Type *type_0, Type *type_1, Type *type_2 );
@@ -27,6 +28,7 @@ public:
     static DynamicLibrary &get_lib_for_types( Type *type_0, Type *type_1, Type *type_2, const char *dep_file );
     static void make_cpp_for_types( const String cpp_name, Type *type_0, Type *type_1, Type *type_2 );
 
+    String preliminary;
     String code;
     StringWithSepInCppLineMaker n;
     Type *type[ 3 ];

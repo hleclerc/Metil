@@ -23,6 +23,10 @@ void MethodWriter::add_include( const String &include ) {
         includes << include;
 }
 
+void MethodWriter::add_preliminary( const String &txt ) {
+    preliminary << txt;
+}
+
 void MethodWriter::beg_def( const String &def_name ) {
     code << "__extern_C__ ";
     code << decl_of( def_name, type[ 0 ], type[ 1 ], type[ 2 ] ) << " {\n";
@@ -48,6 +52,10 @@ void MethodWriter::write_to( String &os ) {
     on << "#endif";
     on << "";
     on << "BEG_METIL_LEVEL1_NAMESPACE;";
+    if ( preliminary.size() ) {
+        on << "";
+        on << preliminary;
+    }
     on << "";
     on << code;
     on << "END_METIL_LEVEL1_NAMESPACE;";
@@ -171,14 +179,14 @@ DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Typ
 
         String cmd = get_env( "METIL_CXX_CMD" );
         ASSERT( cmd.size(), "METIL_CXX_CMD is not defined in env var" );
-        cmd << " -DMETIL_GENE_DYLIB -fPIC -shared -o "  << lib_name << " "  << cpp_name;
+        cmd << " -DMETIL_GENE_DYLIB -g3 -fPIC -shared -o "  << lib_name << " "  << cpp_name;
         if ( exec_cmd( cmd ) )
             ERROR( "Pb during compilation of %s", cpp_name.c_str() );
     }
 
     res.open( lib_name );
     if ( not res )
-        ERROR( "Error durig lib lod %s", res.error().c_str() );
+        ERROR( "Error during lib load %s", res.error().c_str() );
 
     //
     return res;

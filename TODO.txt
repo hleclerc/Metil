@@ -1,0 +1,5 @@
++ select_C Array
++ select Array
+* tests sur les matrices (i,j)
+* indices muets
+* tableaux typés

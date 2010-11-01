@@ -38,11 +38,19 @@ public:
     #define DECL_MET( T, N ) Method_##T *N
     #include "DeclMethods.h"
     #undef DECL_MET
+
+    // static helpers
+    static Type *find_with_name( const char *name );
 };
 
 /// Call Method
 #define CM_1( M, A, ... ) (A).type->M( A, ##__VA_ARGS__ )
 #define CM_2( M, A, B, ... ) (A).type->M[ (B).type->number ]( A, B, ##__VA_ARGS__ )
+
+#define DECL_TYPE( N ) \
+    extern Type metil_type_bas_##N; \
+    extern Type metil_type_ref_##N; \
+    extern Type metil_type_cst_##N
 
 END_METIL_LEVEL1_NAMESPACE;
 

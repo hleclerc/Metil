@@ -1,6 +1,6 @@
 #include "MetilSession.h"
 #include "MetilServer.h"
-#include "StringHelp.h"
+#include "Level1/StringHelp.h"
 #include "BasicVec.h"
 #include "Tokenize.h"
 #include "System.h"

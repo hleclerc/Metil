@@ -3,9 +3,9 @@
 #include "NbArgsMethods.h"
 #include "BasicMethods.h"
 #include "MethodName.h"
+#include "StringHelp.h"
 #include "BasicVec.h"
 #include "Math.h"
-#include "Dout.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
@@ -132,6 +132,13 @@ Type *Type::init_if_necessary() {
     }
 
     return this;
+}
+
+Type *Type::find_with_name( const char *name ) {
+    for( Type *t = last_type; t; t = t->prev_type )
+        if ( Level1::equal( t->name, name ) )
+            return t;
+    return 0;
 }
 
 END_METIL_LEVEL1_NAMESPACE;

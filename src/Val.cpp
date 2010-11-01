@@ -21,9 +21,9 @@ Val::Val( const char *str ) {
 //static PI32 zero_PI32 = 0;
 //static PI32 one_PI32 = 1;
 //
-//Val zero             ( Level1::MO( &Level1::type_Zero     ) );
-//Val one              ( Level1::MO( &Level1::type_One      ) );
-//Val minus_one        ( Level1::MO( &Level1::type_MinusOne ) );
+Val zero             ( Level1::MO( &Level1::metil_type_cst_Cst_zero      ) );
+Val one              ( Level1::MO( &Level1::metil_type_cst_Cst_one       ) );
+Val minus_one        ( Level1::MO( &Level1::metil_type_cst_Cst_minus_one ) );
 //Val pi               ( Level1::MO( &Level1::type_Pi       ) );
 //Val i                ( Level1::MO( &Level1::type_I        ) );
 //Val inf              ( Level1::MO( &Level1::type_Inf      ) );

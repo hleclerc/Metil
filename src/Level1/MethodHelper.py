@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import string
 
 methods = [
@@ -42,6 +43,19 @@ def cor( c ):
     print "unknown char " + c
     return "Bing"
 
+def arg_const( c ):
+    return c.isupper()
+
+def nb_args( c ):
+    return len( c ) - 1
+
+def nb_MO_args( m ):
+    res = 0
+    for c in m[ 1: ]:
+        res += c == 'o'
+        res += c == 'O'
+    return res
+
 def args( m ):
     l = "abcdefgh"
     return string.join( [ cor( c ) + l[ n ] for c, n in zip( m[1:], range( 100 ) ) ], ", " )
@@ -49,6 +63,6 @@ def args( m ):
 def arg_names( m ):
     l = "abcdefgh"
     return string.join( [ l[ n ] for n in range( len( m[1:] ) ) ], ", " )
-    
-    
-    
+
+
+

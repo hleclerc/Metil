@@ -1,5 +1,5 @@
 #include "BitmapDisplay.h"
-#include "StringHelp.h"
+#include "Level1/StringHelp.h"
 #include "CudaMetil.h"
 #include "Base64.h"
 #include "Png.h"

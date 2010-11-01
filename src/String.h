@@ -80,6 +80,7 @@ struct String : public Level1::MO {
     void flush() { CM_1( flush, *this ); }
     void write_separator( int num );
     Val find( const String &str ) const { return CM_2( find, *this, str ); } ///< return index of first str found in this. Else, return -1
+    Val find( const String &str, const Val &starting_from ) const; ///< return index of first str found in this after starting_from. Else, return -1
     String beg_upto( const Val &s ) const { return CM_2( beg_upto, *this, s ); } ///< "abcd".beg_upto( 1 ) -> "a"
     String end_from( const Val &s ) const { return CM_2( end_from, *this, s ); } ///< "abcd".beg_upto( 1 ) -> "a"
     String replace( const String &a, const String &b ) const;
@@ -94,6 +95,9 @@ struct String : public Level1::MO {
     operator FP32() const { return CM_1( convert_to_FP32, *this ); }
     operator FP64() const { return CM_1( convert_to_FP64, *this ); }
     operator FP80() const { return CM_1( convert_to_FP80, *this ); }
+
+    // static helpers
+    static String read_sized( const char *&str ); /// ex: 3abcdef will give "abc"
 
     // static attributes
     static Endl endl; ///< file << String::endl; will diplay a carriage return and flush the file

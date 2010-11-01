@@ -131,10 +131,10 @@ template<class T> typename EnableIf<IsAnInteger<T>::res,Val>::T log ( T b ) { re
 template<class T> typename EnableIf<IsAnInteger<T>::res,Val>::T exp ( T b ) { return exp ( Val( b ) ); }
 
 
-//extern Val zero;              // 0
-//extern Val one;               // 1
+extern Val zero;              // 0
+extern Val one;               // 1
 //extern Val two;               // 2
-//extern Val minus_one;         // -1
+extern Val minus_one;         // -1
 //extern Val pi;                // 3.14159...
 //extern Val i;                 // sqrt(-1)
 //extern Val one_half;          // 1/2
