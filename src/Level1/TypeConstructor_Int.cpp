@@ -6,8 +6,8 @@
 BEG_METIL_LEVEL1_NAMESPACE;
 
 // bootstrap methods for Int64
-void metil_def_del__when__a__is__Int_s_64( MO &a ) { DEL( reinterpret_cast<SI64 *>( a.data ) ); }
-void metil_def_del__when__a__is__Int_s_32( MO &a ) { DEL( reinterpret_cast<SI32 *>( a.data ) ); }
+void metil_def_del__when__a__is__Int_s_64__pert__100( MO &a ) { DEL( reinterpret_cast<SI64 *>( a.data ) ); }
+void metil_def_del__when__a__is__Int_s_32__pert__100( MO &a ) { DEL( reinterpret_cast<SI32 *>( a.data ) ); }
 
 MO metil_def_copy__when__a__is__Int_s_32( MO a ) { return NEW_Number( *reinterpret_cast<SI32 *>( a.data ) ); }
 MO metil_def_copy__when__a__is__Int_s_64( MO a ) { return NEW_Number( *reinterpret_cast<SI64 *>( a.data ) ); }

@@ -102,7 +102,9 @@ void metil_gen_del__when__a__isa__Array( MethodWriter &cw, Mos *args ) {
 
     // destroy items
     if ( c->item_type_bas ) {
-        TODO;
+        if ( not c->item_type_bas->constructor->is_a_POD() ) {
+            TODO;
+        }
     } else {
         c->write_get_data_ptr( cw, false, "d", "h", args[ 0 ].data );
         for(int d = c->dim() - 1; d >= 0; --d )
@@ -292,6 +294,7 @@ void TypeConstructor_Array::init( Type *type ) {
 
     // type_name
     String type_name = String::read_sized( name );
+    item_type_bas = Type::find_with_name( type_name.c_str() );
 
     BasicVec<String> lst = tokenize( name + 1, '_' );
 

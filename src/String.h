@@ -77,6 +77,7 @@ struct String : public Level1::MO {
     // methods
     Val size() const { return CM_1( size, *this ); }
     const char *c_str() const { return (const char *)CM_1( ptr_z, *const_cast<String *>( this ) ); }
+    char *new_c_str() const { return (char *)CM_1( new_ptr_z, *this ); }
     void flush() { CM_1( flush, *this ); }
     void write_separator( int num );
     Val find( const String &str ) const { return CM_2( find, *this, str ); } ///< return index of first str found in this. Else, return -1

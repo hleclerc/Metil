@@ -12,8 +12,12 @@ public:
     Mat();
     Mat( ST r, ST c, Level1::Type *base_type = 0 );
 
+    // specialisation for 2 args -> ( row, col ) which is inverted / Arrays
+    Val operator()( const Val &a, const Val &b ) const { return Array<Val>::operator()( b, a ); }
+    Val operator()( const Val &a, const Val &b ) { return Array<Val>::operator()( b, a ); }
+
 protected:
-    Level1::MO *init_dyn_mat( ST r, ST c );
+    Level1::MO *init_dyn_mat( ST r, ST c, Level1::Type *base_type ); ///<
 };
 
 END_METIL_NAMESPACE;

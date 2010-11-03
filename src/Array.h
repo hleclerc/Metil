@@ -29,12 +29,14 @@ struct Array : public Level1::MO {
 
     Val size() const { return type->size( *this ); }
 
+    // 1 arg
     T operator[]( const Val &a ) const { return CM_2( select_C, *this, a ); }
     T operator()( const Val &a ) const { return CM_2( select_C, *this, a ); }
 
     T operator[]( const Val &a ) { return CM_2( select, *this, a ); }
     T operator()( const Val &a ) { return CM_2( select, *this, a ); }
 
+    // 2 args
     T operator()( const Val &a, const Val &b ) const {
         Level1::MO data[] = { a, b };
         return CM_2( select_C, *this, MO( data, &Level1::metil_type_ref_Array_4NULL_1_2_2 ) );

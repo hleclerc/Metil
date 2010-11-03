@@ -1,4 +1,5 @@
 Makefile
+TODO.txt
 src/Dout.h
 src/StringWithSepInCppLine.h
 src/BasicVecRef.h
@@ -80,6 +81,7 @@ src/Level1/DisplayInt.h
 src/Level1/TypeConstructor_Flt.h
 src/Level1/TypeConstructor.h
 src/Level1/Owcp.h
+src/Level1/def_MORef.h
 src/Level1/TypeConstructor_OwcpString.h
 src/Level1/MethodWriter.h
 src/Level1/BasicMethods.h
@@ -162,6 +164,7 @@ src/MethodTypes.h.py
 src/NbArgsMethods.h.py
 src/Level1/MethodHelper.py
 src/Level1/MethodWriterSymb.h.py
+src/Level1/def_MORef.h.py
 src/Level1/MethodGenerator.h.py
 src/Level1/parser_if.h.py
 src/Level1/MethodWriterDecl.h.py
@@ -196,11 +199,17 @@ doc/PartnerShip.h
 doc/Debugging.h
 doc/customdoxygen.css
 tests/main.cpp
-tests/compilations/gen_met_for__Select_24Array_4NULL_1_m_m_CptUse8Int_s_32__Int_s_32.cpp
-tests/compilations/gen_met_for__Select_24Array_4NULL_1_m_m_CptUse8Int_s_32.cpp
-tests/compilations/gen_met_for__Array_4NULL_1_m_m_CptUse__Int_s_32.cpp
-tests/compilations/gen_met_for__Cst_zero.cpp
-tests/compilations/gen_met_for__FileWithoutClose__Cst_minus_one.cpp
-tests/compilations/gen_met_for__FileWithoutClose__Array_4NULL_1_m_m_CptUse.cpp
-tests/compilations/gen_met_for__Array_4NULL_1_m_m_CptUse.cpp
-src/Level1/def_MORef.h.py
+tests/compilations/gen_met_for__FileWithoutClose__Array_4NULL_1_2_2.cpp
+tests/compilations/gen_met_for__Select_17Array_4NULL_1_2_28Int_s_64.cpp
+tests/compilations/gen_met_for__FileWithoutClose__Cst_zero.cpp
+tests/compilations/gen_met_for__FileWithoutClose__Array_4NULL_2_m_m_m_m_CptUse.cpp
+tests/compilations/gen_met_for__Select_28Array_4NULL_2_m_m_m_m_CptUse8Int_s_64.cpp
+tests/compilations/gen_met_for__FileWithoutClose__Cst_one.cpp
+tests/compilations/gen_met_for__Array_4NULL_2_m_m_m_m_CptUse__Array_4NULL_1_2_2.cpp
+tests/compilations/gen_met_for__Array_4NULL_2_m_m_m_m_CptUse.cpp
+tests/compilations/gen_met_for__Array_4NULL_1_2_2__Int_s_32.cpp
+tests/compilations/gen_met_for__Select_28Array_4NULL_2_m_m_m_m_CptUse8Int_s_64__Int_s_32.cpp
+src/Level1/S.h
+src/Level1/TypeSet.h
+src/Level1/MethodWriterHelper_Int.h
+src/Level1/MethodWriterHelper_Int.cpp

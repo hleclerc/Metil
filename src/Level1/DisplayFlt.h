@@ -113,7 +113,7 @@ struct BasicBaseNFltNumber {
     char data[ size ];
 };
 
-template<int len_mant, int len_expo, int off_mant, int off_sign, int off_expo, int bia_expo>
+template<int off_mant, int len_mant, int off_expo, int len_expo, int off_sign, int len_sign, int bia_expo>
 struct DisplayFlt {
     static void display( String &os, const PI8 *v ) {
         const int nb_digits = 8; // ( len_mant + 2 ) / 3;

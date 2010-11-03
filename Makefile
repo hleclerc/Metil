@@ -37,6 +37,6 @@ documentation:
 	mkdir -p html/Level1/images; cp doc/images/* html/Level1/images
 
 archive:
-	git archive -o Metil-0.0.0.tgz --prefix=Metil-0.0.0/ HEAD
+	git archive -o Metil-0.zip --prefix=Metil-0.0.0/ HEAD
 # 	git archive -oo -format=tar --prefix=Metil-0.0.0/ HEAD | gzip > Metil-0.0.0.tgz
 	

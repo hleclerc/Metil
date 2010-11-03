@@ -134,6 +134,9 @@ Type *Type::init_if_necessary() {
     return this;
 }
 
+Type *Type::vec_type() { return &constructor->vec_type( name )->bas_type; }
+Type *Type::mat_type() { return &constructor->mat_type( name )->bas_type; }
+
 Type *Type::find_with_name( const char *name ) {
     for( Type *t = last_type; t; t = t->prev_type )
         if ( Level1::equal( t->name, name ) )
