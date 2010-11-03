@@ -35,7 +35,7 @@ public:
     BasicVec<String> includes;
 };
 
-typedef void MethodMaker( MethodWriter &mw, Mos *mos );
+typedef void MethodMaker( MethodWriter &mw, const Mos *mos, const String &ret = "return " );
 
 END_METIL_LEVEL1_NAMESPACE;
 

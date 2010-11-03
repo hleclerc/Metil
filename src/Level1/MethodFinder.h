@@ -44,7 +44,8 @@ public:
     }
 
     ///
-    static Item *find_item( Type *type_0, Type *type_1 = 0, Type *type_2 = 0, bool abort_if_pb = true ) {
+    static Item *find_item( Type *type_0, Type *type_1 = 0, Type *type_2 = 0,
+                           bool abort_if_pb = true, bool want_gen_only = false ) {
         if ( type_0 ) type_0->init_if_necessary();
         if ( type_1 ) type_1->init_if_necessary();
         if ( type_2 ) type_2->init_if_necessary();
@@ -52,7 +53,8 @@ public:
         // find items with greater pertinence and checked cond
         BasicVec<Item *,-1,4> res;
         for( Item *item = last; item; item = item->prev ) {
-            if ( item->cond->valid( type_0, type_1, type_2 ) ) {
+            if ( item->cond->valid( type_0, type_1, type_2 ) and (
+                        want_gen_only == false or item->gene ) ) {
                 if ( res.size() ) {
                     if ( item->pert < res[ 0 ]->pert )
                         continue;
@@ -99,6 +101,18 @@ public:
 
     static Item *last;
 };
+
+template<class MethodName>
+void call_gene( MethodWriter &cw, Type *type_0, Type *type_1, Type *type_2, Mos *a, const String &ret = "return " ) {
+    typedef MethodFinder<MethodName> MF;
+    typename MF::Item *item = MF::find_item( type_0, type_1, type_2, true, true );
+    MethodWriter mw( type_0, type_1, type_2 );
+    item->gene( mw, a, ret );
+    cw << mw.code;
+    for( int i = 0; i < mw.includes.size(); ++i )
+        cw.includes << mw.includes[ i ];
+    cw.preliminary << mw.preliminary;
+}
 
 END_METIL_LEVEL1_NAMESPACE;
 

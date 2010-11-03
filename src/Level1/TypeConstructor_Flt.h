@@ -14,7 +14,6 @@ class TypeConstructor_Flt : public TypeConstructor {
 public:
     virtual void init( Type *type );
     virtual int static_size_in_bits() const;
-    virtual int needed_alignement_in_bits() const;
     virtual bool is_a_POD() const;
 
     DECL_WRITER( write_str );

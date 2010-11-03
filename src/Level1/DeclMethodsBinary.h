@@ -1,28 +1,7 @@
 // arithmetic, binary
 #include "DeclMethodsBinaryArithmetic.h"
-
-// base
-DECL_MET( VoO       , reassign                ); // =
-
-// arithmetic, self binary
-DECL_MET( VoO       , self_add                ); // +=
-DECL_MET( VoO       , self_sub                ); // -=
-DECL_MET( VoO       , self_mul                ); // *=
-DECL_MET( VoO       , self_div                ); // /=
-DECL_MET( VoO       , self_quo                ); // //=
-DECL_MET( VoO       , self_mod                ); // %=
-DECL_MET( VoO       , self_pow                ); // ^=
-
-DECL_MET( VoO       , reassign_inplace        ); // =, but try to keep type
-
-// arithmetic, self binary
-DECL_MET( VoO       , self_add_inplace        ); // +=
-DECL_MET( VoO       , self_sub_inplace        ); // -=
-DECL_MET( VoO       , self_mul_inplace        ); // *=
-DECL_MET( VoO       , self_div_inplace        ); // /=
-DECL_MET( VoO       , self_quo_inplace        ); // //=
-DECL_MET( VoO       , self_mod_inplace        ); // %=
-DECL_MET( VoO       , self_pow_inplace        ); // ^=
+#include "DeclMethodsBinarySelfOp.h"
+#include "DeclMethodsBinarySelfOpInplace.h"
 
 // stream
 DECL_MET( VoO       , set_ok                  ); //

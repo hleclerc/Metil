@@ -9,8 +9,8 @@ BEG_METIL_LEVEL1_NAMESPACE;
 void metil_def_del__when__a__is__Int_s_64__pert__100( MO &a ) { DEL( reinterpret_cast<SI64 *>( a.data ) ); }
 void metil_def_del__when__a__is__Int_s_32__pert__100( MO &a ) { DEL( reinterpret_cast<SI32 *>( a.data ) ); }
 
-MO metil_def_copy__when__a__is__Int_s_32( MO a ) { return NEW_Number( *reinterpret_cast<SI32 *>( a.data ) ); }
-MO metil_def_copy__when__a__is__Int_s_64( MO a ) { return NEW_Number( *reinterpret_cast<SI64 *>( a.data ) ); }
+MO metil_def_copy__when__a__is__Int_s_32__pert__100( MO a ) { return NEW_Number( *reinterpret_cast<SI32 *>( a.data ) ); }
+MO metil_def_copy__when__a__is__Int_s_64__pert__100( MO a ) { return NEW_Number( *reinterpret_cast<SI64 *>( a.data ) ); }
 
 void metil_def_self_append__when__a__isa__String__and__b__is__Int_s_64__pert__1000( MO &a, MO b ) {
     DisplayInt<63,1,0,63>::display( static_cast<String &>( a ), (const PI8 *)b.data );
@@ -93,6 +93,7 @@ String TypeConstructor_Int::cpp_type() const {
 }
 
 bool TypeConstructor_Int::is_a_POD() const { return 1; }
+int TypeConstructor_Int::static_size_in_bits() const { return mant; }
 
 //
 void TypeConstructor_Int::init( Type *type ) {

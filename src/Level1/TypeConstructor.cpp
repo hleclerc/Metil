@@ -3,10 +3,9 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
+// default behavior
 void metil_def_self_append__pert__0( MO &a, MO b ) { Ad c = a; a = CM_2( append, a, b ); }
-
 void metil_def_reassign__pert__0( MO &a, MO b ) { Ad c = a; a = CM_1( copy, b ); }
-
 void metil_def_add_parent__pert__0( MO &a, struct OwcpChild *b ) {}
 void metil_def_rem_parent__pert__0( MO &a, struct OwcpChild *b ) {}
 
@@ -20,9 +19,24 @@ void metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_wr
     cw.type[ 1 ]->constructor->write_write_str( cw, a + 1 );
 }
 
+// POD
 void metil_gen_del__when__a__has__is_a_POD__pert__1( MethodWriter &mw, Mos *a ) {
-    mw.n << "FREE( " << a->data << ", Number<"
-         << mw.type[ 0 ]->constructor->static_size_in_bytes() << ">() );";
+    int size = mw.type[ 0 ]->constructor->static_size_in_bytes();
+    if ( size > 0 )
+        mw.n << "FREE( " << a->data << ", Number<" << size << ">() );";
+}
+
+void metil_gen_copy__when__a__has__is_a_POD__pert__1( MethodWriter &mw, Mos *a ) {
+    int size = mw.type[ 0 ]->constructor->static_size_in_bytes();
+    if ( size > 0 ) {
+        mw.add_include( "Level1/StringHelp.h" );
+        String s; s << "Number<" << size << ">()";
+        mw.n << "void *res = MALLOC( " << s << " );";
+        mw.n << "memcpy( res, " << a->data << ", " << s << " );";
+        mw.n << "return MO( res, &metil_type_bas_" << mw.type[ 0 ]->name << " );";
+    } else {
+        mw.n << "return MO( &metil_type_cst_" << mw.type[ 0 ]->name << " );";
+    }
 }
 
 TypeConstructor::TypeConstructor() {

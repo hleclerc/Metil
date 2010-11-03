@@ -1,5 +1,6 @@
 #include "TypeConstructor_Select.h"
 #include "TypeConstructor_Array.h"
+#include "MethodFinder.h"
 #include "Tokenize.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
@@ -62,8 +63,8 @@ void metil_gen_select_C__when__a__isa__Array__pert__1( MethodWriter &cw, Mos *ar
     c->write_get_index( cw, "index", cw.type[ 1 ]->constructor, args[ 1 ], "h" );
 
     if ( c->item_type_bas ) {
-        // item_type_bas->constructor->write_write_str( cw, MOS( "d", "type" ) );
-        TODO;
+        Mos d; d.data << "d + index * " << c->item_type_bas->constructor->static_size_in_bytes();
+        call_gene<MethodName_copy>( cw, c->item_type_bas, 0, 0, &d );
     } else
         cw.n << "return CM_1( copy, d[ index ] );";
 }
@@ -150,7 +151,12 @@ void TypeConstructor_Array::write_select_op( MethodWriter &mw, const Mos *a, Typ
         write_get_data_ptr( mw, false, "d", "h", "select_data->a" );
         mw.n << "ST index = select_data->b;";
         if ( item_type_bas ) {
-            TODO;
+            Mos d; d.data << "d + index * " << item_type_bas->constructor->static_size_in_bytes();
+            if ( op == "copy" ) call_gene<MethodName_copy>( mw, item_type_bas, 0, 0, &d );
+
+            #define DECL_MET( T, N ) if ( op == #N ) call_gene<MethodName_##N##_inplace>( mw, item_type_bas, mw.type[ 1 ], 0, &d );
+            #include "DeclMethodsBinarySelfOp.h"
+            #undef DECL_MET
         } else {
             if ( op == "copy" )
                 mw.n << "return CM_1( " << op << ", d[ index ] );";
@@ -216,7 +222,7 @@ void TypeConstructor_Array::write_get_header( MethodWriter &cw, const String &na
 }
 
 void TypeConstructor_Array::write_get_data_ptr( MethodWriter &cw, bool want_const, const String &name_data, const String &name_header, const String &data ) const {
-    String type; type << ( want_const ? "const " : "" ) << ( item_type_bas ? "void" : "MO" ) << " *";
+    String type; type << ( want_const ? "const " : "" ) << ( item_type_bas ? "char" : "MO" ) << " *";
     if ( want_ExtPtr ) {
         cw << type << name_data << " = reinterpret_cast<" << type << ">( " << name_header << "->ext_ptr );\n";
     } else {

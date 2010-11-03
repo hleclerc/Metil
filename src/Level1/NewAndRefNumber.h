@@ -32,8 +32,12 @@ DECL_REF_AND_NEW( FP80, Flt_0_64_64_15_79_1_16383 );
 
 #undef DECL_REF_AND_NEW
 
-template<class T> Type *type_ptr() { return type_ptr( S<T>() ); }
-
 END_METIL_LEVEL1_NAMESPACE;
+
+BEG_METIL_NAMESPACE;
+
+template<class T> Level1::Type *type_ptr() { return Level1::type_ptr( S<T>() ); }
+
+END_METIL_NAMESPACE;
 
 #endif // NEWANDREFNUMBER_H

@@ -17,6 +17,7 @@ public:
 
     virtual bool is_a_POD() const;
     virtual String cpp_type() const;
+    virtual int static_size_in_bits() const;
 
     virtual void init( Type *type );
     int mant;
