@@ -21,7 +21,7 @@
 git clone git://gitosis.lmt.ens-cachan.fr/Metil
     \endcode
 
-    The test version is in the same host and is named <tt>MetilTest</tt>. The patches are send to the production repository only if they pass all the unit tests (located in the <tt>unit_tests</tt> directory of the sources).
+    The test version is in the same host and is named <tt>MetilTest</tt>. The patches are sent to the production repository only if they pass all the unit tests (located in the <tt>unit_tests</tt> directory of the sources).
 
 
 \section DirectoryOrganisation Organisation of the sources
@@ -45,7 +45,7 @@ cd Metil
     To facilitate compilation of your code or of the examples, you first need to generate the <tt>metil_comp</tt> executable:
 
     \code
-make # build metil_comp
+make
     \endcode
 
     The executable <tt>Metil/metil_comp/metil_comp</tt> should be accessible from any location. For instance you can put a symbolic link in a directory belonging to your <tt>${PATH}</tt>. The following command automatically make this link (by default in <tt>/usr/bin</tt>).

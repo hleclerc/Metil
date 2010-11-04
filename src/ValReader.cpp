@@ -1,6 +1,9 @@
+#include "Level1/SymbolHeader.h"
 #include "Level1/StringHelp.h"
 #include "ValReader.h"
 #include "Math.h"
+
+#include "Level1/TypeConstructor_Op.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
@@ -43,9 +46,10 @@ ValReader::ValReader( String str, BasicVec<String> &symbols ) : symbols( symbols
 
     //
     if ( is_a_letter( *s ) ) {
-        //const char *t = s;
-        //while ( is_a_letter_or_a_number( *(++s) ) );
-        TODO; // res = Level1::NEW_Symbol( NewString( t, s ) );
+        const char *t = s;
+        while ( Level1::is_a_letter_or_a_number( *(++s) ) );
+        res.type = &metil_type_bas_Symbol;
+        res.data = NEW( SymbolHeader, NewString( t, s ) );
     }
 }
 

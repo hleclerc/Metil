@@ -40,12 +40,55 @@ struct OwcpAncestor {
 
     /// result of current operations
     MO op_mp;
+
+    ///
+    void add_parent( OwcpChild *parent ) {
+        if ( first_parent ) {
+            first_parent->prev = parent;
+            parent->next = first_parent;
+            parent->prev = 0;
+            first_parent = parent;
+        } else {
+            first_parent = parent;
+            parent->next = 0;
+            parent->prev = 0;
+        }
+    }
+
+    ///
+    void rem_parent( OwcpChild *parent ) {
+        if ( parent == first_parent ) {
+            first_parent = first_parent->next;
+            if ( first_parent )
+                first_parent->prev = 0;
+            return;
+        }
+        //
+        for( OwcpChild *p = first_parent->next; p; p = p->next ) {
+            if ( p == parent ) {
+                p->prev->next = p->next; // we do have a p->prev because this is not the first item
+                if ( p->next )
+                    p->next->prev = p->prev;
+                return;
+            }
+        }
+    }
+};
+
+/**
+*/
+template<class AdditionalData=AdditionalDataVoid>
+struct OwcpWithoutChild : public OwcpAncestor {
+    CANNOT_BE_DERIVED; /// hum ->replace by NO_VIRTUAL_DESTR
+
+    ///
+    AdditionalData data;
 };
 
 /**
 */
 template<int nb_children,class AdditionalData=AdditionalDataVoid>
-struct Owcp : public OwcpAncestor {
+struct Owcp : public OwcpWithoutChild<AdditionalData> {
     CANNOT_BE_DERIVED;
 
     Owcp( Type *type ) {
@@ -92,77 +135,16 @@ struct Owcp : public OwcpAncestor {
         ch( num ).type->add_parent( ch( num ), children + num );
     }
 
-    void add_parent( OwcpChild *parent ) {
-        if ( first_parent ) {
-            first_parent->prev = parent;
-            parent->next = first_parent;
-            parent->prev = 0;
-            first_parent = parent;
-        } else {
-            first_parent = parent;
-            parent->next = 0;
-            parent->prev = 0;
-        }
-    }
-
-    void rem_parent( OwcpChild *parent ) {
-        if ( parent == first_parent ) {
-            first_parent = first_parent->next;
-            if ( first_parent )
-                first_parent->prev = 0;
-            return;
-        }
-        //
-        for( OwcpChild *p = first_parent->next; p; p = p->next ) {
-            if ( p == parent ) {
-                p->prev->next = p->next; // we do have a p->prev because this is not the first item
-                if ( p->next )
-                    p->next->prev = p->prev;
-                return;
-            }
-        }
-    }
-
     /// an Owcp can contain from 0 to ... children meaning that sizeof( Owcp ) does not represent
     /// the room occupied in memory
     OwcpChild children[ nb_children ];
-
-    ///
-    AdditionalData data;
-
-    //    static void del( MO &self ) {
-    //        Owcp *obj = reinterpret_cast<Owcp *>( self.data );
-    //        if ( --obj->cpt_use < 0 )
-    //            obj->~Owcp();
-    //    }
-
-    //    static void free_( MO &self ) {
-    //        FREE( self.data, Number<sizeof(Owcp)>() );
-    //    }
-
-    //    static MO copy( const MO &self ) {
-    //        ++reinterpret_cast<Owcp *>( self.data )->cpt_use;
-    //        return self;
-    //    }
-
-    //    static MO copy_ref( const MO &self ) {
-    //        ++reinterpret_cast<Owcp *>( self.data )->cpt_use;
-    //        MO res( self.data, self.type->bas_type );
-    //        return res;
-    //    }
-
-    //    static ST size_in_mem( const MO &self ) {
-    //        return get_room_used_by( *reinterpret_cast<Owcp *>( self.data ) );
-    //    }
-
-    //    static MO get_child( const MO &self, ST num ) {
-    //        return reinterpret_cast<const Owcp *>( self.data )->ch( num );
-    //    }
-
-    //    static ST nb_children_( const MO &self ) {
-    //        return nb_children;
-    //    }
 };
+
+template<class T>
+void owcp_DEL( T *val ) {
+    if ( --val->cpt_use < 0 )
+        DEL( val );
+}
 
 END_METIL_LEVEL1_NAMESPACE;
 

@@ -50,7 +50,7 @@ void metil_gen_select_C__when__a__isa__Array__pert__1( MethodWriter &cw, const M
         Mos d; d.data << "d + index * " << c->item_type_bas->constructor->static_size_in_bytes();
         call_gene<MethodName_copy>( cw, c->item_type_bas, 0, 0, &d );
     } else
-        cw.n << "return CM_1( copy, d[ index ] );";
+        cw.n << ret << "CM_1( copy, d[ index ] );";
 }
 
 void metil_gen_select__when__a__isa__Array__pert__1( MethodWriter &cw, const Mos *args, const String &ret ) {
@@ -70,7 +70,7 @@ void metil_gen_select__when__a__isa__Array__pert__1( MethodWriter &cw, const Mos
     cw.add_preliminary( "DECL_TYPE( " + select_type + " );\n" );
     cw.add_preliminary( "DEFI_TYPE( Select, " + select_type + " );\n" );
     cw.n << "typedef Pair<void *,ST> P;";
-    cw.n << "return MO( NEW( P, " << args[ 0 ].data << ", index ), &metil_type_bas_" << select_type << " );";
+    cw.n << ret << "MO( NEW( P, " << args[ 0 ].data << ", index ), &metil_type_bas_" << select_type << " );";
 }
 
 

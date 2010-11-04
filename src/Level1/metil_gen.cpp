@@ -13,11 +13,14 @@
 #include "TypeConstructor_Flt.h"
 #include "TypeConstructor_Int.h"
 #include "TypeConstructor_MORef.h"
+#include "TypeConstructor_Op.h"
 #include "TypeConstructor_OwcpString.h"
 #include "TypeConstructor_Select.h"
 #include "TypeConstructor_Socket.h"
 #include "TypeConstructor_String.h"
 #include "TypeConstructor_StringConcat.h"
+#include "TypeConstructor_Symbol.h"
+#include "TypeConstructor_SymbolicExpression.h"
 #include "TypeConstructor_VoidString.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
@@ -141,6 +144,9 @@ static TypeConstructor_Int type_constructor_Int_s_8;
 Type metil_type_bas_Int_s_8( &type_constructor_Int_s_8, "Int_s_8", &metil_type_bas_Int_s_8, &metil_type_ref_Int_s_8, 0, Type::Bas );
 Type metil_type_ref_Int_s_8( &type_constructor_Int_s_8, "Int_s_8", &metil_type_bas_Int_s_8, &metil_type_ref_Int_s_8, 0, Type::Cst );
 
+static TypeConstructor_Op type_constructor_Op_Add;
+Type metil_type_bas_Op_Add( &type_constructor_Op_Add, "Op_Add", &metil_type_bas_Op_Add, 0, 0, Type::Bas );
+
 static TypeConstructor_OwcpString type_constructor_OwcpString;
 Type metil_type_bas_OwcpString( &type_constructor_OwcpString, "OwcpString", &metil_type_bas_OwcpString, 0, 0, Type::Bas );
 
@@ -149,6 +155,9 @@ Type metil_type_bas_Socket( &type_constructor_Socket, "Socket", &metil_type_bas_
 
 static TypeConstructor_StringConcat type_constructor_StringConcat;
 Type metil_type_bas_StringConcat( &type_constructor_StringConcat, "StringConcat", &metil_type_bas_StringConcat, 0, 0, Type::Bas );
+
+static TypeConstructor_Symbol type_constructor_Symbol;
+Type metil_type_bas_Symbol( &type_constructor_Symbol, "Symbol", &metil_type_bas_Symbol, 0, 0, Type::Bas );
 
 static TypeConstructor_VoidString type_constructor_VoidString;
 Type metil_type_cst_VoidString( &type_constructor_VoidString, "VoidString", 0, 0, &metil_type_cst_VoidString, Type::Ref );
@@ -385,6 +394,7 @@ extern MethodName_self_append::TM metil_def_self_append__when__a__isa__VoidStrin
 extern MethodName_self_append::TM metil_def_self_append__when__b__isa__VoidString__pert__101;
 extern MethodName_convert_to_Bool::TM metil_def_convert_to_Bool__when__a__isa__VoidString__pert__1;
 extern MethodName_size::TM metil_def_size__when__a__isa__VoidString;
+extern MethodMaker metil_gen_add__when__a__isa__SymbolicExpression__and__b__isa__SymbolicExpression__pert__2;
 extern MethodMaker metil_gen_size_in_mem__when__a__has__has_writer_for_size_in_mem__pert__1;
 extern MethodMaker metil_gen_del__when__a__has__has_writer_for_del__pert__1;
 extern MethodMaker metil_gen_free__when__a__has__has_writer_for_free__pert__1;
@@ -436,11 +446,14 @@ extern MethodMaker metil_gen_nb_children__when__a__has__has_writer_for_nb_childr
 extern MethodMaker metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1;
 extern MethodMaker metil_gen_del__when__a__has__is_a_POD__pert__1;
 extern MethodMaker metil_gen_copy__when__a__has__is_a_POD__pert__1;
+extern MethodMaker metil_gen_del__when__a__isa__Op;
 extern MethodMaker metil_gen_self_append__when__a__isa__String__and__b__isa__Cst__pert__1;
 extern MethodMaker metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1;
 extern MethodMaker metil_gen_select_C__when__a__isa__Array__pert__1;
 extern MethodMaker metil_gen_select__when__a__isa__Array__pert__1;
 extern MethodMaker metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1;
+extern MethodMaker metil_gen_del__when__a__isa__Symbol;
+extern MethodMaker metil_gen_copy__when__a__isa__Symbol;
 extern MethodMaker metil_gen_reassign__when__a__isa__Select__pert__1;
 extern MethodMaker metil_gen_reassign_inplace__when__a__isa__Flt;
 
@@ -2878,6 +2891,20 @@ void reg_def() {
     item_metil_def_size__when__a__isa__VoidString.pert = 0;
     MethodFinder<MethodName_size>::last = &item_metil_def_size__when__a__isa__VoidString;
 
+    static MethodCond_and<MethodCond_0_isa<TypeConstructor_SymbolicExpression>,MethodCond_1_isa<TypeConstructor_SymbolicExpression> > cond_metil_gen_add__when__a__isa__SymbolicExpression__and__b__isa__SymbolicExpression__pert__2;
+
+    static const char *string_17 = "src/Level1/TypeConstructor_SymbolicExpression.cpp";
+
+    static MethodFinder<MethodName_add>::Item item_metil_gen_add__when__a__isa__SymbolicExpression__and__b__isa__SymbolicExpression__pert__2;
+    item_metil_gen_add__when__a__isa__SymbolicExpression__and__b__isa__SymbolicExpression__pert__2.prev = MethodFinder<MethodName_add>::last;
+    item_metil_gen_add__when__a__isa__SymbolicExpression__and__b__isa__SymbolicExpression__pert__2.cond = &cond_metil_gen_add__when__a__isa__SymbolicExpression__and__b__isa__SymbolicExpression__pert__2;
+    item_metil_gen_add__when__a__isa__SymbolicExpression__and__b__isa__SymbolicExpression__pert__2.meth = 0;
+    item_metil_gen_add__when__a__isa__SymbolicExpression__and__b__isa__SymbolicExpression__pert__2.gene = metil_gen_add__when__a__isa__SymbolicExpression__and__b__isa__SymbolicExpression__pert__2;
+    item_metil_gen_add__when__a__isa__SymbolicExpression__and__b__isa__SymbolicExpression__pert__2.file = string_17;
+    item_metil_gen_add__when__a__isa__SymbolicExpression__and__b__isa__SymbolicExpression__pert__2.line = 5;
+    item_metil_gen_add__when__a__isa__SymbolicExpression__and__b__isa__SymbolicExpression__pert__2.pert = 2;
+    MethodFinder<MethodName_add>::last = &item_metil_gen_add__when__a__isa__SymbolicExpression__and__b__isa__SymbolicExpression__pert__2;
+
     static TypeConstructor::C0_has_has_writer_for_size_in_mem cond_metil_gen_size_in_mem__when__a__has__has_writer_for_size_in_mem__pert__1;
 
     static MethodFinder<MethodName_size_in_mem>::Item item_metil_gen_size_in_mem__when__a__has__has_writer_for_size_in_mem__pert__1;
@@ -3474,7 +3501,7 @@ void reg_def() {
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.meth = 0;
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.gene = metil_gen_del__when__a__has__is_a_POD__pert__1;
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.file = string_2;
-    item_metil_gen_del__when__a__has__is_a_POD__pert__1.line = 23;
+    item_metil_gen_del__when__a__has__is_a_POD__pert__1.line = 24;
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.pert = 1;
     MethodFinder<MethodName_del>::last = &item_metil_gen_del__when__a__has__is_a_POD__pert__1;
 
@@ -3484,9 +3511,23 @@ void reg_def() {
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.meth = 0;
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.gene = metil_gen_copy__when__a__has__is_a_POD__pert__1;
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.file = string_2;
-    item_metil_gen_copy__when__a__has__is_a_POD__pert__1.line = 29;
+    item_metil_gen_copy__when__a__has__is_a_POD__pert__1.line = 30;
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.pert = 1;
     MethodFinder<MethodName_copy>::last = &item_metil_gen_copy__when__a__has__is_a_POD__pert__1;
+
+    static MethodCond_0_isa<TypeConstructor_Op> cond_metil_gen_del__when__a__isa__Op;
+
+    static const char *string_18 = "src/Level1/TypeConstructor_Op.cpp";
+
+    static MethodFinder<MethodName_del>::Item item_metil_gen_del__when__a__isa__Op;
+    item_metil_gen_del__when__a__isa__Op.prev = MethodFinder<MethodName_del>::last;
+    item_metil_gen_del__when__a__isa__Op.cond = &cond_metil_gen_del__when__a__isa__Op;
+    item_metil_gen_del__when__a__isa__Op.meth = 0;
+    item_metil_gen_del__when__a__isa__Op.gene = metil_gen_del__when__a__isa__Op;
+    item_metil_gen_del__when__a__isa__Op.file = string_18;
+    item_metil_gen_del__when__a__isa__Op.line = 7;
+    item_metil_gen_del__when__a__isa__Op.pert = 0;
+    MethodFinder<MethodName_del>::last = &item_metil_gen_del__when__a__isa__Op;
 
     static MethodCond_and<MethodCond_0_isa<TypeConstructor_String>,MethodCond_1_isa<TypeConstructor_Cst> > cond_metil_gen_self_append__when__a__isa__String__and__b__isa__Cst__pert__1;
 
@@ -3502,14 +3543,14 @@ void reg_def() {
 
     static MethodCond_and<MethodCond_0_isa<TypeConstructor_String>,MethodCond_1_isa<TypeConstructor_Array> > cond_metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1;
 
-    static const char *string_17 = "src/Level1/TypeConstructor_Array.cpp";
+    static const char *string_19 = "src/Level1/TypeConstructor_Array.cpp";
 
     static MethodFinder<MethodName_self_append>::Item item_metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1;
     item_metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1.prev = MethodFinder<MethodName_self_append>::last;
     item_metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1.cond = &cond_metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1;
     item_metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1.meth = 0;
     item_metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1.gene = metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1;
-    item_metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1.file = string_17;
+    item_metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1.file = string_19;
     item_metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1.line = 12;
     item_metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1.pert = 1;
     MethodFinder<MethodName_self_append>::last = &item_metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1;
@@ -3521,7 +3562,7 @@ void reg_def() {
     item_metil_gen_select_C__when__a__isa__Array__pert__1.cond = &cond_metil_gen_select_C__when__a__isa__Array__pert__1;
     item_metil_gen_select_C__when__a__isa__Array__pert__1.meth = 0;
     item_metil_gen_select_C__when__a__isa__Array__pert__1.gene = metil_gen_select_C__when__a__isa__Array__pert__1;
-    item_metil_gen_select_C__when__a__isa__Array__pert__1.file = string_17;
+    item_metil_gen_select_C__when__a__isa__Array__pert__1.file = string_19;
     item_metil_gen_select_C__when__a__isa__Array__pert__1.line = 41;
     item_metil_gen_select_C__when__a__isa__Array__pert__1.pert = 1;
     MethodFinder<MethodName_select_C>::last = &item_metil_gen_select_C__when__a__isa__Array__pert__1;
@@ -3531,7 +3572,7 @@ void reg_def() {
     item_metil_gen_select__when__a__isa__Array__pert__1.cond = &cond_metil_gen_select_C__when__a__isa__Array__pert__1;
     item_metil_gen_select__when__a__isa__Array__pert__1.meth = 0;
     item_metil_gen_select__when__a__isa__Array__pert__1.gene = metil_gen_select__when__a__isa__Array__pert__1;
-    item_metil_gen_select__when__a__isa__Array__pert__1.file = string_17;
+    item_metil_gen_select__when__a__isa__Array__pert__1.file = string_19;
     item_metil_gen_select__when__a__isa__Array__pert__1.line = 56;
     item_metil_gen_select__when__a__isa__Array__pert__1.pert = 1;
     MethodFinder<MethodName_select>::last = &item_metil_gen_select__when__a__isa__Array__pert__1;
@@ -3543,35 +3584,59 @@ void reg_def() {
     item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.cond = &cond_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1;
     item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.meth = 0;
     item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.gene = metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1;
-    item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.file = string_17;
-    item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.line = 76;
+    item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.file = string_19;
+    item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.line = 77;
     item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.pert = 1;
     MethodFinder<MethodName_set_values>::last = &item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1;
 
+    static MethodCond_0_isa<TypeConstructor_Symbol> cond_metil_gen_del__when__a__isa__Symbol;
+
+    static const char *string_20 = "src/Level1/TypeConstructor_Symbol.cpp";
+
+    static MethodFinder<MethodName_del>::Item item_metil_gen_del__when__a__isa__Symbol;
+    item_metil_gen_del__when__a__isa__Symbol.prev = MethodFinder<MethodName_del>::last;
+    item_metil_gen_del__when__a__isa__Symbol.cond = &cond_metil_gen_del__when__a__isa__Symbol;
+    item_metil_gen_del__when__a__isa__Symbol.meth = 0;
+    item_metil_gen_del__when__a__isa__Symbol.gene = metil_gen_del__when__a__isa__Symbol;
+    item_metil_gen_del__when__a__isa__Symbol.file = string_20;
+    item_metil_gen_del__when__a__isa__Symbol.line = 5;
+    item_metil_gen_del__when__a__isa__Symbol.pert = 0;
+    MethodFinder<MethodName_del>::last = &item_metil_gen_del__when__a__isa__Symbol;
+
+    static MethodFinder<MethodName_copy>::Item item_metil_gen_copy__when__a__isa__Symbol;
+    item_metil_gen_copy__when__a__isa__Symbol.prev = MethodFinder<MethodName_copy>::last;
+    item_metil_gen_copy__when__a__isa__Symbol.cond = &cond_metil_gen_del__when__a__isa__Symbol;
+    item_metil_gen_copy__when__a__isa__Symbol.meth = 0;
+    item_metil_gen_copy__when__a__isa__Symbol.gene = metil_gen_copy__when__a__isa__Symbol;
+    item_metil_gen_copy__when__a__isa__Symbol.file = string_20;
+    item_metil_gen_copy__when__a__isa__Symbol.line = 9;
+    item_metil_gen_copy__when__a__isa__Symbol.pert = 0;
+    MethodFinder<MethodName_copy>::last = &item_metil_gen_copy__when__a__isa__Symbol;
+
     static MethodCond_0_isa<TypeConstructor_Select> cond_metil_gen_reassign__when__a__isa__Select__pert__1;
 
-    static const char *string_18 = "src/Level1/TypeConstructor_Select.cpp";
+    static const char *string_21 = "src/Level1/TypeConstructor_Select.cpp";
 
     static MethodFinder<MethodName_reassign>::Item item_metil_gen_reassign__when__a__isa__Select__pert__1;
     item_metil_gen_reassign__when__a__isa__Select__pert__1.prev = MethodFinder<MethodName_reassign>::last;
     item_metil_gen_reassign__when__a__isa__Select__pert__1.cond = &cond_metil_gen_reassign__when__a__isa__Select__pert__1;
     item_metil_gen_reassign__when__a__isa__Select__pert__1.meth = 0;
     item_metil_gen_reassign__when__a__isa__Select__pert__1.gene = metil_gen_reassign__when__a__isa__Select__pert__1;
-    item_metil_gen_reassign__when__a__isa__Select__pert__1.file = string_18;
+    item_metil_gen_reassign__when__a__isa__Select__pert__1.file = string_21;
     item_metil_gen_reassign__when__a__isa__Select__pert__1.line = 5;
     item_metil_gen_reassign__when__a__isa__Select__pert__1.pert = 1;
     MethodFinder<MethodName_reassign>::last = &item_metil_gen_reassign__when__a__isa__Select__pert__1;
 
     static MethodCond_0_isa<TypeConstructor_Flt> cond_metil_gen_reassign_inplace__when__a__isa__Flt;
 
-    static const char *string_19 = "src/Level1/TypeConstructor_Flt.cpp";
+    static const char *string_22 = "src/Level1/TypeConstructor_Flt.cpp";
 
     static MethodFinder<MethodName_reassign_inplace>::Item item_metil_gen_reassign_inplace__when__a__isa__Flt;
     item_metil_gen_reassign_inplace__when__a__isa__Flt.prev = MethodFinder<MethodName_reassign_inplace>::last;
     item_metil_gen_reassign_inplace__when__a__isa__Flt.cond = &cond_metil_gen_reassign_inplace__when__a__isa__Flt;
     item_metil_gen_reassign_inplace__when__a__isa__Flt.meth = 0;
     item_metil_gen_reassign_inplace__when__a__isa__Flt.gene = metil_gen_reassign_inplace__when__a__isa__Flt;
-    item_metil_gen_reassign_inplace__when__a__isa__Flt.file = string_19;
+    item_metil_gen_reassign_inplace__when__a__isa__Flt.file = string_22;
     item_metil_gen_reassign_inplace__when__a__isa__Flt.line = 9;
     item_metil_gen_reassign_inplace__when__a__isa__Flt.pert = 0;
     MethodFinder<MethodName_reassign_inplace>::last = &item_metil_gen_reassign_inplace__when__a__isa__Flt;

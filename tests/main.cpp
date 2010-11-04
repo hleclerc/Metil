@@ -20,15 +20,17 @@ int main() {
 //        noeud_commun = map_cond( m.noeud, n.noeud, _1.number, _1 == _2 );
 //    }
 
+    Val a( "a" ), b( "b" );
+    PRINT( a + b );
 
     // Array<Val> a( 2 );
     //    PRINT( Val(1.5) );
-    Mat a( 5, 6, type_ptr<float>() );
-    a.set_values( 10 );
+//    Mat a( 5, 6, type_ptr<float>() );
+//    a.set_values( 10 );
     //    for( int r = 0; r < a.nb_rows(); ++r )
     //        for( int c = 0; c < a.nb_cols(); ++c )
     //            a( r, c ) = r + c;
-    PRINTN( a );
+//    PRINTN( a );
 
     //    PRINTN( a );
     //    PRINT( a( 0, 0 ) );

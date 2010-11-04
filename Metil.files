@@ -217,3 +217,10 @@ src/Level1/DeclMethodsBinarySelfOp.h
 src/Level1/DeclMethodsBinarySelfOpInplace.h
 src/Array.cpp
 src/Level1/ArrayHeader.cpp
+src/Level1/TypeConstructor_Symbol.h
+src/Level1/TypeConstructor_Symbol.cpp
+src/Level1/SymbolHeader.h
+src/Level1/TypeConstructor_Op.h
+src/Level1/TypeConstructor_Op.cpp
+src/Level1/TypeConstructor_SymbolicExpression.h
+src/Level1/TypeConstructor_SymbolicExpression.cpp

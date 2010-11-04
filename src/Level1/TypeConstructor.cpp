@@ -15,7 +15,8 @@ void metil_def_rem_parent__pert__0( MO &a, struct OwcpChild *b ) {}
 #undef DECL_MET
 
 void metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) {
-    cw.n << "String &os = static_cast<String &>(" << a[ 0 ] << ");";
+    cw.add_include( "String.h" );
+    cw.n << "String &os = static_cast<String &>( " << a[ 0 ] << " );";
     cw.type[ 1 ]->constructor->write_write_str( cw, a + 1 );
 }
 

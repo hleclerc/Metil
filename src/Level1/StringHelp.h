@@ -20,6 +20,7 @@ inline bool is_a_lower_letter ( char a ) { return a >= 'a' and a <= 'z'; }
 inline bool is_an_upper_letter( char a ) { return a >= 'A' and a <= 'Z'; }
 inline bool is_a_letter( char a ) { return is_a_lower_letter ( a ) or is_an_upper_letter( a ) or a == '_'; }
 inline bool is_a_space ( char a ) { return a == ' ' or a == '\t' or a == '\n' or a == '\r'; }
+inline bool is_a_letter_or_a_number( char a ) { return is_a_letter( a ) or is_a_number( a ); }
 
 // memcpy
 void memcpy( void *a, const void *b, ST size );
