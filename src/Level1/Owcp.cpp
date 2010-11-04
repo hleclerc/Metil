@@ -1,4 +1,5 @@
 #include "Owcp.h"
+#include "String.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

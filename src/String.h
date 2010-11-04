@@ -55,6 +55,8 @@ struct String : public Level1::MO {
     String &operator<<(       char  s ) { CM_2( self_append, *this, MO( char_ptr + 2 * (unsigned char)s, &Level1::metil_type_cst_ConstCharPtr ) ); return *this; }
     String &operator<<( MO          s ) { CM_2( self_append, *this, s ); return *this; }
     String &operator<<( bool        v ) { return operator<<( int( v ) ); }
+    String &operator<<( const void *v ) { return operator<<( ST( v ) ); }
+    String &operator<<( void       *v ) { return operator<<( ST( v ) ); }
 
     template<class T>
     String &operator<<( const T &val ) { val.write_str( *this ); return *this; }

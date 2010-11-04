@@ -1,6 +1,5 @@
 // basic methods
 #ifndef DONT_WANT_UNARY_BASIC
-DECL_MET( SO  , size_in_mem             ); // size occupied in memory by the data
 
 #ifndef AVOID_DEL
 DECL_MET( Vo  , del                     ); // call destroy and free
@@ -58,11 +57,11 @@ DECL_MET( DO  , priority                ); // + -> 10, * -> 20, ...
 
 
 //// graph and lazy evaluation
-DECL_MET( OOS                 , get_child     ); //
-DECL_MET( VoY                 , add_parent    ); // add_parent( OwcpChild )
-DECL_MET( VoY                 , rem_parent    ); // rem_parent( OwcpChild )
-DECL_MET( SO                  , nb_children   ); // return -1 if not an Owcp
+DECL_MET( OOS , get_child               ); //
+DECL_MET( VoY , add_parent              ); // add_parent( OwcpChild )
+DECL_MET( VoY , rem_parent              ); // rem_parent( OwcpChild )
+DECL_MET( SO  , nb_children             ); // return -1 if not an Owcp
+DECL_MET( YO  , get_parent              ); // get_parent
+DECL_MET( BO  , cur_op_id               ); // return true if op_id == current_op_id
 //DECL_MET( GO<MetilException *>, exec_node     ); // exec_node
-//DECL_MET( YC                  , get_parent    ); // get_parent
 //DECL_MET( GC<MO *>            , get_op_mp     ); // return op_mp if an Owcp, 0 if not
-//DECL_MET( GC<bool>            , cur_op_id     ); //

@@ -250,8 +250,9 @@ int TypeConstructor_Array::len_rese() const {
 }
 
 int TypeConstructor_Array::needed_alignement_in_bits() const {
-    TODO;
-    return 0;
+    if ( item_type_bas )
+        return item_type_bas->constructor->needed_alignement_in_bits();
+    return 1;
 }
 
 int TypeConstructor_Array::static_size_in_bits() const {

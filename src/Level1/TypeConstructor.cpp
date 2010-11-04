@@ -8,6 +8,7 @@ void metil_def_self_append__pert__0( MO &a, MO b ) { Ad c = a; a = CM_2( append,
 void metil_def_reassign__pert__0( MO &a, MO b ) { Ad c = a; a = CM_1( copy, b ); }
 void metil_def_add_parent__pert__0( MO &a, struct OwcpChild *b ) {}
 void metil_def_rem_parent__pert__0( MO &a, struct OwcpChild *b ) {}
+bool metil_def_cur_op_id__pert__0( MO a ) { return false; }
 
 // static gen...( MethodWriter & ) { constructor->write_... }
 #define DECL_MET( T, N ) void metil_gen_##N##__when__a__has__has_writer_for_##N##__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) { cw.type[ 0 ]->constructor->write_##N( cw, a, ret ); }

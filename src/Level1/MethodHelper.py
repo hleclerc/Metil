@@ -23,6 +23,7 @@ methods = [
     "OoO",
     "OOS",
     "VoY",
+    "YO",
 ]
 
 def cor( c ):

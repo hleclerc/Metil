@@ -9,7 +9,8 @@ class TypeConstructor_Op : public TypeConstructor_SymbolicExpression {
 public:
     DECL_WRITER( write_str );
 
-    virtual void default_mw( MethodWriter &mw ) const;
+    virtual int Owcp_size() const { return nb_children; }
+
     virtual void init( Type *type );
     int nb_children;
     String name;

@@ -35,6 +35,8 @@ public:
     Type *type;
 };
 
+extern SI64 current_op_id; /// @see Owcp::op_id...
+
 END_METIL_LEVEL1_NAMESPACE
 
 #endif // MO_H

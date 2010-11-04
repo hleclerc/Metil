@@ -2,13 +2,10 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-void metil_gen_del__when__a__isa__Symbol( MethodWriter &mw, const Mos *a, const String & ) {
-    mw.n << "owcp_DEL( reinterpret_cast<SymbolHeader *>( " << a->data << " ) );";
-}
-
-void metil_gen_copy__when__a__isa__Symbol( MethodWriter &mw, const Mos *a, const String &ret ) {
-    mw.n << "++reinterpret_cast<SymbolHeader *>( " << a->data << " )->cpt_use;";
-    mw.n << ret << *a << ";";
+//
+void metil_gen_del__when__a__isa__Symbol__pert__2( MethodWriter &mw, const Mos *a, const String & ) {
+    mw.n << "SymbolHeader *o = reinterpret_cast<SymbolHeader *>( " << a->data << " );";
+    mw.n << "if ( --o->cpt_use < 0 ) DEL( o );";
 }
 
 void TypeConstructor_Symbol::write_write_str( MethodWriter &mw, const Mos *a, const String & ) const {

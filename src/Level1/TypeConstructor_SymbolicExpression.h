@@ -7,6 +7,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 
 class TypeConstructor_SymbolicExpression : public TypeConstructor {
 public:
+    virtual void default_mw( MethodWriter &mw ) const;
 };
 
 END_METIL_LEVEL1_NAMESPACE;
