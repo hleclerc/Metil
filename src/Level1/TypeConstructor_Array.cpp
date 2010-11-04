@@ -9,7 +9,7 @@ static TypeConstructor_Array *sc( Type *type ) {
     return static_cast<TypeConstructor_Array *>( type->constructor );
 }
 
-void metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1( MethodWriter &cw, Mos *args ) {
+void metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1( MethodWriter &cw, const Mos *args, const String &ret ) {
     TypeConstructor_Array *c = sc( cw.type[ 1 ] );
     if ( c->len() == 0 ) // nothing to display
         return;
@@ -17,8 +17,6 @@ void metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1( M
     // header
     c->write_get_header( cw, "h", args[ 1 ].data );
     c->write_get_data_ptr( cw, true, "d", "h", args[ 1 ].data );
-    if ( c->item_type_bas )
-        cw.n << "Type *type = reinterpret_cast<TypeConstructor_Array *>( " << args[ 1 ].type << "->constructor )->item_type_bas;";
     cw.n << "String &os = static_cast<String &>( a );";
 
     // beg loop
@@ -28,8 +26,10 @@ void metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1( M
     }
 
     if ( c->item_type_bas ) {
-        // item_type_bas->constructor->write_write_str( cw, MOS( "d", "type" ) );
-        TODO;
+        Mos d[ 2 ];
+        d[ 0 ] = args[ 0 ];
+        d[ 1 ].data << "d";
+        call_gene<MethodName_self_append>( cw, cw.type[ 0 ], c->item_type_bas, 0, d );
     } else
         cw.n << "os << *d;";
 
@@ -54,7 +54,7 @@ void TypeConstructor_Array::write_get_index( MethodWriter &cw, const String &nam
     }
 }
 
-void metil_gen_select_C__when__a__isa__Array__pert__1( MethodWriter &cw, Mos *args ) {
+void metil_gen_select_C__when__a__isa__Array__pert__1( MethodWriter &cw, const Mos *args, const String &ret ) {
     TypeConstructor_Array *c = sc( cw.type[ 0 ] );
 
     // header
@@ -69,7 +69,7 @@ void metil_gen_select_C__when__a__isa__Array__pert__1( MethodWriter &cw, Mos *ar
         cw.n << "return CM_1( copy, d[ index ] );";
 }
 
-void metil_gen_select__when__a__isa__Array__pert__1( MethodWriter &cw, Mos *args ) {
+void metil_gen_select__when__a__isa__Array__pert__1( MethodWriter &cw, const Mos *args, const String &ret ) {
     cw.add_include( "Pair.h" );
     cw.add_include( "Level1/TypeConstructor_Select.h" );
     TypeConstructor_Array *c_0 = static_cast<TypeConstructor_Array *>( cw.type[ 0 ]->constructor );
@@ -88,7 +88,7 @@ void metil_gen_select__when__a__isa__Array__pert__1( MethodWriter &cw, Mos *args
     cw.n << "return MO( NEW( P, " << args[ 0 ].data << ", index ), &metil_type_bas_" << select_type << " );";
 }
 
-void metil_gen_del__when__a__isa__Array( MethodWriter &cw, Mos *args ) {
+void metil_gen_del__when__a__isa__Array( MethodWriter &cw, const Mos *args, const String &ret ) {
     TypeConstructor_Array *c = sc( cw.type[ 0 ] );
     if ( c->len() == 0 ) // nothing to del
         return;
@@ -151,10 +151,14 @@ void TypeConstructor_Array::write_select_op( MethodWriter &mw, const Mos *a, Typ
         write_get_data_ptr( mw, false, "d", "h", "select_data->a" );
         mw.n << "ST index = select_data->b;";
         if ( item_type_bas ) {
-            Mos d; d.data << "d + index * " << item_type_bas->constructor->static_size_in_bytes();
-            if ( op == "copy" ) call_gene<MethodName_copy>( mw, item_type_bas, 0, 0, &d );
+            Mos d[ 2 ];
+            d[ 0 ].data << "d + index * " << item_type_bas->constructor->static_size_in_bytes();
+            if ( op == "copy" )
+                call_gene<MethodName_copy>( mw, item_type_bas, 0, 0, d );
+            else
+                d[ 1 ] = a[ 1 ];
 
-            #define DECL_MET( T, N ) if ( op == #N ) call_gene<MethodName_##N##_inplace>( mw, item_type_bas, mw.type[ 1 ], 0, &d );
+            #define DECL_MET( T, N ) if ( op == #N ) call_gene<MethodName_##N##_inplace>( mw, item_type_bas, mw.type[ 1 ], 0, d );
             #include "DeclMethodsBinarySelfOp.h"
             #undef DECL_MET
         } else {
@@ -259,8 +263,12 @@ void TypeConstructor_Array::write_end_loop( MethodWriter &cw, const String &name
             cw << ptr_on_data << " += " << inc << " * ( " <<
                   get_rese_n( name_header, d - 1 ) << " - " <<
                   get_size_n( name_header, d - 1 ) << " );\n";
-        else
-            cw << "++" << ptr_on_data << ";\n";
+        else {
+            if ( item_type_bas )
+                cw << ptr_on_data << " += " << item_type_bas->constructor->static_size_in_bytes() << ";\n";
+            else
+                cw << "++" << ptr_on_data << ";\n";
+        }
     }
     cw << "}\n";
 }

@@ -15,6 +15,7 @@ public:
     virtual void init( Type *type );
     virtual int static_size_in_bits() const;
     virtual bool is_a_POD() const;
+    virtual String cpp_type() const;
 
     DECL_WRITER( write_str );
 

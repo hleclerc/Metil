@@ -6,10 +6,10 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-void metil_gen_reassign_inplace__when__a__isa__Flt( MethodWriter &mw, Mos *a ) {
+void metil_gen_reassign_inplace__when__a__isa__Flt( MethodWriter &mw, const Mos *a, const String & ) {
     TypeConstructor_Flt *c = static_cast<TypeConstructor_Flt *>( mw.type[ 0 ]->constructor );
     if ( String cpp = c->cpp_type() ) {
-        String ret; ret << "reinterpret_cast<" << cpp << ">( " << a[ 0 ].data << " ) =";
+        String ret; ret << "*reinterpret_cast<" << cpp << " *>( " << a[ 0 ].data << " ) = ";
         call_gene<MethodName_convert_to_FP32>( mw, mw.type[ 1 ], 0, 0, a + 1, ret );
     } else
         TODO;
@@ -34,6 +34,13 @@ int TypeConstructor_Flt::static_size_in_bits() const {
 
 bool TypeConstructor_Flt::is_a_POD() const {
     return true;
+}
+
+String TypeConstructor_Flt::cpp_type() const {
+    if ( static_size_in_bits() == 32 ) return "FP32";
+    if ( static_size_in_bits() == 64 ) return "FP64";
+    if ( static_size_in_bits() == 80 ) return "FP80";
+    return String();
 }
 
 void TypeConstructor_Flt::init( Type *type ) {

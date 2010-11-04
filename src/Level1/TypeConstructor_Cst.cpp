@@ -18,7 +18,7 @@ CONV_TO( FP32 );
 CONV_TO( FP64 );
 CONV_TO( FP80 );
 
-void metil_gen_self_append__when__a__isa__String__and__b__isa__Cst__pert__1( MethodWriter &cw, Mos *args ) {
+void metil_gen_self_append__when__a__isa__String__and__b__isa__Cst__pert__1( MethodWriter &cw, const Mos *args, const String &ret ) {
     cw.add_include( "String.h" );
     cw.n << "static_cast<String &>( a ) << " << sc( cw.type[ 1 ] )->disp_str() << ";";
 }

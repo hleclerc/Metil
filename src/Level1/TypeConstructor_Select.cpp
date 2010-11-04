@@ -2,7 +2,7 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-void metil_gen_reassign__when__a__isa__Select__pert__1( MethodWriter &mw, Mos *args ) {
+void metil_gen_reassign__when__a__isa__Select__pert__1( MethodWriter &mw, const Mos *args, const String & ) {
     TypeConstructor_Select *c = static_cast<TypeConstructor_Select *>( mw.type[ 0 ]->constructor );
     c->type_a->constructor->write_select_op( mw, args, c->type_b->constructor, "reassign" );
 }

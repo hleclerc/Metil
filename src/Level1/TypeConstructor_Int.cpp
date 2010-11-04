@@ -55,14 +55,9 @@ BOP( boolean_and, && );
 
 #undef BOP
 
-//
-void metil_gen_div__when__a__is__Int_s_64__and__b__is__Int_s_64( MethodWriter &cw, Mos *mos ) {
-    TODO;
-}
-
 #define WCONV( T ) \
     void TypeConstructor_Int::write_convert_to_##T( MethodWriter &mw, const Mos *a, const String &ret_ins ) const { \
-       mw.n << ret_ins << "*reinterpret_cast<const " << cpp_type() << " *>(" << a[ 0 ].data << ");"; \
+       mw.n << ret_ins << "*reinterpret_cast<const " << cpp_type() << " *>( " << a[ 0 ].data << " );"; \
     }
 WCONV( Bool );
 WCONV( SI32 );

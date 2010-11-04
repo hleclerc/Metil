@@ -121,7 +121,7 @@ void try_to_generate( MethodWriter &mw ) {
     if ( item and item->gene and not item->meth ) {
         BasicVec<Mos> mos( "a", "b", "c" );
         mw.beg_def( MethodName::get_name() );
-        item->gene( mw, mos.ptr() );
+        item->gene( mw, mos.ptr(), "return " );
         mw.end_def();
     }
 }

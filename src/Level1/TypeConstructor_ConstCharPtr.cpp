@@ -16,6 +16,8 @@ const void *metil_def_new_ptr_z__when__a__isa__ConstCharPtr( MO a ) { return str
 
 void metil_def_copy_data__when__a__isa__ConstCharPtr( MO a, void *ptr, ST size ) { memcpy( ptr, a.data, size ); }
 
+bool metil_def_convert_to_Bool__when__a__isa__ConstCharPtr( MO a ) { return true; }
+
 MO metil_def_equal__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1( MO a, MO b ) { return NEW_Number( equal( (const char *)a.data, (const char *)b.data ) ); }
 
 MO metil_def_find__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1( MO a, MO b ) {

@@ -10,23 +10,23 @@ void metil_def_add_parent__pert__0( MO &a, struct OwcpChild *b ) {}
 void metil_def_rem_parent__pert__0( MO &a, struct OwcpChild *b ) {}
 
 // static gen...( MethodWriter & ) { constructor->write_... }
-#define DECL_MET( T, N ) void metil_gen_##N##__when__a__has__has_writer_for_##N##__pert__1( MethodWriter &cw, Mos *a ) { cw.type[ 0 ]->constructor->write_##N( cw, a ); }
+#define DECL_MET( T, N ) void metil_gen_##N##__when__a__has__has_writer_for_##N##__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) { cw.type[ 0 ]->constructor->write_##N( cw, a, ret ); }
 #include "DeclMethodsUnary.h"
 #undef DECL_MET
 
-void metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1( MethodWriter &cw, Mos *a ) {
+void metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) {
     cw.n << "String &os = static_cast<String &>(" << a[ 0 ] << ");";
     cw.type[ 1 ]->constructor->write_write_str( cw, a + 1 );
 }
 
 // POD
-void metil_gen_del__when__a__has__is_a_POD__pert__1( MethodWriter &mw, Mos *a ) {
+void metil_gen_del__when__a__has__is_a_POD__pert__1( MethodWriter &mw, const Mos *a, const String &ret ) {
     int size = mw.type[ 0 ]->constructor->static_size_in_bytes();
     if ( size > 0 )
         mw.n << "FREE( " << a->data << ", Number<" << size << ">() );";
 }
 
-void metil_gen_copy__when__a__has__is_a_POD__pert__1( MethodWriter &mw, Mos *a ) {
+void metil_gen_copy__when__a__has__is_a_POD__pert__1( MethodWriter &mw, const Mos *a, const String &ret ) {
     int size = mw.type[ 0 ]->constructor->static_size_in_bytes();
     if ( size > 0 ) {
         mw.add_include( "Level1/StringHelp.h" );
