@@ -16,6 +16,7 @@ public:
     Val operator()( const Val &a, const Val &b ) const { return Array<Val>::operator()( b, a ); }
     Val operator()( const Val &a, const Val &b ) { return Array<Val>::operator()( b, a ); }
 
+    // Val nb_rows() const { return ; }
 protected:
     Level1::MO *init_dyn_mat( ST r, ST c, Level1::Type *base_type ); ///<
 };

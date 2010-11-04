@@ -31,6 +31,9 @@ struct ArrayHeader :
         public ClassOrVoid<ArrayHeader_Ptr,want_ext_ptr> {};
 
 
+template<int dim>
+static MO *init_dyn_array( MO &res, ST *sizes, Number<dim> );
+
 END_METIL_LEVEL1_NAMESPACE;
 
 #endif // ARRAYDATA_H

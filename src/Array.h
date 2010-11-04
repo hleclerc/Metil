@@ -5,6 +5,8 @@
 
 BEG_METIL_NAMESPACE;
 
+class Vec;
+
 /**
   multidimensionnal array
 
@@ -28,6 +30,7 @@ struct Array : public Level1::MO {
     ~Array() { CM_1( del, *this ); }
 
     Val size() const { return type->size( *this ); }
+    Array<Val> sizes() const { return type->sizes( *this ); }
 
     // 1 arg
     T operator[]( const Val &a ) const { return CM_2( select_C, *this, a ); }

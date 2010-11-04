@@ -123,8 +123,23 @@ void metil_gen_del__when__a__isa__Array( MethodWriter &cw, const Mos *args, cons
     }
 }
 
+void TypeConstructor_Array::write_size( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
+    if ( len() == 0 ) // nothing to del
+        mw.n << ret_ins << "&metil_type_cst_Cst_zero;";
+    else {
+        write_get_header( mw, "h", a[ 0 ].data );
+        write_get_len( mw, "res", "h" );
+        mw.n << ret_ins << "NEW_Number( res );";
+    }
+}
 
-
+void TypeConstructor_Array::write_sizes( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
+    //c->write_get_header( mw, "h", a[ 0 ].data );
+    //write_get_len( mw, "res", "h" );
+    //mw.n << ret_ins << "NEW_Number( res );";
+    mw.n << "TODO;";
+    mw.n << ret_ins << "0;";
+}
 
 void TypeConstructor_Array::default_mw( MethodWriter &mw ) const {
     TypeConstructor::default_mw( mw );

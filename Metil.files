@@ -215,3 +215,5 @@ src/Level1/MethodWriterHelper_Int.h
 src/Level1/MethodWriterHelper_Int.cpp
 src/Level1/DeclMethodsBinarySelfOp.h
 src/Level1/DeclMethodsBinarySelfOpInplace.h
+src/Array.cpp
+src/Level1/ArrayHeader.cpp

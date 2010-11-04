@@ -1,5 +1,6 @@
 + select_C Array
 + select Array
 + tests sur les matrices (i,j)
-* tableaux typés
++ tableaux typés
 * indices muets
+* nb_rows, ...
