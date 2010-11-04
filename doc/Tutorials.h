@@ -3,8 +3,25 @@
 
     @section TutorialCompilation Compilation
     
-        Let's start with a file named "my_first_example.cpp"
-        
+        Let's start with example <tt>Metil/examples/Hello_world.cpp</tt>
+
+        \code
+#include <String.h>  // because we need to handle strings
+using namespace Metil; // Metil user objects are defined in this namespace
+int main(){ // classical entry point in C++
+  coutn<<"Hello World";  // sends the string to the standard output
+}
+        \endcode
+
+        To compile and execute this file, type
+        \code
+metil_comp Hello_world.cpp
+        \endcode
+
+        The dependancies and the flags are automatically managed according to the data in the header files. A directory named <tt>compilations</tt> is created containing compiled files which might be directly reused for future execution. For more information about @p metil_comp click @subpage MetilComp "here".
+
+
+        As a second example let's create a file named "my_first_example.cpp"
         \code
 #include <Vec.h> // because we need vectors
 using namespace Metil; // Metil user objects are defined in this namespace
@@ -20,7 +37,6 @@ int main() { // the classical entry point in C++
 metil_comp my_first_example.cpp
         \endcode
         
-        The dependancies and the flags are automatically managed according to the data in the header files. For more information about @p metil_comp click @subpage MetilComp "here".
 
     @section TutorialFirstStep A first step with "low-level" fields
 
