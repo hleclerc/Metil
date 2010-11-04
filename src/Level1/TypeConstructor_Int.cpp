@@ -5,7 +5,7 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-// bootstrap methods for Int64
+// bootstrap methods for SI32 + SI64
 void metil_def_del__when__a__is__Int_s_64__pert__100( MO &a ) { DEL( reinterpret_cast<SI64 *>( a.data ) ); }
 void metil_def_del__when__a__is__Int_s_32__pert__100( MO &a ) { DEL( reinterpret_cast<SI32 *>( a.data ) ); }
 
@@ -66,6 +66,17 @@ WCONV( FP32 );
 WCONV( FP64 );
 WCONV( FP80 );
 WCONV( ST   );
+
+
+
+// gene
+void TypeConstructor_Int::write_write_str( MethodWriter &mw, const Mos *a, const String & ) const {
+    mw.add_include( "Level1/DisplayInt.h" );
+    mw.n << "DisplayInt<" << mant - sign << "," << sign << ",0," << mant - sign << ">::display( os, (const PI8 *)" << a->data << " );";
+}
+
+
+
 
 String TypeConstructor_Int::cpp_type() const {
     if ( sign == 0 ) {

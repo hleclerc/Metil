@@ -15,6 +15,8 @@ public:
     DECL_WRITER( convert_to_FP80 );
     DECL_WRITER( convert_to_ST   );
 
+    DECL_WRITER( write_str );
+
     virtual bool is_a_POD() const;
     virtual String cpp_type() const;
     virtual int static_size_in_bits() const;

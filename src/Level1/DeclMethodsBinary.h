@@ -26,3 +26,5 @@ DECL_MET( OOO       , beg_upto                ); // "abcd".beg_upto( 1 ) -> "a"
 DECL_MET( OOO       , end_from                ); // "abcd".end_from( 1 ) -> "bcd"
 
 DECL_MET( BOO       , always_equal            ); //
+
+DECL_MET( VoO       , set_values              ); // obj[ ... ] = val

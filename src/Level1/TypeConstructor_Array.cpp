@@ -38,22 +38,6 @@ void metil_gen_self_append__when__a__isa__String__and__b__isa__Array__pert__1( M
         c->write_end_loop( cw, "h", d, "d" );
 }
 
-void TypeConstructor_Array::write_get_index( MethodWriter &cw, const String &name_res, const TypeConstructor *c_1, const Mos &d_1, const String &name_header ) const {
-    int to = c_1->tensor_order();
-    if ( to == 0 ) {
-        cw.n << "ST index = static_cast<const Val &>( " << d_1 << " );";
-    } else if ( to == 1 ) {
-        cw.n << "ST i = 0, c = 1, index = 0;";
-        for( int d = 0; d < tensor_order(); ++d ) {
-            if ( d )
-                cw.n << "i = " << d << ";";
-            cw.n << "index += c * static_cast<const Val &>( CM_2( select_C, " << d_1 << ", REF_Number( i ) ) );";
-            if ( d < tensor_order() - 1 )
-                cw.n << "c *= " << get_rese_n( "h", d ) << ";";
-        }
-    }
-}
-
 void metil_gen_select_C__when__a__isa__Array__pert__1( MethodWriter &cw, const Mos *args, const String &ret ) {
     TypeConstructor_Array *c = sc( cw.type[ 0 ] );
 
@@ -79,7 +63,8 @@ void metil_gen_select__when__a__isa__Array__pert__1( MethodWriter &cw, const Mos
     select_type << strlen( cw.type[ 0 ]->name ) << cw.type[ 0 ]->name;
     select_type << "8Int_s_64";
 
-    c_0->write_get_header( cw, "h", args[ 0 ].data );
+    if ( c_0->dim() > 1 )
+        c_0->write_get_header( cw, "h", args[ 0 ].data );
     c_0->write_get_index( cw, "index", c_1, args[ 1 ], "h" );
 
     cw.add_preliminary( "DECL_TYPE( " + select_type + " );\n" );
@@ -88,38 +73,62 @@ void metil_gen_select__when__a__isa__Array__pert__1( MethodWriter &cw, const Mos
     cw.n << "return MO( NEW( P, " << args[ 0 ].data << ", index ), &metil_type_bas_" << select_type << " );";
 }
 
-void metil_gen_del__when__a__isa__Array( MethodWriter &cw, const Mos *args, const String &ret ) {
-    TypeConstructor_Array *c = sc( cw.type[ 0 ] );
-    if ( c->len() == 0 ) // nothing to del
+
+void metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1( MethodWriter &cw, const Mos *args, const String &ret ) {
+    TypeConstructor_Array *c = static_cast<TypeConstructor_Array *>( cw.type[ 0 ]->constructor );
+    c->write_get_header( cw, "h", args[ 0 ].data );
+    c->write_get_data_ptr( cw, false, "d", "h", args[ 0 ].data );
+
+    // beg loop
+    for(int d = c->dim() - 1; d >= 0; --d )
+        c->write_beg_loop( cw, "h", d );
+
+    if ( c->item_type_bas ) {
+        Mos d[ 2 ];
+        d[ 0 ].data << "d";
+        d[ 1 ] = args[ 1 ];
+        call_gene<MethodName_reassign_inplace>( cw, c->item_type_bas, cw.type[ 1 ], 0, d );
+    } else {
+        cw.n << "CM_2( reassign, *d, " << args[ 1 ] << " );";
+    }
+
+    // end loop
+    for(int d = 0; d < c->dim(); ++d )
+        c->write_end_loop( cw, "h", d, "d" );
+}
+
+
+void TypeConstructor_Array::write_del( MethodWriter &cw, const Mos *args, const String & ) const {
+    if ( len() == 0 ) // nothing to del
         return;
-    if ( c->want_CptUse or c->dyn() )
-        c->write_get_header( cw, "h", args[ 0 ].data );
+    if ( want_CptUse or dyn() )
+        write_get_header( cw, "h", args[ 0 ].data );
 
     //
-    if ( c->want_CptUse ) {
+    if ( want_CptUse ) {
         cw.n << "if ( --h->cpt_use >= 0 )";
         cw.n << "return;";
     }
 
     // destroy items
-    if ( c->item_type_bas ) {
-        if ( not c->item_type_bas->constructor->is_a_POD() ) {
+    if ( item_type_bas ) {
+        if ( not item_type_bas->constructor->is_a_POD() ) {
             TODO;
         }
     } else {
-        c->write_get_data_ptr( cw, false, "d", "h", args[ 0 ].data );
-        for(int d = c->dim() - 1; d >= 0; --d )
-            c->write_beg_loop( cw, "h", d );
+        write_get_data_ptr( cw, false, "d", "h", args[ 0 ].data );
+        for(int d = dim() - 1; d >= 0; --d )
+            write_beg_loop( cw, "h", d );
         cw.n << "CM_1( del, *d );";
-        for(int d = 0; d < c->dim(); ++d )
-            c->write_end_loop( cw, "h", d, "d" );
+        for(int d = 0; d < dim(); ++d )
+            write_end_loop( cw, "h", d, "d" );
     }
 
     // free data
-    if ( c->dyn() ) {
+    if ( dyn() ) {
         cw.n << "FREE( h, h->rese_mem );";
     } else {
-        TODO;
+        cw.n << "FREE( " << args->data << ", Number<" << static_size_in_bytes() << ">() );";
     }
 }
 
@@ -134,11 +143,36 @@ void TypeConstructor_Array::write_size( MethodWriter &mw, const Mos *a, const St
 }
 
 void TypeConstructor_Array::write_sizes( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
-    //c->write_get_header( mw, "h", a[ 0 ].data );
-    //write_get_len( mw, "res", "h" );
-    //mw.n << ret_ins << "NEW_Number( res );";
-    mw.n << "TODO;";
-    mw.n << ret_ins << "0;";
+    write_get_header( mw, "h", a[ 0 ].data );
+    mw.add_include( "BasicVec.h" );
+    if ( len_size() == dim() and dim() ) {
+        mw << "ST *data = h->size;";
+        mw.n << "Type *type = type_ptr( S<ST>() )->static_vec_type( " << dim() << " )->cst_type;";
+    } else {
+        mw.n << "typedef BasicVec<ST," << dim() << "> B;";
+        mw << "B *data = NEW( B";
+        for(int d = 0; d < dim(); ++d )
+            mw << ", " << get_size_n( "h", d );
+        mw.n << " );";
+        mw.n << "Type *type = type_ptr( S<ST>() )->static_vec_type( " << dim() << " );";
+    }
+    mw.n << ret_ins << "MO( data, type );";
+}
+
+void TypeConstructor_Array::write_get_index( MethodWriter &cw, const String &name_res, const TypeConstructor *c_1, const Mos &d_1, const String &name_header ) const {
+    int to = c_1->tensor_order();
+    if ( to == 0 ) {
+        cw.n << "ST index = static_cast<const Val &>( " << d_1 << " );";
+    } else if ( to == 1 ) {
+        cw.n << "ST i = 0, c = 1, index = 0;";
+        for( int d = 0; d < tensor_order(); ++d ) {
+            if ( d )
+                cw.n << "i = " << d << ";";
+            cw.n << "index += c * static_cast<const Val &>( CM_2( select_C, " << d_1 << ", REF_Number( i ) ) );";
+            if ( d < tensor_order() - 1 )
+                cw.n << "c *= " << get_rese_n( "h", d ) << ";";
+        }
+    }
 }
 
 void TypeConstructor_Array::default_mw( MethodWriter &mw ) const {

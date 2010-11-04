@@ -10,7 +10,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 class TypeConstructor {
 public:
     TypeConstructor();
-    ~TypeConstructor();
+    virtual ~TypeConstructor();
     virtual void init( Type *type );
 
     // conditions ( used by "has__..." in metil_def_... or metil_gen_... )
@@ -27,6 +27,8 @@ public:
     DECL_COND( Owcp_size_3 ) { return Owcp_size() == 3; }
 
     DECL_COND( is_a_POD );
+    DECL_COND( tensor_order_0 );
+    DECL_COND( tensor_order_1 );
 
     #define DECL_MET( T, N ) DECL_COND( has_writer_for_##N );
     #include "DeclMethodsUnary.h"
@@ -61,8 +63,9 @@ public:
 
     virtual void write_select_op( MethodWriter &mw, const Mos *a, TypeConstructor *index_type, const String &op ) const;
 
-    TypeSetAncestor *vec_type( const String &name );
-    TypeSetAncestor *mat_type( const String &name );
+    TypeSetAncestor *dyn_array_type ( int dim, const String &name );
+    TypeSetAncestor *sta_array_type ( int dim, ST *size, const String &name );
+    TypeSetAncestor *static_vec_type( ST size, const String &name );
 
     bool have_been_initialized;
     Type *bas_type;
@@ -72,8 +75,8 @@ public:
     #undef DECL_COND
 
 protected:
-    TypeSetAncestor *_vec_type_set; ///< for matrices
-    TypeSetAncestor *_mat_type_set; ///< for matrices
+    BasicVec<TypeSetAncestor *> _dyn_array_type_set; ///< for matrices, vectors, ...
+    BasicVec<BasicVec<TypeSetAncestor *> > _sta_array_type_set; ///< for matrices, vectors, ...
 };
 
 #define DEFI_TYPE( B, N ) \

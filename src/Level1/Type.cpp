@@ -134,8 +134,17 @@ Type *Type::init_if_necessary() {
     return this;
 }
 
-Type *Type::vec_type() { return &constructor->vec_type( name )->bas_type; }
-Type *Type::mat_type() { return &constructor->mat_type( name )->bas_type; }
+Type *Type::dyn_array_type( int dim ) {
+    return &constructor->dyn_array_type( dim, name )->bas_type;
+}
+
+Type *Type::static_vec_type( ST size ) {
+    return &constructor->static_vec_type( size, name )->bas_type;
+}
+
+Type *Type::sta_array_type( int dim, ST *size ) {
+    return &constructor->sta_array_type( dim, size, name )->bas_type;
+}
 
 Type *Type::find_with_name( const char *name ) {
     for( Type *t = last_type; t; t = t->prev_type )
