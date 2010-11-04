@@ -21,29 +21,46 @@
 git clone git://gitosis.lmt.ens-cachan.fr/Metil
     \endcode
 
-    (if you do not have git on your machine, @subpage GitInstallation "this link" contains installation instructions)
-
     The test version is in the same host and is named <tt>MetilTest</tt>. The patches are send to the production repository only if they pass all the unit tests (located in the <tt>unit_tests</tt> directory of the sources).
 
-    To facilitate compilation of your code or of the examples, you first need to generate the <tt>metil_comp</tt> executable:
-
-    \code
-cd Metil # or where the sources are
-make
-sudo make install # with or without sudo
-    \endcode
-
-    You are now ready to start the @subpage Tutorials "tutorials".
 
 \section DirectoryOrganisation Organisation of the sources
 
     Directories are organized in the following way:
-    - src/*.[h,cpp]: the main source files
-    - doc/*.h: documentation specific files
-    - html_Level0: generated documentation for user level (using <tt>make doc</tt>)
-    - html_Level1: generated documentation for developpers (using <tt>make doc</tt>)
-    - unit_tests/*.cpp: gathers unit_tests
-    - examples/*.cpp: contains a lot of (documented) examples
+    - Metil/src/*.[h,cpp]: the main source files
+    - Metil/doc/*.h: documentation specific files
+    - Metil/metil_comp/*.[h,cpp]: metil_comp sources
+    - Metil/unit_tests/*.cpp: gathers unit_tests
+    - Metil/tests/*.cpp: gathers ??
+    - Metil/examples/*.cpp: contains a lot of (documented) examples
+    - Metil/html: generated documentation (using <tt>make documentation</tt>)
 
+\section PreliminaryBuilding Preliminary building
+
+    Go to Metil directory:
+    \code
+cd Metil 
+    \endcode
+
+    To facilitate compilation of your code or of the examples, you first need to generate the <tt>metil_comp</tt> executable:
+
+    \code
+make # build metil_comp
+    \endcode
+
+    The executable <tt>Metil/metil_comp/metil_comp</tt> should be accessible from any location. For instance you can put a symbolic link in a directory belonging to your <tt>${PATH}</tt>. The following command automatically make this link (by default in <tt>/usr/bin</tt>).
+
+    \code
+sudo make install  
+    \endcode
+
+    You are now ready to start the @subpage Tutorials "tutorials".
+
+    If you wish to generate this documentation, simply execute the following command 
+    \code
+make documentation
+    \endcode
+
+    The documentation will be created in <tt>Metil/html</tt>. Use your favorite browser to read file <tt>Metil/html/index.html</tt>
 */
 
