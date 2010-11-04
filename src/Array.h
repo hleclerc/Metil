@@ -30,6 +30,7 @@ struct Array : public Level1::MO {
     ~Array() { CM_1( del, *this ); }
 
     Val size() const { return type->size( *this ); }
+    Val size( int i ) const { return sizes()[ i ]; }
     Array<Val> sizes() const { return type->sizes( *this ); }
 
     // 1 arg
@@ -49,6 +50,9 @@ struct Array : public Level1::MO {
         Level1::MO data[] = { a, b };
         return CM_2( select, *this, MO( data, &Level1::metil_type_ref_Array_4NULL_1_2_2 ) );
     }
+
+    /// obj[ ... ] = val
+    void set_values( const Val &val ) { CM_2( set_values, *this, val ); }
 
 protected:
     Array() {}

@@ -39,15 +39,20 @@ void metil_gen_copy__when__a__has__is_a_POD__pert__1( MethodWriter &mw, const Mo
     }
 }
 
+
+
 TypeConstructor::TypeConstructor() {
     have_been_initialized = false;
-    _vec_type_set = 0;
-    _mat_type_set = 0;
 }
 
 TypeConstructor::~TypeConstructor() {
-    if ( _vec_type_set ) DEL( _vec_type_set );
-    if ( _mat_type_set ) DEL( _mat_type_set );
+    for( int d = 0; d < _dyn_array_type_set.size(); ++d )
+        if ( _dyn_array_type_set[ d ] )
+            DEL( _dyn_array_type_set[ d ] );
+    for( int d = 0; d < _sta_array_type_set.size(); ++d )
+        for( int n = 0; n < _sta_array_type_set[ d ].size(); ++n )
+            if ( _sta_array_type_set[ d ][ n ] )
+                DEL( _sta_array_type_set[ d ][ n ] );
 }
 
 void TypeConstructor::init( Type *type ) {
@@ -58,6 +63,8 @@ void TypeConstructor::init( Type *type ) {
 
 void TypeConstructor::default_mw( MethodWriter &mw ) const {}
 bool TypeConstructor::is_a_POD() const { return 0; }
+bool TypeConstructor::tensor_order_0() const { return tensor_order() == 0; }
+bool TypeConstructor::tensor_order_1() const { return tensor_order() == 1; }
 int TypeConstructor::Owcp_size() const { return -1; }
 int TypeConstructor::static_size_in_bytes() const { return ( static_size_in_bits() + 7 ) / 8; }
 int TypeConstructor::static_size_in_bits() const { return -1; }
@@ -93,20 +100,40 @@ String TypeConstructor::cpp_type() const {
     return String();
 }
 
-TypeSetAncestor *TypeConstructor::vec_type( const String &name ) {
-    if ( not _vec_type_set ) {
-        String tn; tn << "Array_" << name.size() << name << "_1_m_m_CptUse";
-        _vec_type_set = NEW( TypeSet<TypeConstructor_Array>, tn );
+TypeSetAncestor *TypeConstructor::dyn_array_type( int dim, const String &name ) {
+    if ( _dyn_array_type_set.size() <= dim )
+        _dyn_array_type_set.resize( dim + 1, (TypeSetAncestor *)0 );
+    if ( not _dyn_array_type_set[ dim ] ) {
+        String tn;
+        tn << "Array_" << name.size() << name << "_" << dim;
+        for( int d = 0; d < dim; ++d )
+            tn << "_m_m";
+        tn << "_CptUse";
+        _dyn_array_type_set[ dim ] = NEW( TypeSet<TypeConstructor_Array>, tn );
     }
-    return _vec_type_set;
+    return _dyn_array_type_set[ dim ];
 }
 
-TypeSetAncestor *TypeConstructor::mat_type( const String &name ) {
-    if ( not _mat_type_set ) {
-        String tn; tn << "Array_" << name.size() << name << "_2_m_m_m_m_CptUse";
-        _mat_type_set = NEW( TypeSet<TypeConstructor_Array>, tn );
+TypeSetAncestor *TypeConstructor::static_vec_type( ST size, const String &name ) {
+    if ( _sta_array_type_set.size() <= 1 )
+        _sta_array_type_set.resize( 2 );
+    if ( _sta_array_type_set[ 1 ].size() <= size )
+        _sta_array_type_set[ 1 ].resize( size + 1, (TypeSetAncestor *)0 );
+    if ( not _sta_array_type_set[ 1 ][ size ] ) {
+        String tn;
+        tn << "Array_" << name.size() << name << "_" << 1 << "_" << size << "_" << size;
+        _sta_array_type_set[ 1 ][ size ] = NEW( TypeSet<TypeConstructor_Array>, tn );
     }
-    return _mat_type_set;
+    return _sta_array_type_set[ 1 ][ size ];
+}
+
+TypeSetAncestor *TypeConstructor::sta_array_type( int dim, ST *size, const String &name ) {
+    if ( dim == 1 )
+        return static_vec_type( size[ 0 ], name );
+    if ( _sta_array_type_set.size() <= dim )
+        _sta_array_type_set.resize( dim + 1 );
+    TODO;
+    return 0;
 }
 
 END_METIL_LEVEL1_NAMESPACE;

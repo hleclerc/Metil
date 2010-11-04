@@ -28,6 +28,7 @@ public:
     virtual int needed_alignement_in_bits() const;
     virtual void write_select_op( MethodWriter &mw, const Mos *a, TypeConstructor *index_type, const String &op ) const;
 
+    DECL_WRITER( del );
     DECL_WRITER( size );
     DECL_WRITER( sizes );
 

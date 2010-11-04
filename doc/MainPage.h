@@ -13,7 +13,7 @@
         <ul>
             <li> @subpage Installation and @subpage GenericConsiderations </li>
             <li> @subpage Tutorials and @subpage Examples </li>
-            <li> @subpage WhatsNew </li>
+            <li> <a href="http://www/redmine/projects/metil/news">WhatsNew</a> </li>
         </ul>
         </td>
         <td valign="top">

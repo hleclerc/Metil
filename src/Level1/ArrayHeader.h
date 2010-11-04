@@ -2,6 +2,7 @@
 #define ARRAYDATA_H
 
 #include "ClassOrVoid.h"
+#include "Number.h"
 #include "MO.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
@@ -32,7 +33,7 @@ struct ArrayHeader :
 
 
 template<int dim>
-static MO *init_dyn_array( MO &res, ST *sizes, Number<dim> );
+MO *init_dyn_array( MO &res, const ST *size, Number<dim>, Type *base_type = 0 );
 
 END_METIL_LEVEL1_NAMESPACE;
 

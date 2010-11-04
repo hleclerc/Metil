@@ -17,12 +17,22 @@ public:
     virtual bool is_a_POD() const;
     virtual String cpp_type() const;
 
+    DECL_WRITER( convert_to_Bool );
+    DECL_WRITER( convert_to_SI32 );
+    DECL_WRITER( convert_to_SI64 );
+    DECL_WRITER( convert_to_FP32 );
+    DECL_WRITER( convert_to_FP64 );
+    DECL_WRITER( convert_to_FP80 );
+
     DECL_WRITER( write_str );
 
     MethodWriterHelper_Int mant;
     MethodWriterHelper_Int expo;
     MethodWriterHelper_Int sign;
     int bia_expo;
+
+private:
+    void write_convert_to_( MethodWriter &mw, const Mos *a, const String & ) const;
 };
 
 END_METIL_LEVEL1_NAMESPACE;

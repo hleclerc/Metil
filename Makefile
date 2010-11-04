@@ -22,9 +22,6 @@ metil_gen:
 comp:
 	metil_comp src/make_compressed_struct.cpp
 
-clean:
-	rm -rf tests/compilations 2> /dev/null
-	rm -rf unit_tests/compilations 2> /dev/null
 
 tests: clean
 	cd unit_tests; python run_unit_test.py
@@ -39,4 +36,8 @@ documentation:
 archive:
 	git archive -o Metil-0.zip --prefix=Metil-0.0.0/ HEAD
 # 	git archive -oo -format=tar --prefix=Metil-0.0.0/ HEAD | gzip > Metil-0.0.0.tgz
+
+clean:
+	rm -f unit_tests/compilations/* 2> /dev/null
+	rm -f tests/compilations/* 2> /dev/null
 	

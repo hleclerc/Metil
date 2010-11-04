@@ -40,8 +40,9 @@ public:
     #undef DECL_MET
 
     // related types
-    Type *vec_type();
-    Type *mat_type();
+    Type *dyn_array_type( int dim );
+    Type *sta_array_type( int dim, ST *size );
+    Type *static_vec_type( ST size );
 
     // static helpers
     static Type *find_with_name( const char *name );

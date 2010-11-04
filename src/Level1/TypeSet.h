@@ -16,7 +16,7 @@ struct TypeSetAncestor {
         cst_type( constructor, this->name, &bas_type, &ref_type, &cst_type, Type::Cst ) {
     }
 
-    ~TypeSetAncestor() {
+    virtual ~TypeSetAncestor() {
         std::free( name );
     }
 
