@@ -88,7 +88,6 @@ String CompilationEnvironment::make_obj_cmd( const String &obj, const String &cp
     }
 
     // flags
-    PRINT( cpp_parser.lib_names );
     for( int i = 0; i < cpp_parser.lib_names.size(); ++i )
         lib_names << cpp_parser.lib_names[ i ];
     for( int i = 0; i < cpp_parser.lib_paths.size(); ++i )

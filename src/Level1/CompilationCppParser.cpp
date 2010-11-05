@@ -128,36 +128,38 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                 }
             }
             if ( c[ 1 ] == 'p' and c[ 2 ] == 'r' and c[ 3 ] == 'a' and c[ 4 ] == 'g' and c[ 5 ] == 'm' and c[ 6 ] == 'a' and c[ 7 ] == ' ' ) {
-                c += 7;
-                if ( equal( c, "src_file" ) ) {
-                    src_files << get_next_word( c += 8 );
+                c += 8;
+                PRINT( String( NewString( c, c + 9 ) ) + "." );
+                PRINT( strncmp( c, "lib_name ", 9 ) );
+                if ( strncmp( c, "src_file ", 9 ) ) {
+                    src_files << get_next_word( c += 9 );
                     continue;
                 }
-                if ( equal( c, "lib_path" ) ) {
-                    lib_paths << get_next_word( c += 8 );
+                if ( strncmp( c, "lib_path ", 9 ) ) {
+                    lib_paths << get_next_word( c += 9 );
                     continue;
                 }
-                if ( equal( c, "lib_name" ) ) {
-                    lib_names << get_next_word( c += 8 );
+                if ( strncmp( c, "lib_name ", 9 ) ) {
+                    lib_names << get_next_word( c += 9 );
                     continue;
                 }
-                if ( equal( c, "cpp_path" ) ) {
-                    cpp_paths << get_next_word( c += 8 );
+                if ( strncmp( c, "cpp_path ", 9 ) ) {
+                    cpp_paths << get_next_word( c += 9 );
                     continue;
                 }
-                if ( equal( c, "cpp_flag" ) ) {
-                    cpp_flags << get_next_word( c += 8 );
+                if ( strncmp( c, "cpp_flag ", 9 ) ) {
+                    cpp_flags << get_next_word( c += 9 );
                     continue;
                 }
-                if ( equal( c, "lnk_flag" ) ) {
-                    lnk_flags << get_next_word( c += 8 );
+                if ( strncmp( c, "lnk_flag ", 9 ) ) {
+                    lnk_flags << get_next_word( c += 9 );
                     continue;
                 }
-                if ( equal( c, "gpu_flag" ) ) {
-                    gpu_flags << get_next_word( c += 8 );
+                if ( strncmp( c, "gpu_flag ", 9 ) ) {
+                    gpu_flags << get_next_word( c += 9 );
                     continue;
                 }
-                if ( equal( c, "need_compilation_environment" ) ) {
+                if ( strncmp( c, "need_compilation_environment", 28 ) ) {
                     c += 28;
                     need_compilation_environment = true;
                     continue;

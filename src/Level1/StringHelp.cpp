@@ -21,6 +21,16 @@ int strcmp( const char *a, const char *b ) {
     return *b ? -1 : +1;
 }
 
+int strncmp( const char *a, const char *b, int n ) {
+    for( int i = 0; i < n; ++a, ++b ) {
+        if ( *a < *b )
+            return -1;
+        if ( *a > *b )
+            return +1;
+    }
+    return 0;
+}
+
 ST strlen( const char *a ) {
     ST res = 0;
     while ( a[ res ] )
