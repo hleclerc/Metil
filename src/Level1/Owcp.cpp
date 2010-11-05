@@ -1,5 +1,6 @@
-#include "Owcp.h"
+#include "TypeConstructor.h"
 #include "String.h"
+#include "Owcp.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
@@ -33,5 +34,15 @@ MO metil_def_copy__when__a__has__Owcp_type__pert__1( MO a ) {
     return a;
 }
 
+//
+ST metil_def_nb_children__when__a__has__Owcp_type__pert__1( MO a ) {
+    return a.type->constructor->Owcp_size();
+}
+
+//
+MO metil_def_get_child__when__a__has__Owcp_type__pert__1( MO a, ST i ) {
+    Owcp<2> *o = reinterpret_cast<Owcp<2> *>( a.data ); // would be the same result with s != 2
+    return o->ch( i );
+}
 
 END_METIL_LEVEL1_NAMESPACE;

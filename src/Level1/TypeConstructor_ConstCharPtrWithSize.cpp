@@ -15,9 +15,18 @@ MO metil_def_copy__when__a__isa__ConstCharPtrWithSize( MO a ) {
     return MO( NEW( TD, o->data, o->size ), a.type );
 }
 
+MO metil_def_size__when__a__isa__ConstCharPtrWithSize( MO a ) {
+    return NEW_Number( reinterpret_cast<TD *>( a.data )->size );
+}
+
 const void *metil_def_new_ptr_z__when__a__isa__ConstCharPtrWithSize( MO a ) {
     const TD *o = reinterpret_cast<const TD *>( a.data );
     return strndup( o->data, o->size );
+}
+
+void metil_def_copy_data__when__a__isa__ConstCharPtrWithSize( MO a, void *ptr, ST size ) {
+    const TD *o = reinterpret_cast<const TD *>( a.data );
+    memcpy( ptr, o->data, size );
 }
 
 const void *metil_def_ptr_z__when__a__isa__ConstCharPtrWithSize( MO &a ) {

@@ -16,7 +16,7 @@ static void *obj_dot_ptr( const MO &obj ) {
 }
 
 void write_dot_rec( String &os, const MO &obj, bool want_parents ) {
-    if ( obj.type->cur_op_id( obj ) )
+    if ( CM_1( cur_op_id, obj ) )
         return;
 
     os << "    node" << obj_dot_ptr( obj ) << " [label=\"";

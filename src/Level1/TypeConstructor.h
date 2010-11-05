@@ -29,6 +29,7 @@ public:
     DECL_COND( is_a_POD );
     DECL_COND( tensor_order_0 );
     DECL_COND( tensor_order_1 );
+    DECL_COND( is_void );
 
     #define DECL_MET( T, N ) DECL_COND( has_writer_for_##N );
     #include "DeclMethodsUnary.h"

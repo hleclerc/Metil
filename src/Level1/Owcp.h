@@ -77,7 +77,7 @@ struct OwcpAncestor {
 
 /**
 */
-template<class AdditionalData=AdditionalDataVoid>
+template< class AdditionalData = AdditionalDataVoid >
 struct OwcpWithoutChild : public OwcpAncestor {
     CANNOT_BE_DERIVED; /// hum ->replace by NO_VIRTUAL_DESTR
 
@@ -87,8 +87,8 @@ struct OwcpWithoutChild : public OwcpAncestor {
 
 /**
 */
-template<int nb_children,class AdditionalData=AdditionalDataVoid>
-struct Owcp : public OwcpWithoutChild<AdditionalData> {
+template< int nb_children, class AdditionalData = AdditionalDataVoid >
+struct Owcp : public OwcpAncestor {
     CANNOT_BE_DERIVED;
 
     Owcp( Type *type ) {
@@ -138,6 +138,9 @@ struct Owcp : public OwcpWithoutChild<AdditionalData> {
     /// an Owcp can contain from 0 to ... children meaning that sizeof( Owcp ) does not represent
     /// the room occupied in memory
     OwcpChild children[ nb_children ];
+
+    ///
+    AdditionalData data;
 };
 
 template<class T>

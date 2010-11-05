@@ -8,6 +8,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 /**  */
 class TypeConstructor_VoidString : public TypeConstructor_String {
 public:
+    virtual bool is_void() const { return true; }
 };
 
 END_METIL_LEVEL1_NAMESPACE;

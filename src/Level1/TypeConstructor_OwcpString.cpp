@@ -57,4 +57,10 @@ MO metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1( MO a
     return MO( ns.data, &metil_type_bas_OwcpString );
 }
 
+MO metil_def_select_C__when__a__isa__OwcpString__and__b__isa__Int__pert__1( MO a, MO b ) {
+    OwcpStringData *o = reinterpret_cast<OwcpStringData *>( a.data );
+    unsigned char v = o->val( CM_1( convert_to_SI32, b ) );
+    return MO( String::char_ptr + 2 * v, &Level1::metil_type_cst_ConstCharPtr );
+}
+
 END_METIL_LEVEL1_NAMESPACE;

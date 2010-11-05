@@ -39,109 +39,109 @@ void set_env( String var, String val ) {
     #endif
 }
 
-//inline static bool sep( char s ) {
-//    return s == '/' or s == '\\';
-//}
+inline static bool sep( char s ) {
+    return s == '/' or s == '\\';
+}
 
-//String canonicalize_filename( const String &filename ) {
-//    // ./ or .// or .\ ... at the beginning
-//    const char *b = filename.c_str();
-//    if ( b[0]=='.' and sep( b[1] ) ) {
-//        b += 2;
-//        while ( sep( b[0] ) )
-//            ++b;
-//    }
+String canonicalize_filename( const String &filename ) {
+    // ./ or .// or .\ ... at the beginning
+    const char *b = filename.c_str();
+    if ( b[0]=='.' and sep( b[1] ) ) {
+        b += 2;
+        while ( sep( b[0] ) )
+            ++b;
+    }
 
-//    if ( not b[ 0 ] )
-//        return ".";
+    if ( not b[ 0 ] )
+        return ".";
 
-//    // / or \ at the end
-//    const char *e = b + strlen( b ) - 1;
-//    while ( e >= b and sep( e[ 0 ] ) )
-//        --e;
-//    if ( e < b ) // if contains only separators
-//        return "/";
-//    ++e;
+    // / or \ at the end
+    const char *e = b + strlen( b ) - 1;
+    while ( e >= b and sep( e[ 0 ] ) )
+        --e;
+    if ( e < b ) // if contains only separators
+        return "/";
+    ++e;
 
-//    //
-//    NewStringPtr res( e - b + 1 );
-//    char *bas = res.ptr(), *str = bas;
-//    for(const char *f = b; f < e; ++f ) {
-//        if ( sep( f[ 0 ] ) ) { // /
-//            if ( f[ 1 ] == '.' ) { // .
-//                if ( f + 2 == e and f != b ) // "something/." at the end
-//                    break;
-//                if ( f[ 2 ] == '.' ) { // /..
-//                    if ( f == b ) { // "/..xxx" at the beginning (weird...)
-//                        f += 2;
-//                        *(str++) = '/';
-//                        *(str++) = '.';
-//                        *(str++) = '.';
-//                        continue;
-//                    }
-//                    while ( str >= bas and not sep( *(--str) ) );
-//                    str += sep( *str );
-//                    ++f;
-//                    continue;
-//                }
-//            }
-//        }
-//        if ( f[ 0 ] == '.' ) {
-//            if ( f[ 1 ] == '.' ) { // ".." but no "/.."
-//                *(str++) = '.';
-//                *(str++) = '.';
-//                ++f;
-//                continue;
-//            }
-//            if ( sep( f[ 1 ] ) ) { // "./"
-//                ++f;
-//                continue;
-//            }
-//        }
+    //
+    NewString res( e - b + 1 );
+    char *bas = res.ptr(), *str = bas;
+    for(const char *f = b; f < e; ++f ) {
+        if ( sep( f[ 0 ] ) ) { // /
+            if ( f[ 1 ] == '.' ) { // .
+                if ( f + 2 == e and f != b ) // "something/." at the end
+                    break;
+                if ( f[ 2 ] == '.' ) { // /..
+                    if ( f == b ) { // "/..xxx" at the beginning (weird...)
+                        f += 2;
+                        *(str++) = '/';
+                        *(str++) = '.';
+                        *(str++) = '.';
+                        continue;
+                    }
+                    while ( str >= bas and not sep( *(--str) ) );
+                    str += sep( *str );
+                    ++f;
+                    continue;
+                }
+            }
+        }
+        if ( f[ 0 ] == '.' ) {
+            if ( f[ 1 ] == '.' ) { // ".." but no "/.."
+                *(str++) = '.';
+                *(str++) = '.';
+                ++f;
+                continue;
+            }
+            if ( sep( f[ 1 ] ) ) { // "./"
+                ++f;
+                continue;
+            }
+        }
 
-//        //
-//        if ( sep( f[0] ) ) {
-//            if ( sep( f[ 1 ] ) ) {
-//                ++f;
-//                continue;
-//            }
-//            *(str++) = '/';
-//            continue;
-//        }
+        //
+        if ( sep( f[0] ) ) {
+            if ( sep( f[ 1 ] ) ) {
+                ++f;
+                continue;
+            }
+            *(str++) = '/';
+            continue;
+        }
 
-//        *(str++) = f[0];
-//    }
+        *(str++) = f[0];
+    }
 
-//    //
-//    if ( str == bas ) // void
-//        *( str++ ) = '.';
-//    str[ 0 ] = 0;
+    //
+    if ( str == bas ) // void
+        *( str++ ) = '.';
+    str[ 0 ] = 0;
 
-//    res.set_size( str - bas );
+    res.set_size( str - bas );
 
-//    //
-//    return res;
-//}
+    //
+    return res;
+}
 
-//String absolute_filename( const String &f ) {
-//    if ( f[0]=='/' or f[0]=='\\' )
-//        return canonicalize_filename( f );
-//    return canonicalize_filename( cur_dir() + '/' + f );
-//}
+String absolute_filename( const String &f ) {
+    if ( f[ 0 ] == '/' or f[ 0 ] == '\\' )
+        return canonicalize_filename( f );
+    return canonicalize_filename( cur_dir() + '/' + f );
+}
 
-//String directory_of( const String &filename ) {
-//    ST pos = filename.rfind( '/' );
-//    if ( pos < 0 )
-//        return String();
-//    return filename.left_to( pos );
-//}
+String directory_of( const String &filename ) {
+    ST pos = filename.rfind( '/' );
+    if ( pos < 0 )
+        return String();
+    return filename.beg_upto( pos );
+}
 
-//String filename_without_dir_of( const String &filename ) {
-//    ST pos = filename.rfind('/');
-//    if ( pos < 0 )
-//        pos = -1;
-//    return filename.right_from( pos + 1 );
-//}
+String filename_without_dir_of( const String &filename ) {
+    ST pos = filename.rfind('/');
+    if ( pos < 0 )
+        pos = -1;
+    return filename.end_from( pos + 1 );
+}
 
 double time_of_day_in_sec() {
     struct timeval st;
@@ -150,11 +150,11 @@ double time_of_day_in_sec() {
     return st.tv_sec + st.tv_usec / 1e6;
 }
 
-int create_directory( const String &filename, bool check_if_exists ) {
+int mkdir( const String &filename, bool check_if_exists ) {
     #ifdef WIN32
-    if ( mkdir( filename.c_str()/* , S_IRWXU| S_IRWXG*/ ) ) {
+    if ( ::mkdir( filename.c_str()/* , S_IRWXU| S_IRWXG*/ ) ) {
     #else
-    if ( mkdir( filename.c_str() , S_IRWXU| S_IRWXG ) ) {
+    if ( ::mkdir( filename.c_str() , S_IRWXU| S_IRWXG ) ) {
     #endif
         if ( errno == EEXIST and check_if_exists == false )
             return 0;
@@ -230,6 +230,8 @@ bool file_exists( const String &n ) {
 //}
 
 int exec_cmd( String f, bool display ) {
+    if ( not f )
+        return 0;
     if ( display )
         coutn << f;
     return system( f.c_str() );

@@ -10,6 +10,9 @@ void metil_def_add_parent__pert__0( MO &a, struct OwcpChild *b ) {}
 void metil_def_rem_parent__pert__0( MO &a, struct OwcpChild *b ) {}
 bool metil_def_cur_op_id__pert__0( MO a ) { return false; }
 
+// void objects
+MO metil_def_copy__when__a__has__is_void( MO a ) { return a.type; }
+
 // static gen...( MethodWriter & ) { constructor->write_... }
 #define DECL_MET( T, N ) void metil_gen_##N##__when__a__has__has_writer_for_##N##__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) { cw.type[ 0 ]->constructor->write_##N( cw, a, ret ); }
 #include "DeclMethodsUnary.h"
@@ -63,10 +66,12 @@ void TypeConstructor::init( Type *type ) {
     cst_type = type->cst_type;
 }
 
-void TypeConstructor::default_mw( MethodWriter &mw ) const {}
 bool TypeConstructor::is_a_POD() const { return 0; }
 bool TypeConstructor::tensor_order_0() const { return tensor_order() == 0; }
 bool TypeConstructor::tensor_order_1() const { return tensor_order() == 1; }
+bool TypeConstructor::is_void() const { return 0; }
+
+void TypeConstructor::default_mw( MethodWriter &mw ) const {}
 int TypeConstructor::Owcp_size() const { return -1; }
 int TypeConstructor::static_size_in_bytes() const { return ( static_size_in_bits() + 7 ) / 8; }
 int TypeConstructor::static_size_in_bits() const { return -1; }

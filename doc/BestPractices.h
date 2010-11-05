@@ -3,13 +3,16 @@
     \section BestPracticesSyntax Recommended syntax
 
         Following syntax is recommended:
-            - Objects and methods should be named straighforwardly (using _ to separate "words").
-            - Operator overiding should be compliant with standard notations.
-            - Class names are written uppercase (Ex: MetilObjectFinder)
-            - Bracket should ..., spaces...
+            - Objects and methods should be named straighforwardly (using <tt>_</tt> to separate "words" in variables and upper case in classes).
+            - Class names are written in uppercase (Ex: <tt>MetilObjectFinder</tt>), variables and methods are written in lowercase (ex; <tt>my_variables</tt>)
+            - Bracket and parenthesis should be as in this exemple: <tt>my_function< param >( a, b[ 10, 5 ] )</tt>
             - Declaration should be in header (.h) files and implementation in cpp (.cpp) files
-            - const should be used as much as possible, members should be protected as much as possible and accessed (if required) throught methods.
-            - Metil object should be declared in the <tt>Metil</tt> namespace. Level1 functions should be declared in separate namespace or as static in classes.
+            - @p const should be used as much as possible, members should be protected as much as possible and accessed (if required) throught methods.
+            - Metil object should be declared in the @p Metil namespace. Level1 functions should be declared in separate namespace or as static in classes.
+            - Operator overiding should be compliant with standard notations (ex : + means plus and not shift, etc...).
+
+        Functions done for specific and local use should be declared @p static.
+
 
     \section BestPracticesglobal_doc Global documentation
         This file is part of the global documentation, everytime a strategy is implemented, it should be described extensively and associated to examples.

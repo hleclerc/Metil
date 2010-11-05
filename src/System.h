@@ -9,15 +9,15 @@ BEG_METIL_NAMESPACE
 String cur_dir(); // current directory
 String get_env( String var ); //
 void set_env( String var, String val ); //
-//String canonicalize_filename( const String &f ); /// /tata/../grot\toto/ -> /grot/toto
-//String absolute_filename( const String &f ); /// ./grot//toto/ -> /pouet/grot/toto
-//String directory_of( const String &filename );
-//String filename_without_dir_of( const String &filename );
-int create_directory( const String &filename, bool check_if_exists = true );
+String canonicalize_filename( const String &f ); /// /tata/../grot\toto/ -> /grot/toto
+String absolute_filename( const String &f ); /// ./grot//toto/ -> /pouet/grot/toto
+String directory_of( const String &filename );
+String filename_without_dir_of( const String &filename );
+int mkdir( const String &filename, bool check_if_exists = true );
 SI64 last_modification_time_or_zero_of_file_named( const char   *n );
 SI64 last_modification_time_or_zero_of_file_named( const String &n );
 bool file_exists( const String &n );
-//void rm( const String &file ); // rm file
+void rm( const String &file ); // rm file
 
 //// system info
 //String get_os_type();

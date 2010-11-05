@@ -9,10 +9,12 @@ BEG_METIL_LEVEL1_NAMESPACE;
 //
 bool equal( const char *a, const char *b );
 ST strlen( const char *a );
+int strcmp( const char *a, const char *b );
 char *strdup( const char *a );
 char *strndup( const char *a, ST s );
 ST find( const char *a, const char *b );
 ST find( const char *a, const char *b, ST len_a );
+ST rfind( const char *a, const char *b );
 
 // char property
 inline bool is_a_number( char a ) { return a >= '0' and a <= '9'; }

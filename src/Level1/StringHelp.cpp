@@ -11,6 +11,16 @@ bool equal( const char *a, const char *b ) {
     return *b == 0;
 }
 
+int strcmp( const char *a, const char *b ) {
+    for( ; *a; ++a, ++b ) {
+        if ( *a < *b )
+            return -1;
+        if ( *a > *b )
+            return +1;
+    }
+    return *b ? -1 : +1;
+}
+
 ST strlen( const char *a ) {
     ST res = 0;
     while ( a[ res ] )
@@ -52,6 +62,18 @@ ST find( const char *a, const char *b, ST len_a ) {
                 return i;
             if ( i + j >= len_a )
                 return -1;
+            if ( a[ i + j ] != b[ j ] )
+                break;
+        }
+    }
+    return -1;
+}
+
+ST rfind( const char *a, const char *b ) {
+    for( int i = strlen( a ) - strlen( b ); i >= 0; --i ) {
+        for( int j = 0; ; ++j ) {
+            if ( b[ j ] == 0 )
+                return i;
             if ( a[ i + j ] != b[ j ] )
                 break;
         }

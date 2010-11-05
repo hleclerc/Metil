@@ -20,4 +20,47 @@ MO metil_def_equal__when__a__isa__String__and__b__isa__String( MO a, MO b ) { //
     return res;
 }
 
+// String < String
+MO metil_def_inf__when__a__isa__String__and__b__isa__String( MO a, MO b ) { // TODO: optimize !
+    char *sa = (char *)CM_1( new_ptr_z, a );
+    char *sb = (char *)CM_1( new_ptr_z, b );
+    MO res = NEW_Number( strcmp( sa, sb ) < 0 );
+    std::free( sa );
+    std::free( sb );
+    return res;
+}
+
+//
+bool metil_def_convert_to_Bool__when__a__isa__String( MO a ) {
+    return Val( CM_1( size, a ) );
+}
+
+//
+MO metil_def_rfind__when__a__isa__String__and__b__isa__String( MO a, MO b ) {
+    char *sa = (char *)CM_1( new_ptr_z, a );
+    char *sb = (char *)CM_1( new_ptr_z, b );
+    MO res = NEW_Number( rfind( sa, sb ) );
+    std::free( sa );
+    std::free( sb );
+    return res;
+}
+
+//
+MO metil_def_end_from__when__a__isa__String__and__b__isa__Int( MO a, MO b ) {
+    char *sa = (char *)CM_1( new_ptr_z, a );
+    SI32 sb = CM_1( convert_to_SI32, b );
+    NewString res( sa + sb );
+    std::free( sa );
+    return MO( res.data, &Level1::metil_type_bas_OwcpString );
+}
+
+//
+MO metil_def_beg_upto__when__a__isa__String__and__b__isa__Int( MO a, MO b ) {
+    char *sa = (char *)CM_1( new_ptr_z, a );
+    SI32 sb = CM_1( convert_to_SI32, b );
+    NewString res( sa, sa + sb );
+    std::free( sa );
+    return MO( res.data, &Level1::metil_type_bas_OwcpString );
+}
+
 END_METIL_LEVEL1_NAMESPACE;

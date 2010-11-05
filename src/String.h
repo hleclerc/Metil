@@ -14,8 +14,8 @@ struct String : public Level1::MO {
     struct Flsh  { void write_str( String &os ) const; }; ///< @see flush
 
     // init
-    String( const MO &o ) : MO( o ) {}
     String() { type = &Level1::metil_type_cst_VoidString; }
+    String( const MO &o     ) : MO( o ) {}
     String( const String &s ) : MO( CM_1( copy, s ) ) {}
     String( const char   *a ) { type = &Level1::metil_type_cst_ConstCharPtr; data = (void *)a; }
     String( char          v ) { type = &Level1::metil_type_cst_ConstCharPtr; data = char_ptr + 2 * (unsigned char)v; } ///< *this will be a single char
@@ -48,6 +48,12 @@ struct String : public Level1::MO {
     // ==
     Val operator==( const String &b ) const { return CM_2( equal, *this, b ); }
     Val operator==( char b ) const { return operator==( String( b ) ); }
+
+    // <
+    Val operator<( const String &b ) const { return CM_2( inf, *this, b ); }
+
+    // []
+    String operator[]( const Val &index ) const { return CM_2( select_C, *this, index ); }
 
     // <<
     String &operator<<( const char *s ) { CM_2( self_append, *this, MO( (char *)s, &Level1::metil_type_cst_ConstCharPtr ) ); return *this; }
@@ -84,6 +90,7 @@ struct String : public Level1::MO {
     void write_separator( int num );
     Val find( const String &str ) const { return CM_2( find, *this, str ); } ///< return index of first str found in this. Else, return -1
     Val find( const String &str, const Val &starting_from ) const; ///< return index of first str found in this after starting_from. Else, return -1
+    Val rfind( const String &str ) const { return CM_2( rfind, *this, str ); } ///< return index of last str found in this. Else, return -1
     String beg_upto( const Val &s ) const { return CM_2( beg_upto, *this, s ); } ///< "abcd".beg_upto( 1 ) -> "a"
     String end_from( const Val &s ) const { return CM_2( end_from, *this, s ); } ///< "abcd".beg_upto( 1 ) -> "a"
     String replace( const String &a, const String &b ) const;
