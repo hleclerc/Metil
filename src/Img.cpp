@@ -24,8 +24,9 @@ void Img::load( const String &filename, const MachineId &machine ) {
 
 void Img::load_tiff( const String &filename, const MachineId &machine ) {
     static DynamicCppLib dl( directory_of( __FILE__ ) + "/TiffLoader.cpp" );
-    typedef Level1::MO LoadTiff( const String &filename, const MachineId &machine );
-    CM_2( reassign, *this, reinterpret_cast<LoadTiff *>( dl.get_sym( "load_tiff" ) )( filename, machine ) );
+    typedef void LoadTiff( Level1::MO &res, const String &filename, const MachineId &machine );
+    CM_1( del, *this );
+    reinterpret_cast<LoadTiff *>( dl.get_sym( "load_tiff" ) )( *this, filename, machine );
 }
 
 void Img::load_qimg( const String &filename, const MachineId &machine ) {

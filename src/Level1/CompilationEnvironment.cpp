@@ -300,7 +300,10 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
     //        loc_paths.push_back_unique( cpp_parser.cpp_paths[ i ] );
 
     // command
-    obj.push_back_unique( make_obj_compilation_tree( obj_for( cpp, dyn ), make_cpp_compilation_tree( cpp ), dyn ) );
+    Ptr<CompilationTree> res = make_obj_compilation_tree( obj_for( cpp, dyn ), make_cpp_compilation_tree( cpp ), dyn );
+    for( int i = 0; i < cpp_parser.inc_files.size(); ++i )
+        res->add_child( make_cpp_compilation_tree( cpp_parser.inc_files[ i ] ) );
+    obj.push_back_unique( res );
 
     // .h -> .cpp ?
     for( int i = 0; i < cpp_parser.inc_files.size(); ++i ) {

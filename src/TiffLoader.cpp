@@ -12,13 +12,13 @@
 
 BEG_METIL_NAMESPACE;
 
-extern "C" Level1::MO load_tiff( const String &filename, const MachineId &machine ) {
+extern "C" void load_tiff( Level1::MO &res, const String &filename, const MachineId &machine ) {
     TIFF *tif = TIFFOpen( filename.c_str(), "r" );
     if ( not tif )
         throw "impossible to read " + filename + " using libtiff";
 
     // int bits_per_sample = type->nb_bits_in_mantissa() > 8 ? 16 : 8;
-    PI32 w, h, bps;
+    PI32 w = 0, h = 0, bps = 8;
     TIFFGetField( tif, TIFFTAG_IMAGEWIDTH     , &w );
     TIFFGetField( tif, TIFFTAG_IMAGELENGTH    , &h );
     TIFFGetField( tif, TIFFTAG_BITSPERSAMPLE  , &bps );
@@ -29,7 +29,6 @@ extern "C" Level1::MO load_tiff( const String &filename, const MachineId &machin
 
     // new Array
     // cudaMalloc( &data, sizeof( float ) * size[ 0 ] * size[ 1 ] );
-    Level1::MO res;
     PI8 *data = reinterpret_cast<PI8 *>( init_dyn_array( res, size, Number<2>(), bps == 16 ? type_ptr<PI16>() : type_ptr<PI8>() ) );
 
     ST line_size = size[ 0 ] * bps / 8;
@@ -41,8 +40,6 @@ extern "C" Level1::MO load_tiff( const String &filename, const MachineId &machin
     _TIFFfree( buf );
 
     TIFFClose( tif );
-
-    return res;
 }
 
 END_METIL_NAMESPACE;

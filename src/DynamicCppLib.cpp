@@ -11,6 +11,7 @@ DynamicCppLib::DynamicCppLib( const String &cpp_file ) {
     String lib_file = ce.lib_for( cpp_file, true );
     ce.make_lib( lib_file, cpp_file, true );
 
+    PRINT( lib_file );
     // open the .so
     lib.open( lib_file );
     if ( not lib )

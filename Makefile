@@ -11,10 +11,10 @@ test: make_metil_comp
 	src/metil_comp -o tests/main -g3 -Isrc tests/main.cpp
 
 test_gdb:
-	metil_comp --exec-using gdb -g3 -Isrc tests/main.cpp
+	src/metil_comp --exec-using gdb -g3 -Isrc tests/main.cpp
 
 test_valgrind:
-	metil_comp --exec-using "valgrind" -g3 -Isrc tests/main.cpp
+	src/metil_comp --exec-using "valgrind" -g3 -Isrc tests/main.cpp
 # 	metil_comp --exec-using "valgrind --leak-check=full --show-reachable=yes" -g3 -Isrc tests/main.cpp
 
 metil_gen:
@@ -22,7 +22,7 @@ metil_gen:
 # 	metil_comp -g3 --valgrind -Isrc src/metil_parse.cpp `find . -name "*.cpp"`
 
 comp:
-	metil_comp src/make_compressed_struct.cpp
+	src/metil_comp src/make_compressed_struct.cpp
 
 
 tests: clean

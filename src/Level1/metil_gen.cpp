@@ -372,6 +372,7 @@ extern MethodName_self_append::TM metil_def_self_append__when__b__isa__VoidStrin
 extern MethodName_convert_to_Bool::TM metil_def_convert_to_Bool__when__a__isa__VoidString__pert__1;
 extern MethodName_size::TM metil_def_size__when__a__isa__VoidString;
 extern MethodName_ptr_z::TM metil_def_ptr_z__when__a__isa__VoidString;
+extern MethodName_copy_data::TM metil_def_copy_data__when__a__isa__VoidString;
 extern MethodName_del::TM metil_def_del__when__a__isa__OwcpString;
 extern MethodName_copy::TM metil_def_copy__when__a__isa__OwcpString;
 extern MethodName_size::TM metil_def_size__when__a__isa__OwcpString;
@@ -2645,6 +2646,16 @@ void reg_def() {
     item_metil_def_ptr_z__when__a__isa__VoidString.line = 13;
     item_metil_def_ptr_z__when__a__isa__VoidString.pert = 0;
     MethodFinder<MethodName_ptr_z>::last = &item_metil_def_ptr_z__when__a__isa__VoidString;
+
+    static MethodFinder<MethodName_copy_data>::Item item_metil_def_copy_data__when__a__isa__VoidString;
+    item_metil_def_copy_data__when__a__isa__VoidString.prev = MethodFinder<MethodName_copy_data>::last;
+    item_metil_def_copy_data__when__a__isa__VoidString.cond = &cond_metil_def_self_append__when__a__isa__VoidString__pert__100;
+    item_metil_def_copy_data__when__a__isa__VoidString.meth = metil_def_copy_data__when__a__isa__VoidString;
+    item_metil_def_copy_data__when__a__isa__VoidString.gene = 0;
+    item_metil_def_copy_data__when__a__isa__VoidString.file = string_10;
+    item_metil_def_copy_data__when__a__isa__VoidString.line = 15;
+    item_metil_def_copy_data__when__a__isa__VoidString.pert = 0;
+    MethodFinder<MethodName_copy_data>::last = &item_metil_def_copy_data__when__a__isa__VoidString;
 
     static MethodCond_0_isa<TypeConstructor_OwcpString> cond_metil_def_del__when__a__isa__OwcpString;
 
