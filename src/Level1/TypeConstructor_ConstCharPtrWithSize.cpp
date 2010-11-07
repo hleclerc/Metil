@@ -36,4 +36,10 @@ const void *metil_def_ptr_z__when__a__isa__ConstCharPtrWithSize( MO &a ) {
     return res.ptr();
 }
 
+MO metil_def_select_C__when__a__isa__ConstCharPtrWithSize__and__b__isa__Int__pert__1( MO a, MO b ) {
+    const TD *o = reinterpret_cast<const TD *>( a.data );
+    unsigned char v = reinterpret_cast<const unsigned char *>( o->data )[ CM_1( convert_to_SI32, b ) ];
+    return MO( String::char_ptr + 2 * v, &Level1::metil_type_cst_ConstCharPtr );
+}
+
 END_METIL_LEVEL1_NAMESPACE;

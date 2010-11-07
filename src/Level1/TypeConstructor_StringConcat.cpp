@@ -57,6 +57,19 @@ const void *metil_def_new_ptr_z__when__a__isa__StringConcat( MO a ) {
     return res;
 }
 
+MO metil_def_select_C__when__a__isa__StringConcat__and__b__isa__Int__pert__1( MO a, MO b ) {
+    MO c_0 = reinterpret_cast<const SC *>( a.data )->children[ 0 ].obj;
+    MO c_1 = reinterpret_cast<const SC *>( a.data )->children[ 1 ].obj;
+    ST s_0 = Val( CM_1( size, c_0 ) );
+    ST s_1 = Val( CM_1( size, c_1 ) );
+    ST pos = CM_1( convert_to_SI32, b );
+    //
+    if ( pos < s_1 )
+        return CM_2( select_C, c_0, b );
+    Ad n = NEW_Number( pos - s_0 );
+    return CM_2( select_C, c_1, n.o );
+}
+
 END_METIL_LEVEL1_NAMESPACE;
 
 

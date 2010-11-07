@@ -97,6 +97,7 @@ struct String : public Level1::MO {
     String &write( const void *ptr, ST len ) { CM_1( write, *this, ptr, len ); return *this; }
     Val begins_by( const String &str ) const;
     Val ends_with( const String &str ) const;
+    String rstrip( const Val &s ) const { return beg_upto( size() - s ); } ///< "abcdefg".rstrip( 2 ) -> "abcde"
     void close() { CM_1( close, *this ); }
 
     operator bool() const { return CM_1( convert_to_Bool, *this ); }

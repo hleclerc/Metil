@@ -234,3 +234,7 @@ src/Level1/CompilationCppParser.cpp
 src/Level1/CompilationEnvironment.h
 src/Level1/CompilationEnvironment.cpp
 tests/test.cpp
+src/Level1/CompilationTree.h
+src/Level1/CompilationTree.cpp
+src/Ptr.h
+src/metil_comp.cpp

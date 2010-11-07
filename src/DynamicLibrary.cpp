@@ -13,15 +13,22 @@
 
 BEG_METIL_NAMESPACE;
 
+
 DynamicLibrary::DynamicLibrary() {
     data = 0;
 }
 
 bool DynamicLibrary::open( String name ) {
+    static bool global_opened = 0;
+    if ( not global_opened ) {
+        global_opened = true;
+        dlopen( 0, RTLD_GLOBAL );
+    }
+
     #ifdef WIN32
     data = LoadLibrary( (const WCHAR *)lib );
     #else
-    data = dlopen( name.c_str(), RTLD_LAZY );
+    data = dlopen( name.c_str(), RTLD_LAZY + RTLD_GLOBAL );
     #endif
     return data;
 }

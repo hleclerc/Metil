@@ -1,4 +1,5 @@
 #include "StringHelp.h"
+#include "String.h"
 
 #include <cstdlib>
 
@@ -22,7 +23,7 @@ int strcmp( const char *a, const char *b ) {
 }
 
 int strncmp( const char *a, const char *b, int n ) {
-    for( int i = 0; i < n; ++a, ++b ) {
+    for( int i = 0; i < n; ++a, ++b, ++i ) {
         if ( *a < *b )
             return -1;
         if ( *a > *b )

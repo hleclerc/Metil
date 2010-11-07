@@ -4,10 +4,11 @@ install: all
 	./install.sh
 
 make_metil_comp:
-	make -C metil_comp
+	metil_comp -ne -o src/metil_comp -g3 -Isrc src/metil_comp.cpp
+#	make -C metil_comp
 
-test:
-	metil_comp -o tests/main -g3 -Isrc tests/main.cpp
+test: make_metil_comp
+	src/metil_comp -o tests/main -g3 -Isrc tests/main.cpp
 
 test_gdb:
 	metil_comp --exec-using gdb -g3 -Isrc tests/main.cpp
@@ -41,4 +42,3 @@ archive:
 clean:
 	rm -f unit_tests/compilations/* 2> /dev/null
 	rm -f tests/compilations/* 2> /dev/null
-	

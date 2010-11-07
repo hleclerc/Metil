@@ -1,5 +1,6 @@
 #include "Level1/ArrayHeader.h"
 #include "Level1/StringHelp.h"
+#include "MachineId.h"
 #include "BasicVec.h"
 #include "String.h"
 
@@ -11,7 +12,7 @@
 
 BEG_METIL_NAMESPACE;
 
-extern "C" Level1::MO load_tiff( const String &filename ) {
+extern "C" Level1::MO load_tiff( const String &filename, const MachineId &machine ) {
     TIFF *tif = TIFFOpen( filename.c_str(), "r" );
     if ( not tif )
         throw "impossible to read " + filename + " using libtiff";

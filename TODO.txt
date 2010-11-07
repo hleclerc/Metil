@@ -8,3 +8,7 @@
 * opérations symboliques courantes
 * indices muets
 *
+
+Comment gérer les .a ? Proposition : par répertoire
+Comment gérer les compil parallèles ?
+  Proposition : avec les Val dans un futur proche
