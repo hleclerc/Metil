@@ -84,6 +84,19 @@ static String get_next_word( const char *&c ) {
     return String( NewString( b, c ) );
 }
 
+static const char *rstrip( const char *c ) {
+    while ( is_a_space( *c ) )
+        --c;
+    return c + 1;
+}
+
+static String get_pragma_arg( const char *&c ) {
+    skip_spaces_but_not_cr( c );
+    const char *b = c;
+    go_to_next_line( c );
+    return String( NewString( b, rstrip( c ) ) );
+}
+
 void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const String &filename ) {
     String current_dir = directory_of( filename ) + "/";
     File file( filename, "r" );
@@ -121,7 +134,19 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                 if ( c[ 2 ] == 'n' and c[ 3 ] == 'c' and c[ 4 ] == 'l' and c[ 5 ] == 'u' and c[ 6 ] == 'd' and c[ 7 ] == 'e' and c[ 8 ] == ' ' ) {
                     String inc_file = ce.find_src( get_include_filename( c += 9 ), current_dir );
                     if ( inc_file ) {
-                        inc_files << inc_file;
+                        inc_files << inc_file;                        
+
+                        // .h.py ?
+                        if ( inc_file.ends_with( ".h" ) ) {
+                            String h_py = inc_file + ".py";
+                            if ( file_exists( h_py ) ) {
+                                if ( last_modification_time_or_zero_of_file_named( h_py ) >
+                                     last_modification_time_or_zero_of_file_named( inc_file ) )
+                                exec_cmd( "python " + h_py + " > " + inc_file, true );
+                            }
+                        }
+
+                        //
                         parse_src_file_rec( ce, inc_file );
                     }
                     continue;
@@ -130,31 +155,31 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
             if ( c[ 1 ] == 'p' and c[ 2 ] == 'r' and c[ 3 ] == 'a' and c[ 4 ] == 'g' and c[ 5 ] == 'm' and c[ 6 ] == 'a' and c[ 7 ] == ' ' ) {
                 c += 8;
                 if ( strncmp( c, "src_file ", 9 ) == 0 ) {
-                    src_files << get_next_word( c += 9 );
+                    src_files << get_pragma_arg( c += 9 );
                     continue;
                 }
                 if ( strncmp( c, "lib_path ", 9 ) == 0 ) {
-                    lib_paths << get_next_word( c += 9 );
+                    lib_paths << get_pragma_arg( c += 9 );
                     continue;
                 }
                 if ( strncmp( c, "lib_name ", 9 ) == 0 ) {
-                    lib_names << get_next_word( c += 9 );
+                    lib_names << get_pragma_arg( c += 9 );
                     continue;
                 }
-                if ( strncmp( c, "cpp_path ", 9 ) == 0 ) {
-                    cpp_paths << get_next_word( c += 9 );
+                if ( strncmp( c, "inc_path ", 9 ) == 0 ) {
+                    inc_paths << get_pragma_arg( c += 9 );
                     continue;
                 }
                 if ( strncmp( c, "cpp_flag ", 9 ) == 0 ) {
-                    cpp_flags << get_next_word( c += 9 );
+                    cpp_flags << get_pragma_arg( c += 9 );
                     continue;
                 }
                 if ( strncmp( c, "lnk_flag ", 9 ) == 0 ) {
-                    lnk_flags << get_next_word( c += 9 );
+                    lnk_flags << get_pragma_arg( c += 9 );
                     continue;
                 }
                 if ( strncmp( c, "gpu_flag ", 9 ) == 0 ) {
-                    gpu_flags << get_next_word( c += 9 );
+                    gpu_flags << get_pragma_arg( c += 9 );
                     continue;
                 }
                 if ( strncmp( c, "need_compilation_environment", 28 ) == 0 ) {

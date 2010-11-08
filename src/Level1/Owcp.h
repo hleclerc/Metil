@@ -1,6 +1,7 @@
 #ifndef OWCP_H
 #define OWCP_H
 
+#include "Ptr.h"
 #include "Type.h"
 #include "AdditionalDataVoid.h"
 
@@ -17,19 +18,15 @@ struct OwcpChild {
 };
 
 /**
-  Objet With Children and parents
+  @brief Object With MO Children and parents
 
   Automatic ref count (-> cpt_use )
 */
-struct OwcpAncestor {
+struct OwcpAncestor : public ObjectWithCptUse {
     OwcpAncestor() {
-        cpt_use      = 0;
         op_id        = 0;
         first_parent = 0;
     }
-
-    /// number of time this object is used
-    int   cpt_use;
 
     /// operation id (every new operation on the graph begins with ++current_op_id
     /// and one can compare op_id with current_op_id to see if operation on this node has been done or not).

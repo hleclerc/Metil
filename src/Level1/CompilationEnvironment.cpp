@@ -4,22 +4,27 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-CompilationEnvironment::CompilationEnvironment() {
-    // inc_paths
-    #ifdef INSTALL_DIR
-    add_inc_path( INSTALL_DIR );
-    #endif
+CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch ) : child( ch ) {
+    if ( child == 0 ) {
+        // inc_paths
+        #ifdef INSTALL_DIR
+        add_inc_path( INSTALL_DIR );
+        #endif
 
-    // defautl values
-    CXX  = "g++";
-    LD   = "g++";
-    NVCC = "/usr/local/cuda/bin/nvcc";
-    _comp_dir = absolute_filename( "compilations" ) + "/";
+        // default values
+        CXX  = "g++";
+        LD   = "g++";
+        NVCC = "/usr/local/cuda/bin/nvcc";
+        _comp_dir = absolute_filename( "compilations" ) + "/";
 
-    device_emulation = 0;
-    maxrregcount     = 0;
+        device_emulation = 0;
+        maxrregcount     = 0;
 
-    load_env_var();
+        load_env_var();
+    } else {
+        device_emulation = -1;
+        maxrregcount     = -1;
+    }
 }
 
 String CompilationEnvironment::find_src( const String &filename, const String &current_dir ) const {
@@ -39,11 +44,17 @@ String CompilationEnvironment::find_src( const String &filename, const String &c
             return trial;
     }
 
+    // try with inc_paths of child
+    if ( child )
+        return child->find_src( filename, current_dir );
+
     // not found :(
     return String();
 }
 
 String CompilationEnvironment::comp_dir() const {
+    if ( not _comp_dir )
+        return child->comp_dir();
     mkdir( _comp_dir, false );
     return _comp_dir;
 }
@@ -67,6 +78,8 @@ void CompilationEnvironment::add_lib_path( const String &path ) {
 }
 
 void CompilationEnvironment::add_lib_name( const String &name ) {
+    if ( child and child->lib_names.contains( name ) )
+        return;
     lib_names.push_back_unique( name );
 }
 
@@ -95,12 +108,12 @@ void CompilationEnvironment::set_comp_dir( const String &path ) {
         _comp_dir += '/';
 }
 
-String CompilationEnvironment::get_comp_dir() const {
-    return _comp_dir;
+String CompilationEnvironment::get_CXX() const {
+    return CXX ? CXX : child->get_CXX();
 }
 
-String CompilationEnvironment::get_cxx() const {
-    return CXX;
+String CompilationEnvironment::get_LD() const {
+    return LD ? LD : child->get_LD();
 }
 
 void CompilationEnvironment::save_env_var( bool update_LD_LIBRARY_PATH ) const {
@@ -205,6 +218,10 @@ String CompilationEnvironment::lib_for( const String &cpp, bool dyn ) {
     return comp_dir() + filename_without_dir_of( cpp ) + lib_suffix( dyn );
 }
 
+String CompilationEnvironment::cpp_for( const String &cpp ) {
+    return comp_dir() + filename_without_dir_of( cpp ) + ".cpp";
+}
+
 String CompilationEnvironment::mex_for( const String &cpp ) {
     const char *suffix = ".mexglx";
     if ( cpp.ends_with( ".cpp" ) ) return cpp.rstrip( 4 ) + suffix;
@@ -217,16 +234,34 @@ String CompilationEnvironment::exe_for( const String &cpp ) {
     return comp_dir() + filename_without_dir_of( cpp ) + exe_suffix();
 }
 
-String CompilationEnvironment::lnk_cmd( const String &exe, const BasicVec<String> &obj, bool lib, bool dyn ) const {
-    String cmd = LD;
+void CompilationEnvironment::extra_lnk_cmd( String &cmd, bool lib, bool dyn ) const {
     if ( LDFLAGS )
         cmd << ' ' << LDFLAGS;
-    if ( lib )
-        cmd << ( dyn ? " -shared" : " -static" );
     for( int i = 0; i < lib_paths.size(); ++i )
         cmd << " -L" << lib_paths[ i ];
     for( int i = 0; i < lib_names.size(); ++i )
         cmd << " -l" << lib_names[ i ];
+    if ( child )
+        child->extra_lnk_cmd( cmd, lib, dyn );
+}
+
+void CompilationEnvironment::extra_obj_cmd( String &cmd, bool dyn ) const {
+    if ( CPPFLAGS )
+        cmd << ' ' << CPPFLAGS;
+    for( int i = 0; i < inc_paths.size(); ++i )
+        cmd << " -I" << inc_paths[ i ];
+    if ( child )
+        child->extra_obj_cmd( cmd, dyn );
+}
+
+String CompilationEnvironment::lnk_cmd( const String &exe, const BasicVec<String> &obj, bool lib, bool dyn ) const {
+    String cmd = get_LD();
+    // basic flags
+    if ( lib )
+        cmd << ( dyn ? " -shared" : " -static" );
+    // -L... -l...
+    extra_lnk_cmd( cmd, lib, dyn );
+    // input / output
     cmd << " -o " << exe;
     for( int i = 0; i < obj.size(); ++i )
         cmd << ' ' << obj[ i ];
@@ -234,27 +269,33 @@ String CompilationEnvironment::lnk_cmd( const String &exe, const BasicVec<String
 }
 
 String CompilationEnvironment::obj_cmd( const String &obj, const String &cpp, bool dyn ) const {
-    String cmd = CXX;
-    if ( CPPFLAGS )
-        cmd << ' ' << CPPFLAGS;
+    String cmd = get_CXX();
+    // basic flags
     if ( dyn )
         cmd << " -fpic";
-    for( int i = 0; i < inc_paths.size(); ++i )
-        cmd << " -I" << inc_paths[ i ];
+    // -L... -l...
+    extra_obj_cmd( cmd, dyn );
+    // input / output
     cmd << " -c -o " << obj << ' ' << cpp;
     return cmd;
 }
 
+CompilationEnvironment *CompilationEnvironment::deepest_child() {
+    if ( child )
+        return child->deepest_child();
+    return this;
+}
 
 Ptr<CompilationTree> CompilationEnvironment::make_cpp_compilation_tree( const String &cpp ) {
-    Ptr<CompilationTree> &res = cor_files[ cpp ];
+    Ptr<CompilationTree> &res = deepest_child()->cor_files[ cpp ];
     if ( not res )
         res = NEW( CompilationTree, cpp );
     return res;
 }
 
+
 Ptr<CompilationTree> CompilationEnvironment::make_obj_compilation_tree( const String &obj, Ptr<CompilationTree> cpp, bool dyn ) {
-    Ptr<CompilationTree> &res = cor_files[ obj ];
+    Ptr<CompilationTree> &res = deepest_child()->cor_files[ obj ];
     if ( not res ) {
         res = NEW( CompilationTree, obj );
         res->add_child( cpp );
@@ -264,7 +305,7 @@ Ptr<CompilationTree> CompilationEnvironment::make_obj_compilation_tree( const St
 }
 
 Ptr<CompilationTree> CompilationEnvironment::make_lnk_compilation_tree( const String &exe, const BasicVec<Ptr<CompilationTree> > &obj, bool lib, bool dyn ) {
-    Ptr<CompilationTree> &res = cor_files[ exe ];
+    Ptr<CompilationTree> &res = deepest_child()->cor_files[ exe ];
     if ( not res ) {
         res = NEW( CompilationTree, exe );
         for( int i = 0; i < obj.size(); ++i )
@@ -295,14 +336,14 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         lib_paths.push_back_unique( cpp_parser.lib_paths[ i ] );
 
     // local flags
-    //    BasicVec<String> loc_paths;
-    //    for( int i = 0; i < cpp_parser.cpp_paths.size(); ++i )
-    //        loc_paths.push_back_unique( cpp_parser.cpp_paths[ i ] );
+    CompilationEnvironment loc_ce( this );
+    for( int i = 0; i < cpp_parser.inc_paths.size(); ++i )
+        loc_ce.inc_paths.push_back_unique( cpp_parser.inc_paths[ i ] );
 
     // command
-    Ptr<CompilationTree> res = make_obj_compilation_tree( obj_for( cpp, dyn ), make_cpp_compilation_tree( cpp ), dyn );
+    Ptr<CompilationTree> res = loc_ce.make_obj_compilation_tree( obj_for( cpp, dyn ), make_cpp_compilation_tree( cpp ), dyn );
     for( int i = 0; i < cpp_parser.inc_files.size(); ++i )
-        res->add_child( make_cpp_compilation_tree( cpp_parser.inc_files[ i ] ) );
+        res->add_child( loc_ce.make_cpp_compilation_tree( cpp_parser.inc_files[ i ] ) );
     obj.push_back_unique( res );
 
     // .h -> .cpp ?

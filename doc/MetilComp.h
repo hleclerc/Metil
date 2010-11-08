@@ -49,7 +49,7 @@ metil_comp --exec-using "valgrind --leak-check=full" ex1.cpp
     
     Possible pragma in .h/.cpp/.cu files:";
         - @p src_file additionnal cpp / cu files"
-        - @p cpp_path additionnal include path"
+        - @p inc_path additionnal include path"
         - @p lnk_flag additionnal flags explicitly passed to the linker
         - @p gpu_flag additionnal flags explicitly passed to nvcc
         - @p lib_path additionnal library (.so/.a) path, like e.g. /usr/local/lib

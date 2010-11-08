@@ -40,7 +40,7 @@ public:
     #undef DECL_MET
 
     // related types
-    Type *dyn_array_type( int dim );
+    Type *dyn_array_type( int dim, bool want_machine_id, bool want_gpu );
     Type *sta_array_type( int dim, ST *size );
     Type *static_vec_type( ST size );
 

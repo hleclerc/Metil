@@ -4,11 +4,12 @@
 BEG_METIL_LEVEL1_NAMESPACE;
 
 // default behavior
-void metil_def_self_append__pert__0( MO &a, MO b ) { Ad c = a; a = CM_2( append, a, b ); }
-void metil_def_reassign__pert__0( MO &a, MO b ) { Ad c = a; a = CM_1( copy, b ); }
-void metil_def_add_parent__pert__0( MO &a, struct OwcpChild *b ) {}
-void metil_def_rem_parent__pert__0( MO &a, struct OwcpChild *b ) {}
-bool metil_def_cur_op_id__pert__0( MO a ) { return false; }
+void             metil_def_self_append__pert__0( MO &a, MO b ) { Ad c = a; a = CM_2( append, a, b ); }
+void             metil_def_reassign__pert__0( MO &a, MO b ) { Ad c = a; a = CM_1( copy, b ); }
+void             metil_def_add_parent__pert__0( MO &a, struct OwcpChild *b ) {}
+void             metil_def_rem_parent__pert__0( MO &a, struct OwcpChild *b ) {}
+bool             metil_def_cur_op_id__pert__0( MO a ) { return false; }
+const MachineId *metil_def_machine_id__pert__0( MO a ) { return MachineId::cur(); }
 
 // void objects
 MO metil_def_copy__when__a__has__is_void( MO a ) { return a.type; }
@@ -73,11 +74,14 @@ bool TypeConstructor::is_void() const { return 0; }
 
 void TypeConstructor::default_mw( MethodWriter &mw ) const {}
 int TypeConstructor::Owcp_size() const { return -1; }
-int TypeConstructor::static_size_in_bytes() const { return ( static_size_in_bits() + 7 ) / 8; }
 int TypeConstructor::static_size_in_bits() const { return -1; }
-int TypeConstructor::tensor_order() const { return 0; }
-int TypeConstructor::needed_alignement_in_bytes() const { return ( needed_alignement_in_bits() + 7 ) / 8; }
 int TypeConstructor::needed_alignement_in_bits() const { return 8; }
+int TypeConstructor::needed_alignement_in_bits_if_in_vec( const MachineId *mid ) const { return 1; }
+int TypeConstructor::tensor_order() const { return 0; }
+
+int TypeConstructor::static_size_in_bytes() const { return ( static_size_in_bits() + 7 ) / 8; }
+int TypeConstructor::needed_alignement_in_bytes() const { return ( needed_alignement_in_bits() + 7 ) / 8; }
+int TypeConstructor::needed_alignement_in_bytes_if_in_vec( const MachineId *mid ) const { return ( needed_alignement_in_bits_if_in_vec( mid ) + 7 ) / 8; }
 
 void TypeConstructor::write_convert_to_ST( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
     mw.n << "if ( sizeof( ST ) == 8 ) {";
@@ -107,18 +111,25 @@ String TypeConstructor::cpp_type() const {
     return String();
 }
 
-TypeSetAncestor *TypeConstructor::dyn_array_type( int dim, const String &name ) {
-    if ( _dyn_array_type_set.size() <= dim )
-        _dyn_array_type_set.resize( dim + 1, (TypeSetAncestor *)0 );
-    if ( not _dyn_array_type_set[ dim ] ) {
+TypeSetAncestor *TypeConstructor::dyn_array_type( int dim, const String &name, bool want_machine_id, bool want_gpu ) {
+    if ( want_gpu )
+        want_machine_id = 0;
+    int off = 3 * dim + 2 * want_machine_id + want_gpu;
+    if ( _dyn_array_type_set.size() <= off )
+        _dyn_array_type_set.resize( off + 1, (TypeSetAncestor *)0 );
+    if ( not _dyn_array_type_set[ off ] ) {
         String tn;
         tn << "Array_" << name.size() << name << "_" << dim;
         for( int d = 0; d < dim; ++d )
             tn << "_m_m";
         tn << "_CptUse";
-        _dyn_array_type_set[ dim ] = NEW( TypeSet<TypeConstructor_Array>, tn );
+        if ( want_machine_id )
+            tn << "_MachineId";
+        if ( want_gpu )
+            tn << "_Gpu";
+        _dyn_array_type_set[ off ] = NEW( TypeSet<TypeConstructor_Array>, tn );
     }
-    return _dyn_array_type_set[ dim ];
+    return _dyn_array_type_set[ off ];
 }
 
 TypeSetAncestor *TypeConstructor::static_vec_type( ST size, const String &name ) {

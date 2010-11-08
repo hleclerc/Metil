@@ -15,7 +15,9 @@ test_gdb:
 
 test_valgrind:
 	src/metil_comp --exec-using "valgrind" -g3 -Isrc tests/main.cpp
-# 	metil_comp --exec-using "valgrind --leak-check=full --show-reachable=yes" -g3 -Isrc tests/main.cpp
+	
+test_valgrind_full:
+	src/metil_comp --exec-using "valgrind --leak-check=full --show-reachable=yes" -g3 -Isrc tests/main.cpp
 
 metil_gen:
 	metil_comp -g3 -Isrc src/Level1/metil_parse.cpp `find src -name "*.cpp" -o -name "*.h"`

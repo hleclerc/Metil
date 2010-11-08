@@ -124,6 +124,8 @@ String canonicalize_filename( const String &filename ) {
 }
 
 String absolute_filename( const String &f ) {
+    if ( not f )
+        return f;
     if ( f[ 0 ] == '/' or f[ 0 ] == '\\' )
         return canonicalize_filename( f );
     return canonicalize_filename( cur_dir() + '/' + f );
@@ -164,6 +166,8 @@ int mkdir( const String &filename, bool check_if_exists ) {
 }
 
 SI64 last_modification_time_or_zero_of_file_named( const char *n ) {
+    if ( not n )
+        return 0;
     struct stat stat_file;
     if ( stat( n, &stat_file ) )
         return 0;

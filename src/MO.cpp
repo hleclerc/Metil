@@ -87,4 +87,8 @@ void MO::display_tex() const {
     display_dot( "tmp" );
 }
 
+const MachineId *MO::machine_id() const {
+    return CM_1( machine_id, *this );
+}
+
 END_METIL_LEVEL1_NAMESPACE

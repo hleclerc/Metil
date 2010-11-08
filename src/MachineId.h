@@ -1,20 +1,20 @@
 #ifndef MACHINEID_H
 #define MACHINEID_H
 
-#include "Config.h"
+#include "TypeConfig.h"
 
 BEG_METIL_NAMESPACE;
 
 struct MachineId {
-    static MachineId cpu( int nb = 0 ) { MachineId res; res.id = -1 - nb; return res; }
-    static MachineId gpu( int nb = 0 ) { MachineId res; res.id =      nb; return res; }
-    static MachineId cur() { return cpu( 0 ); }
+    static const MachineId *cpu( int nb = 0 );
+    static const MachineId *gpu( const MachineId *cpu, int nb = 0 );
+    static const MachineId *cur(); ///< pointer on current machine (where the code is executed)
 
-
-    bool is_a_gpu() const { return id >= 0; }
-    bool is_a_cpu() const { return id <  0; }
-
-    int id;
+    virtual int simd_alignement() const = 0;
+    virtual void write_str( class String &os ) const = 0;
+    virtual void *alloc( ST &rese ) = 0;
+    virtual void free( void *data, ST rese ) = 0;
+    virtual bool is_a_gpu() const;
 };
 
 END_METIL_NAMESPACE;

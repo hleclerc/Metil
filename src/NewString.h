@@ -6,7 +6,7 @@
 BEG_METIL_NAMESPACE;
 
 /**
-    Used to make new contiguous String.
+    @brief Used to make @em new contiguous String (used in some String constructors).
 */
 class NewString {
 public:

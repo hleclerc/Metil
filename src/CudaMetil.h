@@ -12,7 +12,7 @@
 #pragma lib_name cudart
 #pragma lib_path /usr/local/cuda/lib64
 #pragma lib_path /usr/local/cuda/lib
-#pragma cpp_path /usr/local/cuda/include
+#pragma inc_path /usr/local/cuda/include
 #endif
 
 BEG_METIL_NAMESPACE;
@@ -43,12 +43,12 @@ typename T::HasOffPtr memcpy( Ps<T> &dst, const Ps<T> &src ) {
 
 /// make a new copy of data from str
 template<class T>
-Ps<T> strdup( const Ps<T> &src, MachineId dst_id ) {
+Ps<T> strdup( const Ps<T> &src, const MachineId *dst_id ) {
     Ps<T> dst( 0, src.size, src.rese, dst_id );
-    if ( dst_id.is_a_cpu() )
-        dst.data = (T *)MALLOC( dst.rese );
-    else
+    if ( dst_id->is_a_gpu() )
         cudaMalloc( &dst.data, dst.rese );
+    else
+        dst.data = (T *)MALLOC( dst.rese );
     memcpy( dst, src );
     return dst;
 }

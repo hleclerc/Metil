@@ -31,6 +31,7 @@ public:
     DECL_WRITER( del );
     DECL_WRITER( size );
     DECL_WRITER( sizes );
+    DECL_WRITER( machine_id );
 
     int  dim() const;
     bool dyn() const; ///< true if dynamic
@@ -53,6 +54,8 @@ public:
     BasicVec<ST> rese;
     bool want_CptUse;
     bool want_ExtPtr;
+    bool want_Gpu;
+    bool want_MachineId;
     Type *item_type_bas;
 };
 

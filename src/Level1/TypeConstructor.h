@@ -3,6 +3,7 @@
 
 #include "MethodWriter.h"
 #include "MethodCond.h"
+#include "MachineId.h"
 #include "TypeSet.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
@@ -55,16 +56,19 @@ public:
     virtual int tensor_order() const;
     virtual int static_size_in_bits() const;
     virtual int needed_alignement_in_bits() const;
+    virtual int needed_alignement_in_bits_if_in_vec( const MachineId *mid ) const;
     virtual String cpp_type() const;
+
     int static_size_in_bytes() const;
     int needed_alignement_in_bytes() const;
+    int needed_alignement_in_bytes_if_in_vec( const MachineId *mid ) const;
 
     DECL_COND( has_writer_for_convert_to_ST ) { return 0; }
     virtual void write_convert_to_ST( MethodWriter &mw, const Mos *a, const String &ret_ins ) const;
 
     virtual void write_select_op( MethodWriter &mw, const Mos *a, TypeConstructor *index_type, const String &op ) const;
 
-    TypeSetAncestor *dyn_array_type ( int dim, const String &name );
+    TypeSetAncestor *dyn_array_type ( int dim, const String &name, bool want_machine_id, bool want_gpu );
     TypeSetAncestor *sta_array_type ( int dim, ST *size, const String &name );
     TypeSetAncestor *static_vec_type( ST size, const String &name );
 

@@ -98,8 +98,17 @@ String TypeConstructor_Int::cpp_type() const {
     return String();
 }
 
-bool TypeConstructor_Int::is_a_POD() const { return 1; }
-int TypeConstructor_Int::static_size_in_bits() const { return mant; }
+bool TypeConstructor_Int::is_a_POD() const {
+    return 1;
+}
+int TypeConstructor_Int::static_size_in_bits() const {
+    return mant;
+}
+
+int TypeConstructor_Int::needed_alignement_in_bits_if_in_vec( const MachineId *mid ) const {
+    return mid->simd_alignement();
+}
+
 
 //
 void TypeConstructor_Int::init( Type *type ) {

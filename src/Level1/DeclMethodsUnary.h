@@ -65,3 +65,7 @@ DECL_MET( YO  , get_parent              ); // get_parent
 DECL_MET( BO  , cur_op_id               ); // return true if op_id == current_op_id
 //DECL_MET( GO<MetilException *>, exec_node     ); // exec_node
 //DECL_MET( GC<MO *>            , get_op_mp     ); // return op_mp if an Owcp, 0 if not
+
+DECL_MET( MO  , machine_id              ); // return info on where the object is stored
+
+

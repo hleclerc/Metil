@@ -9,12 +9,12 @@ Img::Img() {
     type = &Level1::metil_type_ref_Array_4NULL_2_0_0_0_0;
 }
 
-Img::Img( const String &filename, const MachineId &machine ) {
+Img::Img( const String &filename, const MachineId *machine ) {
     type = &Level1::metil_type_ref_Array_4NULL_2_0_0_0_0;
     load( filename, machine );
 }
 
-void Img::load( const String &filename, const MachineId &machine ) {
+void Img::load( const String &filename, const MachineId *machine ) {
     if ( filename.ends_with( ".tif" ) or filename.ends_with( ".tiff" ) or
          filename.ends_with( ".TIF" ) or filename.ends_with( ".TIFF" ) )
         load_tiff( filename, machine );
@@ -22,14 +22,14 @@ void Img::load( const String &filename, const MachineId &machine ) {
         load_qimg( filename, machine );
 }
 
-void Img::load_tiff( const String &filename, const MachineId &machine ) {
+void Img::load_tiff( const String &filename, const MachineId *machine ) {
     static DynamicCppLib dl( directory_of( __FILE__ ) + "/TiffLoader.cpp" );
-    typedef void LoadTiff( Level1::MO &res, const String &filename, const MachineId &machine );
+    typedef void LoadTiff( Level1::MO &res, const String &filename, const MachineId *machine );
     CM_1( del, *this );
     reinterpret_cast<LoadTiff *>( dl.get_sym( "load_tiff" ) )( *this, filename, machine );
 }
 
-void Img::load_qimg( const String &filename, const MachineId &machine ) {
+void Img::load_qimg( const String &filename, const MachineId *machine ) {
 }
 
 END_METIL_NAMESPACE;

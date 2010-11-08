@@ -159,6 +159,15 @@ void TypeConstructor_Array::write_sizes( MethodWriter &mw, const Mos *a, const S
     mw.n << ret_ins << "MO( data, type );";
 }
 
+void TypeConstructor_Array::write_machine_id( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
+    if ( want_MachineId ) {
+        write_get_header( mw, "h", a[ 0 ].data );
+        mw.n << ret_ins << "h->machine_id;";
+    } else {
+        mw.n << ret_ins << "MachineId::cur();";
+    }
+}
+
 void TypeConstructor_Array::write_get_index( MethodWriter &cw, const String &name_res, const TypeConstructor *c_1, const Mos &d_1, const String &name_header ) const {
     int to = c_1->tensor_order();
     if ( to == 0 ) {
@@ -269,8 +278,11 @@ int TypeConstructor_Array::static_size_in_bits() const {
 }
 
 void TypeConstructor_Array::write_get_header( MethodWriter &cw, const String &name_header, const String &data ) const {
-    if ( len_size() or len_rese() or want_CptUse or want_ExtPtr )  {
-        String h; h << "ArrayHeader<" << len_size() << "," << len_rese() << "," << want_CptUse << "," << want_ExtPtr << ">";
+    if ( len_size() or len_rese() or want_CptUse or want_ExtPtr ) {
+        int al = bas_type ? bas_type->constructor->needed_alignement_in_bytes_if_in_vec(
+                want_Gpu ? MachineId::gpu( MachineId::cur(), 0 ) : MachineId::cur()
+                ) : 1;
+        String h; h << "ArrayHeader<" << len_size() << "," << len_rese() << "," << want_CptUse << "," << want_ExtPtr << "," << want_MachineId << "," << al << ">";
         cw << h << " *" << name_header << " = reinterpret_cast<" << h << " *>( " << data << " );\n";
     }
 }
@@ -283,6 +295,7 @@ void TypeConstructor_Array::write_get_data_ptr( MethodWriter &cw, bool want_cons
         if ( dyn() ) {
             String offset; offset << "sizeof( *" << name_header << " )";
             cw << type << name_data << " = reinterpret_cast<" << type << ">( (char *)" << name_header << " + " << offset << " );\n";
+            // cw << "PRINT(  );\n";
         } else {
             cw << type << name_data << " = reinterpret_cast<" << type << ">( " << data << " );\n";
         }
@@ -350,10 +363,13 @@ static int read_int( const String &str ) {
 void TypeConstructor_Array::init( Type *type ) {
     TypeConstructor::init( type );
 
-    want_CptUse = false;
-    want_ExtPtr = false;
-    item_type_bas = 0;
+    want_CptUse    = false;
+    want_ExtPtr    = false;
+    want_Gpu       = false;
+    want_MachineId = false;
+    item_type_bas  = 0;
 
+    // start parsing
     const char *name = type->name + 6;
 
     // type_name
@@ -371,8 +387,9 @@ void TypeConstructor_Array::init( Type *type ) {
     }
 
     for( int d = 1 + 2 * dim; d < lst.size(); ++d ) {
-        if ( lst[ d ] == "CptUse" ) want_CptUse = true;
-        if ( lst[ d ] == "ExtPtr" ) want_ExtPtr = true;
+        if ( lst[ d ] == "CptUse" ) { want_CptUse = true; }
+        if ( lst[ d ] == "ExtPtr" ) { want_ExtPtr = true; }
+        if ( lst[ d ] == "Gpu"    ) { want_Gpu    = true; want_MachineId = true; }
     }
 }
 

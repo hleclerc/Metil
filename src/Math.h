@@ -56,6 +56,14 @@ template<class T0,class T1> __inline__ T0 ceil( T0 a, T1 m ) {
     return ( a + m - 1 ) / m * m;
 }
 
+/** ceil, but assuming that m is a power of 2 */
+template<class T0,class T1> __inline__ T0 ceil_p2( T0 a, T1 m ) {
+    return ( a + m - 1 ) & ~( m - 1 );
+}
+
+/** ceil, but assuming that m is a power of 2 */
+#define CEIL_P2( a, m ) ( ( a + m - 1 ) & ~( m - 1 ) )
+
 template<class T0,class T1>
 __inline__ T0 iDivUp( T0 a, T1 b ) {
     return ( a + b - 1 ) / b;

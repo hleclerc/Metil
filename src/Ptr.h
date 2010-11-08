@@ -6,6 +6,8 @@
 BEG_METIL_NAMESPACE;
 
 /**
+  @brief for objects with reference counting
+
   Objects pointed by Ptr<...> should inherit from ObjectWithCptUse.
 
   Use NEW( ... ) to allocate objects
@@ -20,9 +22,15 @@ template<class T>
 struct ConstPtr;
 
 /**
+  @brief Pointer on an ObjectWithCptUse
+
   Can be used for reference couting.
 
   T should be an object which inherits from ObjectWithCptUse.
+
+  @remarks this class do not manage cyclic reference counting.
+
+  @remarks object must be allocated with NEW( ... ) (and not with the new operator)
 
   In the folowing example, the memory is automatically managed (the Toto object will be deleted at the end of foo)
 

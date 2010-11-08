@@ -1,7 +1,7 @@
 #ifndef MO_H
 #define MO_H
 
-#include "TypeConfig.h"
+#include "MachineId.h"
 
 BEG_METIL_NAMESPACE;
 class String;
@@ -11,7 +11,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 class Type;
 
 /**
-  Metil Object : contains a pointer on type and data
+  @brief Metil Object : contains a pointer on type and data
 */
 class MO {
 public:
@@ -30,6 +30,8 @@ public:
 
     void display_dot( bool want_parents = false ) const;
     void display_tex() const;
+
+    const MachineId *machine_id() const;
 
     void *data;
     Type *type;

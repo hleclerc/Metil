@@ -7,12 +7,12 @@
 BEG_METIL_NAMESPACE;
 
 /**
-  A pointer, with associated number of items (size) and reserved size in memory
+  @brief Pointer on a object, with associated number of items (size) and reserved size in memory
 */
 template<class T>
 struct Ps {
     Ps() : data( 0 ), size( 1 ), rese( 0 ), pos( MachineId::cpu( 0 ) ) {}
-    Ps( T *data, ST size, ST rese, MachineId pos ) : data( data ), size( size ), rese( rese ), pos( pos ) {}
+    Ps( T *data, ST size, ST rese, const MachineId &pos ) : data( data ), size( size ), rese( rese ), pos( pos ) {}
 
     void clear() { data = 0; size = 1; rese = 0; }
 
@@ -43,7 +43,7 @@ struct Ps {
     T *data;
     ST size; ///< nb (consecutive) pointed items
     ST rese; ///< in bytes
-    MachineId pos; ///< machine id (-1 -> cpu, 0 -> gpu board 0, ...)
+    const MachineId *pos; ///< machine id (-1 -> cpu, 0 -> gpu board 0, ...)
 };
 
 END_METIL_NAMESPACE;

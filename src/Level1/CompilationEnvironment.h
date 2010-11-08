@@ -8,7 +8,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 
 class CompilationEnvironment {
 public:
-    CompilationEnvironment();
+    CompilationEnvironment( CompilationEnvironment *ch = 0 );
 
     String find_src( const String &filename, const String &current_dir ) const; // use current_dir and include_dirs to find filename
     String comp_dir() const;
@@ -22,8 +22,8 @@ public:
     void set_maxrregcount( int nb_registers );
     void set_comp_dir( const String &path );
 
-    String get_comp_dir() const;
-    String get_cxx     () const;
+    String get_CXX     () const;
+    String get_LD      () const;
 
     void save_env_var( bool update_LD_LIBRARY_PATH = true ) const; ///< save data in environment variables (METIL_INC_PATHS, ...)
     void load_env_var(); ///< append data from environment variables (METIL_INC_PATHS, ...)
@@ -32,6 +32,7 @@ public:
     String lib_suffix( bool dyn ); ///< .so, .a, ... depending on the system
     String exe_suffix(); ///< .exe, ... depending on the system
 
+    String cpp_for( const String &bas ); ///< ex: toto -> compilation/toto.cpp
     String obj_for( const String &cpp, bool dyn ); ///< ex: toto.cpp -> compilation/toto.os
     String lib_for( const String &cpp, bool dyn ); ///< ex: toto.cpp -> compilation/toto.so
     String mex_for( const String &cpp ); ///< .mexglx
@@ -52,6 +53,9 @@ protected:
     Ptr<CompilationTree> make_lnk_compilation_tree( const String &app, const BasicVec<Ptr<CompilationTree> > &obj, bool lib, bool dyn );
 
     void parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, const String &cpp, bool dyn );
+    void extra_obj_cmd( String &cmd, bool dyn ) const;
+    void extra_lnk_cmd( String &cmd, bool lib, bool dyn ) const;
+    CompilationEnvironment *deepest_child();
 
     BasicVec<String> inc_paths;
     BasicVec<String> lib_paths;
@@ -65,6 +69,7 @@ protected:
     bool device_emulation;
     int maxrregcount;
 
+    CompilationEnvironment *child;
     BasicVec<String> parsed;
     std::map<String,Ptr<CompilationTree> > cor_files;
 };

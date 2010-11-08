@@ -1,3 +1,4 @@
+#include "CompilationEnvironment.h"
 #include "MethodFinder.h"
 #include "StringHelp.h"
 #include "System.h"
@@ -158,30 +159,31 @@ DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Typ
         return iter->second;
     DynamicLibrary &res = libs[ n ];
 
-    // filename
-    String bas_name = get_env( "METIL_COMP_DIR" );
-    if ( not bas_name.size() )
-        bas_name = "compilations";
-    if ( not bas_name.ends_with("/") )
-        bas_name << "/";
-    bas_name << "gen_met_for";
+    // filenames
+    String bas_name = "gen_met_for";
     if ( type_0 ) bas_name << "__" << type_0->name;
     if ( type_1 ) bas_name << "__" << type_1->name;
     if ( type_2 ) bas_name << "__" << type_2->name;
 
+    CompilationEnvironment &ce = CompilationEnvironment::get_main_compilation_environment();
+    String lib_name = ce.lib_for( bas_name, true );
+
     // if lib exists, load it
-    String lib_name = bas_name + ".so";
-    SI64 date_dep = dep_file ? last_modification_time_or_zero_of_file_named( dep_file ) : 0;
+    SI64 date_dep = last_modification_time_or_zero_of_file_named( dep_file );
     SI64 date_lib = last_modification_time_or_zero_of_file_named( lib_name );
     if ( date_lib <= date_dep ) { // make cpp, compile and load it
-        String cpp_name = bas_name + ".cpp";
+        String cpp_name = ce.cpp_for( bas_name );
         make_cpp_for_types( cpp_name, type_0, type_1, type_2 );
 
-        String cmd = get_env( "METIL_CXX_CMD" );
-        ASSERT( cmd.size(), "METIL_CXX_CMD is not defined in env var" );
-        cmd << " -DMETIL_GENE_DYLIB -g3 -fPIC -shared -o "  << lib_name << " "  << cpp_name;
-        if ( exec_cmd( cmd ) )
+        CompilationEnvironment loc_ce = ce;
+        loc_ce.add_CPPFLAG( "-DMETIL_GENE_DYLIB" );
+        if ( loc_ce.make_lib( lib_name, cpp_name, true ) )
             ERROR( "Pb during compilation of %s", cpp_name.c_str() );
+        //        String cmd = get_env( "METIL_CXX_CMD" );
+        //        ASSERT( cmd.size(), "METIL_CXX_CMD is not defined in env var" );
+        //        cmd << "  -g3 -fPIC -shared -o "  << lib_name << " "  << cpp_name;
+        //        if ( exec_cmd( cmd ) )
+        //            ERROR( "Pb during compilation of %s", cpp_name.c_str() );
     }
 
     res.open( lib_name );

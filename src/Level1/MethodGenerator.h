@@ -202,6 +202,15 @@ struct MethodGenerator<Type::Method_YO,N> {
     }
 };
 
+template<class N>
+struct MethodGenerator<Type::Method_MO,N> {
+    static const MachineId *generator( MO a ) {
+        a.type->init_if_necessary();
+        N::access( a.type ) = MethodFinder<N>::find( a.type );
+        return N::access( a.type )( a );
+    }
+};
+
 
 END_METIL_LEVEL1_NAMESPACE;
 
