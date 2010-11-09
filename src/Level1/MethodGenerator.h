@@ -166,6 +166,16 @@ struct MethodGenerator<Type::Method_VoO,N> {
 };
 
 template<class N>
+struct MethodGenerator<Type::Method_VOO,N> {
+    static void generator( MO a, MO b ) {
+        a.type->init_if_necessary();
+        b.type->init_if_necessary();
+        N::access( a.type )[ b.type->number ] = MethodFinder<N>::find( a.type, b.type );
+        return N::access( a.type )[ b.type->number ]( a, b );
+    }
+};
+
+template<class N>
 struct MethodGenerator<Type::Method_OoO,N> {
     static MO generator( MO &a, MO b ) {
         a.type->init_if_necessary();

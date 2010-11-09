@@ -24,7 +24,7 @@ inline MO *init_dyn_array_kernel( MO &res, const ST *size, Number<1> n_dim, Type
         base_type->init_if_necessary();
         al = base_type->constructor->needed_alignement_in_bytes_if_in_vec( mid );
         ss = base_type->constructor->static_size_in_bytes();
-        res.type = base_type->dyn_array_type( n_dim, want_machine_id, mid );
+        res.type = base_type->dyn_array_type( n_dim, want_machine_id, mid->is_a_gpu() );
     } else {
         al = 1;
         ss = sizeof( MO );
@@ -73,7 +73,7 @@ inline MO *init_dyn_array_kernel( MO &res, const ST *size, Number<dim> n_dim, Ty
         for( int d = 1; d < dim; ++d )
             rese[ d ] = size[ d ];
 
-        res.type = base_type->dyn_array_type( n_dim, want_machine_id, mid );
+        res.type = base_type->dyn_array_type( n_dim, want_machine_id, mid->is_a_gpu() );
     } else {
         al = 1;
         ls = size[ 0 ] * sizeof( MO );

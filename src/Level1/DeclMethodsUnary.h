@@ -27,9 +27,11 @@ DECL_MET( VoPS, write                   ); // a.write( ptr, size )
 DECL_MET( VOpS, read                    ); // a.read ( ptr, size )
 DECL_MET( VOpS, copy_data               ); // a.copy_data( ptr, size )
 
-// vector
+// arrays
 DECL_MET( OO  , size                    ); // size of data (nb items). Returns a scalar
 DECL_MET( OO  , sizes                   ); // size of data (nb items / axes). Returns a vector
+DECL_MET( OO  , min_1                   ); // min of the values
+DECL_MET( OO  , max_1                   ); // max of the values
 
 // string
 DECL_MET( po  , ptr                     ); // return a ptr on data
@@ -67,5 +69,3 @@ DECL_MET( BO  , cur_op_id               ); // return true if op_id == current_op
 //DECL_MET( GC<MO *>            , get_op_mp     ); // return op_mp if an Owcp, 0 if not
 
 DECL_MET( MO  , machine_id              ); // return info on where the object is stored
-
-

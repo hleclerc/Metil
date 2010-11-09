@@ -4,17 +4,17 @@ install: all
 	./install.sh
 
 make_metil_comp:
-	metil_comp -ne -o src/metil_comp -g3 -Isrc src/metil_comp.cpp
+	metil_comp/metil_comp -ne -o src/metil_comp -g3 -Isrc src/metil_comp.cpp
 #	make -C metil_comp
 
 test: make_metil_comp
 	src/metil_comp -o tests/main -g3 -Isrc tests/main.cpp
 
 test_gdb:
-	src/metil_comp --exec-using gdb -g3 -Isrc tests/main.cpp
+	src/metil_comp --gdb -g3 -Isrc tests/main.cpp
 
 test_valgrind:
-	src/metil_comp --exec-using "valgrind" -g3 -Isrc tests/main.cpp
+	src/metil_comp --exec-using "valgrind --num-callers=30" -g3 -Isrc tests/main.cpp
 	
 test_valgrind_full:
 	src/metil_comp --exec-using "valgrind --leak-check=full --show-reachable=yes" -g3 -Isrc tests/main.cpp

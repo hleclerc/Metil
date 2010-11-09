@@ -22,6 +22,7 @@ public:
     void set_maxrregcount( int nb_registers );
     void set_comp_dir( const String &path );
 
+    String get_NVCC    () const;
     String get_CXX     () const;
     String get_LD      () const;
 
@@ -53,7 +54,7 @@ protected:
     Ptr<CompilationTree> make_lnk_compilation_tree( const String &app, const BasicVec<Ptr<CompilationTree> > &obj, bool lib, bool dyn );
 
     void parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, const String &cpp, bool dyn );
-    void extra_obj_cmd( String &cmd, bool dyn ) const;
+    void extra_obj_cmd( String &cmd, bool dyn, bool cu ) const;
     void extra_lnk_cmd( String &cmd, bool lib, bool dyn ) const;
     CompilationEnvironment *deepest_child();
 
@@ -65,8 +66,9 @@ protected:
     String LD;
     String NVCC;
     String CPPFLAGS;
+    String GPUFLAGS;
     String LDFLAGS;
-    bool device_emulation;
+    int device_emulation;
     int maxrregcount;
 
     CompilationEnvironment *child;

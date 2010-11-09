@@ -7,9 +7,8 @@ BEG_METIL_LEVEL1_NAMESPACE;
 CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch ) : child( ch ) {
     if ( child == 0 ) {
         // inc_paths
-        #ifdef INSTALL_DIR
-        add_inc_path( INSTALL_DIR );
-        #endif
+        String dir = directory_of( __FILE__ );
+        add_inc_path( dir.beg_upto( dir.size() - 7 ) ); // Level1
 
         // default values
         CXX  = "g++";
@@ -106,6 +105,10 @@ void CompilationEnvironment::set_comp_dir( const String &path ) {
     mkdir( _comp_dir, false );
     if ( not _comp_dir.ends_with( '/' ) )
         _comp_dir += '/';
+}
+
+String CompilationEnvironment::get_NVCC() const {
+    return NVCC ? NVCC : child->get_NVCC();
 }
 
 String CompilationEnvironment::get_CXX() const {
@@ -245,13 +248,18 @@ void CompilationEnvironment::extra_lnk_cmd( String &cmd, bool lib, bool dyn ) co
         child->extra_lnk_cmd( cmd, lib, dyn );
 }
 
-void CompilationEnvironment::extra_obj_cmd( String &cmd, bool dyn ) const {
-    if ( CPPFLAGS )
-        cmd << ' ' << CPPFLAGS;
+void CompilationEnvironment::extra_obj_cmd( String &cmd, bool dyn, bool cu ) const {
+    if ( cu ) {
+        if ( GPUFLAGS )
+            cmd << ' ' << GPUFLAGS;
+    } else {
+        if ( CPPFLAGS )
+            cmd << ' ' << CPPFLAGS;
+    }
     for( int i = 0; i < inc_paths.size(); ++i )
         cmd << " -I" << inc_paths[ i ];
     if ( child )
-        child->extra_obj_cmd( cmd, dyn );
+        child->extra_obj_cmd( cmd, dyn, cu );
 }
 
 String CompilationEnvironment::lnk_cmd( const String &exe, const BasicVec<String> &obj, bool lib, bool dyn ) const {
@@ -269,12 +277,27 @@ String CompilationEnvironment::lnk_cmd( const String &exe, const BasicVec<String
 }
 
 String CompilationEnvironment::obj_cmd( const String &obj, const String &cpp, bool dyn ) const {
-    String cmd = get_CXX();
-    // basic flags
-    if ( dyn )
-        cmd << " -fpic";
+    String cmd;
+    bool cu = cpp.ends_with( ".cu" );
+    if ( cu ) {
+        cmd << get_NVCC();
+        // basic flags
+        if ( dyn )
+            cmd << " -Xcompiler -fPIC";
+        if ( maxrregcount > 0 )
+            cmd << " --maxrregcount=" << maxrregcount;
+        if ( device_emulation > 0 )
+            cmd << " --device-emulation -G -g";
+        else
+            cmd << " -w -g -O3 --gpu-architecture=compute_13";
+    } else {
+        cmd << get_CXX();
+        // basic flags
+        if ( dyn )
+            cmd << " -fpic";
+    }
     // -L... -l...
-    extra_obj_cmd( cmd, dyn );
+    extra_obj_cmd( cmd, dyn, cu );
     // input / output
     cmd << " -c -o " << obj << ' ' << cpp;
     return cmd;
@@ -346,13 +369,15 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         res->add_child( loc_ce.make_cpp_compilation_tree( cpp_parser.inc_files[ i ] ) );
     obj.push_back_unique( res );
 
-    // .h -> .cpp ?
+    // .h -> .cpp or .cu ?
     for( int i = 0; i < cpp_parser.inc_files.size(); ++i ) {
         String h = cpp_parser.inc_files[ i ];
         if ( h.ends_with( ".h" ) ) {
-            String ext_cpp = h.beg_upto( h.size() - 2 ) + ".cpp";
-            if ( ext_cpp and file_exists( ext_cpp ) )
-                parse_cpp( obj, ext_cpp, dyn );
+            String base = h.beg_upto( h.size() - 2 );
+            if ( file_exists( base + ".cpp" ) )
+                parse_cpp( obj, base + ".cpp", dyn );
+            if ( file_exists( base + ".cu" ) )
+                parse_cpp( obj, base + ".cu", dyn );
         }
     }
 

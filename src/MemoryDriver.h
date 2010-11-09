@@ -43,7 +43,7 @@ public:
     virtual void beg_local_data( void **dst, void **loc, ST &size, ST alig );
     virtual void end_local_data( void *dst, void *loc, ST size );
     virtual void copy( void **dst, const void *src, ST size, ST alig );
-    static MachineId machine_id() { return MachineId::cpu( 0 ); }
+    static const MachineId *machine_id() { return MachineId::cpu( 0 ); }
 
     char *res;
     ST off;
@@ -57,7 +57,7 @@ public:
     virtual void beg_local_data( void **dst, void **loc, ST &size, ST alig );
     virtual void end_local_data( void *dst, void *loc, ST size );
     virtual void copy( void **dst, const void *src, ST size, ST alig );
-    static MachineId machine_id() { return MachineId::gpu( 0 ); }
+    static const MachineId *machine_id() { return MachineId::gpu( 0 ); }
 
     char *res;
     ST off;
@@ -79,17 +79,17 @@ struct CopyCs {
         return Ps<C>( C::copy( *cpy_driver, str, num ), num, *ld.off, machine );
     }
 
-    MachineId machine;
+    const MachineId *machine;
     MemoryDriver *cpy_driver;
     const T *str;
     ST num;
 };
 
 template<class T>
-CopyCs<T> make_cs( const T *str, ST num, MachineId machine ) {
+CopyCs<T> make_cs( const T *str, ST num, const MachineId *machine ) {
     CopyCs<T> res( str, num );
     res.machine = machine;
-    if ( machine.is_a_gpu() )
+    if ( machine->is_a_gpu() )
         res.cpy_driver = NEW( MemoryDriver_Gpu );
     else
         res.cpy_driver = NEW( MemoryDriver_Cpu );

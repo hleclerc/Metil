@@ -126,13 +126,16 @@ int main( int argc, char **argv ) {
             out_file = argv[ ++i ];
         } else { // -> program name (assuming a .cpp file)
             if ( not comp_dir )
-                comp_dir = directory_of( arg ) + "/compilations";
+                if ( String dir = directory_of( arg ) )
+                    comp_dir = dir + "/compilations";
             cpp_file = arg;
             for( ++i; i < argc; ++i )
                 exec_args << argv[ i ];
         }
     }
-    ce.set_comp_dir( comp_dir );
+
+    if ( comp_dir )
+        ce.set_comp_dir( comp_dir );
 
     // filenames
     if ( not cpp_file ) {

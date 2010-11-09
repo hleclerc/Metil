@@ -690,9 +690,9 @@ private:
         ST old_rese = _rese;
         _rese = wanted_in_bytes;
         _data = _alloc();
-        for(ST i=0;i<_size;++i)
+        for( ST i = 0; i < _size; ++i )
             new( _data + i ) T_( old_data[ i ] );
-        for(ST i=_size-1;i>=0;--i)
+        for( ST i = _size - 1; i >= 0; --i )
             old_data[ i ].~T_();
         __free( old_data, old_rese );
     }

@@ -16,6 +16,7 @@ typedef void Method_VOpS( MO a, void *b, ST c );
 typedef MO (* Method_OOO)( MO a, MO b );
 typedef bool (* Method_BOO)( MO a, MO b );
 typedef void (* Method_VoO)( MO &a, MO b );
+typedef void (* Method_VOO)( MO a, MO b );
 typedef MO (* Method_OoO)( MO &a, MO b );
 typedef MO Method_OOS( MO a, ST b );
 typedef void Method_VoY( MO &a, struct OwcpChild *b );

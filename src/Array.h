@@ -54,6 +54,9 @@ struct Array : public Level1::MO {
     /// obj[ ... ] = val
     void set_values( const Val &val ) { CM_2( set_values, *this, val ); }
 
+    T min() const { return CM_1( min_1, *this ); }
+    T max() const { return CM_1( max_1, *this ); }
+
 protected:
     Array() {}
 };

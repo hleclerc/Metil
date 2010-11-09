@@ -12,6 +12,8 @@ MO metil_def_size__when__a__isa__VoidString( MO a ) { return NEW_Number( 0 ); } 
 
 const void *metil_def_ptr_z__when__a__isa__VoidString( MO &a ) { return ""; }
 
+void *metil_def_new_ptr_z__when__a__isa__VoidString( MO a ) { return strdup( "" ); }
+
 void metil_def_copy_data__when__a__isa__VoidString( MO a, void *ptr, ST size ) {}
 
 END_METIL_LEVEL1_NAMESPACE;

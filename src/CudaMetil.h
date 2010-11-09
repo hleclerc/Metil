@@ -13,6 +13,7 @@
 #pragma lib_path /usr/local/cuda/lib64
 #pragma lib_path /usr/local/cuda/lib
 #pragma inc_path /usr/local/cuda/include
+#pragma cpp_path /usr/local/cuda/include
 #endif
 
 BEG_METIL_NAMESPACE;

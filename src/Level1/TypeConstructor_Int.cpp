@@ -12,20 +12,10 @@ void metil_def_del__when__a__is__Int_s_32__pert__100( MO &a ) { DEL( reinterpret
 MO metil_def_copy__when__a__is__Int_s_32__pert__100( MO a ) { return NEW_Number( *reinterpret_cast<SI32 *>( a.data ) ); }
 MO metil_def_copy__when__a__is__Int_s_64__pert__100( MO a ) { return NEW_Number( *reinterpret_cast<SI64 *>( a.data ) ); }
 
-void metil_def_self_append__when__a__isa__String__and__b__is__Int_s_64__pert__1000( MO &a, MO b ) {
-    DisplayInt<63,1,0,63>::display( static_cast<String &>( a ), (const PI8 *)b.data );
-}
-void metil_def_self_append__when__a__isa__String__and__b__is__Int_s_32__pert__1000( MO &a, MO b ) {
-    DisplayInt<31,1,0,31>::display( static_cast<String &>( a ), (const PI8 *)b.data );
-}
-
-void metil_def_self_append__when__a__isa__String__and__b__is__Int_p_64__pert__1000( MO &a, MO b ) {
-    DisplayInt<64,0,0,0>::display( static_cast<String &>( a ), (const PI8 *)b.data );
-}
-
-void metil_def_self_append__when__a__isa__String__and__b__is__Int_p_32__pert__1000( MO &a, MO b ) {
-    DisplayInt<32,0,0,0>::display( static_cast<String &>( a ), (const PI8 *)b.data );
-}
+void metil_def_self_append__when__a__isa__String__and__b__is__Int_s_64__pert__1000( MO &a, MO b ) { DisplayInt<63,1,0,63>::display( static_cast<String &>( a ), (const PI8 *)b.data ); }
+void metil_def_self_append__when__a__isa__String__and__b__is__Int_s_32__pert__1000( MO &a, MO b ) { DisplayInt<31,1,0,31>::display( static_cast<String &>( a ), (const PI8 *)b.data ); }
+void metil_def_self_append__when__a__isa__String__and__b__is__Int_p_64__pert__1000( MO &a, MO b ) { DisplayInt<64,0,0, 0>::display( static_cast<String &>( a ), (const PI8 *)b.data ); }
+void metil_def_self_append__when__a__isa__String__and__b__is__Int_p_32__pert__1000( MO &a, MO b ) { DisplayInt<32,0,0, 0>::display( static_cast<String &>( a ), (const PI8 *)b.data ); }
 
 bool metil_def_convert_to_Bool__when__a__is__Int_s_64__pert__1000( MO a ) { return *reinterpret_cast<const SI64 *>( a.data ); }
 SI32 metil_def_convert_to_SI32__when__a__is__Int_s_64__pert__1000( MO a ) { return *reinterpret_cast<const SI64 *>( a.data ); }
@@ -75,7 +65,18 @@ void TypeConstructor_Int::write_write_str( MethodWriter &mw, const Mos *a, const
     mw.n << "DisplayInt<" << mant - sign << "," << sign << ",0," << mant - sign << ">::display( os, (const PI8 *)" << a->data << " );";
 }
 
+static void gen_self_op( MethodWriter &mw, const Mos *a, const String &op ) {
+    const TypeConstructor_Int *c_0 = static_cast<const TypeConstructor_Int *>( mw.type[ 0 ]->constructor );
+    const TypeConstructor_Int *c_1 = static_cast<const TypeConstructor_Int *>( mw.type[ 1 ]->constructor );
+    String t_0 = c_0->cpp_type();
+    String t_1 = c_1->cpp_type();
+    if ( t_0 and t_1 )
+        mw.n << "*reinterpret_cast<" << t_0 << " *>( " << a[ 0 ].data << " ) " << op << " *reinterpret_cast<const " << t_1 << " *>( " << a[ 1 ].data << " );";
+    else
+        TODO;
+}
 
+void metil_gen_reassign_inplace__when__a__isa__Int__and__b__isa__Int( MethodWriter &mw, const Mos *a, const String & ) { gen_self_op( mw, a, "=" ); }
 
 
 String TypeConstructor_Int::cpp_type() const {

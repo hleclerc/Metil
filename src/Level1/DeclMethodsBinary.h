@@ -28,3 +28,5 @@ DECL_MET( OOO       , end_from                ); // "abcd".end_from( 1 ) -> "bcd
 DECL_MET( BOO       , always_equal            ); //
 
 DECL_MET( VoO       , set_values              ); // obj[ ... ] = val
+
+DECL_MET( VOO       , call_C                  ); // used e.g. functor objects

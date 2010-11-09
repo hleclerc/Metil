@@ -9,10 +9,10 @@ BEG_METIL_NAMESPACE;
 const MachineId *MachineId::cpu( int nb ) {
     static BasicVec<MachineId *> res;
     ST os = res.size();
-    if ( nb >= os ) {
-        res.reserve( nb + 1 );
+    if ( os <= nb ) {
+        res.resize( nb + 1 );
         for( int i = os; i <= nb; ++i )
-            res << NEW( MachineId_Cpu, i );
+            res[ i ] = NEW( MachineId_Cpu, i );
     }
     return res[ nb ];
 }
@@ -24,10 +24,10 @@ const MachineId *MachineId::gpu( const MachineId *cpu, int nb ) { ///< @todo cpu
 
     static BasicVec<MachineId *> res;
     ST os = res.size();
-    if ( nb >= os ) {
-        res.reserve( nb + 1 );
+    if ( os <= nb ) {
+        res.resize( nb + 1 );
         for( int i = os; i <= nb; ++i )
-            res << func( cpu, i );
+            res[ i ] = func( cpu, i );
     }
     return res[ nb ];
 }

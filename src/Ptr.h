@@ -51,14 +51,27 @@ template<class T>
 struct Ptr {
     Ptr() : data( 0 ) {}
     Ptr( T *obj ) : data( obj ) {}
-    Ptr( const Ptr<T> &obj ) : data( obj.data ) { if ( data ) ++data->cpt_use; }
+    Ptr( const Ptr &obj ) : data( obj.data ) { if ( data ) ++data->cpt_use; }
+
+    template<class U>
+    Ptr( const Ptr<U> &obj ) : data( obj.data ) { if ( data ) ++data->cpt_use; }
 
     ~Ptr() {
         if ( data and --data->cpt_use < 0 )
             DEL( data );
     }
 
-    Ptr &operator=( const Ptr<T> &obj ) {
+    Ptr &operator=( const Ptr &obj ) {
+        if ( obj.data )
+            ++obj.data->cpt_use;
+        if ( data and --data->cpt_use < 0 )
+            DEL( data );
+        data = obj.data;
+        return *this;
+    }
+
+    template<class U>
+    Ptr &operator=( const Ptr<U> &obj ) {
         if ( obj.data )
             ++obj.data->cpt_use;
         if ( data and --data->cpt_use < 0 )
