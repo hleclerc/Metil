@@ -111,28 +111,30 @@ String TypeConstructor::cpp_type() const {
     return String();
 }
 
-TypeSetAncestor *TypeConstructor::dyn_array_type( int dim, const String &name, bool want_machine_id, bool want_gpu ) {
-    if ( want_gpu )
-        want_machine_id = 0;
-    int off = 3 * dim + 2 * want_machine_id + want_gpu;
+TypeSetAncestor *TypeConstructor::dyn_array_type( int dim, const String &name, MachineId *mid, bool want_CptUse ) {
+    bool want_ExtPtr    = mid != MachineId::cur();
+    bool want_MachineId = want_ExtPtr;
+    bool want_Gpu       = mid->is_a_gpu();
+    int off = 16 * dim + 8 * want_CptUse + 4 * want_ExtPtr + 2 * want_MachineId + want_Gpu;
     if ( _dyn_array_type_set.size() <= off )
         _dyn_array_type_set.resize( off + 1, (TypeSetAncestor *)0 );
+
     if ( not _dyn_array_type_set[ off ] ) {
         String tn;
         tn << "Array_" << name.size() << name << "_" << dim;
         for( int d = 0; d < dim; ++d )
             tn << "_m_m";
-        tn << "_CptUse";
-        if ( want_machine_id )
-            tn << "_MachineId";
-        if ( want_gpu )
-            tn << "_Gpu";
+        if ( want_CptUse    ) tn << "_CptUse";
+        if ( want_ExtPtr    ) tn << "_ExtPtr";
+        if ( want_Gpu       ) tn << "_Gpu";
+        if ( want_MachineId ) tn << "_MachineId";
         _dyn_array_type_set[ off ] = NEW( TypeSet<TypeConstructor_Array>, tn );
     }
     return _dyn_array_type_set[ off ];
 }
 
-TypeSetAncestor *TypeConstructor::static_vec_type( ST size, const String &name ) {
+TypeSetAncestor *TypeConstructor::static_vec_type( ST size, const String &name, MachineId *mid ) {
+    ASSERT( mid == MachineId::cur(), "TODO" );
     if ( _sta_array_type_set.size() <= 1 )
         _sta_array_type_set.resize( 2 );
     if ( _sta_array_type_set[ 1 ].size() <= size )
@@ -145,7 +147,8 @@ TypeSetAncestor *TypeConstructor::static_vec_type( ST size, const String &name )
     return _sta_array_type_set[ 1 ][ size ];
 }
 
-TypeSetAncestor *TypeConstructor::sta_array_type( int dim, ST *size, const String &name ) {
+TypeSetAncestor *TypeConstructor::sta_array_type( int dim, ST *size, const String &name, MachineId *mid ) {
+    ASSERT( mid == MachineId::cur(), "TODO" );
     if ( dim == 1 )
         return static_vec_type( size[ 0 ], name );
     if ( _sta_array_type_set.size() <= dim )

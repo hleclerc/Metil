@@ -4,7 +4,12 @@ using namespace Metil;
 using namespace Level1;
 
 int main() {
-    //Img img( "/home/leclerc/Data/plateblanche/plateblanche001_0008.tif", MachineId::gpu( MachineId::cur(), 1 ) );
+    // Img img( "/home/leclerc/Data/plateblanche/plateblanche001_0008.tif", MachineId::gpu( MachineId::cur(), 1 ) );
+    Vec vec( type_ptr<double>(), 5 );
+    for( ST i = 0; i < vec.size(); ++i )
+        vec[ i ] = i;
+    PRINT( i );
+
     //    Img img( 256, 256, type_ptr<float>() );
 
     //    PRINT( img.w() );

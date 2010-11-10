@@ -6,7 +6,7 @@
 BEG_METIL_NAMESPACE;
 
 /**
-  @brief thread condition. Used to wait for events in threads.
+  @brief thread condition. Used to wait for events in separate threads.
 
   User is responsible to lock and unlock the mutex before and after.
 
@@ -16,12 +16,12 @@ BEG_METIL_NAMESPACE;
 Mutex mutex;
 WaitCondition wait_cond;
 
-// consumer
+// consumer, wait for a wake up
 mutex.lock();
 wait_cond.wait();
 mutex.free();
 
-// producer
+// and in another thread
 mutex.lock();
 wait_cond.wake_all( mutex );
 mutex.free();

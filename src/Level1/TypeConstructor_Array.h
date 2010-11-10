@@ -17,6 +17,8 @@ BEG_METIL_LEVEL1_NAMESPACE;
     - rese[ n ]
     - [CptUse]
     - [ExtPtr]
+    - [Gpu]
+    - [MachineId]
 */
 class TypeConstructor_Array : public TypeConstructor {
 public:

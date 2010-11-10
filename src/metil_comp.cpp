@@ -24,6 +24,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << pn << " [options] cpp_file";
     cerrn << "  -h or --help : usage";
     cerrn << "  -o file : name of the output file";
+    cerrn << "  -jn : launch compilation using n threads";
     cerrn << "  -mex : create a Matlab mexglx file";
     cerrn << "  -dylib : create a dynamic library";
     cerrn << "  -ne : do not launch the executable";
@@ -104,7 +105,7 @@ int main( int argc, char **argv ) {
         } else if ( arg == "--maxrregcount" ) {
             ce.set_maxrregcount( atoi( argv[ ++i ] ) );
         } else if ( arg == "-j" ) {
-            ce.set_nb_threads( atoi( argv[ ++i ] ) );
+            ce.set_nb_threads( atoi( argv[ i ] + 2 ) );
         } else if ( arg == "-mex" ) {
             want_mex  = true;
             want_lib  = true;

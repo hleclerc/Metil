@@ -68,9 +68,9 @@ public:
 
     virtual void write_select_op( MethodWriter &mw, const Mos *a, TypeConstructor *index_type, const String &op ) const;
 
-    TypeSetAncestor *dyn_array_type ( int dim, const String &name, bool want_machine_id, bool want_gpu );
-    TypeSetAncestor *sta_array_type ( int dim, ST *size, const String &name );
-    TypeSetAncestor *static_vec_type( ST size, const String &name );
+    TypeSetAncestor *dyn_array_type ( int dim, const String &name, MachineId *mid, bool want_CptUse = false );
+    TypeSetAncestor *sta_array_type ( int dim, ST *size, const String &name, MachineId *mid );
+    TypeSetAncestor *static_vec_type( ST size, const String &name, MachineId *mid );
 
     bool have_been_initialized;
     Type *bas_type;

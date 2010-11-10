@@ -55,6 +55,8 @@ public:
         new( v + 4 ) T( v_4 );
     }
 
+    Vec( Level1::Type *item_type, ST size, const MachineId *machine_id = MachineId::cur() );
+
 protected:
     Level1::MO *init_dyn_vec( Level1::Type *type, ST size );
     Level1::MO *init_dyn_vec( ST size );

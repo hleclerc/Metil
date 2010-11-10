@@ -132,6 +132,19 @@ void TypeConstructor_Array::write_del( MethodWriter &cw, const Mos *args, const 
     }
 }
 
+void TypeConstructor_Array::write_init( MethodWriter &cw, const Mos *args, const String & ) const {
+    if ( item_type_bas and item_type_bas->constructor->is_a_POD() )
+        return;
+    // TODO;
+    write_get_header( cw, "h", args[ 0 ].data );
+    write_get_data_ptr( cw, false, "d", "h", args[ 0 ].data );
+    for(int d = dim() - 1; d >= 0; --d )
+        write_beg_loop( cw, "h", d );
+    // cw.n << "CM_1( del, *d );";
+    for(int d = 0; d < dim(); ++d )
+        write_end_loop( cw, "h", d, "d" );
+}
+
 void TypeConstructor_Array::write_size( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
     if ( len() == 0 ) // nothing to del
         mw.n << ret_ins << "&metil_type_cst_Cst_zero;";
