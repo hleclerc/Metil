@@ -103,6 +103,8 @@ int main( int argc, char **argv ) {
             ce.set_device_emulation( 1 );
         } else if ( arg == "--maxrregcount" ) {
             ce.set_maxrregcount( atoi( argv[ ++i ] ) );
+        } else if ( arg == "-j" ) {
+            ce.set_nb_threads( atoi( argv[ ++i ] ) );
         } else if ( arg == "-mex" ) {
             want_mex  = true;
             want_lib  = true;
@@ -121,7 +123,7 @@ int main( int argc, char **argv ) {
         } else if ( arg[0] == '-' and arg[1]== 'o' ) {
             if ( i + 1 >= argc ) {
                 usage( argv[ 0 ], "-o must be followed by something (the output file)." );
-                return 6;
+                return 7;
             }
             out_file = argv[ ++i ];
         } else { // -> program name (assuming a .cpp file)
@@ -140,7 +142,7 @@ int main( int argc, char **argv ) {
     // filenames
     if ( not cpp_file ) {
         usage( argv[ 0 ], "you have to specify something to compile." );
-        return 7;
+        return 8;
     }
 
     if ( not out_file ) {

@@ -21,10 +21,13 @@ public:
     void set_device_emulation( bool flag );
     void set_maxrregcount( int nb_registers );
     void set_comp_dir( const String &path );
+    void set_nb_threads( int nb_threads );
 
-    String get_NVCC    () const;
-    String get_CXX     () const;
-    String get_LD      () const;
+    String get_NVCC() const;
+    String get_CXX () const;
+    String get_LD  () const;
+
+    int get_nb_threads() const;
 
     void save_env_var( bool update_LD_LIBRARY_PATH = true ) const; ///< save data in environment variables (METIL_INC_PATHS, ...)
     void load_env_var(); ///< append data from environment variables (METIL_INC_PATHS, ...)
@@ -70,6 +73,7 @@ protected:
     String LDFLAGS;
     int device_emulation;
     int maxrregcount;
+    int nb_threads;
 
     CompilationEnvironment *child;
     BasicVec<String> parsed;

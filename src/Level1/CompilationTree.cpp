@@ -1,5 +1,7 @@
 #include "CompilationTree.h"
 #include "System.h"
+#include "Thread.h"
+#include "WaitCondition.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
@@ -52,26 +54,77 @@ int CompilationTree::exec_node( String *out ) {
     return exec_cmd( cmd, false );
 }
 
-int CompilationTree::exec( String *out ) {
-    BasicVec<CompilationTree *> leaves;
+struct Leaves {
+    Leaves( int nb_threads, String *out ) : out( out ), return_code( 0 ), nb_threads( nb_threads ), nb_waiting_threads( 0 ) {}
+
+    void exec() {
+        while ( return_code == 0 ) {
+            // no leaf to execute ?
+            mutex.lock();
+            if ( not data.size() ) {
+                if ( ++nb_waiting_threads == nb_threads ) {
+                    wait_cond.wake_all();
+                    mutex.free();
+                    break;
+                }
+                wait_cond.wait( mutex );
+                if ( nb_waiting_threads == nb_threads ) {
+                    mutex.free();
+                    break;
+                }
+                --nb_waiting_threads;
+                mutex.free();
+                continue;
+            }
+
+            CompilationTree *c = data.pop_back();
+            mutex.free();
+
+            // exec
+            if ( int res = c->exec_node( out ) ) {
+                return_code = res;
+                mutex.lock();
+                wait_cond.wake_all();
+                mutex.free();
+                break;
+            }
+
+            // new node to execute ?
+            mutex.lock();
+            c->op_id = cur_op_id;
+            for( int i = 0; i < c->parents.size(); ++i )
+                if ( all_child_done( c->parents[ i ] ) )
+                    data << c->parents[ i ];
+            if ( data.size() )
+                wait_cond.wake_all();
+            mutex.free();
+        }
+    }
+
+    Mutex mutex;
+    WaitCondition wait_cond;
+    String *out;
+    BasicVec<CompilationTree *> data;
+    int return_code, nb_threads, nb_waiting_threads;
+};
+
+struct CompilationTreeThread : public Thread {
+    CompilationTreeThread( Leaves *l ) : l( l ) {}
+    virtual void run() { l->exec(); }
+    Leaves *l;
+};
+
+int CompilationTree::exec( int nb_threads, String *out ) {
+    Leaves leaves( nb_threads, out );
     ++cur_op_id;
-    get_leaves( leaves, this );
+    get_leaves( leaves.data, this );
 
     //
     ++cur_op_id;
-    while ( leaves.size() ) {
-        CompilationTree *c = leaves.pop_back();
-        c->op_id = cur_op_id;
-        if ( int res = c->exec_node( out ) )
-            return res;
-
-        //
-        for( int i = 0; i < c->parents.size(); ++i )
-            if ( all_child_done( c->parents[ i ] ) )
-                leaves << c->parents[ i ];
-    }
-
-    return 0;
+    BasicVec<CompilationTreeThread> threads( Size(), nb_threads, &leaves );
+    for( int i = 0; i < nb_threads; ++i ) threads[ i ].exec();
+    for( int i = 0; i < nb_threads; ++i ) threads[ i ].wait();
+    return leaves.return_code;
 }
 
 END_METIL_LEVEL1_NAMESPACE;

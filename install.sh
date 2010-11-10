@@ -6,6 +6,6 @@ if [ -z "$INSTALL_DIR" ]
 then
     INSTALL_DIR="/usr/bin"
 fi
-
-ln -s `pwd`/metil_comp/metil_comp $INSTALL_DIR
+rm -f $INSTALL_DIR/metil_comp
+ln -s `pwd`/src/metil_comp $INSTALL_DIR
 

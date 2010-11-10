@@ -18,11 +18,13 @@ CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch ) : c
 
         device_emulation = 0;
         maxrregcount     = 0;
+        nb_threads       = 8;
 
         load_env_var();
     } else {
         device_emulation = -1;
         maxrregcount     = -1;
+        nb_threads       = -1;
     }
 }
 
@@ -107,6 +109,10 @@ void CompilationEnvironment::set_comp_dir( const String &path ) {
         _comp_dir += '/';
 }
 
+void CompilationEnvironment::set_nb_threads( int nb_threads_ ) {
+    nb_threads = nb_threads_;
+}
+
 String CompilationEnvironment::get_NVCC() const {
     return NVCC ? NVCC : child->get_NVCC();
 }
@@ -117,6 +123,10 @@ String CompilationEnvironment::get_CXX() const {
 
 String CompilationEnvironment::get_LD() const {
     return LD ? LD : child->get_LD();
+}
+
+int CompilationEnvironment::get_nb_threads() const {
+    return nb_threads > 0 ? nb_threads : child->get_nb_threads();
 }
 
 void CompilationEnvironment::save_env_var( bool update_LD_LIBRARY_PATH ) const {
@@ -416,7 +426,7 @@ int CompilationEnvironment::make_app( const String &app, const String &cpp, bool
 
     //
     Ptr<CompilationTree> res = make_lnk_compilation_tree( app, obj, lib, dyn );
-    return res->exec( &cout );
+    return res->exec( get_nb_threads(), &cout );
 }
 
 int CompilationEnvironment::make_lib( const String &lib, const String &cpp, bool dyn ) {

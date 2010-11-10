@@ -13,7 +13,7 @@ public:
 
     void add_child( const Ptr<CompilationTree> &ch );
 
-    int exec( String *out = 0 );
+    int exec( int nb_threads, String *out = 0 );
     int exec_node( String *out );
 
     String dst;
