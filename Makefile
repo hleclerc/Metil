@@ -20,7 +20,7 @@ test_valgrind_full:
 	src/metil_comp --exec-using "valgrind --leak-check=full --show-reachable=yes" -g3 -Isrc tests/main.cpp
 
 metil_gen:
-	metil_comp -g3 -Isrc src/Level1/metil_parse.cpp `find src -name "*.cpp" -o -name "*.h"`
+	src/metil_comp -g3 -Isrc src/Level1/metil_parse.cpp `find src -name "*.cpp" -o -name "*.h"`
 # 	metil_comp -g3 --valgrind -Isrc src/metil_parse.cpp `find . -name "*.cpp"`
 
 comp:

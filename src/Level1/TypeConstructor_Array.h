@@ -31,6 +31,7 @@ public:
     virtual void write_select_op( MethodWriter &mw, const Mos *a, TypeConstructor *index_type, const String &op ) const;
 
     DECL_WRITER( del );
+    DECL_WRITER( init );
     DECL_WRITER( size );
     DECL_WRITER( sizes );
     DECL_WRITER( machine_id );

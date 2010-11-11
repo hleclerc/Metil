@@ -42,11 +42,11 @@ Vec::Vec() {
 //    vec[ 4 ] = CM_1( copy, v_4 );
 //}
 
-Vec::Vec( Level1::Type *item_type, ST size, const MachineId *machine_id = MachineId::cur() ) {
-    type = item_type->type_of_dyn_array(  );
-
-    Level1::init_dyn_array( *this, &size, Number<1>(), type, machine_id );
-    CM_2( *this, init_2, &Level1::metil_type_cst_Cst_zero );
+Vec::Vec( Level1::Type *item_type, ST size, const MachineId *machine_id ) {
+    //type = item_type->type_of_dyn_array(  );
+    TODO;
+    //Level1::init_dyn_array( *this, &size, Number<1>(), type, machine_id );
+    //CM_2( *this, init_2, &Level1::metil_type_cst_Cst_zero );
 }
 
 //Level1::MO *Vec::init_dyn_vec( Level1::Type *type, ST size ) {

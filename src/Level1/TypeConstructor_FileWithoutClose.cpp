@@ -52,7 +52,8 @@ const void *metil_def_ptr_z__when__a__isa__FileWithoutClose__pert__1( MO &a ) {
     fseek( f, old, SEEK_SET );
 
     NewString res( end - old );
-    fread( res.ptr(), 1, end - old, f );
+    ST act = fread( res.ptr(), 1, end - old, f );
+    ASSERT( act == end - old, "..." );
     static_cast<String &>( a ) = res;
     return res.ptr();
 }

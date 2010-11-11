@@ -150,7 +150,7 @@ TypeSetAncestor *TypeConstructor::static_vec_type( ST size, const String &name, 
 TypeSetAncestor *TypeConstructor::sta_array_type( int dim, ST *size, const String &name, MachineId *mid ) {
     ASSERT( mid == MachineId::cur(), "TODO" );
     if ( dim == 1 )
-        return static_vec_type( size[ 0 ], name );
+        return static_vec_type( size[ 0 ], name, mid );
     if ( _sta_array_type_set.size() <= dim )
         _sta_array_type_set.resize( dim + 1 );
     TODO;
