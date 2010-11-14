@@ -21,12 +21,11 @@ public:
         struct C2_has_##N : public MethodCond { virtual bool valid( Type *, Type *, Type *type_2 ) const { return type_2->constructor->N(); } }; \
         virtual bool N() const
 
-    DECL_COND( Owcp_type ) { return Owcp_size() >= 0; }
-    DECL_COND( Owcp_size_0 ) { return Owcp_size() == 0; }
-    DECL_COND( Owcp_size_1 ) { return Owcp_size() == 1; }
-    DECL_COND( Owcp_size_2 ) { return Owcp_size() == 2; }
-    DECL_COND( Owcp_size_3 ) { return Owcp_size() == 3; }
-
+    DECL_COND( Owcp_type );
+    DECL_COND( Owcp_size_0 );
+    DECL_COND( Owcp_size_1 );
+    DECL_COND( Owcp_size_2 );
+    DECL_COND( Owcp_size_3 );
     DECL_COND( is_a_POD );
     DECL_COND( tensor_order_0 );
     DECL_COND( tensor_order_1 );

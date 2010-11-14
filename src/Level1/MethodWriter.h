@@ -20,6 +20,7 @@ public:
     void write_to( String &os );
     void add_include( const String &include );
     void add_preliminary( const String &txt ); ///< after includes and namespace
+    void add_type_decl( const String &name ); ///< add declaration for type "name" and look if there's a declaration somewhere
 
 
     static String def_str( const String &method_name, Type *type_0, Type *type_1, Type *type_2 );
@@ -33,6 +34,7 @@ public:
     StringWithSepInCppLineMaker n;
     Type *type[ 3 ];
     BasicVec<String> includes;
+    BasicVec<String> ext_types;
 };
 
 typedef void MethodMaker( MethodWriter &mw, const Mos *mos, const String &ret = "return " );

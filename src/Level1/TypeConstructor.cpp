@@ -12,7 +12,8 @@ bool             metil_def_cur_op_id__pert__0( MO a ) { return false; }
 const MachineId *metil_def_machine_id__pert__0( MO a ) { return MachineId::cur(); }
 
 // void objects
-MO metil_def_copy__when__a__has__is_void( MO a ) { return a.type; }
+MO metil_def_copy__when__a__has__is_void__pert__1( MO a ) { return a.type; }
+void metil_gen_copy__when__a__has__is_void( MethodWriter &mw, const Mos *a, const String &ret ) { mw.n << ret << " " << a->type << ";"; }
 
 // static gen...( MethodWriter & ) { constructor->write_... }
 #define DECL_MET( T, N ) void metil_gen_##N##__when__a__has__has_writer_for_##N##__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) { cw.type[ 0 ]->constructor->write_##N( cw, a, ret ); }
@@ -39,9 +40,9 @@ void metil_gen_copy__when__a__has__is_a_POD__pert__1( MethodWriter &mw, const Mo
         String s; s << "Number<" << size << ">()";
         mw.n << "void *res = MALLOC( " << s << " );";
         mw.n << "memcpy( res, " << a->data << ", " << s << " );";
-        mw.n << "return MO( res, &metil_type_bas_" << mw.type[ 0 ]->name << " );";
+        mw.n << ret << "MO( res, &metil_type_bas_" << mw.type[ 0 ]->name << " );";
     } else {
-        mw.n << "return MO( &metil_type_cst_" << mw.type[ 0 ]->name << " );";
+        mw.n << ret << "MO( &metil_type_cst_" << mw.type[ 0 ]->name << " );";
     }
 }
 
@@ -67,10 +68,16 @@ void TypeConstructor::init( Type *type ) {
     cst_type = type->cst_type;
 }
 
+bool TypeConstructor::Owcp_type() const { return Owcp_size() >= 0; }
+bool TypeConstructor::Owcp_size_0() const { return Owcp_size() == 0; }
+bool TypeConstructor::Owcp_size_1() const { return Owcp_size() == 1; }
+bool TypeConstructor::Owcp_size_2() const { return Owcp_size() == 2; }
+bool TypeConstructor::Owcp_size_3() const { return Owcp_size() == 3; }
+
 bool TypeConstructor::is_a_POD() const { return 0; }
 bool TypeConstructor::tensor_order_0() const { return tensor_order() == 0; }
 bool TypeConstructor::tensor_order_1() const { return tensor_order() == 1; }
-bool TypeConstructor::is_void() const { return 0; }
+bool TypeConstructor::is_void() const { return static_size_in_bits() == 0; }
 
 void TypeConstructor::default_mw( MethodWriter &mw ) const {}
 int TypeConstructor::Owcp_size() const { return -1; }

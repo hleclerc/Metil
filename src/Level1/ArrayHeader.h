@@ -51,18 +51,18 @@ struct ArrayHeader : public ArrayHeaderBase<len_size,len_rese,want_cpt_use,want_
     char extra_bytes[ base_ceil - base_size ];
 };
 
-MO *init_dyn_array_dyn_dim( MO &res, const ST *size, int dim, Type *base_type = 0, const MachineId *mid = MachineId::cur() );
+//MO *init_dyn_array_dyn_dim( MO &res, const ST *size, int dim, Type *base_type = 0, const MachineId *mid = MachineId::cur() );
 
-MO *init_dyn_array( MO &res, const ST *size, Number<0>, Type *base_type = 0, const MachineId *mid = MachineId::cur() );
-MO *init_dyn_array( MO &res, const ST *size, Number<1>, Type *base_type = 0, const MachineId *mid = MachineId::cur() );
-MO *init_dyn_array( MO &res, const ST *size, Number<2>, Type *base_type = 0, const MachineId *mid = MachineId::cur() );
-MO *init_dyn_array( MO &res, const ST *size, Number<3>, Type *base_type = 0, const MachineId *mid = MachineId::cur() );
-MO *init_dyn_array( MO &res, const ST *size, Number<4>, Type *base_type = 0, const MachineId *mid = MachineId::cur() );
+//MO *init_dyn_array( MO &res, const ST *size, Number<0>, Type *base_type = 0, const MachineId *mid = MachineId::cur() );
+//MO *init_dyn_array( MO &res, const ST *size, Number<1>, Type *base_type = 0, const MachineId *mid = MachineId::cur() );
+//MO *init_dyn_array( MO &res, const ST *size, Number<2>, Type *base_type = 0, const MachineId *mid = MachineId::cur() );
+//MO *init_dyn_array( MO &res, const ST *size, Number<3>, Type *base_type = 0, const MachineId *mid = MachineId::cur() );
+//MO *init_dyn_array( MO &res, const ST *size, Number<4>, Type *base_type = 0, const MachineId *mid = MachineId::cur() );
 
-template<int n>
-MO *init_dyn_array( MO &res, const ST *size, Number<n>, Type *base_type = 0, const MachineId *mid = MachineId::cur() ) {
-    return init_dyn_array_dyn_dim( res, size, n, base_type, mid );
-}
+//template<int n>
+//MO *init_dyn_array( MO &res, const ST *size, Number<n>, Type *base_type = 0, const MachineId *mid = MachineId::cur() ) {
+//    return init_dyn_array_dyn_dim( res, size, n, base_type, mid );
+//}
 
 END_METIL_LEVEL1_NAMESPACE;
 

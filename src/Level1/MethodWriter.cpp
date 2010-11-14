@@ -28,6 +28,13 @@ void MethodWriter::add_preliminary( const String &txt ) {
     preliminary << txt;
 }
 
+void MethodWriter::add_type_decl( const String &name ) {
+    if ( ext_types.contains( name ) )
+        return;
+    ext_types << name;
+    add_preliminary( "DECL_TYPE( " + name + " );\n" );
+}
+
 void MethodWriter::beg_def( const String &def_name ) {
     code << "__extern_C__ ";
     code << decl_of( def_name, type[ 0 ], type[ 1 ], type[ 2 ] ) << " {\n";
@@ -152,14 +159,7 @@ void MethodWriter::make_cpp_for_types( const String cpp_name, Type *type_0, Type
 }
 
 DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Type *type_2, const char *dep_file ) {
-    static std::map<SI64,DynamicLibrary> libs;
-    SI64 n = type_0->number + ( SI64( type_1 ? type_1->number : 0 ) << 24 ) + ( SI64( type_2 ? type_2->number : 0 ) << 48 );
-    std::map<SI64,DynamicLibrary>::iterator iter = libs.find( n );
-    if ( iter != libs.end() )
-        return iter->second;
-    DynamicLibrary &res = libs[ n ];
-
-    // filenames
+    // filename
     String bas_name = "gen_met_for";
     if ( type_0 ) bas_name << "__" << type_0->name;
     if ( type_1 ) bas_name << "__" << type_1->name;
@@ -167,6 +167,16 @@ DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Typ
 
     CompilationEnvironment &ce = CompilationEnvironment::get_main_compilation_environment();
     String lib_name = ce.lib_for( bas_name, true );
+
+    // already loaded ?
+    static std::map<String,DynamicLibrary> libs;
+    std::map<String,DynamicLibrary>::iterator iter = libs.find( lib_name );
+    if ( iter != libs.end() ) {
+        PRINT( "yop" );
+        return iter->second;
+    }
+    DynamicLibrary &res = libs[ lib_name ];
+
 
     // if lib exists, load it
     SI64 date_dep = last_modification_time_or_zero_of_file_named( dep_file );
@@ -186,6 +196,7 @@ DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Typ
         //            ERROR( "Pb during compilation of %s", cpp_name.c_str() );
     }
 
+    PRINT( lib_name );
     res.open( lib_name );
     if ( not res )
         ERROR( "Error during lib load %s", res.error().c_str() );

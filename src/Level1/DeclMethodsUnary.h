@@ -15,7 +15,8 @@ DECL_MET( OO  , copy                    ); // make a copy of self
 DECL_MET( OO  , copy_ref                ); // make a copy of a data reference @see RefOn
 #endif // DONT_WANT_UNARY_BASIC
 
-DECL_MET( Vo  , init                    ); // constructor (default values)
+DECL_MET( Vo  , init_1                  ); //
+
 
 //DECL_MET( VOt , write_str               ); // string or file output
 //DECL_MET( VOt , write_dot               ); // string or file output

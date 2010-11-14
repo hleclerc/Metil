@@ -16,6 +16,7 @@ public:
 
     String disp_str() const;
 
+    virtual int static_size_in_bits() const;
     virtual void init( Type *type );
 
     String name;

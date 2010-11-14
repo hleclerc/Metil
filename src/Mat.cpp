@@ -9,12 +9,13 @@ Mat::Mat() {
 }
 
 Mat::Mat( ST r, ST c, Level1::Type *base_type ) {
-    ST size[ 2 ] = { c, r };
-    Level1::MO *d = Level1::init_dyn_array( *this, size, Number<2>(), base_type );
-    if ( not base_type ) {
-        for( int i = 0; i < r * c; ++i )
-            new( d + i ) Val;
-    }
+    TODO;
+//    ST size[ 2 ] = { c, r };
+//    Level1::MO *d = Level1::init_dyn_array( *this, size, Number<2>(), base_type );
+//    if ( not base_type ) {
+//        for( int i = 0; i < r * c; ++i )
+//            new( d + i ) Val;
+//    }
 }
 
 END_METIL_NAMESPACE;

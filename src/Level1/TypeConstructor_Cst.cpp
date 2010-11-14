@@ -43,6 +43,10 @@ String TypeConstructor_Cst::disp_str() const {
     return "";
 }
 
+int TypeConstructor_Cst::static_size_in_bits() const {
+    return 0;
+}
+
 void TypeConstructor_Cst::init( Type *type ) {
     TypeConstructor::init( type );
     name = type->name + 4;

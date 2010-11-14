@@ -84,6 +84,7 @@ static void update_bin_methods_data( int nb_types ) {
 }
 
 Type::Type( TypeConstructor *constructor, const char *name, Type *bas, Type *ref, Type *cst, BRC k ) : number( 0 ), name( name ), constructor( constructor ), bas_type( bas ), ref_type( ref ), cst_type( cst )  {
+printf("%s\n",name);
     prev_type = last_type;
     last_type = this;
 
@@ -147,9 +148,12 @@ Type *Type::sta_array_type( int dim, ST *size, MachineId *mid ) {
 }
 
 Type *Type::find_with_name( const char *name ) {
-    for( Type *t = last_type; t; t = t->prev_type )
+    for( Type *t = last_type; t; t = t->prev_type ) {
+        // printf("%s %p\n",t->name,t);
+
         if ( Level1::equal( t->name, name ) )
             return t;
+    }
     return 0;
 }
 
