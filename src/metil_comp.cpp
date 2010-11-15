@@ -119,6 +119,8 @@ int main( int argc, char **argv ) {
             ce.set_dbg_level( atoi( argv[ i ] + 2 ) );
         } else if ( arg.begins_by( "-O" ) ) {
             ce.set_opt_level( atoi( argv[ i ] + 2 ) );
+        } else if ( arg.begins_by( "-D" ) ) {
+            ce.add_def_proc( argv[ i ] + 2 );
         } else if ( arg.begins_by( "--static" ) ) {
             want_dyn = false;
         } else if ( arg == "-mex" ) {

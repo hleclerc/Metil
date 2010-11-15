@@ -4,11 +4,96 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-CompilationCppParser::CompilationCppParser( CompilationEnvironment &ce, const String &cpp_file ) {
-    defines[ "METIL_COMP_DIRECTIVE" ];
-    need_compilation_environment = false;
+static void save_dep_vec( String &fd, const BasicVec<String> &vec ) {
+    for( int i = 0; i < vec.size(); ++i )
+        fd << vec[ i ].size() << vec[ i ];
+    fd << "0\n";
+}
+
+static void load_dep_vec( const char *&c, BasicVec<String> &vec ) {
+    while ( true ) {
+        String r = String::read_sized( c );
+        if ( not r )
+            break;
+        vec << r;
+    }
+    if ( *c )
+        ++c;
+}
+
+bool CompilationCppParser::init_using_dep( CompilationEnvironment &ce, const String &cpp_file, const String &dep_file ) {
+    SI64 date_cpp = last_modification_time_or_zero_of_file_named( cpp_file );
+    SI64 date_dep = last_modification_time_or_zero_of_file_named( dep_file );
+    if ( date_cpp > date_dep )
+        return false;
+
+    File fd( dep_file, "r" );
+    const char *c = fd.c_str();
+
+    // orig flags are conform ?
+    BasicVec<String> loc_inc_paths;
+    BasicVec<String> loc_def_procs;
+    load_dep_vec( c, loc_inc_paths );
+    load_dep_vec( c, loc_def_procs );
+    if ( any( ce_inc_paths != loc_inc_paths ) or any( ce_def_procs != loc_def_procs ) )
+        return false;
+
+
+    // include file are older than dep file ?
+    load_dep_vec( c, inc_files );
+    for( ST i = 0; i < inc_files.size(); ++i ) {
+        if ( last_modification_time_or_zero_of_file_named( inc_files[ i ] ) > date_dep ) {
+            inc_files.resize( 0 );
+            return false;
+        }
+    }
+
+    // -> OK
+    load_dep_vec( c, moc_files );
+    load_dep_vec( c, src_files );
+
+    load_dep_vec( c, lib_paths );
+    load_dep_vec( c, lib_names );
+    load_dep_vec( c, inc_paths );
+    load_dep_vec( c, cpp_flags );
+    load_dep_vec( c, lnk_flags );
+    load_dep_vec( c, gpu_flags );
+
+    BasicVec<String> defs;
+    load_dep_vec( c, defs );
+    for( int i = 0; i < defs.size(); ++i )
+        defines[ defs[ i ] ];
+
+    return true;
+}
+
+CompilationCppParser::CompilationCppParser( CompilationEnvironment &ce, const String &cpp_file, const String &dep_file ) : dep_file( dep_file ) {
+    ce.get_inc_paths( ce_inc_paths );
+    ce.get_def_procs( ce_def_procs );
+    if ( init_using_dep( ce, cpp_file, dep_file ) )
+        return;
+
     //
+    defines[ "METIL_COMP_DIRECTIVE" ];
     parse_src_file_rec( ce, cpp_file );
+}
+
+CompilationCppParser::~CompilationCppParser() {
+    // save .dep
+    File fd( dep_file, "w" );
+    save_dep_vec( fd, ce_inc_paths );
+    save_dep_vec( fd, ce_def_procs );
+
+    save_dep_vec( fd, inc_files );
+    save_dep_vec( fd, moc_files );
+    save_dep_vec( fd, src_files );
+
+    save_dep_vec( fd, lib_paths );
+    save_dep_vec( fd, lib_names );
+    save_dep_vec( fd, inc_paths );
+    save_dep_vec( fd, cpp_flags );
+    save_dep_vec( fd, lnk_flags );
+    save_dep_vec( fd, gpu_flags );
 }
 
 static void skip_spaces_but_not_cr( const char *&c ) {
@@ -134,7 +219,7 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                 if ( c[ 2 ] == 'n' and c[ 3 ] == 'c' and c[ 4 ] == 'l' and c[ 5 ] == 'u' and c[ 6 ] == 'd' and c[ 7 ] == 'e' and c[ 8 ] == ' ' ) {
                     String inc_file = ce.find_src( get_include_filename( c += 9 ), current_dir );
                     if ( inc_file ) {
-                        inc_files << inc_file;                        
+                        inc_files << inc_file;
 
                         // .h.py ?
                         if ( inc_file.ends_with( ".h" ) ) {
@@ -180,11 +265,6 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                 }
                 if ( strncmp( c, "gpu_flag ", 9 ) == 0 ) {
                     gpu_flags << get_pragma_arg( c += 9 );
-                    continue;
-                }
-                if ( strncmp( c, "need_compilation_environment", 28 ) == 0 ) {
-                    c += 28;
-                    need_compilation_environment = true;
                     continue;
                 }
             }

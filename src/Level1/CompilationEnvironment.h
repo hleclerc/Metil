@@ -17,6 +17,8 @@ public:
     void add_lib_path( const String &path );
     void add_lib_name( const String &name );
     void add_CPPFLAG ( const String &flag );
+    void add_def_proc( const String &proc );
+
     void set_CXX     ( const String &path );
     void set_device_emulation( bool flag );
     void set_maxrregcount( int nb_registers );
@@ -32,6 +34,9 @@ public:
     int get_nb_threads() const;
     int get_dbg_level() const;
     int get_opt_level() const;
+
+    void get_inc_paths( BasicVec<String> &res ) const;
+    void get_def_procs( BasicVec<String> &res ) const;
 
     void save_env_var( bool update_LD_LIBRARY_PATH = true ) const; ///< save data in environment variables (METIL_INC_PATHS, ...)
     void load_env_var(); ///< append data from environment variables (METIL_INC_PATHS, ...)
@@ -71,7 +76,7 @@ protected:
     BasicVec<String> inc_paths;
     BasicVec<String> lib_paths;
     BasicVec<String> lib_names;
-    BasicVec<String> defines;
+    BasicVec<String> def_procs;
     String _comp_dir;
     String CXX;
     String LD;

@@ -8,11 +8,11 @@ BEG_METIL_LEVEL1_NAMESPACE;
 
 class CompilationCppParser {
 public:
-    CompilationCppParser( CompilationEnvironment &ce, const String &cpp_file );
+    CompilationCppParser( CompilationEnvironment &ce, const String &cpp_file, const String &dep_file );
+    ~CompilationCppParser();
 
     // output
     BasicVec<String> inc_files; ///< files that have been included
-    BasicVec<String> hpy_files; ///< .h.py files
     BasicVec<String> moc_files; ///<
     BasicVec<String> src_files; ///< .cpp files that are recquired to link this file
 
@@ -22,7 +22,6 @@ public:
     BasicVec<String> cpp_flags; ///<
     BasicVec<String> lnk_flags; ///<
     BasicVec<String> gpu_flags; ///<
-    bool need_compilation_environment;
 
 private:
     struct Define {
@@ -30,10 +29,14 @@ private:
         String val;
     };
 
+    bool init_using_dep( CompilationEnvironment &ce, const String &cpp_file, const String &dep_file );
     void parse_src_file_rec( CompilationEnvironment &ce, const String &filename );
 
-    // static String filename_from_directive( const char *b );
+    BasicVec<String> ce_inc_paths; ///< -I... which come from CompilationEnvironment
+    BasicVec<String> ce_def_procs; ///< -D... which come from CompilationEnvironmentd
+
     std::map<String,Define> defines;
+    String dep_file;
 };
 
 END_METIL_LEVEL1_NAMESPACE;

@@ -99,6 +99,10 @@ void CompilationEnvironment::add_CPPFLAG( const String &flag ) {
     CPPFLAGS << flag;
 }
 
+void CompilationEnvironment::add_def_proc( const String &def ) {
+    def_procs << def;
+}
+
 void CompilationEnvironment::set_CXX( const String &path ) {
     CXX = path;
 }
@@ -152,6 +156,20 @@ int CompilationEnvironment::get_dbg_level() const {
 
 int CompilationEnvironment::get_opt_level  () const {
     return opt_level >= 0 ? opt_level : child->get_opt_level();
+}
+
+void CompilationEnvironment::get_inc_paths( BasicVec<String> &res ) const {
+    if ( child )
+        child->get_inc_paths( res );
+    for( int i = 0; i < inc_paths.size(); ++i )
+        res.push_back_unique( inc_paths[ i ] );
+}
+
+void CompilationEnvironment::get_def_procs( BasicVec<String> &res ) const {
+    if ( child )
+        child->get_def_procs( res );
+    for( int i = 0; i < def_procs.size(); ++i )
+        res.push_back_unique( def_procs[ i ] );
 }
 
 void CompilationEnvironment::save_env_var( bool update_LD_LIBRARY_PATH ) const {
@@ -313,8 +331,20 @@ void CompilationEnvironment::extra_obj_cmd( String &cmd, bool dyn, bool cu ) con
     }
     for( int i = 0; i < inc_paths.size(); ++i )
         cmd << " -I" << inc_paths[ i ];
-    if ( dbg_level > 0 ) cmd << " -g" << dbg_level;
-    if ( opt_level > 0 ) cmd << " -O" << opt_level;
+    for( int i = 0; i < def_procs.size(); ++i )
+        cmd << " -D" << def_procs[ i ];
+    if ( dbg_level > 0 ) {
+        if ( cu )
+            cmd << " -g";
+        else
+            cmd << " -g" << dbg_level;
+    }
+    if ( opt_level > 0 ) {
+        if ( cu )
+            cmd << " -O";
+        else
+            cmd << " -O" << opt_level;
+    }
     if ( child )
         child->extra_obj_cmd( cmd, dyn, cu );
 }
@@ -398,21 +428,6 @@ Ptr<CompilationTree> CompilationEnvironment::make_lnk_compilation_tree( const St
     return res;
 }
 
-static void save_dep_vec( String &fd, const BasicVec<String> &vec ) { ///< @see parse_cpp
-    for( int i = 0; i < vec.size(); ++i )
-        fd << vec[ i ].size() << vec[ i ];
-    fd << "0\n";
-}
-
-static void load_dep_vec( const char *&c, BasicVec<String> &vec ) { ///< @see parse_cpp
-    while ( true ) {
-        String r = String::read_sized( c );
-        if ( not r )
-            return;
-        vec << r;
-    }
-}
-
 void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, const String &cpp_, bool dyn ) {
     String cpp = absolute_filename( cpp_ );
 
@@ -421,19 +436,8 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         return;
     parsed << cpp;
 
-    // look in cache
-    String dep = dep_for( cpp );
-    SI64 date_cpp = last_modification_time_or_zero_of_file_named( cpp );
-    SI64 date_dep = last_modification_time_or_zero_of_file_named( dep );
-    if ( date_cpp <= date_dep ) {
-        File fd( dep, "r" );
-        const char *c = fd.c_str();
-        load_dep_vec( c, defines );
-        PRINT( defines );
-    }
-
     // parse
-    CompilationCppParser cpp_parser( *this, cpp );
+    CompilationCppParser cpp_parser( *this, cpp, dep_for( cpp ) );
 
     // global flags
     for( int i = 0; i < cpp_parser.lib_names.size(); ++i )
@@ -469,11 +473,6 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         String ext_cpp = cpp_parser.src_files[ i ];
         parse_cpp( obj, ext_cpp, dyn );
     }
-
-
-    // save in .dep
-    File fd( dep, "w" );
-    save_dep_vec( fd, defines );
 }
 
 struct Lib {
