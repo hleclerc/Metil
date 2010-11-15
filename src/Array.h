@@ -25,8 +25,12 @@ struct Array : public Level1::MO {
         ASSERT( dim < 6, "TODO" );
         type = lst[ dim ];
     }
+    Array( const Array &a ) : MO( CM_1( copy, a ) ) {}
+    Array &operator=( const Array &a ) { CM_2( reassign, *this, a ); return *this; }
 
     ~Array() { CM_1( del, *this ); }
+
+
 
     Val size() const { return type->size( *this ); }
     Val size( int i ) const { return sizes()[ i ]; }

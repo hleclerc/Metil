@@ -7,50 +7,75 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-MethodWriter::MethodWriter( Type *type_0, Type *type_1, Type *type_2, const MethodWriter *parent ) : n( code ) {
+MethodWriter::MethodWriter( Type *type_0, Type *type_1, Type *type_2, MethodWriter *parent ) : n( parent ? parent->code : code ), parent( parent ) {
     type[ 0 ] = type_0;
     type[ 1 ] = type_1;
     type[ 2 ] = type_2;
-    includes << "Level1/Type.h";
-    os_defined = false;
-
-    if ( parent ) {
-        os_defined = parent->os_defined;
-    }
+    add_include( "Level1/Type.h" );
 }
 
 MethodWriter &MethodWriter::operator<<( const String &str ) {
+    if ( parent )
+        return parent->operator<<( str );
     code << str;
     return *this;
 }
 
 void MethodWriter::add_include( const String &include ) {
-    if ( not includes.contains( include ) )
+    if ( parent )
+        parent->add_include( include );
+    else if ( not includes.contains( include ) )
         includes << include;
 }
 
 void MethodWriter::add_preliminary( const String &txt ) {
-    preliminary << txt;
+    if ( parent )
+        parent->add_preliminary( txt );
+    else
+        preliminary << txt;
 }
 
 void MethodWriter::add_type_decl( const String &name ) {
-    if ( ext_types.contains( name ) )
-        return;
-    ST p = name.find( '_' );
-    String cons = p >= 0 ? name.beg_upto( p ) : name;
-    ext_types << name;
-    add_include( "Level1/TypeConstructor_" + cons + ".h" );
-    add_preliminary( "DECL_TYPE( " + name + " );\n" );
-    add_preliminary( "DEFI_TYPE( " + cons + ", " + name + " );\n" );
+    if ( parent )
+        parent->add_type_decl( name );
+    else {
+        if ( ext_types.contains( name ) )
+            return;
+        ST p = name.find( '_' );
+        String cons = p >= 0 ? name.beg_upto( p ) : name;
+        ext_types << name;
+        add_include( "Level1/TypeConstructor_" + cons + ".h" );
+        add_preliminary( "DECL_TYPE( " + name + " );\n" );
+        add_preliminary( "DEFI_TYPE( " + cons + ", " + name + " );\n" );
+    }
+}
+
+Type *MethodWriter::get_type( int n ) const {
+    return type[ n ];
+}
+
+bool MethodWriter::get_os_defined() const {
+    if ( parent )
+        return parent->os_defined;
+    return os_defined;
+}
+
+void MethodWriter::set_os_defined( bool v ) {
+    if ( parent )
+        parent->set_os_defined( v );
+    else
+        os_defined = v;
 }
 
 void MethodWriter::beg_def( const String &def_name ) {
+    ASSERT( parent == 0, "beg_def should be done in main MethodWriter" );
     code << "__extern_C__ ";
     code << decl_of( def_name, type[ 0 ], type[ 1 ], type[ 2 ] ) << " {\n";
     os_defined = false;
 }
 
 void MethodWriter::end_def() {
+    ASSERT( parent == 0, "end_def should be done in main MethodWriter" );
     code << "}\n";
 }
 
@@ -135,7 +160,7 @@ String MethodWriter::symb_of( const String &method_name, Type *type_0, Type *typ
 template<class MethodName>
 void try_to_generate( MethodWriter &mw ) {
     typedef MethodFinder<MethodName> MF;
-    typename MF::Item *item = MF::find_item( mw.type[ 0 ], mw.type[ 1 ], mw.type[ 2 ], false );
+    typename MF::Item *item = MF::find_item( mw.get_type( 0 ), mw.get_type( 1 ), mw.get_type( 2 ), false );
     if ( item and item->gene and not item->meth ) {
         BasicVec<Mos> mos( "a", "b", "c" );
         mw.beg_def( MethodName::get_name() );

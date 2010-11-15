@@ -1,7 +1,7 @@
+#include "Array.h"
+
 #ifndef VEC_H
 #define VEC_H
-
-#include "Array.h"
 
 BEG_METIL_NAMESPACE;
 
@@ -13,6 +13,8 @@ BEG_METIL_NAMESPACE;
 class Vec : public Array<Val> {
 public:
     Vec();
+    Vec( const Array<Val> &a ) : Array<Val>( a ) {  }
+    Vec( const Vec &a ) : Array<Val>( static_cast<const Array<Val> &>( a ) ) {  }
     // Vec( const Array<Val> &a ) { static_cast<MO &>( *this ) = CM_1( copy, a ); }
 
 //    Vec( const Val &v_0 );

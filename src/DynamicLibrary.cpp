@@ -18,6 +18,11 @@ DynamicLibrary::DynamicLibrary() {
     data = 0;
 }
 
+DynamicLibrary::~DynamicLibrary() {
+    if ( data )
+        dlclose( data );
+}
+
 bool DynamicLibrary::open( String name ) {
     static bool global_opened = 0;
     if ( not global_opened ) {
@@ -31,11 +36,6 @@ bool DynamicLibrary::open( String name ) {
     data = dlopen( name.c_str(), RTLD_LAZY + RTLD_GLOBAL );
     #endif
     return data;
-}
-
-DynamicLibrary::~DynamicLibrary() {
-    if ( data )
-        dlclose( data );
 }
 
 void *DynamicLibrary::get_sym( String name ) {

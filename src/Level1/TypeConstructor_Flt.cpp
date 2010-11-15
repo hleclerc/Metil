@@ -7,12 +7,12 @@
 BEG_METIL_LEVEL1_NAMESPACE;
 
 void metil_gen_reassign_inplace__when__a__isa__Flt( MethodWriter &mw, const Mos *a, const String & ) {
-    TypeConstructor_Flt *c = static_cast<TypeConstructor_Flt *>( mw.type[ 0 ]->constructor );
+    TypeConstructor_Flt *c = static_cast<TypeConstructor_Flt *>( mw.get_type( 0 )->constructor );
     if ( String cpp = c->cpp_type() ) {
         String ret; ret << "*reinterpret_cast<" << cpp << " *>( " << a[ 0 ].data << " ) = ";
-        if ( cpp == "FP32" ) call_gene<MethodName_convert_to_FP32>( mw, mw.type[ 1 ], 0, 0, a + 1, ret );
-        if ( cpp == "FP64" ) call_gene<MethodName_convert_to_FP64>( mw, mw.type[ 1 ], 0, 0, a + 1, ret );
-        if ( cpp == "FP80" ) call_gene<MethodName_convert_to_FP80>( mw, mw.type[ 1 ], 0, 0, a + 1, ret );
+        if ( cpp == "FP32" ) call_gene<MethodName_convert_to_FP32>( mw, mw.get_type( 1 ), 0, 0, a + 1, ret );
+        if ( cpp == "FP64" ) call_gene<MethodName_convert_to_FP64>( mw, mw.get_type( 1 ), 0, 0, a + 1, ret );
+        if ( cpp == "FP80" ) call_gene<MethodName_convert_to_FP80>( mw, mw.get_type( 1 ), 0, 0, a + 1, ret );
     } else
         TODO;
 }

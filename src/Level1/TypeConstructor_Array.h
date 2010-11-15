@@ -32,6 +32,7 @@ public:
 
     DECL_WRITER( del );
     DECL_WRITER( init );
+    DECL_WRITER( copy );
     DECL_WRITER( size );
     DECL_WRITER( sizes );
     DECL_WRITER( write_str );

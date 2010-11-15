@@ -11,7 +11,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 */
 class MethodWriter {
 public:
-    MethodWriter( Type *type_0, Type *type_1, Type *type_2, const MethodWriter *parent = 0 );
+    MethodWriter( Type *type_0, Type *type_1, Type *type_2, MethodWriter *parent = 0 );
 
     MethodWriter &operator<<( const String &str );
     void beg_def( const String &def_name );
@@ -22,6 +22,9 @@ public:
     void add_preliminary( const String &txt ); ///< after includes and namespace
     void add_type_decl( const String &name ); ///< add declaration for type "name" and look if there's a declaration somewhere
 
+    Type *get_type( int n ) const;
+    bool get_os_defined() const;
+    void set_os_defined( bool v );
 
     static String def_str( const String &method_name, Type *type_0, Type *type_1, Type *type_2 );
     static String decl_of( const String &method_name, Type *type_0, Type *type_1, Type *type_2 );
@@ -29,9 +32,11 @@ public:
     static DynamicLibrary &get_lib_for_types( Type *type_0, Type *type_1, Type *type_2, const char *dep_file );
     static void make_cpp_for_types( const String cpp_name, Type *type_0, Type *type_1, Type *type_2 );
 
+    StringWithSepInCppLineMaker n; ///< used to output lines with CR at the end
+private:
+    MethodWriter *parent;
     String preliminary;
     String code;
-    StringWithSepInCppLineMaker n;
     Type *type[ 3 ];
     BasicVec<String> includes;
     BasicVec<String> ext_types;

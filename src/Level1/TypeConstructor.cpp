@@ -16,36 +16,36 @@ MO metil_def_copy__when__a__has__is_void__pert__1( MO a ) { return a.type; }
 void metil_gen_copy__when__a__has__is_void( MethodWriter &mw, const Mos *a, const String &ret ) { mw.n << ret << " " << a->type << ";"; }
 
 // static gen...( MethodWriter & ) { constructor->write_... }
-#define DECL_MET( T, N ) void metil_gen_##N##__when__a__has__has_writer_for_##N##__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) { cw.type[ 0 ]->constructor->write_##N( cw, a, ret ); }
+#define DECL_MET( T, N ) void metil_gen_##N##__when__a__has__has_writer_for_##N##__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) { cw.get_type( 0 )->constructor->write_##N( cw, a, ret ); }
 #include "DeclMethodsUnary.h"
 #undef DECL_MET
 
 void metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) {
     cw.add_include( "String.h" );
-    if ( not cw.os_defined ) {
-        cw.os_defined = true;
+    if ( cw.get_os_defined() == false ) {
+        cw.set_os_defined( true );
         cw.n << "String &os = static_cast<String &>( " << a[ 0 ] << " );";
     }
-    cw.type[ 1 ]->constructor->write_write_str( cw, a + 1 );
+    cw.get_type( 1 )->constructor->write_write_str( cw, a + 1 );
 }
 
 // POD
 void metil_gen_del__when__a__has__is_a_POD__pert__1( MethodWriter &mw, const Mos *a, const String &ret ) {
-    int size = mw.type[ 0 ]->constructor->static_size_in_bytes();
+    int size = mw.get_type( 0 )->constructor->static_size_in_bytes();
     if ( size > 0 )
         mw.n << "FREE( " << a->data << ", Number<" << size << ">() );";
 }
 
 void metil_gen_copy__when__a__has__is_a_POD__pert__1( MethodWriter &mw, const Mos *a, const String &ret ) {
-    int size = mw.type[ 0 ]->constructor->static_size_in_bytes();
+    int size = mw.get_type( 0 )->constructor->static_size_in_bytes();
     if ( size > 0 ) {
         mw.add_include( "Level1/StringHelp.h" );
         String s; s << "Number<" << size << ">()";
         mw.n << "void *res = MALLOC( " << s << " );";
         mw.n << "memcpy( res, " << a->data << ", " << s << " );";
-        mw.n << ret << "MO( res, &metil_type_bas_" << mw.type[ 0 ]->name << " );";
+        mw.n << ret << "MO( res, &metil_type_bas_" << mw.get_type( 0 )->name << " );";
     } else {
-        mw.n << ret << "MO( &metil_type_cst_" << mw.type[ 0 ]->name << " );";
+        mw.n << ret << "MO( &metil_type_cst_" << mw.get_type( 0 )->name << " );";
     }
 }
 

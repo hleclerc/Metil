@@ -10,11 +10,11 @@ static TypeConstructor_Array *sc( Type *type ) {
 }
 
 void metil_gen_allocate__when__a__isa__Array__and__b__isa__Int__pert__1( MethodWriter &mw, const Mos *args, const String &ret ) {
-    TypeConstructor_Array *c = sc( mw.type[ 0 ] );
+    TypeConstructor_Array *c = sc( mw.get_type( 0 ) );
     if ( c->len() == 0 ) // nothing to allocate
         return;
     // wanted size
-    call_gene<MethodName_convert_to_SI64>( mw, mw.type[ 1 ], 0, 0, args + 1, "ST size = " );
+    call_gene<MethodName_convert_to_SI64>( mw, mw.get_type( 1 ), 0, 0, args + 1, "ST size = " );
 
     // rese_mem
     c->write_get_static_s( mw, "ss" );
@@ -42,26 +42,26 @@ void metil_gen_allocate__when__a__isa__Array__and__b__isa__Int__pert__1( MethodW
 }
 
 void metil_gen_init_arg__when__a__isa__Array__pert__1( MethodWriter &mw, const Mos *args, const String &ret ) {
-    TypeConstructor_Array *c = sc( mw.type[ 0 ] );
+    TypeConstructor_Array *c = sc( mw.get_type( 0 ) );
     c->write_smp_beg_loop( mw, args[ 0 ].data, false );
     Mos loc_args[ 2 ] = { Mos( "d", "" ), args[ 1 ] };
     if ( c->item_type_bas )
-        call_gene<MethodName_init_arg>( mw, c->item_type_bas, mw.type[ 1 ], 0, loc_args );
+        call_gene<MethodName_init_arg>( mw, c->item_type_bas, mw.get_type( 1 ), 0, loc_args );
     else
-        call_gene<MethodName_copy>( mw, mw.type[ 1 ], 0, 0, args + 1, "*d = " );
+        call_gene<MethodName_copy>( mw, mw.get_type( 1 ), 0, 0, args + 1, "*d = " );
     c->write_smp_end_loop( mw );
 }
 
 
 
 void metil_gen_select_C__when__a__isa__Array__pert__1( MethodWriter &cw, const Mos *args, const String &ret ) {
-    TypeConstructor_Array *c = sc( cw.type[ 0 ] );
+    TypeConstructor_Array *c = sc( cw.get_type( 0 ) );
 
     // header
     c->write_get_t_header( cw, "AH" );
     c->write_get_header( cw, "h", args[ 0 ].data, "AH" );
     c->write_get_data_ptr( cw, true, "d", "h", args[ 0 ].data );
-    c->write_get_index( cw, "index", cw.type[ 1 ]->constructor, args[ 1 ], "h" );
+    c->write_get_index( cw, "index", cw.get_type( 1 )->constructor, args[ 1 ], "h" );
 
     if ( c->item_type_bas ) {
         Mos d; d.data << "d + index * " << c->item_type_bas->constructor->static_size_in_bytes();
@@ -73,11 +73,11 @@ void metil_gen_select_C__when__a__isa__Array__pert__1( MethodWriter &cw, const M
 void metil_gen_select__when__a__isa__Array__pert__1( MethodWriter &cw, const Mos *args, const String &ret ) {
     cw.add_include( "Pair.h" );
     cw.add_include( "Level1/TypeConstructor_Select.h" );
-    TypeConstructor_Array *c_0 = static_cast<TypeConstructor_Array *>( cw.type[ 0 ]->constructor );
-    TypeConstructor *c_1 = cw.type[ 1 ]->constructor;
+    TypeConstructor_Array *c_0 = static_cast<TypeConstructor_Array *>( cw.get_type( 0 )->constructor );
+    TypeConstructor *c_1 = cw.get_type( 1 )->constructor;
 
     String select_type = "Select_";
-    select_type << strlen( cw.type[ 0 ]->name ) << cw.type[ 0 ]->name;
+    select_type << strlen( cw.get_type( 0 )->name ) << cw.get_type( 0 )->name;
     select_type << "8Int_s_64";
 
     if ( c_0->dim() > 1 )
@@ -91,7 +91,7 @@ void metil_gen_select__when__a__isa__Array__pert__1( MethodWriter &cw, const Mos
 
 
 void metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1( MethodWriter &cw, const Mos *args, const String &ret ) {
-    TypeConstructor_Array *c = static_cast<TypeConstructor_Array *>( cw.type[ 0 ]->constructor );
+    TypeConstructor_Array *c = static_cast<TypeConstructor_Array *>( cw.get_type( 0 )->constructor );
     c->write_get_t_header( cw, "AH" );
     c->write_get_header( cw, "h", args[ 0 ].data, "AH" );
     c->write_get_data_ptr( cw, false, "d", "h", args[ 0 ].data );
@@ -104,7 +104,7 @@ void metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__per
         Mos d[ 2 ];
         d[ 0 ].data << "d";
         d[ 1 ] = args[ 1 ];
-        call_gene<MethodName_reassign_inplace>( cw, c->item_type_bas, cw.type[ 1 ], 0, d );
+        call_gene<MethodName_reassign_inplace>( cw, c->item_type_bas, cw.get_type( 1 ), 0, d );
     } else {
         cw.n << "CM_2( reassign, *d, " << args[ 1 ] << " );";
     }
@@ -161,8 +161,21 @@ void TypeConstructor_Array::write_init( MethodWriter &cw, const Mos *args, const
     for(int d = dim() - 1; d >= 0; --d )
         write_beg_loop( cw, "h", d );
     // cw.n << "CM_1( del, *d );";
+    cw.n << "TODO;";
     for(int d = 0; d < dim(); ++d )
         write_end_loop( cw, "h", d, "d" );
+}
+
+void TypeConstructor_Array::write_copy( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
+    if ( want_CptUse ) {
+        write_get_t_header( mw, "AH" );
+        write_get_header( mw, "h", a->data, "AH" );
+        mw.n << "++h->cpt_use;";
+        mw.n << ret_ins << *a << ";";
+    } else {
+        mw.n << "TODO;";
+        mw.n << ret_ins << "0;";
+    }
 }
 
 void TypeConstructor_Array::write_size( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
@@ -184,8 +197,6 @@ void TypeConstructor_Array::write_sizes( MethodWriter &mw, const Mos *a, const S
 
     write_get_t_header( mw, "AH" );
     write_get_header( mw, "h", a->data, "AH" );
-    PRINT( len_size() );
-    PRINT( dim() );
     if ( len_size() == dim() ) {
         String type_vec_32, type_vec_64;
         type_vec_32 << "Array_8Int_s_32_1_" << dim() << "_" << dim();
@@ -225,7 +236,6 @@ void TypeConstructor_Array::write_write_str( MethodWriter &mw, const Mos *args, 
     write_get_t_header( mw, "AH" );
     write_get_header( mw, "h", args->data, "AH" );
     write_get_data_ptr( mw, true, "d", "h", args->data );
-    mw.n << "PRINT( *(const SI64 *)d );";
 
     // beg loop
     for(int d = dim() - 1; d >= 0; --d ) {
@@ -237,7 +247,7 @@ void TypeConstructor_Array::write_write_str( MethodWriter &mw, const Mos *args, 
         Mos d[ 2 ];
         d[ 0 ] = Mos( "os" );
         d[ 1 ].data << "d";
-        call_gene<MethodName_self_append>( mw, mw.type[ 0 ], item_type_bas, 0, d );
+        call_gene<MethodName_self_append>( mw, mw.get_type( 0 ), item_type_bas, 0, d );
     } else
         mw.n << "os << *d;";
 
@@ -295,7 +305,7 @@ void TypeConstructor_Array::write_select_op( MethodWriter &mw, const Mos *a, Typ
             else
                 d[ 1 ] = a[ 1 ];
 
-            #define DECL_MET( T, N ) if ( op == #N ) call_gene<MethodName_##N##_inplace>( mw, item_type_bas, mw.type[ 1 ], 0, d );
+            #define DECL_MET( T, N ) if ( op == #N ) call_gene<MethodName_##N##_inplace>( mw, item_type_bas, mw.get_type( 1 ), 0, d );
             #include "DeclMethodsBinarySelfOp.h"
             #undef DECL_MET
         } else {

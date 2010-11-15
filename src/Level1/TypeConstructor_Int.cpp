@@ -66,8 +66,8 @@ void TypeConstructor_Int::write_write_str( MethodWriter &mw, const Mos *a, const
 }
 
 static void gen_self_op_inplace( MethodWriter &mw, const Mos *a, const String &op ) {
-    const TypeConstructor_Int *c_0 = static_cast<const TypeConstructor_Int *>( mw.type[ 0 ]->constructor );
-    const TypeConstructor_Int *c_1 = static_cast<const TypeConstructor_Int *>( mw.type[ 1 ]->constructor );
+    const TypeConstructor_Int *c_0 = static_cast<const TypeConstructor_Int *>( mw.get_type( 0 )->constructor );
+    const TypeConstructor_Int *c_1 = static_cast<const TypeConstructor_Int *>( mw.get_type( 1 )->constructor );
     String t_0 = c_0->cpp_type();
     String t_1 = c_1->cpp_type();
     if ( t_0 and t_1 )

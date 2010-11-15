@@ -108,10 +108,6 @@ void call_gene( MethodWriter &cw, Type *type_0, Type *type_1, Type *type_2, cons
     typename MF::Item *item = MF::find_item( type_0, type_1, type_2, true, true );
     MethodWriter mw( type_0, type_1, type_2, &cw );
     item->gene( mw, a, ret );
-    cw << mw.code;
-    for( int i = 0; i < mw.includes.size(); ++i )
-        cw.includes << mw.includes[ i ];
-    cw.preliminary << mw.preliminary;
 }
 
 END_METIL_LEVEL1_NAMESPACE;

@@ -70,18 +70,23 @@ void CompilationEnvironment::add_inc_path( const String &path ) {
 }
 
 void CompilationEnvironment::add_lib_path( const String &path ) {
-    String a = absolute_filename( path );
-    if ( a.size() ) {
-        if ( not a.ends_with( "/" ) )
-            a += '/';
-        lib_paths.push_back_unique( a );
+    if ( child )
+        child->add_lib_path( path );
+    else {
+        String a = absolute_filename( path );
+        if ( a.size() ) {
+            if ( not a.ends_with( "/" ) )
+                a += '/';
+            lib_paths.push_back_unique( a );
+        }
     }
 }
 
 void CompilationEnvironment::add_lib_name( const String &name ) {
-    if ( child and child->lib_names.contains( name ) )
-        return;
-    lib_names.push_back_unique( name );
+    if ( child )
+        child->add_lib_name( name );
+    else
+        lib_names.push_back_unique( name );
 }
 
 void CompilationEnvironment::add_CPPFLAG( const String &flag ) {
@@ -364,9 +369,9 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
 
     // global flags
     for( int i = 0; i < cpp_parser.lib_names.size(); ++i )
-        lib_names.push_back_unique( cpp_parser.lib_names[ i ] );
+        add_lib_name( cpp_parser.lib_names[ i ] );
     for( int i = 0; i < cpp_parser.lib_paths.size(); ++i )
-        lib_paths.push_back_unique( cpp_parser.lib_paths[ i ] );
+        add_lib_path( cpp_parser.lib_paths[ i ] );
 
     // local flags
     CompilationEnvironment loc_ce( this );
