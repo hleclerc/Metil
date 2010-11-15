@@ -173,8 +173,28 @@ void TypeConstructor_Array::write_copy( MethodWriter &mw, const Mos *a, const St
         mw.n << "++h->cpt_use;";
         mw.n << ret_ins << *a << ";";
     } else {
-        mw.n << "TODO;";
-        mw.n << ret_ins << "0;";
+        mw.add_include( "Level1/StringHelp.h" );
+        if ( need_header() ) {
+            write_get_t_header( mw, "AH" );
+            write_get_header( mw, "h", a->data, "AH" );
+            mw.n << "ST rese_mem = h->rese_mem;";
+            mw.n << "AH *data = (AH *)MALLOC( rese_mem );";
+            if ( item_type_bas and item_type_bas->constructor->is_a_POD() )
+                mw.n << "memcpy( data, " << a->data << ", h->rese_mem );";
+            else
+                mw.n << "TODO;";
+            mw.n << ret_ins << "MO( data, " << a->type << "->bas_type );";
+        } else {
+            int s = static_size_in_bytes();
+            ASSERT( s >= 0, "..." );
+            mw.n << "Number<" << s << "> sn;";
+            mw.n << "void *data = MALLOC( sn );";
+            if ( item_type_bas and item_type_bas->constructor->is_a_POD() )
+                mw.n << "memcpy( data, " << a->data << ", sn );";
+            else
+                mw.n << "TODO;";
+            mw.n << ret_ins << "MO( data, " << a->type << "->bas_type );";
+        }
     }
 }
 
@@ -205,6 +225,7 @@ void TypeConstructor_Array::write_sizes( MethodWriter &mw, const Mos *a, const S
         mw.add_type_decl( type_vec_64 );
         mw << "ST *data = h->size;";
         mw.n << "Type *type = sizeof( void *) == 8 ? &metil_type_cst_" << type_vec_64 << " : &metil_type_cst_" << type_vec_32 << ";";
+        mw.n << ret_ins << "MO( data, type );";
     } else {
         mw.n << "TODO;";
         mw.n << ret_ins << "0;";
@@ -215,7 +236,6 @@ void TypeConstructor_Array::write_sizes( MethodWriter &mw, const Mos *a, const S
         //        mw.n << " );";
         //        mw.n << "Type *type = type_ptr( S<ST>() )->static_vec_type( " << dim() << " );";
     }
-    mw.n << ret_ins << "MO( data, type );";
 }
 
 void TypeConstructor_Array::write_machine_id( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {

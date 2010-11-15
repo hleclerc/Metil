@@ -15,7 +15,7 @@ int main() {
     PRINT( vec );
     Vec s = vec.sizes();
     PRINT( s );
-    Vec t = vec;
+    Vec t = s;
     PRINT( t );
     PRINT( s.type->name );
 
