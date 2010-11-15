@@ -19,9 +19,9 @@ SI64 last_modification_time_or_zero_of_file_named( const String &n );
 bool file_exists( const String &n );
 void rm( const String &file ); // rm file
 
-//// system info
-//String get_os_type();
-//String get_cpu_type();
+// system info
+String get_os_type();
+String get_cpu_type();
 //bool term_supports_color(); ///< return true if terminal supports escape color sequences
 
 ///**

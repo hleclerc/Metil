@@ -187,25 +187,25 @@ bool file_exists( const String &n ) {
 //    unlink( n.c_str() );
 //}
 
-//String get_os_type() {
-//    #ifdef WIN32
-//        return "Win";
-//    #else
-//        struct utsname utsn;
-//        uname(&utsn);
-//        return String( NewStringPtr( utsn.sysname ) );
-//    #endif
-//}
+String get_os_type() {
+    #ifdef WIN32
+        return "Win";
+    #else
+        struct utsname utsn;
+        uname(&utsn);
+        return String( NewString( utsn.sysname ) );
+    #endif
+}
 
-//String get_cpu_type() {
-//    #ifdef WIN32
-//        return sizeof(void *) == 4 ? "i686" : "x86_64"; // TODO !!
-//    #else
-//        struct utsname utsn;
-//        uname(&utsn);
-//        return String( NewStringPtr( utsn.machine ) );
-//    #endif
-//}
+String get_cpu_type() {
+    #ifdef WIN32
+        return sizeof(void *) == 4 ? "i686" : "x86_64"; // TODO !!
+    #else
+        struct utsname utsn;
+        uname(&utsn);
+        return String( NewString( utsn.machine ) );
+    #endif
+}
 
 //bool term_supports_color() {
 //    const char *c_term = getenv("TERM");

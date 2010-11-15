@@ -246,6 +246,8 @@ String CompilationEnvironment::obj_suffix( bool dyn ) {
     String res;
     if ( get_dbg_level() > 0 ) res << ".g" << get_dbg_level();
     if ( get_opt_level() > 0 ) res << ".O" << get_opt_level();
+    res << "." << get_os_type();
+    res << "." << get_cpu_type();
     res << ( dyn ? ".os" : ".o" );
     return res;
 }
