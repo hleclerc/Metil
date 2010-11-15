@@ -7,11 +7,16 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-MethodWriter::MethodWriter( Type *type_0, Type *type_1, Type *type_2 ) : n( code ) {
+MethodWriter::MethodWriter( Type *type_0, Type *type_1, Type *type_2, const MethodWriter *parent ) : n( code ) {
     type[ 0 ] = type_0;
     type[ 1 ] = type_1;
     type[ 2 ] = type_2;
     includes << "Level1/Type.h";
+    os_defined = false;
+
+    if ( parent ) {
+        os_defined = parent->os_defined;
+    }
 }
 
 MethodWriter &MethodWriter::operator<<( const String &str ) {
@@ -31,13 +36,18 @@ void MethodWriter::add_preliminary( const String &txt ) {
 void MethodWriter::add_type_decl( const String &name ) {
     if ( ext_types.contains( name ) )
         return;
+    ST p = name.find( '_' );
+    String cons = p >= 0 ? name.beg_upto( p ) : name;
     ext_types << name;
+    add_include( "Level1/TypeConstructor_" + cons + ".h" );
     add_preliminary( "DECL_TYPE( " + name + " );\n" );
+    add_preliminary( "DEFI_TYPE( " + cons + ", " + name + " );\n" );
 }
 
 void MethodWriter::beg_def( const String &def_name ) {
     code << "__extern_C__ ";
     code << decl_of( def_name, type[ 0 ], type[ 1 ], type[ 2 ] ) << " {\n";
+    os_defined = false;
 }
 
 void MethodWriter::end_def() {
@@ -171,14 +181,12 @@ DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Typ
     // already loaded ?
     static std::map<String,DynamicLibrary> libs;
     std::map<String,DynamicLibrary>::iterator iter = libs.find( lib_name );
-    if ( iter != libs.end() ) {
-        PRINT( "yop" );
+    if ( iter != libs.end() )
         return iter->second;
-    }
-    DynamicLibrary &res = libs[ lib_name ];
 
 
     // if lib exists, load it
+    DynamicLibrary &res = libs[ lib_name ];
     SI64 date_dep = last_modification_time_or_zero_of_file_named( dep_file );
     SI64 date_lib = last_modification_time_or_zero_of_file_named( lib_name );
     if ( date_lib <= date_dep ) { // make cpp, compile and load it
@@ -189,14 +197,8 @@ DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Typ
         loc_ce.add_CPPFLAG( "-DMETIL_GENE_DYLIB" );
         if ( loc_ce.make_lib( lib_name, cpp_name, true ) )
             ERROR( "Pb during compilation of %s", cpp_name.c_str() );
-        //        String cmd = get_env( "METIL_CXX_CMD" );
-        //        ASSERT( cmd.size(), "METIL_CXX_CMD is not defined in env var" );
-        //        cmd << "  -g3 -fPIC -shared -o "  << lib_name << " "  << cpp_name;
-        //        if ( exec_cmd( cmd ) )
-        //            ERROR( "Pb during compilation of %s", cpp_name.c_str() );
     }
 
-    PRINT( lib_name );
     res.open( lib_name );
     if ( not res )
         ERROR( "Error during lib load %s", res.error().c_str() );

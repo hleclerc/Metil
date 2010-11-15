@@ -17,21 +17,27 @@ void metil_gen_allocate__when__a__isa__Array__and__b__isa__Int__pert__1( MethodW
     call_gene<MethodName_convert_to_SI64>( mw, mw.type[ 1 ], 0, 0, args + 1, "ST size = " );
 
     // rese_mem
-    c->write_get_t_header( mw, "AH" );
     c->write_get_static_s( mw, "ss" );
-    mw.n << "ST rese_mem = sizeof( AH ) + size * ss;";
-    mw.n << "PRINT( rese_mem );";
+    if ( c->need_header() ) {
+        c->write_get_t_header( mw, "AH" );
+        mw.n << "ST rese_mem = sizeof( AH ) + size * ss;";
 
-    // fill header
-    mw.n << "AH *header = (AH *)MALLOC( rese_mem );";
-    mw.n << "new( header ) AH;";
-    mw.n << "header->rese_mem = rese_mem;";
-    mw.n << "header->size[ 0 ] = size;";
-    mw.n << "header->rese[ 0 ] = ( rese_mem - sizeof( AH ) ) / ss;";
+        // fill header
+        mw.n << "AH *header = (AH *)MALLOC( rese_mem );";
+        mw.n << "new( header ) AH;";
+        mw.n << "header->rese_mem = rese_mem;";
+        mw.n << "header->size[ 0 ] = size;";
+        mw.n << "header->rese[ 0 ] = ( rese_mem - sizeof( AH ) ) / ss;";
+
+        // ret
+        mw.n << args->data << " = header;";
+        mw.n << ret << "header;";
+    } else {
+        mw.n << "ST rese_mem = size * ss;";
+        mw.n << "void *header = MALLOC( rese_mem );";
+    }
     // mw.n << "set_machine_id( wmi, header, mid );";
 
-    // ret
-    mw.n << args->data << " = header;";
     mw.n << ret << "header;";
 }
 
@@ -40,7 +46,7 @@ void metil_gen_init_arg__when__a__isa__Array__pert__1( MethodWriter &mw, const M
     c->write_smp_beg_loop( mw, args[ 0 ].data, false );
     Mos loc_args[ 2 ] = { Mos( "d", "" ), args[ 1 ] };
     if ( c->item_type_bas )
-        call_gene<MethodName_init_arg>( mw, mw.type[ 0 ], mw.type[ 1 ], 0, loc_args );
+        call_gene<MethodName_init_arg>( mw, c->item_type_bas, mw.type[ 1 ], 0, loc_args );
     else
         call_gene<MethodName_copy>( mw, mw.type[ 1 ], 0, 0, args + 1, "*d = " );
     c->write_smp_end_loop( mw );
@@ -171,23 +177,34 @@ void TypeConstructor_Array::write_size( MethodWriter &mw, const Mos *a, const St
 }
 
 void TypeConstructor_Array::write_sizes( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
-//    write_get_t_header( mw, "AH" );
-//    write_get_header( mw, "h", a[ 0 ].data, "AH" );
-//    mw.add_include( "BasicVec.h" );
-//    if ( len_size() == dim() and dim() ) {
-//        mw << "ST *data = h->size;";
-//        mw.n << "Type *type = type_ptr( S<ST>() )->static_vec_type( " << dim() << " )->cst_type;";
-//    } else {
-//        mw.n << "typedef BasicVec<ST," << dim() << "> B;";
-//        mw << "B *data = NEW( B";
-//        for(int d = 0; d < dim(); ++d )
-//            mw << ", " << get_size_n( "h", d );
-//        mw.n << " );";
-//        mw.n << "Type *type = type_ptr( S<ST>() )->static_vec_type( " << dim() << " );";
-//    }
-//    mw.n << ret_ins << "MO( data, type );";
-    mw.n << "TODO;";
-    mw.n << ret_ins << " 0;";
+    if ( dim() == 0 ) {
+        mw.n << ret_ins << "&metil_type_cst_Array_4NULL_0;";
+        return;
+    }
+
+    write_get_t_header( mw, "AH" );
+    write_get_header( mw, "h", a->data, "AH" );
+    PRINT( len_size() );
+    PRINT( dim() );
+    if ( len_size() == dim() ) {
+        String type_vec_32, type_vec_64;
+        type_vec_32 << "Array_8Int_s_32_1_" << dim() << "_" << dim();
+        type_vec_64 << "Array_8Int_s_64_1_" << dim() << "_" << dim();
+        mw.add_type_decl( type_vec_32 );
+        mw.add_type_decl( type_vec_64 );
+        mw << "ST *data = h->size;";
+        mw.n << "Type *type = sizeof( void *) == 8 ? &metil_type_cst_" << type_vec_64 << " : &metil_type_cst_" << type_vec_32 << ";";
+    } else {
+        mw.n << "TODO;";
+        mw.n << ret_ins << "0;";
+        //        mw.n << "typedef BasicVec<ST," << dim() << "> B;";
+        //        mw << "B *data = NEW( B";
+        //        for(int d = 0; d < dim(); ++d )
+        //            mw << ", " << get_size_n( "h", d );
+        //        mw.n << " );";
+        //        mw.n << "Type *type = type_ptr( S<ST>() )->static_vec_type( " << dim() << " );";
+    }
+    mw.n << ret_ins << "MO( data, type );";
 }
 
 void TypeConstructor_Array::write_machine_id( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
@@ -206,9 +223,9 @@ void TypeConstructor_Array::write_write_str( MethodWriter &mw, const Mos *args, 
 
     // header
     write_get_t_header( mw, "AH" );
-    write_get_header( mw, "h", args[ 1 ].data, "AH" );
-    write_get_data_ptr( mw, true, "d", "h", args[ 1 ].data );
-    mw.n << "String &os = static_cast<String &>( a );";
+    write_get_header( mw, "h", args->data, "AH" );
+    write_get_data_ptr( mw, true, "d", "h", args->data );
+    mw.n << "PRINT( *(const SI64 *)d );";
 
     // beg loop
     for(int d = dim() - 1; d >= 0; --d ) {
@@ -218,7 +235,7 @@ void TypeConstructor_Array::write_write_str( MethodWriter &mw, const Mos *args, 
 
     if ( item_type_bas ) {
         Mos d[ 2 ];
-        d[ 0 ] = args[ 0 ];
+        d[ 0 ] = Mos( "os" );
         d[ 1 ].data << "d";
         call_gene<MethodName_self_append>( mw, mw.type[ 0 ], item_type_bas, 0, d );
     } else
@@ -379,7 +396,6 @@ void TypeConstructor_Array::write_get_data_ptr( MethodWriter &cw, bool want_cons
         if ( dyn() ) {
             String offset; offset << "sizeof( *" << name_header << " )";
             cw << type << name_data << " = reinterpret_cast<" << type << ">( (char *)" << name_header << " + " << offset << " );\n";
-            // cw << "PRINT(  );\n";
         } else {
             cw << type << name_data << " = reinterpret_cast<" << type << ">( " << data << " );\n";
         }

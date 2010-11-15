@@ -13,6 +13,7 @@ public:
     DECL_WRITER( convert_to_FP32 );
     DECL_WRITER( convert_to_FP64 );
     DECL_WRITER( convert_to_FP80 );
+    DECL_WRITER( write_str );
 
     String disp_str() const;
 

@@ -2,6 +2,13 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
+// bootstrap
+SI32 metil_def_convert_to_SI32__when__a__is__Cst_zero__pert__1000( MO a ) { return 0; }
+SI32 metil_def_convert_to_SI64__when__a__is__Cst_zero__pert__1000( MO a ) { return 0; }
+SI32 metil_def_convert_to_Bool__when__a__is__Cst_zero__pert__1000( MO a ) { return 0; }
+
+
+// writers
 static TypeConstructor_Cst *sc( Type *type ) {
     return static_cast<TypeConstructor_Cst *>( type->constructor );
 }
@@ -18,19 +25,8 @@ CONV_TO( FP32 );
 CONV_TO( FP64 );
 CONV_TO( FP80 );
 
-void metil_gen_self_append__when__a__isa__String__and__b__isa__Cst__pert__1( MethodWriter &cw, const Mos *args, const String &ret ) {
-    cw.add_include( "String.h" );
-    cw.n << "static_cast<String &>( a ) << " << sc( cw.type[ 1 ] )->disp_str() << ";";
-}
-
-
-SI32 metil_def_convert_to_SI32__when__a__is__Cst_zero__pert__1000( MO a ) { return 0; }
-SI32 metil_def_convert_to_SI64__when__a__is__Cst_zero__pert__1000( MO a ) { return 0; }
-SI32 metil_def_convert_to_Bool__when__a__is__Cst_zero__pert__1000( MO a ) { return 0; }
-
-
-MO metil_def_copy__when__a__isa__Cst__pert__1( MO a ) {
-    return a.type;
+void TypeConstructor_Cst::write_write_str( MethodWriter &cw, const Mos *args, const String &ret ) const {
+    cw.n << "os << " << disp_str() << ";";
 }
 
 

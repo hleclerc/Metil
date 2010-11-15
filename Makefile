@@ -44,3 +44,4 @@ archive:
 clean:
 	rm -f unit_tests/compilations/* 2> /dev/null
 	rm -f tests/compilations/* 2> /dev/null
+	rm -f compilations/* 2> /dev/null

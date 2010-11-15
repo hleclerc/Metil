@@ -22,7 +22,10 @@ void metil_gen_copy__when__a__has__is_void( MethodWriter &mw, const Mos *a, cons
 
 void metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) {
     cw.add_include( "String.h" );
-    cw.n << "String &os = static_cast<String &>( " << a[ 0 ] << " );";
+    if ( not cw.os_defined ) {
+        cw.os_defined = true;
+        cw.n << "String &os = static_cast<String &>( " << a[ 0 ] << " );";
+    }
     cw.type[ 1 ]->constructor->write_write_str( cw, a + 1 );
 }
 

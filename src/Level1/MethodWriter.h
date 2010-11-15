@@ -11,7 +11,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 */
 class MethodWriter {
 public:
-    MethodWriter( Type *type_0, Type *type_1, Type *type_2 );
+    MethodWriter( Type *type_0, Type *type_1, Type *type_2, const MethodWriter *parent = 0 );
 
     MethodWriter &operator<<( const String &str );
     void beg_def( const String &def_name );
@@ -35,6 +35,7 @@ public:
     Type *type[ 3 ];
     BasicVec<String> includes;
     BasicVec<String> ext_types;
+    bool os_defined;
 };
 
 typedef void MethodMaker( MethodWriter &mw, const Mos *mos, const String &ret = "return " );

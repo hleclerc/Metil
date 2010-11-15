@@ -25,13 +25,12 @@ struct Array : public Level1::MO {
         ASSERT( dim < 6, "TODO" );
         type = lst[ dim ];
     }
-    Array( Level1::MO mo ) : MO( mo ) {}
 
     ~Array() { CM_1( del, *this ); }
 
     Val size() const { return type->size( *this ); }
     Val size( int i ) const { return sizes()[ i ]; }
-    Array<Val> sizes() const { return type->sizes( *this ); }
+    Vec sizes() const;
 
     // 1 arg
     T operator[]( const Val &a ) const { return CM_2( select_C, *this, a ); }
@@ -59,8 +58,16 @@ struct Array : public Level1::MO {
 
 protected:
     Array() {}
+    Array( Level1::MO mo ) : MO( mo ) {}
 };
 
+END_METIL_NAMESPACE;
+
+#include "Vec.h"
+
+BEG_METIL_NAMESPACE;
+template<class T>
+Vec Array<T>::sizes() const { return type->sizes( *this ); }
 END_METIL_NAMESPACE;
 
 #endif // ARRAY_H

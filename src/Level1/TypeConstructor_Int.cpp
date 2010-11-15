@@ -65,7 +65,7 @@ void TypeConstructor_Int::write_write_str( MethodWriter &mw, const Mos *a, const
     mw.n << "DisplayInt<" << mant - sign << "," << sign << ",0," << mant - sign << ">::display( os, (const PI8 *)" << a->data << " );";
 }
 
-static void gen_self_op( MethodWriter &mw, const Mos *a, const String &op ) {
+static void gen_self_op_inplace( MethodWriter &mw, const Mos *a, const String &op ) {
     const TypeConstructor_Int *c_0 = static_cast<const TypeConstructor_Int *>( mw.type[ 0 ]->constructor );
     const TypeConstructor_Int *c_1 = static_cast<const TypeConstructor_Int *>( mw.type[ 1 ]->constructor );
     String t_0 = c_0->cpp_type();
@@ -76,8 +76,8 @@ static void gen_self_op( MethodWriter &mw, const Mos *a, const String &op ) {
         TODO;
 }
 
-void metil_gen_reassign_inplace__when__a__isa__Int__and__b__isa__Int( MethodWriter &mw, const Mos *a, const String & ) { gen_self_op( mw, a, "=" ); }
-
+void metil_gen_reassign_inplace__when__a__isa__Int__and__b__isa__Int( MethodWriter &mw, const Mos *a, const String & ) { gen_self_op_inplace( mw, a, "=" ); }
+void metil_gen_init_arg__when__a__isa__Int__and__b__isa__Int        ( MethodWriter &mw, const Mos *a, const String & ) { gen_self_op_inplace( mw, a, "=" ); }
 
 String TypeConstructor_Int::cpp_type() const {
     if ( sign == 0 ) {

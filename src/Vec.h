@@ -13,6 +13,7 @@ BEG_METIL_NAMESPACE;
 class Vec : public Array<Val> {
 public:
     Vec();
+    // Vec( const Array<Val> &a ) { static_cast<MO &>( *this ) = CM_1( copy, a ); }
 
 //    Vec( const Val &v_0 );
 //    Vec( const Val &v_0, const Val &v_1 );
@@ -59,6 +60,9 @@ public:
     Vec( Size, ST size );
 
 protected:
+    friend class Array<Val>;
+    Vec( Level1::MO mo ) : Array<Val>( mo ) {}
+
     Level1::MO *init_dyn_vec( Level1::Type *type, ST size );
     Level1::MO *init_dyn_vec( ST size );
 };

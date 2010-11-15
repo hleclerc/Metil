@@ -46,6 +46,16 @@ MO metil_def_rfind__when__a__isa__String__and__b__isa__String( MO a, MO b ) {
 }
 
 //
+MO metil_def_find__when__a__isa__String__and__b__isa__String( MO a, MO b ) {
+    char *sa = (char *)CM_1( new_ptr_z, a );
+    char *sb = (char *)CM_1( new_ptr_z, b );
+    MO res = NEW_Number( find( sa, sb ) );
+    std::free( sa );
+    std::free( sb );
+    return res;
+}
+
+//
 MO metil_def_end_from__when__a__isa__String__and__b__isa__Int( MO a, MO b ) {
     char *sa = (char *)CM_1( new_ptr_z, a );
     SI32 sb = CM_1( convert_to_SI32, b );
