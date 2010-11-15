@@ -13,19 +13,19 @@ BEG_METIL_NAMESPACE;
 class Vec : public Array<Val> {
 public:
     Vec();
-    Vec( const Array<Val> &a ) : Array<Val>( a ) {  }
-    Vec( const Vec &a ) : Array<Val>( static_cast<const Array<Val> &>( a ) ) {  }
-    // Vec( const Array<Val> &a ) { static_cast<MO &>( *this ) = CM_1( copy, a ); }
+    // explicit Vec( const Array<Val> &a ) : Array<Val>( a ) {  }
+    explicit Vec( const Vec &a ) : Array<Val>( static_cast<const Array<Val> &>( a ) ) {  }
 
-//    Vec( const Val &v_0 );
-//    Vec( const Val &v_0, const Val &v_1 );
-//    Vec( const Val &v_0, const Val &v_1, const Val &v_2 );
-//    Vec( const Val &v_0, const Val &v_1, const Val &v_2, const Val &v_3 );
-//    Vec( const Val &v_0, const Val &v_1, const Val &v_2, const Val &v_3, const Val &v_4 );
+    Vec( const Val &v_0 );
+    Vec( const Val &v_0, const Val &v_1 );
+    Vec( const Val &v_0, const Val &v_1, const Val &v_2 );
+    Vec( const Val &v_0, const Val &v_1, const Val &v_2, const Val &v_3 );
+    Vec( const Val &v_0, const Val &v_1, const Val &v_2, const Val &v_3, const Val &v_4 );
 
 //    template<class T,class T0> Vec( S<T> s, const T0 &v_0 ) {
-//        T *v = reinterpret_cast<T *>( init_dyn_vec( Level1::type_ptr( s ), 1 ) );
-//        new( v + 0 ) T( v_0 );
+//        //Level1::MO tmp = Level1::type_ptr( s );
+//        // T *v = reinterpret_cast<T *>( init_dyn_vec( , 1 ) );
+//        // new( v + 0 ) T( v_0 );
 //    }
 
 //    template<class T,class T0,class T1> Vec( S<T> s, const T0 &v_0, const T1 &v_1 ) {
@@ -60,6 +60,9 @@ public:
 
     // Vec( Level1::Type *item_type, ST size, const MachineId *machine_id = MachineId::cur() );
     Vec( Size, ST size );
+
+    Vec &operator=( const Array<Val> &a ) { CM_2( reassign, *this, a ); return *this; }
+    Vec &operator=( const Vec &a ) { CM_2( reassign, *this, a ); return *this; }
 
 protected:
     friend class Array<Val>;

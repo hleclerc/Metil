@@ -31,6 +31,11 @@ extern Type metil_type_bas_Op_Add;
 extern Type metil_type_bas_ConstCharPtrWithSize;
 extern Type metil_type_bas_StringConcat;
 extern Type metil_type_bas_Symbol;
+extern Type metil_type_bas_Array_4NULL_1_1_1;
+extern Type metil_type_bas_Array_4NULL_1_2_2;
+extern Type metil_type_bas_Array_4NULL_1_3_3;
+extern Type metil_type_bas_Array_4NULL_1_4_4;
+extern Type metil_type_bas_Array_4NULL_1_5_5;
 extern Type metil_type_bas_Array_4NULL_1_m_m_CptUse;
 extern Type metil_type_ref_Int_s_8;
 extern Type metil_type_ref_Int_s_16;
@@ -62,7 +67,6 @@ extern Type metil_type_cst_Array_4NULL_4_0_0_0_0_0_0_0_0;
 extern Type metil_type_cst_Array_4NULL_5_0_0_0_0_0_0_0_0_0_0;
 extern Type metil_type_cst_Cst_one;
 extern Type metil_type_cst_Cst_minus_one;
-extern Type metil_type_cst_Array_4NULL_1_0_0_0;
 
 END_METIL_LEVEL1_NAMESPACE;
 

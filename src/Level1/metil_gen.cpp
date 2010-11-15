@@ -33,11 +33,21 @@ Type metil_type_cst_Array_4NULL_0( &type_constructor_Array_4NULL_0, "Array_4NULL
 static TypeConstructor_Array type_constructor_Array_4NULL_1_0_0;
 Type metil_type_cst_Array_4NULL_1_0_0( &type_constructor_Array_4NULL_1_0_0, "Array_4NULL_1_0_0", 0, 0, &metil_type_cst_Array_4NULL_1_0_0, Type::Ref );
 
-static TypeConstructor_Array type_constructor_Array_4NULL_1_0_0_0;
-Type metil_type_cst_Array_4NULL_1_0_0_0( &type_constructor_Array_4NULL_1_0_0_0, "Array_4NULL_1_0_0_0", 0, 0, &metil_type_cst_Array_4NULL_1_0_0_0, Type::Ref );
+static TypeConstructor_Array type_constructor_Array_4NULL_1_1_1;
+Type metil_type_bas_Array_4NULL_1_1_1( &type_constructor_Array_4NULL_1_1_1, "Array_4NULL_1_1_1", &metil_type_bas_Array_4NULL_1_1_1, 0, 0, Type::Bas );
 
 static TypeConstructor_Array type_constructor_Array_4NULL_1_2_2;
-Type metil_type_ref_Array_4NULL_1_2_2( &type_constructor_Array_4NULL_1_2_2, "Array_4NULL_1_2_2", 0, &metil_type_ref_Array_4NULL_1_2_2, 0, Type::Cst );
+Type metil_type_bas_Array_4NULL_1_2_2( &type_constructor_Array_4NULL_1_2_2, "Array_4NULL_1_2_2", &metil_type_bas_Array_4NULL_1_2_2, &metil_type_ref_Array_4NULL_1_2_2, 0, Type::Bas );
+Type metil_type_ref_Array_4NULL_1_2_2( &type_constructor_Array_4NULL_1_2_2, "Array_4NULL_1_2_2", &metil_type_bas_Array_4NULL_1_2_2, &metil_type_ref_Array_4NULL_1_2_2, 0, Type::Cst );
+
+static TypeConstructor_Array type_constructor_Array_4NULL_1_3_3;
+Type metil_type_bas_Array_4NULL_1_3_3( &type_constructor_Array_4NULL_1_3_3, "Array_4NULL_1_3_3", &metil_type_bas_Array_4NULL_1_3_3, 0, 0, Type::Bas );
+
+static TypeConstructor_Array type_constructor_Array_4NULL_1_4_4;
+Type metil_type_bas_Array_4NULL_1_4_4( &type_constructor_Array_4NULL_1_4_4, "Array_4NULL_1_4_4", &metil_type_bas_Array_4NULL_1_4_4, 0, 0, Type::Bas );
+
+static TypeConstructor_Array type_constructor_Array_4NULL_1_5_5;
+Type metil_type_bas_Array_4NULL_1_5_5( &type_constructor_Array_4NULL_1_5_5, "Array_4NULL_1_5_5", &metil_type_bas_Array_4NULL_1_5_5, 0, 0, Type::Bas );
 
 static TypeConstructor_Array type_constructor_Array_4NULL_1_m_m_CptUse;
 Type metil_type_bas_Array_4NULL_1_m_m_CptUse( &type_constructor_Array_4NULL_1_m_m_CptUse, "Array_4NULL_1_m_m_CptUse", &metil_type_bas_Array_4NULL_1_m_m_CptUse, 0, 0, Type::Bas );
@@ -3899,7 +3909,7 @@ void reg_def() {
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.meth = 0;
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.gene = metil_gen_del__when__a__has__is_a_POD__pert__1;
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.file = string_2;
-    item_metil_gen_del__when__a__has__is_a_POD__pert__1.line = 30;
+    item_metil_gen_del__when__a__has__is_a_POD__pert__1.line = 33;
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.pert = 1;
     MethodFinder<MethodName_del>::last = &item_metil_gen_del__when__a__has__is_a_POD__pert__1;
 
@@ -3909,7 +3919,7 @@ void reg_def() {
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.meth = 0;
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.gene = metil_gen_copy__when__a__has__is_a_POD__pert__1;
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.file = string_2;
-    item_metil_gen_copy__when__a__has__is_a_POD__pert__1.line = 36;
+    item_metil_gen_copy__when__a__has__is_a_POD__pert__1.line = 39;
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.pert = 1;
     MethodFinder<MethodName_copy>::last = &item_metil_gen_copy__when__a__has__is_a_POD__pert__1;
 
@@ -3935,7 +3945,7 @@ void reg_def() {
     item_metil_gen_init_arg__when__a__isa__Array__pert__1.meth = 0;
     item_metil_gen_init_arg__when__a__isa__Array__pert__1.gene = metil_gen_init_arg__when__a__isa__Array__pert__1;
     item_metil_gen_init_arg__when__a__isa__Array__pert__1.file = string_18;
-    item_metil_gen_init_arg__when__a__isa__Array__pert__1.line = 37;
+    item_metil_gen_init_arg__when__a__isa__Array__pert__1.line = 44;
     item_metil_gen_init_arg__when__a__isa__Array__pert__1.pert = 1;
     MethodFinder<MethodName_init_arg>::last = &item_metil_gen_init_arg__when__a__isa__Array__pert__1;
 
@@ -3945,7 +3955,7 @@ void reg_def() {
     item_metil_gen_select_C__when__a__isa__Array__pert__1.meth = 0;
     item_metil_gen_select_C__when__a__isa__Array__pert__1.gene = metil_gen_select_C__when__a__isa__Array__pert__1;
     item_metil_gen_select_C__when__a__isa__Array__pert__1.file = string_18;
-    item_metil_gen_select_C__when__a__isa__Array__pert__1.line = 50;
+    item_metil_gen_select_C__when__a__isa__Array__pert__1.line = 57;
     item_metil_gen_select_C__when__a__isa__Array__pert__1.pert = 1;
     MethodFinder<MethodName_select_C>::last = &item_metil_gen_select_C__when__a__isa__Array__pert__1;
 
@@ -3955,7 +3965,7 @@ void reg_def() {
     item_metil_gen_select__when__a__isa__Array__pert__1.meth = 0;
     item_metil_gen_select__when__a__isa__Array__pert__1.gene = metil_gen_select__when__a__isa__Array__pert__1;
     item_metil_gen_select__when__a__isa__Array__pert__1.file = string_18;
-    item_metil_gen_select__when__a__isa__Array__pert__1.line = 66;
+    item_metil_gen_select__when__a__isa__Array__pert__1.line = 73;
     item_metil_gen_select__when__a__isa__Array__pert__1.pert = 1;
     MethodFinder<MethodName_select>::last = &item_metil_gen_select__when__a__isa__Array__pert__1;
 
@@ -3967,7 +3977,7 @@ void reg_def() {
     item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.meth = 0;
     item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.gene = metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1;
     item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.file = string_18;
-    item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.line = 86;
+    item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.line = 93;
     item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1.pert = 1;
     MethodFinder<MethodName_set_values>::last = &item_metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__pert__1;
 

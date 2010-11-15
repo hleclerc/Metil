@@ -162,6 +162,9 @@ template<class Obj> void _destroy( const Obj *obj ) { obj->~Obj(); } ///< call d
 
 #endif // USE_STD_ALLOC
 
+#define ALLOC_VEC( T, size )         reinterpret_cast<T *>( Metil::Level1::malloc( Metil::Number< size * sizeof( T ) >() ) )
+
+
 // --------------------------------------------------------------------
 #define NEW_AND_DEL_COMPATIBLE \
     enum { can_be_derived = 1 }; \

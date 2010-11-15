@@ -3,21 +3,18 @@
 using namespace Metil;
 using namespace Level1;
 
-#ifdef METIL_COMP_DIRECTIVE
-#pragma lib_path grototo
-#endif
-
 int main() {
     // Img img( "/home/leclerc/Data/plateblanche/plateblanche001_0008.tif", MachineId::gpu( MachineId::cur(), 1 ) );
-    Vec vec( Size(), 5 );
-    for( ST i = 0; i < vec.size(); ++i )
-        vec[ i ] = i;
+    Vec vec( 5.5, 65 );
     PRINT( vec );
-    Vec s = vec.sizes();
-    PRINT( s );
-    Vec t = s;
-    PRINT( t );
-    PRINT( s.type->name );
+//    for( ST i = 0; i < vec.size(); ++i )
+//        vec[ i ] = i;
+//    PRINT( vec );
+//    Vec s = vec.sizes();
+//    PRINT( s );
+//    Vec t = s;
+//    PRINT( t );
+//    PRINT( s.type->name );
 
     //    Img img( 256, 256, type_ptr<float>() );
 
