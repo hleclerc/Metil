@@ -359,6 +359,7 @@ Ptr<CompilationTree> CompilationEnvironment::make_lnk_compilation_tree( const St
 void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, const String &cpp_, bool dyn ) {
     String cpp = absolute_filename( cpp_ );
 
+    PRINT( "coucou" );
     // already parsed ?
     if ( parsed.contains( cpp ) )
         return;
