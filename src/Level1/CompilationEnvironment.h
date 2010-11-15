@@ -22,12 +22,16 @@ public:
     void set_maxrregcount( int nb_registers );
     void set_comp_dir( const String &path );
     void set_nb_threads( int nb_threads );
+    void set_dbg_level( int level );
+    void set_opt_level( int level );
 
     String get_NVCC() const;
     String get_CXX () const;
     String get_LD  () const;
 
     int get_nb_threads() const;
+    int get_dbg_level() const;
+    int get_opt_level() const;
 
     void save_env_var( bool update_LD_LIBRARY_PATH = true ) const; ///< save data in environment variables (METIL_INC_PATHS, ...)
     void load_env_var(); ///< append data from environment variables (METIL_INC_PATHS, ...)
@@ -45,6 +49,7 @@ public:
     String obj_cmd( const String &obj, const String &cpp, bool dyn ) const;
     String lnk_cmd( const String &exe, const BasicVec<String> &obj, bool lib, bool dyn ) const;
 
+    Ptr<CompilationTree> make_compilation_tree( const String &app, const String &cpp, bool lib, bool dyn, bool make_so = true );
     int make_app( const String &app, const String &cpp, bool lib, bool dyn );
     int make_lib( const String &lib, const String &cpp, bool dyn );
     int make_exe( const String &exe, const String &cpp );
@@ -74,6 +79,8 @@ protected:
     int device_emulation;
     int maxrregcount;
     int nb_threads;
+    int dbg_level;
+    int opt_level;
 
     CompilationEnvironment *child;
     BasicVec<String> parsed;

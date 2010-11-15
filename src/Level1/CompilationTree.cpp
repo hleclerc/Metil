@@ -15,6 +15,31 @@ void CompilationTree::add_child( const Ptr<CompilationTree> &ch ) {
     ch->parents.push_back_unique( this );
 }
 
+static void save_Makefile_rec( CompilationTree *c, String &os, const BasicVec<String> &dep ) {
+    if ( c->op_id == cur_op_id )
+        return;
+    c->op_id = cur_op_id;
+
+    if ( c->cmd ) {
+        os << c->dst << ':';
+        for( int i = 0; i < dep.size(); ++i )
+            os << ' ' << dep[ i ];
+        for( int i = 0; i < c->children.size(); ++i )
+            os << ' ' << c->children[ i ]->dst;
+        os << '\n';
+        os << '\t' << c->cmd << "\n\n";
+    }
+
+    // rec
+    for( int i = 0; i < c->children.size(); ++i )
+        save_Makefile_rec( c->children[ i ].ptr(), os, dep );
+}
+
+void CompilationTree::save_Makefile( String &os, const BasicVec<String> &dep ) {
+    ++cur_op_id;
+    save_Makefile_rec( this, os, dep );
+}
+
 static void get_leaves( BasicVec<CompilationTree *> &leaves, CompilationTree *c ) {
     if ( c->op_id == cur_op_id )
         return;

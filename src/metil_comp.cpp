@@ -26,18 +26,23 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  -o file : name of the output file";
     cerrn << "  -jn : launch compilation using n threads";
     cerrn << "  -mex : create a Matlab mexglx file";
+    cerrn << "  -make filename : generate a Makefile and do not launch";
     cerrn << "  -dylib : create a dynamic library";
     cerrn << "  -ne : do not launch the executable";
     cerrn << "  -nc : do not compile (launch the executable if -ne is not present)";
     cerrn << "  -Iincludedir : append an include dir to environnement";
     cerrn << "  -DMACRO : #define MACRO";
     cerrn << "  -DMACRO=val : #define MACRO val";
+    cerrn << "  -gn : set debug level to n";
+    cerrn << "  -On : set optimisation level to n";
+    cerrn << "  --cxx cxx : specify compiler";
     cerrn << "  --comp-dir dir : specify path of directory used to store tmp files (.o, ...)";
     cerrn << "  --exec-using prg : execute using prg. Example : --exec-using time to use time";
     cerrn << "  --valgrind : execute using valgrind";
     cerrn << "  --gdb : execute using gbb (user has to write run in the gdb prompt...)";
     cerrn << "  --device-emulation : device emulation for cuda";
     cerrn << "  --maxrregcount n : device emulation for cuda";
+    cerrn << "  --static : do not make dynamic objects";
     cerrn << "possible pragma in .h/.cpp/.cu files:";
     cerrn << "  src_file additionnal cpp / cu files";
     cerrn << "  inc_path additionnal include path";
@@ -62,7 +67,7 @@ bool is_a_CPPFLAG( const String &arg ) {
 int main( int argc, char **argv ) {
     Level1::CompilationEnvironment &ce = Level1::CompilationEnvironment::get_main_compilation_environment();
 
-    String cpp_file, out_file, exec_using, comp_dir;
+    String cpp_file, out_file, exec_using, comp_dir, make_file;
     BasicVec<String> exec_args;
     bool execution   = true;
     bool compilation = true;
@@ -86,6 +91,12 @@ int main( int argc, char **argv ) {
                 return 4;
             }
             exec_using = argv[ i ];
+        } else if ( arg == "-make" ) {
+            if ( ++i >= argc ) {
+                usage( argv[ 0 ], "-make must be followed by the name of resulting Makefile" );
+                return 10;
+            }
+            make_file = argv[ i ];
         } else if ( arg == "--cxx" ) {
             if ( ++i >= argc ) {
                 usage( argv[ 0 ], "--cxx must be followed by the name of the cxx compiler" );
@@ -98,14 +109,18 @@ int main( int argc, char **argv ) {
                 return 6;
             }
             comp_dir = argv[ i ];
-        } else if ( is_a_CPPFLAG( arg ) ) {
-            ce.add_CPPFLAG( arg );
         } else if ( arg == "--device-emulation" ) {
             ce.set_device_emulation( 1 );
         } else if ( arg == "--maxrregcount" ) {
             ce.set_maxrregcount( atoi( argv[ ++i ] ) );
-        } else if ( arg == "-j" ) {
+        } else if ( arg.begins_by( "-j" ) ) {
             ce.set_nb_threads( atoi( argv[ i ] + 2 ) );
+        } else if ( arg.begins_by( "-g" ) ) {
+            ce.set_dbg_level( atoi( argv[ i ] + 2 ) );
+        } else if ( arg.begins_by( "-O" ) ) {
+            ce.set_opt_level( atoi( argv[ i ] + 2 ) );
+        } else if ( arg.begins_by( "--static" ) ) {
+            want_dyn = false;
         } else if ( arg == "-mex" ) {
             want_mex  = true;
             want_lib  = true;
@@ -127,7 +142,9 @@ int main( int argc, char **argv ) {
                 return 7;
             }
             out_file = argv[ ++i ];
-        } else { // -> program name (assuming a .cpp file)
+        } else if ( is_a_CPPFLAG( arg ) ) {
+            ce.add_CPPFLAG( arg );
+        } else { // -> program name (assuming a .cpp file) and arguments
             if ( not comp_dir )
                 if ( String dir = directory_of( arg ) )
                     comp_dir = dir + "/compilations";
@@ -153,6 +170,16 @@ int main( int argc, char **argv ) {
             out_file = ce.lib_for( cpp_file, want_dyn );
         else
             out_file = ce.exe_for( cpp_file );
+    }
+
+    // want a Makefile ?
+    if ( make_file ) {
+        Ptr<Level1::CompilationTree> ct = ce.make_compilation_tree( out_file, cpp_file, want_lib, want_dyn, false );
+        File fm( make_file, "w" );
+        fm << "all: " << ct->dst << "\n\n";
+        fm << ce.comp_dir() << ":\n\tmkdir " << ce.comp_dir() << "\n\n";
+        ct->save_Makefile( fm, ce.comp_dir() );
+        return 0;
     }
 
     // compilation

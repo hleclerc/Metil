@@ -19,12 +19,16 @@ CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch ) : c
         device_emulation = 0;
         maxrregcount     = 0;
         nb_threads       = 8;
+        dbg_level        = 0;
+        opt_level        = 0;
 
         load_env_var();
     } else {
         device_emulation = -1;
         maxrregcount     = -1;
         nb_threads       = -1;
+        dbg_level        = -1;
+        opt_level        = -1;
     }
 }
 
@@ -114,8 +118,16 @@ void CompilationEnvironment::set_comp_dir( const String &path ) {
         _comp_dir += '/';
 }
 
-void CompilationEnvironment::set_nb_threads( int nb_threads_ ) {
-    nb_threads = nb_threads_;
+void CompilationEnvironment::set_nb_threads( int nb_threads ) {
+    this->nb_threads = nb_threads;
+}
+
+void CompilationEnvironment::set_dbg_level( int level ) {
+    this->dbg_level = level;
+}
+
+void CompilationEnvironment::set_opt_level( int level ) {
+    this->opt_level = level;
 }
 
 String CompilationEnvironment::get_NVCC() const {
@@ -132,6 +144,14 @@ String CompilationEnvironment::get_LD() const {
 
 int CompilationEnvironment::get_nb_threads() const {
     return nb_threads > 0 ? nb_threads : child->get_nb_threads();
+}
+
+int CompilationEnvironment::get_dbg_level() const {
+    return dbg_level >= 0 ? dbg_level : child->get_dbg_level();
+}
+
+int CompilationEnvironment::get_opt_level  () const {
+    return opt_level >= 0 ? opt_level : child->get_opt_level();
 }
 
 void CompilationEnvironment::save_env_var( bool update_LD_LIBRARY_PATH ) const {
@@ -166,6 +186,10 @@ void CompilationEnvironment::save_env_var( bool update_LD_LIBRARY_PATH ) const {
         set_env( "METIL_DEV_EMU", "1" );
     if ( maxrregcount )
         set_env( "METIL_REG_CNT", String( maxrregcount ) );
+    if ( dbg_level >= 0 )
+        set_env( "METIL_DBG_LEVEL", String( dbg_level ) );
+    if ( opt_level >= 0 )
+        set_env( "METIL_OPT_LEVEL", String( opt_level ) );
 
     // LD_LIBRARY_PATH
     if ( update_LD_LIBRARY_PATH ) {
@@ -206,18 +230,24 @@ void CompilationEnvironment::load_env_var() {
             parsed << lst[ i ];
     }
 
-    if ( String str = get_env( "METIL_COMP_DIR" ) ) _comp_dir = str;
-    if ( String str = get_env( "METIL_CXX"      ) ) CXX       = str;
-    if ( String str = get_env( "METIL_LD"       ) ) LD        = str;
-    if ( String str = get_env( "METIL_NVCC"     ) ) NVCC      = str;
-    if ( String str = get_env( "METIL_CPPFLAGS" ) ) CPPFLAGS  = str;
-    if ( String str = get_env( "METIL_LDFLAGS"  ) ) LDFLAGS   = str;
-    if ( String str = get_env( "METIL_DEV_EMU"  ) ) device_emulation = Val( str );
-    if ( String str = get_env( "METIL_REG_CNT"  ) ) maxrregcount = Val( str );
+    if ( String str = get_env( "METIL_COMP_DIR"  ) ) _comp_dir = str;
+    if ( String str = get_env( "METIL_CXX"       ) ) CXX       = str;
+    if ( String str = get_env( "METIL_LD"        ) ) LD        = str;
+    if ( String str = get_env( "METIL_NVCC"      ) ) NVCC      = str;
+    if ( String str = get_env( "METIL_CPPFLAGS"  ) ) CPPFLAGS  = str;
+    if ( String str = get_env( "METIL_LDFLAGS"   ) ) LDFLAGS   = str;
+    if ( String str = get_env( "METIL_DEV_EMU"   ) ) device_emulation = Val( str );
+    if ( String str = get_env( "METIL_REG_CNT"   ) ) maxrregcount = Val( str );
+    if ( String str = get_env( "METIL_DBG_LEVEL" ) ) dbg_level = Val( str );
+    if ( String str = get_env( "METIL_OPT_LEVEL" ) ) opt_level = Val( str );
 }
 
 String CompilationEnvironment::obj_suffix( bool dyn ) {
-    return dyn ? ".os" : ".o";
+    String res;
+    if ( get_dbg_level() > 0 ) res << ".g" << get_dbg_level();
+    if ( get_opt_level() > 0 ) res << ".O" << get_opt_level();
+    res << ( dyn ? ".os" : ".o" );
+    return res;
 }
 
 String CompilationEnvironment::lib_suffix( bool dyn ) {
@@ -273,6 +303,8 @@ void CompilationEnvironment::extra_obj_cmd( String &cmd, bool dyn, bool cu ) con
     }
     for( int i = 0; i < inc_paths.size(); ++i )
         cmd << " -I" << inc_paths[ i ];
+    if ( dbg_level > 0 ) cmd << " -g" << dbg_level;
+    if ( opt_level > 0 ) cmd << " -O" << opt_level;
     if ( child )
         child->extra_obj_cmd( cmd, dyn, cu );
 }
@@ -311,7 +343,7 @@ String CompilationEnvironment::obj_cmd( const String &obj, const String &cpp, bo
         if ( dyn )
             cmd << " -fpic";
     }
-    // -L... -l...
+    // -L... -l... -g...
     extra_obj_cmd( cmd, dyn, cu );
     // input / output
     cmd << " -c -o " << obj << ' ' << cpp;
@@ -379,7 +411,7 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         loc_ce.inc_paths.push_back_unique( cpp_parser.inc_paths[ i ] );
 
     // command
-    Ptr<CompilationTree> res = loc_ce.make_obj_compilation_tree( obj_for( cpp, dyn ), make_cpp_compilation_tree( cpp ), dyn );
+    Ptr<CompilationTree> res = loc_ce.make_obj_compilation_tree( loc_ce.obj_for( cpp, dyn ), make_cpp_compilation_tree( cpp ), dyn );
     for( int i = 0; i < cpp_parser.inc_files.size(); ++i )
         res->add_child( loc_ce.make_cpp_compilation_tree( cpp_parser.inc_files[ i ] ) );
     obj.push_back_unique( res );
@@ -407,30 +439,36 @@ struct Lib {
     BasicVec<Ptr<CompilationTree> > obj;
 };
 
-int CompilationEnvironment::make_app( const String &app, const String &cpp, bool lib, bool dyn ) {
+Ptr<CompilationTree> CompilationEnvironment::make_compilation_tree( const String &app, const String &cpp, bool lib, bool dyn, bool make_so ) {
     BasicVec<Ptr<CompilationTree> > obj;
     parse_cpp( obj, cpp, dyn );
 
     // sort by directory
-    String base_dir = directory_of( cpp );
-    std::map<String,Lib> map_lib;
-    for( int i = 0; i < obj.size(); ++i ) {
-        String dir = directory_of( obj[ i ]->children[ 0 ]->dst );
-        if ( dir == base_dir )
-            continue;
-        map_lib[ dir ].obj << obj[ i ];
-        obj.remove( i-- );
-    }
+    if ( make_so ) {
+        String base_dir = directory_of( cpp );
+        std::map<String,Lib> map_lib;
+        for( int i = 0; i < obj.size(); ++i ) {
+            String dir = directory_of( obj[ i ]->children[ 0 ]->dst );
+            if ( dir == base_dir )
+                continue;
+            map_lib[ dir ].obj << obj[ i ];
+            obj.remove( i-- );
+        }
 
-    // make dylibs
-    int cpt = 0;
-    for( std::map<String,Lib>::iterator iter = map_lib.begin(); iter != map_lib.end(); ++iter ) {
-        String name; name << app << "_" << cpt++;
-        obj << make_lnk_compilation_tree( lib_for( name, true ), iter->second.obj, true, true );
+        // make dylibs
+        int cpt = 0;
+        for( std::map<String,Lib>::iterator iter = map_lib.begin(); iter != map_lib.end(); ++iter ) {
+            String name; name << app << "_" << cpt++;
+            obj << make_lnk_compilation_tree( lib_for( name, true ), iter->second.obj, true, true );
+        }
     }
 
     //
-    Ptr<CompilationTree> res = make_lnk_compilation_tree( app, obj, lib, dyn );
+    return make_lnk_compilation_tree( app, obj, lib, dyn );
+}
+
+int CompilationEnvironment::make_app( const String &app, const String &cpp, bool lib, bool dyn ) {
+    Ptr<CompilationTree> res = make_compilation_tree( app, cpp, lib, dyn );
     return res->exec( get_nb_threads(), &cout );
 }
 

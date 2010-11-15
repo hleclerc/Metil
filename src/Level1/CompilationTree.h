@@ -12,6 +12,7 @@ public:
     CompilationTree( const String &dst );
 
     void add_child( const Ptr<CompilationTree> &ch );
+    void save_Makefile( String &os, const BasicVec<String> &dep = BasicVec<String>() );
 
     int exec( int nb_threads, String *out = 0 );
     int exec_node( String *out );

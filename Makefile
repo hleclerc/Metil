@@ -1,33 +1,30 @@
-all: make_metil_comp
+LOC_MC = ./metil_comp --comp-dir compilations
 
-install: all
+all: ./metil_comp
+
+install: ./metil_comp
 	./install.sh
 
-make_metil_comp:
-	metil_comp/metil_comp -ne -o src/metil_comp -g3 -Isrc src/metil_comp.cpp
-#	make -C metil_comp
-
 test: # make_metil_comp
-	src/metil_comp --comp-dir compilations -o tests/main -g3 -Isrc tests/main.cpp
+	${LOC_MC} -o tests/main -g3 -Isrc tests/main.cpp
 
 test_gdb:
-	src/metil_comp --comp-dir compilations --gdb -g3 -Isrc tests/main.cpp
+	${LOC_MC} --gdb -g3 -Isrc tests/main.cpp
 
 test_valgrind:
-	src/metil_comp --comp-dir compilations --exec-using "valgrind --num-callers=30" -g3 -Isrc tests/main.cpp
+	${LOC_MC} --exec-using "valgrind --num-callers=30" -g3 tests/main.cpp
 	
 test_valgrind_full:
-	src/metil_comp --comp-dir compilations --exec-using "valgrind --leak-check=full --show-reachable=yes" -g3 -Isrc tests/main.cpp
+	${LOC_MC} --exec-using "valgrind --leak-check=full --show-reachable=yes" -g3 tests/main.cpp
 
 metil_gen:
-	src/metil_comp --comp-dir compilations -g3 -Isrc src/Level1/metil_parse.cpp `find src -name "*.cpp" -o -name "*.h"`
-# 	metil_comp -g3 --valgrind -Isrc src/metil_parse.cpp `find . -name "*.cpp"`
+	${LOC_MC} -g3 src/Level1/metil_parse.cpp `find src -name "*.cpp" -o -name "*.h"`
+	#metil_comp -g3 --valgrind -Isrc src/metil_parse.cpp `find . -name "*.cpp"`
 
 comp:
-	src/metil_comp src/make_compressed_struct.cpp
+	${LOC_MC} src/make_compressed_struct.cpp
 
-
-tests: clean
+make_unit_tests: clean
 	cd unit_tests; python run_unit_test.py
 
 documentation:
@@ -39,9 +36,13 @@ documentation:
 
 archive:
 	git archive -o Metil-0.zip --prefix=Metil-0.0.0/ HEAD
-# 	git archive -oo -format=tar --prefix=Metil-0.0.0/ HEAD | gzip > Metil-0.0.0.tgz
+	#git archive -oo -format=tar --prefix=Metil-0.0.0/ HEAD | gzip > Metil-0.0.0.tgz
 
 clean:
-	rm -f unit_tests/compilations/* 2> /dev/null
-	rm -f tests/compilations/* 2> /dev/null
-	rm -f compilations/* 2> /dev/null
+	rm -rf compilations 2> /dev/null
+
+metil_comp_mk:
+	${LOC_MC} --static -make metil_comp.mk -o ./metil_comp -O3 src/metil_comp.cpp
+	sed -i -e s@`pwd`/@@g metil_comp.mk
+
+include metil_comp.mk
