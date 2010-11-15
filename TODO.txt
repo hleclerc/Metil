@@ -17,4 +17,6 @@ A quoi sert la base de données ?
   -> dire qu'un fichier a été fait à partir de telle commande
     -> avec telles dépendances
 
-  L'idée c'est de trouver le nom du fichier avec ce
+L'idée c'est de trouver le nom du fichier dst avec CompEnv et de regarder dans la base si on est bons
+  dst -> dep / cmd
+  peut se faire avec des offsets dans un gros vecteur...

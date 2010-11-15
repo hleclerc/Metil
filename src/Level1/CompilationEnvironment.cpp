@@ -260,6 +260,10 @@ String CompilationEnvironment::exe_suffix() {
     return String();
 }
 
+String CompilationEnvironment::dep_suffix() {
+    return ".dep";
+}
+
 String CompilationEnvironment::obj_for( const String &cpp, bool dyn ) {
     return comp_dir() + filename_without_dir_of( cpp ) + obj_suffix( dyn );
 }
@@ -282,6 +286,10 @@ String CompilationEnvironment::mex_for( const String &cpp ) {
 
 String CompilationEnvironment::exe_for( const String &cpp ) {
     return comp_dir() + filename_without_dir_of( cpp ) + exe_suffix();
+}
+
+String CompilationEnvironment::dep_for( const String &cpp ) {
+    return comp_dir() + filename_without_dir_of( cpp ) + dep_suffix();
 }
 
 void CompilationEnvironment::extra_lnk_cmd( String &cmd, bool lib, bool dyn ) const {
@@ -390,6 +398,21 @@ Ptr<CompilationTree> CompilationEnvironment::make_lnk_compilation_tree( const St
     return res;
 }
 
+static void save_dep_vec( String &fd, const BasicVec<String> &vec ) { ///< @see parse_cpp
+    for( int i = 0; i < vec.size(); ++i )
+        fd << vec[ i ].size() << vec[ i ];
+    fd << "0\n";
+}
+
+static void load_dep_vec( const char *&c, BasicVec<String> &vec ) { ///< @see parse_cpp
+    while ( true ) {
+        String r = String::read_sized( c );
+        if ( not r )
+            return;
+        vec << r;
+    }
+}
+
 void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, const String &cpp_, bool dyn ) {
     String cpp = absolute_filename( cpp_ );
 
@@ -397,6 +420,17 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
     if ( parsed.contains( cpp ) )
         return;
     parsed << cpp;
+
+    // look in cache
+    String dep = dep_for( cpp );
+    SI64 date_cpp = last_modification_time_or_zero_of_file_named( cpp );
+    SI64 date_dep = last_modification_time_or_zero_of_file_named( dep );
+    if ( date_cpp <= date_dep ) {
+        File fd( dep, "r" );
+        const char *c = fd.c_str();
+        load_dep_vec( c, defines );
+        PRINT( defines );
+    }
 
     // parse
     CompilationCppParser cpp_parser( *this, cpp );
@@ -430,11 +464,16 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         }
     }
 
-    // src_file
+    // ext_cpp from src_file
     for( int i = 0; i < cpp_parser.src_files.size(); ++i ) {
         String ext_cpp = cpp_parser.src_files[ i ];
         parse_cpp( obj, ext_cpp, dyn );
     }
+
+
+    // save in .dep
+    File fd( dep, "w" );
+    save_dep_vec( fd, defines );
 }
 
 struct Lib {

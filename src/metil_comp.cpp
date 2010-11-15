@@ -177,8 +177,7 @@ int main( int argc, char **argv ) {
         Ptr<Level1::CompilationTree> ct = ce.make_compilation_tree( out_file, cpp_file, want_lib, want_dyn, false );
         File fm( make_file, "w" );
         fm << "all: " << ct->dst << "\n\n";
-        fm << ce.comp_dir() << ":\n\tmkdir " << ce.comp_dir() << "\n\n";
-        ct->save_Makefile( fm, ce.comp_dir() );
+        ct->save_Makefile( fm, "mkdir -p " + ce.comp_dir() );
         return 0;
     }
 

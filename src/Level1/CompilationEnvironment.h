@@ -39,12 +39,14 @@ public:
     String obj_suffix( bool dyn ); ///< .os, .o, ... depending on the system
     String lib_suffix( bool dyn ); ///< .so, .a, ... depending on the system
     String exe_suffix(); ///< .exe, ... depending on the system
+    String dep_suffix(); ///< .dep
 
     String cpp_for( const String &bas ); ///< ex: toto -> compilation/toto.cpp
     String obj_for( const String &cpp, bool dyn ); ///< ex: toto.cpp -> compilation/toto.os
     String lib_for( const String &cpp, bool dyn ); ///< ex: toto.cpp -> compilation/toto.so
     String mex_for( const String &cpp ); ///< .mexglx
-    String exe_for( const String &cpp ); ///< ex: toto.cpp -> compilation/toto.exe
+    String exe_for( const String &cpp ); ///< ex: toto.cpp -> compilation/toto.cpp.exe
+    String dep_for( const String &cpp ); ///< ex: toto.cpp -> compilation/toto.cpp.dep
 
     String obj_cmd( const String &obj, const String &cpp, bool dyn ) const;
     String lnk_cmd( const String &exe, const BasicVec<String> &obj, bool lib, bool dyn ) const;
@@ -69,6 +71,7 @@ protected:
     BasicVec<String> inc_paths;
     BasicVec<String> lib_paths;
     BasicVec<String> lib_names;
+    BasicVec<String> defines;
     String _comp_dir;
     String CXX;
     String LD;
