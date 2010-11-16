@@ -32,6 +32,8 @@ DECL_REF_AND_NEW( FP80, Flt_0_64_64_15_79_1_16383 );
 
 #undef DECL_REF_AND_NEW
 
+inline MO NEW_Number( bool v ) { return v ? &metil_type_cst_Cst_1 : &metil_type_cst_Cst_0; }
+
 END_METIL_LEVEL1_NAMESPACE;
 
 BEG_METIL_NAMESPACE;

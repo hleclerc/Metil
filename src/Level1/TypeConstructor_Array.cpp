@@ -200,7 +200,7 @@ void TypeConstructor_Array::write_copy( MethodWriter &mw, const Mos *a, const St
 
 void TypeConstructor_Array::write_size( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
     if ( len() == 0 ) // nothing to del
-        mw.n << ret_ins << "&metil_type_cst_Cst_zero;";
+        mw.n << ret_ins << "&metil_type_cst_Cst_0;";
     else {
         write_get_t_header( mw, "AH" );
         write_get_header( mw, "h", a[ 0 ].data, "AH" );

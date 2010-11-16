@@ -8,7 +8,7 @@ Val::Val( const String &str ) {
     Level1::ValReader reader( str, sym );
     type = reader.res.type;
     data = reader.res.data;
-    reader.res.type = &Level1::metil_type_cst_Cst_zero; // to avoid del of the result
+    reader.res.type = &Level1::metil_type_cst_Cst_0; // to avoid del of the result
 }
 
 Val::Val( const char *str ) {
@@ -21,22 +21,22 @@ Val::Val( const char *str ) {
 //static PI32 zero_PI32 = 0;
 //static PI32 one_PI32 = 1;
 //
-Val zero             ( Level1::MO( &Level1::metil_type_cst_Cst_zero      ) );
-Val one              ( Level1::MO( &Level1::metil_type_cst_Cst_one       ) );
-Val minus_one        ( Level1::MO( &Level1::metil_type_cst_Cst_minus_one ) );
-//Val pi               ( Level1::MO( &Level1::type_Pi       ) );
-//Val i                ( Level1::MO( &Level1::type_I        ) );
-//Val inf              ( Level1::MO( &Level1::type_Inf      ) );
-//Val exp_1            ( Level1::MO( &Level1::type_Exp_1    ) );
-//Val nan              ( Level1::MO( &Level1::type_Nan      ) );
-//Val one_half         ( Level1::MO( data_one_half    , Level1::type_PR( 32, 32, 0, 1 ) ) );
-//Val minus_one_half   ( Level1::MO( data_one_half    , Level1::type_NR( 32, 32, 0, 1 ) ) );
-//Val one_quarter      ( Level1::MO( data_one_quarter , Level1::type_PR( 32, 32, 0, 1 ) ) );
-//Val minus_one_quarter( Level1::MO( data_one_quarter , Level1::type_NR( 32, 32, 0, 1 ) ) );
-//Val two              ( Level1::MO( data_one_half + 1, &Level1::type_PI32_Ref ) );
+Val zero             ( Level1::MO( &Level1::metil_type_cst_Cst_0   ) );
+Val one              ( Level1::MO( &Level1::metil_type_cst_Cst_1   ) );
+Val two              ( Level1::MO( &Level1::metil_type_cst_Cst_2   ) );
+Val minus_one        ( Level1::MO( &Level1::metil_type_cst_Cst_m_1 ) );
+Val pi               ( Level1::MO( &Level1::metil_type_cst_Cst_pi  ) );
+Val i                ( Level1::MO( &Level1::metil_type_cst_Cst_i   ) );
+Val inf              ( Level1::MO( &Level1::metil_type_cst_Cst_inf ) );
+Val exp_1            ( Level1::MO( &Level1::metil_type_cst_Cst_exp ) );
+Val nan              ( Level1::MO( &Level1::metil_type_cst_Cst_nan ) );
+
+Val one_half         ( Level1::MO( &Level1::metil_type_cst_Cst_1_2   ) );
+Val minus_one_half   ( Level1::MO( &Level1::metil_type_cst_Cst_m_1_2 ) );
+Val one_quarter      ( Level1::MO( &Level1::metil_type_cst_Cst_1_4   ) );
+Val minus_one_quarter( Level1::MO( &Level1::metil_type_cst_Cst_m_1_4 ) );
 //Val zero_as_PI32     ( Level1::MO( &zero_PI32       , &Level1::type_PI32_Ref ) );
 //Val one_as_PI32      ( Level1::MO( &one_PI32        , &Level1::type_PI32_Ref ) );
 //Val minus_one_as_NI32( Level1::MO( &one_PI32        , &Level1::type_NI32_Ref ) );
-//#endif
 
 END_METIL_NAMESPACE

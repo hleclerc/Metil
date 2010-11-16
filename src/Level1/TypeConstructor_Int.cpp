@@ -110,6 +110,28 @@ int TypeConstructor_Int::needed_alignement_in_bits_if_in_vec( const MachineId *m
     return mid->simd_alignement();
 }
 
+int TypeConstructor_Int::equ_code( MethodWriter &mw, const Mos &arg, const String &val ) const {
+    if ( String t = cpp_type() ) {
+        if ( val == "0" ) {
+            mw.n << "if ( *reinterpret_cast<const " + t + " *>( " << arg.data << " ) == 0 ) ";
+            return 1;
+        }
+        if ( val == "1" ) {
+            mw.n << "if ( *reinterpret_cast<const " + t + " *>( " << arg.data << " ) == 1 ) ";
+            return 1;
+        }
+        if ( val == "2" ) {
+            mw.n << "if ( *reinterpret_cast<const " + t + " *>( " << arg.data << " ) == 2 ) ";
+            return 1;
+        }
+        if ( val == "m_1" ) {
+            mw.n << "if ( *reinterpret_cast<const " + t + " *>( " << arg.data << " ) == -1 ) ";
+            return 1;
+        }
+    }
+    return 0;
+}
+
 
 //
 void TypeConstructor_Int::init( Type *type ) {

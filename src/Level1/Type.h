@@ -39,11 +39,6 @@ public:
     #include "DeclMethods.h"
     #undef DECL_MET
 
-    // related types
-    Type *dyn_array_type( int dim, MachineId *mid );
-    Type *sta_array_type( int dim, ST *size, MachineId *mid );
-    Type *static_vec_type( ST size, MachineId *mid );
-
     // static helpers
     static Type *find_with_name( const char *name );
 };

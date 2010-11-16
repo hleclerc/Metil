@@ -145,17 +145,6 @@ Type *Type::init_if_necessary() {
     return this;
 }
 
-Type *Type::dyn_array_type( int dim, MachineId *mid ) {
-    return &constructor->dyn_array_type( dim, name, mid )->bas_type;
-}
-
-Type *Type::static_vec_type( ST size, MachineId *mid ) {
-    return &constructor->static_vec_type( size, name, mid )->bas_type;
-}
-
-Type *Type::sta_array_type( int dim, ST *size, MachineId *mid ) {
-    return &constructor->sta_array_type( dim, size, name, mid )->bas_type;
-}
 
 Type *Type::find_with_name( const char *name ) {
     for( Type *t = last_type; t; t = t->prev_type )

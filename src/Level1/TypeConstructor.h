@@ -49,7 +49,13 @@ public:
         virtual bool has_writer_for_##N() const { return 1; } \
         virtual void write_##N( MethodWriter &mw, const Mos *a, const String &ret_ins ) const
 
+    DECL_COND( has_writer_for_convert_to_ST ) { return 0; }
+    virtual void write_convert_to_ST( MethodWriter &mw, const Mos *a, const String &ret_ins ) const;
+    virtual void write_select_op( MethodWriter &mw, const Mos *a, TypeConstructor *index_type, const String &op ) const;
 
+    #undef DECL_COND
+
+    // generic properties
     virtual int Owcp_size() const;
     virtual void default_mw( MethodWriter &mw ) const;
     virtual int tensor_order() const;
@@ -62,25 +68,12 @@ public:
     int needed_alignement_in_bytes() const;
     int needed_alignement_in_bytes_if_in_vec( const MachineId *mid ) const;
 
-    DECL_COND( has_writer_for_convert_to_ST ) { return 0; }
-    virtual void write_convert_to_ST( MethodWriter &mw, const Mos *a, const String &ret_ins ) const;
-
-    virtual void write_select_op( MethodWriter &mw, const Mos *a, TypeConstructor *index_type, const String &op ) const;
-
-    TypeSetAncestor *dyn_array_type ( int dim, const String &name, MachineId *mid, bool want_CptUse = false );
-    TypeSetAncestor *sta_array_type ( int dim, ST *size, const String &name, MachineId *mid );
-    TypeSetAncestor *static_vec_type( ST size, const String &name, MachineId *mid );
+    virtual int equ_code( MethodWriter &mw, const Mos &arg, const String &val ) const;
 
     bool have_been_initialized;
     Type *bas_type;
     Type *ref_type;
     Type *cst_type;
-
-    #undef DECL_COND
-
-protected:
-    BasicVec<TypeSetAncestor *> _dyn_array_type_set; ///< for matrices, vectors, ...
-    BasicVec<BasicVec<TypeSetAncestor *> > _sta_array_type_set; ///< for matrices, vectors, ...
 };
 
 #define DEFI_TYPE( B, N ) \

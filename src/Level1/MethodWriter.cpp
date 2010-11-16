@@ -79,6 +79,9 @@ void MethodWriter::end_def() {
     code << "}\n";
 }
 
+void MethodWriter::ret() {
+}
+
 int MethodWriter::nb_types() const {
     return bool( type[ 0 ] ) + bool( type[ 1 ] ) + bool( type[ 2 ] );
 }

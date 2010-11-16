@@ -62,7 +62,7 @@ const void *metil_def_ptr_z__when__a__isa__FileWithoutClose__pert__1( MO &a ) {
 MO metil_def_size__when__a__isa__FileWithoutClose__pert__1( MO a ) {
     FILE *f = reinterpret_cast<FILE *>( a.data );
     if ( not f )
-        return &metil_type_cst_Cst_zero;
+        return &metil_type_cst_Cst_0;
     ST old = ftell( f );
     fseek( f,   0, SEEK_END );
     ST end = ftell( f );

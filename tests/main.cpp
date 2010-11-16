@@ -1,36 +1,21 @@
-// #include <Img.h>
-#include <Vec.h>
+#include <Val.h>
 using namespace Metil;
 using namespace Level1;
 
 int main() {
-    // Img img( "/home/leclerc/Data/plateblanche/plateblanche001_0008.tif", MachineId::gpu( MachineId::cur(), 1 ) );
-    Vec vec( 5.5, 65 );
-    PRINT( vec );
-//    for( ST i = 0; i < vec.size(); ++i )
-//        vec[ i ] = i;
-//    PRINT( vec );
-//    Vec s = vec.sizes();
-//    PRINT( s );
-//    Vec t = s;
-//    PRINT( t );
-//    PRINT( s.type->name );
-
-    //    Img img( 256, 256, type_ptr<float>() );
-
-    //    PRINT( img.w() );
-    //    PRINT( img.h() );
-    //    for( int y = 0; y < img.h(); ++y )
-    //        for( int x = 0; x < img.w(); ++x )
-    //            img( x, y ) = float( x + y );
-
-    //    PRINT( img.min() );
-    //    PRINT( img.max() );
-
-    // Img img( "/home/leclerc/Dic/Croix/toto000.tif" );
-    // Vec v( T_FP64, 1, 7 );
-    // Vec v( 1, 5 );
-    // PRINT( v );
-
-
+//    PRINT( Val( 1 ) && 0 );
+//    PRINT( Val( 1 ) && 1 );
+//    PRINT( zero && bool( 1 ) );
+//    Val a("a"), b("b");
+//    PRINT( a * zero );
+//    PRINT( zero * a );
+//    PRINT( a * one );
+//    PRINT( one * a );
+//    PRINT( a * minus_one );
+//    PRINT( minus_one * a );
+//    PRINT( a * 0 );
+    PRINT( two * two );
+    PRINT( 2 * two );
+    // PRINT( ST( minus_one ) );
+    // PRINT( a );
 }

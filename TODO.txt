@@ -4,8 +4,10 @@
 + tableaux typés
 + nb_rows, ...
 + symbols
++ opérations symboliques courantes
 
-* opérations symboliques courantes
+* simplifications courantes
+   a + 1 - a -> ...
 * indices muets
 
 Comment gérer les .a ? Proposition : par répertoire
@@ -20,3 +22,9 @@ A quoi sert la base de données ?
 L'idée c'est de trouver le nom du fichier dst avec CompEnv et de regarder dans la base si on est bons
   dst -> dep / cmd
   peut se faire avec des offsets dans un gros vecteur...
+
+Question sur le stockage des opérations symboliques
+  -> si on fait des Add, Mul... binaires, il faut chercher dans les enfants les simplifications potentielles
+    ((5+a*b)+c)-(c-d) -> ... il faut aller fouiller à l'intérieur.
+    Prop : si on trouve une simplifications, on reparcourt le graphe en évitant les pointeurs
+    L'idée, A + b -> on

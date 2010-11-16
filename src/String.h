@@ -47,9 +47,11 @@ struct String : public Level1::MO {
 
     // ==
     Val operator==( const String &b ) const { return CM_2( equal, *this, b ); }
-    Val operator==( char b ) const { return operator==( String( b ) ); }
+    Val operator==( const char   *b ) const { return operator==( String( b ) ); }
+    Val operator==( char          b ) const { return operator==( String( b ) ); }
     Val operator!=( const String &b ) const { return not operator==( b ); }
-    Val operator!=( char b ) const { return operator!=( String( b ) ); }
+    Val operator!=( const char   *b ) const { return operator!=( String( b ) ); }
+    Val operator!=( char          b ) const { return operator!=( String( b ) ); }
 
     // <
     Val operator<( const String &b ) const { return CM_2( inf, *this, b ); }

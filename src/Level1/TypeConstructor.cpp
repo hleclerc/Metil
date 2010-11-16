@@ -56,13 +56,6 @@ TypeConstructor::TypeConstructor() {
 }
 
 TypeConstructor::~TypeConstructor() {
-    for( int d = 0; d < _dyn_array_type_set.size(); ++d )
-        if ( _dyn_array_type_set[ d ] )
-            DEL( _dyn_array_type_set[ d ] );
-    for( int d = 0; d < _sta_array_type_set.size(); ++d )
-        for( int n = 0; n < _sta_array_type_set[ d ].size(); ++n )
-            if ( _sta_array_type_set[ d ][ n ] )
-                DEL( _sta_array_type_set[ d ][ n ] );
 }
 
 void TypeConstructor::init( Type *type ) {
@@ -93,6 +86,8 @@ int TypeConstructor::static_size_in_bytes() const { return ( static_size_in_bits
 int TypeConstructor::needed_alignement_in_bytes() const { return ( needed_alignement_in_bits() + 7 ) / 8; }
 int TypeConstructor::needed_alignement_in_bytes_if_in_vec( const MachineId *mid ) const { return ( needed_alignement_in_bits_if_in_vec( mid ) + 7 ) / 8; }
 
+int TypeConstructor::equ_code( MethodWriter &, const Mos &, const String & ) const { return 0; }
+
 void TypeConstructor::write_convert_to_ST( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
     mw.n << "if ( sizeof( ST ) == 8 ) {";
     write_convert_to_SI64( mw, a, ret_ins );
@@ -119,52 +114,6 @@ void TypeConstructor::write_select_op( MethodWriter &mw, const Mos *a, TypeConst
 
 String TypeConstructor::cpp_type() const {
     return String();
-}
-
-TypeSetAncestor *TypeConstructor::dyn_array_type( int dim, const String &name, MachineId *mid, bool want_CptUse ) {
-    bool want_ExtPtr    = mid != MachineId::cur();
-    bool want_MachineId = want_ExtPtr;
-    bool want_Gpu       = mid->is_a_gpu();
-    int off = 16 * dim + 8 * want_CptUse + 4 * want_ExtPtr + 2 * want_MachineId + want_Gpu;
-    if ( _dyn_array_type_set.size() <= off )
-        _dyn_array_type_set.resize( off + 1, (TypeSetAncestor *)0 );
-
-    if ( not _dyn_array_type_set[ off ] ) {
-        String tn;
-        tn << "Array_" << name.size() << name << "_" << dim;
-        for( int d = 0; d < dim; ++d )
-            tn << "_m_m";
-        if ( want_CptUse    ) tn << "_CptUse";
-        if ( want_ExtPtr    ) tn << "_ExtPtr";
-        if ( want_Gpu       ) tn << "_Gpu";
-        if ( want_MachineId ) tn << "_MachineId";
-        _dyn_array_type_set[ off ] = NEW( TypeSet<TypeConstructor_Array>, tn );
-    }
-    return _dyn_array_type_set[ off ];
-}
-
-TypeSetAncestor *TypeConstructor::static_vec_type( ST size, const String &name, MachineId *mid ) {
-    ASSERT( mid == MachineId::cur(), "TODO" );
-    if ( _sta_array_type_set.size() <= 1 )
-        _sta_array_type_set.resize( 2 );
-    if ( _sta_array_type_set[ 1 ].size() <= size )
-        _sta_array_type_set[ 1 ].resize( size + 1, (TypeSetAncestor *)0 );
-    if ( not _sta_array_type_set[ 1 ][ size ] ) {
-        String tn;
-        tn << "Array_" << name.size() << name << "_" << 1 << "_" << size << "_" << size;
-        _sta_array_type_set[ 1 ][ size ] = NEW( TypeSet<TypeConstructor_Array>, tn );
-    }
-    return _sta_array_type_set[ 1 ][ size ];
-}
-
-TypeSetAncestor *TypeConstructor::sta_array_type( int dim, ST *size, const String &name, MachineId *mid ) {
-    ASSERT( mid == MachineId::cur(), "TODO" );
-    if ( dim == 1 )
-        return static_vec_type( size[ 0 ], name, mid );
-    if ( _sta_array_type_set.size() <= dim )
-        _sta_array_type_set.resize( dim + 1 );
-    TODO;
-    return 0;
 }
 
 END_METIL_LEVEL1_NAMESPACE;

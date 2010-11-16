@@ -21,6 +21,7 @@ public:
     void add_include( const String &include );
     void add_preliminary( const String &txt ); ///< after includes and namespace
     void add_type_decl( const String &name ); ///< add declaration for type "name" and look if there's a declaration somewhere
+    void ret(); ///< signal return
 
     Type *get_type( int n ) const;
     bool get_os_defined() const;

@@ -1,3 +1,5 @@
+#include "String.h"
+
 #ifndef VAL_H
 #define VAL_H
 
@@ -13,7 +15,7 @@ BEG_METIL_NAMESPACE;
 */
 class Val : public Level1::MO {
 public:
-    Val() { type = &Level1::metil_type_cst_Cst_zero; }
+    Val() { type = &Level1::metil_type_cst_Cst_0; }
     Val( const Level1::MO &mo ) : Level1::MO( mo ) {}
 
     template<class T>
@@ -41,8 +43,8 @@ public:
     Val operator|( const Val &b ) const { return CM_2( bitwise_or , *this, b ); }
     Val operator^( const Val &b ) const { return CM_2( bitwise_xor, *this, b ); }
 
-    Val operator&&( const Val &b ) const { return CM_2( boolean_and, *this, b ); }
-    Val operator||( const Val &b ) const { return CM_2( boolean_or , *this, b ); }
+    // Val operator&&( const Val &b ) const { return CM_2( boolean_and, *this, b ); }
+    // Val operator||( const Val &b ) const { return CM_2( boolean_or , *this, b ); }
 
     Val &operator+=( const Val &b ) { CM_2( self_add, *this, b ); return *this; }
     Val &operator-=( const Val &b ) { CM_2( self_sub, *this, b ); return *this; }
@@ -84,6 +86,11 @@ template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator- ( T a, c
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator* ( T a, const Val &b ) { return Val( a ) * b; }
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator/ ( T a, const Val &b ) { return Val( a ) / b; }
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator% ( T a, const Val &b ) { return Val( a ) % b; }
+template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator& ( T a, const Val &b ) { return Val( a ) & b; }
+template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator| ( T a, const Val &b ) { return Val( a ) | b; }
+template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator^ ( T a, const Val &b ) { return Val( a ) ^ b; }
+//template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator&&( T a, const Val &b ) { return Val( a ) && b; }
+//template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator||( T a, const Val &b ) { return Val( a ) || b; }
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator==( T a, const Val &b ) { return Val( a ) == b; }
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator< ( T a, const Val &b ) { return Val( a ) <  b; }
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator<=( T a, const Val &b ) { return Val( a ) <= b; }
@@ -105,6 +112,11 @@ template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator- ( const 
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator* ( const Val &a, T b ) { return a * Val( b ); }
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator/ ( const Val &a, T b ) { return a / Val( b ); }
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator% ( const Val &a, T b ) { return a % Val( b ); }
+template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator& ( const Val &a, T b ) { return a & Val( b ); }
+template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator| ( const Val &a, T b ) { return a | Val( b ); }
+template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator^ ( const Val &a, T b ) { return a ^ Val( b ); }
+//template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator&&( const Val &a, T b ) { return a && Val( b ); }
+//template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator||( const Val &a, T b ) { return a || Val( b ); }
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator==( const Val &a, T b ) { return a == Val( b ); }
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator< ( const Val &a, T b ) { return a <  Val( b ); }
 template<class T> typename EnableIf<IsAScalar<T>::res,Val>::T operator<=( const Val &a, T b ) { return a <= Val( b ); }
@@ -133,7 +145,7 @@ template<class T> typename EnableIf<IsAnInteger<T>::res,Val>::T exp ( T b ) { re
 
 extern Val zero;              // 0
 extern Val one;               // 1
-//extern Val two;               // 2
+extern Val two;               // 2
 extern Val minus_one;         // -1
 //extern Val pi;                // 3.14159...
 //extern Val i;                 // sqrt(-1)

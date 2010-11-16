@@ -9,13 +9,13 @@ test: # make_metil_comp
 	${LOC_MC} -o tests/main -g3 -Isrc tests/main.cpp
 
 test_gdb:
-	${LOC_MC} --gdb -g3 -Isrc tests/main.cpp
+	${LOC_MC} -o tests/main --gdb -g3 -Isrc tests/main.cpp
 
 test_valgrind:
-	${LOC_MC} --exec-using "valgrind --num-callers=30" -g3 tests/main.cpp
+	${LOC_MC} -o tests/main --exec-using "valgrind --num-callers=30" -g3 tests/main.cpp
 	
 test_valgrind_full:
-	${LOC_MC} --exec-using "valgrind --leak-check=full --show-reachable=yes" -g3 tests/main.cpp
+	${LOC_MC} -o tests/main --exec-using "valgrind --leak-check=full --show-reachable=yes" -g3 tests/main.cpp
 
 metil_gen:
 	${LOC_MC} -g3 src/Level1/metil_parse.cpp `find src -name "*.cpp" -o -name "*.h"`

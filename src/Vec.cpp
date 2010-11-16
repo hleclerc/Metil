@@ -55,7 +55,7 @@ Vec::Vec( const Val &v_0, const Val &v_1, const Val &v_2, const Val &v_3, const 
 Vec::Vec( Size, ST size ) {
     type = &Level1::metil_type_bas_Array_4NULL_1_m_m_CptUse;
     CM_2( allocate, *this, Level1::REF_Number( size ) );
-    CM_2( init_arg, *this, Level1::MO( &Level1::metil_type_cst_Cst_zero ) );
+    CM_2( init_arg, *this, Level1::MO( &Level1::metil_type_cst_Cst_0 ) );
 }
 
 //Vec::Vec( Level1::Type *item_type, ST size, const MachineId *machine_id ) {
@@ -63,7 +63,7 @@ Vec::Vec( Size, ST size ) {
 //    type = &Level1::metil_type_bas_Array_4NULL_1_m_m_CptUse;
 //    CM_2( allocate, *this, Level1::REF_Number( size ) );
 //    //Level1::init_dyn_array( *this, &size, Number<1>(), type, machine_id );
-//    //CM_2( *this, init_2, &Level1::metil_type_cst_Cst_zero );
+//    //CM_2( *this, init_2, &Level1::metil_type_cst_Cst_0 );
 //}
 
 //Level1::MO *Vec::init_dyn_vec( Level1::Type *type, ST size ) {
