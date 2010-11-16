@@ -37,7 +37,18 @@ static bool make_expr_mul( MethodWriter &mw, const Mos *args, const String &ret 
     return false;
 }
 
-void make_expr( MethodWriter &mw, const Mos *args, const String &ret, const String &op ) {
+void make_expr_1( MethodWriter &mw, const Mos *args, const String &ret, const String &op ) {
+    // resulting type
+    String op_type;
+    op_type << "Op_" << op << '_' << char_type( mw.get_type( 0 )->constructor );
+    mw.add_type_decl( op_type );
+
+    // default behavior -> op( a, b, ... )
+    mw.n << "Type *type = &metil_type_bas_" << op_type << ";";
+    mw.n << ret << "MO( NEW( Owcp<1>, type, " << args[ 0 ] << " ), type );";
+}
+
+void make_expr_2( MethodWriter &mw, const Mos *args, const String &ret, const String &op ) {
     if ( op == "add" and make_expr_add( mw, args, ret ) )
         return;
     if ( op == "mul" and make_expr_mul( mw, args, ret ) )
@@ -67,69 +78,27 @@ void make_expr( MethodWriter &mw, const Mos *args, const String &ret, const Stri
 
     // resulting type
     String op_type;
-    op_type << "Op_" << op << '_';
-    for( int i = 0; i < mw.nb_types(); ++i )
-        op_type << char_type( mw.get_type( i )->constructor );
+    op_type << "Op_" << op << '_' << char_type( mw.get_type( 0 )->constructor ) << '_' << char_type( mw.get_type( 1 )->constructor );
     mw.add_type_decl( op_type );
 
     // default behavior -> op( a, b, ... )
     mw.n << "Type *type = &metil_type_bas_" << op_type << ";";
-    mw << ret << "MO( NEW( Owcp<" << mw.nb_types() << ">, type";
-    for( int i = 0; i < mw.nb_types(); ++i )
-        mw << ", " << args[ i ];
-    mw.n << " ), type );";
+    mw.n << ret << "MO( NEW( Owcp<2>, type, " << args[ 0 ] << ", " << args[ 1 ] << " ), type );";
 }
 
-#define DEF_OP( OP ) \
-    void metil_gen_##OP##__when__a__isa__SymbolicExpression__or__b__isa__SymbolicExpression__pert__0( MethodWriter &mw, const Mos *args, const String &ret ) { \
-        make_expr( mw, args, ret, #OP ); \
+#define DECL_MET( T, N ) \
+    void metil_gen_##N##__when__a__isa__SymbolicExpression__pert__0( MethodWriter &mw, const Mos *args, const String &ret ) { \
+        make_expr_1( mw, args, ret, #N ); \
     }
+#include "DeclMethodsUnaryArithmetic.h"
+#undef DECL_MET
 
-// #define DECL_OP() ...
-
-DEF_OP( add         );
-DEF_OP( sub         );
-DEF_OP( mul         );
-DEF_OP( div         );
-DEF_OP( quo         );
-DEF_OP( mod         );
-DEF_OP( pow         );
-DEF_OP( atan2       );
-
-DEF_OP( inf         ); // <
-DEF_OP( infeq       ); // <=
-DEF_OP( sup         ); // >
-DEF_OP( supeq       ); // >=
-DEF_OP( equal       ); // ==
-DEF_OP( noteq       ); // !=
-
-DEF_OP( bitwise_and ); // &
-DEF_OP( bitwise_or  ); // |
-DEF_OP( bitwise_xor ); // ^
-
-DEF_OP( boolean_and ); // &&
-DEF_OP( boolean_or  ); // ||
-DEF_OP( boolean_xor ); // ^^
-
-DEF_OP( neg         ); // -.
-DEF_OP( inv         ); // 1/.
-DEF_OP( sin         ); //
-DEF_OP( cos         ); //
-DEF_OP( tan         ); //
-DEF_OP( asin        ); //
-DEF_OP( acos        ); //
-DEF_OP( atan        ); //
-DEF_OP( abs         ); //
-DEF_OP( sqrt        ); //
-DEF_OP( rsqrt       ); //
-DEF_OP( log         ); //
-DEF_OP( exp         ); //
-DEF_OP( sgn         ); //
-DEF_OP( eqz         ); // == 0
-DEF_OP( supeqz      ); // >= 0
-DEF_OP( supz        ); // > 0
-DEF_OP( infeqz      ); // <= 0
-DEF_OP( infz        ); // < 0
+#define DECL_MET( T, N ) \
+    void metil_gen_##N##__when__a__isa__SymbolicExpression__or__b__isa__SymbolicExpression__pert__0( MethodWriter &mw, const Mos *args, const String &ret ) { \
+        make_expr_2( mw, args, ret, #N ); \
+    }
+#include "DeclMethodsBinaryArithmetic.h"
+#undef DECL_MET
 
 
 void TypeConstructor_SymbolicExpression::default_mw( MethodWriter &mw ) const {
