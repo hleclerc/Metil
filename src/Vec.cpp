@@ -8,14 +8,14 @@ Vec::Vec() {
 }
 
 Vec::Vec( const Val &v_0 ) {
-    Level1::MO *vec = ALLOC_VEC( Level1::MO, 1 );
+    Level1::MO *vec = ALLOC_STATIC_VEC( Level1::MO, 1 );
     type = &Level1::metil_type_bas_Array_4NULL_1_1_1;
     data = vec;
     vec[ 0 ] = CM_1( copy, v_0 );
 }
 
 Vec::Vec( const Val &v_0, const Val &v_1 ) {
-    Level1::MO *vec = ALLOC_VEC( Level1::MO, 2 );
+    Level1::MO *vec = ALLOC_STATIC_VEC( Level1::MO, 2 );
     type = &Level1::metil_type_bas_Array_4NULL_1_2_2;
     data = vec;
     vec[ 0 ] = CM_1( copy, v_0 );
@@ -23,7 +23,7 @@ Vec::Vec( const Val &v_0, const Val &v_1 ) {
 }
 
 Vec::Vec( const Val &v_0, const Val &v_1, const Val &v_2 ) {
-    Level1::MO *vec = ALLOC_VEC( Level1::MO, 3 );
+    Level1::MO *vec = ALLOC_STATIC_VEC( Level1::MO, 3 );
     type = &Level1::metil_type_bas_Array_4NULL_1_3_3;
     data = vec;
     vec[ 0 ] = CM_1( copy, v_0 );
@@ -32,7 +32,7 @@ Vec::Vec( const Val &v_0, const Val &v_1, const Val &v_2 ) {
 }
 
 Vec::Vec( const Val &v_0, const Val &v_1, const Val &v_2, const Val &v_3 ) {
-    Level1::MO *vec = ALLOC_VEC( Level1::MO, 4 );
+    Level1::MO *vec = ALLOC_STATIC_VEC( Level1::MO, 4 );
     type = &Level1::metil_type_bas_Array_4NULL_1_4_4;
     data = vec;
     vec[ 0 ] = CM_1( copy, v_0 );
@@ -42,7 +42,7 @@ Vec::Vec( const Val &v_0, const Val &v_1, const Val &v_2, const Val &v_3 ) {
 }
 
 Vec::Vec( const Val &v_0, const Val &v_1, const Val &v_2, const Val &v_3, const Val &v_4 ) {
-    Level1::MO *vec = ALLOC_VEC( Level1::MO, 5 );
+    Level1::MO *vec = ALLOC_STATIC_VEC( Level1::MO, 5 );
     type = &Level1::metil_type_bas_Array_4NULL_1_5_5;
     data = vec;
     vec[ 0 ] = CM_1( copy, v_0 );

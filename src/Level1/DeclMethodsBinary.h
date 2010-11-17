@@ -4,9 +4,8 @@
 #include "DeclMethodsBinarySelfOpInplace.h"
 
 //
-DECL_MET( PoO, allocate       ); // type->allocate( *this, size or other kind of argument )
+DECL_MET( PoO, allocate       ); // allocate( array with type defined but data, size or other kind of argument ). If size is
 DECL_MET( VoO, init_arg       ); // obj->init( arg )
-
 
 // stream
 DECL_MET( VoO, set_ok         ); //

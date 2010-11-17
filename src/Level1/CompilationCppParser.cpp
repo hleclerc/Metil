@@ -35,6 +35,8 @@ bool CompilationCppParser::init_using_dep( CompilationEnvironment &ce, const Str
     BasicVec<String> loc_def_procs;
     load_dep_vec( c, loc_inc_paths );
     load_dep_vec( c, loc_def_procs );
+    if ( ce_inc_paths.size() != loc_inc_paths.size() or ce_def_procs.size() != loc_def_procs.size() )
+        return false;
     if ( any( ce_inc_paths != loc_inc_paths ) or any( ce_def_procs != loc_def_procs ) )
         return false;
 

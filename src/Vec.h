@@ -13,8 +13,7 @@ BEG_METIL_NAMESPACE;
 class Vec : public Array<Val> {
 public:
     Vec();
-    // explicit Vec( const Array<Val> &a ) : Array<Val>( a ) {  }
-    explicit Vec( const Vec &a ) : Array<Val>( static_cast<const Array<Val> &>( a ) ) {  }
+    Vec( const Vec &a ) : Array<Val>( static_cast<const Array<Val> &>( a ) ) {  }
 
     Vec( const Val &v_0 );
     Vec( const Val &v_0, const Val &v_1 );
@@ -28,11 +27,13 @@ public:
 //        // new( v + 0 ) T( v_0 );
 //    }
 
-//    template<class T,class T0,class T1> Vec( S<T> s, const T0 &v_0, const T1 &v_1 ) {
-//        T *v = reinterpret_cast<T *>( init_dyn_vec( Level1::type_ptr( s ), 2 ) );
-//        new( v + 0 ) T( v_0 );
-//        new( v + 1 ) T( v_1 );
-//    }
+    template<class T,class T0,class T1> Vec( S<T> s, const T0 &v_0, const T1 &v_1 ) {
+        type = Level1::type_ptr( s );
+        T *v = reinterpret_cast<T *>( CM_2( allocate, *this, two ) );
+        ALLOC_STATIC_VEC( T, 2 );
+        new( v + 0 ) T( v_0 );
+        new( v + 1 ) T( v_1 );
+    }
 
 //    template<class T,class T0,class T1,class T2> Vec( S<T> s, const T0 &v_0, const T1 &v_1, const T2 &v_2 ) {
 //        T *v = reinterpret_cast<T *>( init_dyn_vec( Level1::type_ptr( s ), 3 ) );
