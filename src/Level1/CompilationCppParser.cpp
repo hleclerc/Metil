@@ -242,11 +242,11 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
             if ( c[ 1 ] == 'p' and c[ 2 ] == 'r' and c[ 3 ] == 'a' and c[ 4 ] == 'g' and c[ 5 ] == 'm' and c[ 6 ] == 'a' and c[ 7 ] == ' ' ) {
                 c += 8;
                 if ( strncmp( c, "src_file ", 9 ) == 0 ) {
-                    src_files << get_pragma_arg( c += 9 );
+                    src_files << ce.find_src( get_pragma_arg( c += 9 ), current_dir );
                     continue;
                 }
                 if ( strncmp( c, "lib_path ", 9 ) == 0 ) {
-                    lib_paths << get_pragma_arg( c += 9 );
+                    lib_paths << ce.find_src( get_pragma_arg( c += 9 ), current_dir );
                     continue;
                 }
                 if ( strncmp( c, "lib_name ", 9 ) == 0 ) {
@@ -254,7 +254,7 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                     continue;
                 }
                 if ( strncmp( c, "inc_path ", 9 ) == 0 ) {
-                    inc_paths << get_pragma_arg( c += 9 );
+                    inc_paths << ce.find_src( get_pragma_arg( c += 9 ), current_dir );
                     continue;
                 }
                 if ( strncmp( c, "cpp_flag ", 9 ) == 0 ) {
