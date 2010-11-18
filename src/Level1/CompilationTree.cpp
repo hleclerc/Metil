@@ -22,11 +22,11 @@ static void save_Makefile_rec( CompilationTree *c, String &os, const BasicVec<St
 
     if ( c->cmd ) {
         os << c->dst << ':';
+        for( int i = 0; i < dep.size(); ++i )
+            os << ' ' << dep[ i ];
         for( int i = 0; i < c->children.size(); ++i )
             os << ' ' << c->children[ i ]->dst;
         os << '\n';
-        for( int i = 0; i < dep.size(); ++i )
-            os << '\t' << dep[ i ] << '\n';
         os << '\t' << c->cmd << "\n\n";
     }
 

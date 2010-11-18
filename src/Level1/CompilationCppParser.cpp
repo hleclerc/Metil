@@ -227,6 +227,7 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                         if ( inc_file.ends_with( ".h" ) ) {
                             String h_py = inc_file + ".py";
                             if ( file_exists( h_py ) ) {
+                                PRINT( h_py );
                                 if ( last_modification_time_or_zero_of_file_named( h_py ) >
                                      last_modification_time_or_zero_of_file_named( inc_file ) )
                                 exec_cmd( "python " + h_py + " > " + inc_file, true );

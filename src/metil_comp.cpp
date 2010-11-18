@@ -179,7 +179,8 @@ int main( int argc, char **argv ) {
         Ptr<Level1::CompilationTree> ct = ce.make_compilation_tree( out_file, cpp_file, want_lib, want_dyn, false );
         File fm( make_file, "w" );
         fm << "all: " << ct->dst << "\n\n";
-        ct->save_Makefile( fm, "mkdir -p " + ce.comp_dir() );
+        fm << ce.comp_dir() + "dummy:\n\tmkdir -p " << ce.comp_dir() << "; touch " << ce.comp_dir() << "dummy\n\n";
+        ct->save_Makefile( fm, ce.comp_dir() + "dummy" );
         return 0;
     }
 
