@@ -124,6 +124,8 @@ int main( int argc, char **argv ) {
             ce.add_def_proc( argv[ i ] + 2 );
         } else if ( arg.begins_by( "-L" ) ) {
             ce.add_lib_path( argv[ i ] + 2 );
+        } else if ( arg.begins_by( "-l" ) ) {
+            ce.add_lib_name( argv[ i ] + 2 );
         } else if ( arg.begins_by( "--static" ) ) {
             want_dyn = false;
         } else if ( arg == "-mex" ) {
