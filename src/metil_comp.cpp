@@ -60,6 +60,7 @@ bool is_a_CPPFLAG( const String &arg ) {
         arg.begins_by( "-march") or
         arg.begins_by( "-f" ) or
         arg.begins_by( "-W" ) or
+        arg.begins_by( "-L" ) or
         arg.begins_by( "-D" );
 }
 
@@ -121,6 +122,8 @@ int main( int argc, char **argv ) {
             ce.set_opt_level( atoi( argv[ i ] + 2 ) );
         } else if ( arg.begins_by( "-D" ) ) {
             ce.add_def_proc( argv[ i ] + 2 );
+        } else if ( arg.begins_by( "-L" ) ) {
+            ce.add_lib_path( argv[ i ] + 2 );
         } else if ( arg.begins_by( "--static" ) ) {
             want_dyn = false;
         } else if ( arg == "-mex" ) {

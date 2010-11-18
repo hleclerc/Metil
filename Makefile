@@ -42,7 +42,7 @@ clean:
 	rm -rf compilations 2> /dev/null
 
 metil_comp_mk:
-	${LOC_MC} --static -make metil_comp.mk -o ./metil_comp -O3 src/metil_comp.cpp
+	${LOC_MC} --static -make metil_comp.mk -o ./metil_comp -g3 -O3 src/metil_comp.cpp
 	sed -i -e s@`pwd`/@@g metil_comp.mk
 
 include metil_comp.mk
