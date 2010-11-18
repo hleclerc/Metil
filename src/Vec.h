@@ -21,16 +21,15 @@ public:
     Vec( const Val &v_0, const Val &v_1, const Val &v_2, const Val &v_3 );
     Vec( const Val &v_0, const Val &v_1, const Val &v_2, const Val &v_3, const Val &v_4 );
 
-//    template<class T,class T0> Vec( S<T> s, const T0 &v_0 ) {
-//        //Level1::MO tmp = Level1::type_ptr( s );
-//        // T *v = reinterpret_cast<T *>( init_dyn_vec( , 1 ) );
-//        // new( v + 0 ) T( v_0 );
-//    }
+    //    template<class T,class T0> Vec( S<T> s, const T0 &v_0 ) {
+    //        //Level1::MO tmp = Level1::type_ptr( s );
+    //        // T *v = reinterpret_cast<T *>( init_dyn_vec( , 1 ) );
+    //        // new( v + 0 ) T( v_0 );
+    //    }
 
     template<class T,class T0,class T1> Vec( S<T> s, const T0 &v_0, const T1 &v_1 ) {
         type = Level1::type_ptr( s );
-        T *v = reinterpret_cast<T *>( CM_2( allocate, *this, two ) );
-        ALLOC_STATIC_VEC( T, 2 );
+        T *v = reinterpret_cast<T *>( CM_2( allocate_vec, *this, two ) );
         new( v + 0 ) T( v_0 );
         new( v + 1 ) T( v_1 );
     }

@@ -173,7 +173,8 @@ int main( int argc, char **argv ) {
         else
             out_file = ce.exe_for( cpp_file );
     }
- // want a Makefile ?
+
+    // want a Makefile ?
     if ( make_file ) {
         Ptr<Level1::CompilationTree> ct = ce.make_compilation_tree( out_file, cpp_file, want_lib, want_dyn, false );
         File fm( make_file, "w" );

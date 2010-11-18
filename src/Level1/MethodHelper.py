@@ -23,6 +23,7 @@ methods = [
     "VOO",
     "OoO",
     "PoO",
+    "poO",
     "OOS",
     "VoY",
     "YO",
