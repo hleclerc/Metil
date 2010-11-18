@@ -19,6 +19,7 @@ typedef void (* Method_VoO)( MO &a, MO b );
 typedef void (* Method_VOO)( MO a, MO b );
 typedef MO (* Method_OoO)( MO &a, MO b );
 typedef const void *(* Method_PoO)( MO &a, MO b );
+typedef void *(* Method_poO)( MO &a, MO b );
 typedef MO Method_OOS( MO a, ST b );
 typedef void Method_VoY( MO &a, struct OwcpChild *b );
 typedef struct OwcpChild *Method_YO( MO a );

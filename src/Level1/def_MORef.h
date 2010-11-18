@@ -25,6 +25,8 @@
 #define MET_1_OoO( N ) MO  metil_def_##N##__when__b__isa__MORef__pert__11( MO &a, MO b ) { Ad v = CM_1( copy, b ); return CM_2( N, a, v.o ); }
 #define MET_PoO( N )
 #define MET_1_PoO( N ) const void * metil_def_##N##__when__b__isa__MORef__pert__11( MO &a, MO b ) { Ad v = CM_1( copy, b ); return CM_2( N, a, v.o ); }
+#define MET_poO( N )
+#define MET_1_poO( N ) void * metil_def_##N##__when__b__isa__MORef__pert__11( MO &a, MO b ) { Ad v = CM_1( copy, b ); return CM_2( N, a, v.o ); }
 #define MET_OOS( N ) MO  metil_def_##N##__when__a__isa__MORef__pert__10( MO a, ST b ) { Ad v = CM_1( copy, a ); return CM_1( N, v.o, b ); }
 #define MET_VoY( N )
 #define MET_YO( N ) struct OwcpChild * metil_def_##N##__when__a__isa__MORef__pert__10( MO a ) { Ad v = CM_1( copy, a ); return CM_1( N, v.o ); }

@@ -66,6 +66,19 @@ bool CompilationCppParser::init_using_dep( CompilationEnvironment &ce, const Str
     for( int i = 0; i < defs.size(); ++i )
         defines[ defs[ i ] ];
 
+    // .h.py ?
+    for( int i = 0; i < inc_files.size(); ++i ) {
+        String inc_file = inc_files[ i ];
+        if ( inc_file.ends_with( ".h" ) ) {
+            String h_py = inc_file + ".py";
+            if ( file_exists( h_py ) ) {
+                if ( last_modification_time_or_zero_of_file_named( h_py ) >
+                     last_modification_time_or_zero_of_file_named( inc_file ) )
+                exec_cmd( "python " + h_py + " > " + inc_file, true );
+            }
+        }
+    }
+
     return true;
 }
 
@@ -227,7 +240,6 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                         if ( inc_file.ends_with( ".h" ) ) {
                             String h_py = inc_file + ".py";
                             if ( file_exists( h_py ) ) {
-                                // PRINT( h_py );
                                 if ( last_modification_time_or_zero_of_file_named( h_py ) >
                                      last_modification_time_or_zero_of_file_named( inc_file ) )
                                 exec_cmd( "python " + h_py + " > " + inc_file, true );

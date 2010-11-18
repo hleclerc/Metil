@@ -23,6 +23,7 @@
 #define NB_ARGS_METHOD_VOO 2
 #define NB_ARGS_METHOD_OoO 2
 #define NB_ARGS_METHOD_PoO 2
+#define NB_ARGS_METHOD_poO 2
 #define NB_ARGS_METHOD_OOS 1
 #define NB_ARGS_METHOD_VoY 1
 #define NB_ARGS_METHOD_YO 1

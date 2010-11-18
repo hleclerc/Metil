@@ -5,7 +5,7 @@
 
 //
 DECL_MET( PoO, allocate       ); // allocate( array with type defined but data, size or other kind of argument ). If size is
-// DECL_MET( poO, allocate_vec   ); // allocate a vector of type a->type and size defined by b. returns a pointer on data.
+DECL_MET( poO, allocate_vec   ); // allocate a vector of type a->type and size defined by b. returns a pointer on data.
 DECL_MET( VoO, init_arg       ); // obj->init( arg )
 
 // stream

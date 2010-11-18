@@ -19,6 +19,7 @@
     if ( type == "VOO" ) return "void " + def_name + "( MO a, MO b )";
     if ( type == "OoO" ) return "MO " + def_name + "( MO &a, MO b )";
     if ( type == "PoO" ) return "const void *" + def_name + "( MO &a, MO b )";
+    if ( type == "poO" ) return "void *" + def_name + "( MO &a, MO b )";
     if ( type == "OOS" ) return "MO " + def_name + "( MO a, ST b )";
     if ( type == "VoY" ) return "void " + def_name + "( MO &a, struct OwcpChild *b )";
     if ( type == "YO" ) return "struct OwcpChild *" + def_name + "( MO a )";
