@@ -1,6 +1,10 @@
 #include "Level1/ArrayHeader.h"
 #include "Array.h"
 
+#ifdef METIL_COMP_DIRECTIVE
+#pragma lib_path /usr/local/lib
+#endif
+
 BEG_METIL_NAMESPACE;
 
 Vec::Vec() {
