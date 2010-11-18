@@ -29,6 +29,7 @@ public:
 
     String get_NVCC() const;
     String get_CXX () const;
+    String get_CC  () const;
     String get_LD  () const;
 
     int get_nb_threads() const;
@@ -79,6 +80,7 @@ protected:
     BasicVec<String> def_procs;
     String _comp_dir;
     String CXX;
+    String CC;
     String LD;
     String NVCC;
     String CPPFLAGS;

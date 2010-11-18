@@ -12,6 +12,7 @@ CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch ) : c
 
         // default values
         CXX  = "g++";
+        CC   = "gcc";
         LD   = "g++";
         NVCC = "/usr/local/cuda/bin/nvcc";
         _comp_dir = absolute_filename( "compilations" ) + "/";
@@ -140,6 +141,10 @@ String CompilationEnvironment::get_NVCC() const {
 
 String CompilationEnvironment::get_CXX() const {
     return CXX ? CXX : child->get_CXX();
+}
+
+String CompilationEnvironment::get_CC() const {
+    return CC ? CC : child->get_CC();
 }
 
 String CompilationEnvironment::get_LD() const {
@@ -378,7 +383,7 @@ String CompilationEnvironment::obj_cmd( const String &obj, const String &cpp, bo
         else
             cmd << " -w -g -O3 --gpu-architecture=compute_13";
     } else {
-        cmd << get_CXX();
+        cmd << ( cpp.ends_with( ".c" ) ? get_CC() : get_CXX() );
         // basic flags
         if ( dyn )
             cmd << " -fpic";

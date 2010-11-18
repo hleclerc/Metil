@@ -248,7 +248,6 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                 }
                 if ( strncmp( c, "lib_path ", 9 ) == 0 ) {
                     lib_paths << ce.find_src( get_pragma_arg( c += 9 ), current_dir );
-                    PRINT( lib_paths );
                     continue;
                 }
                 if ( strncmp( c, "lib_name ", 9 ) == 0 ) {
