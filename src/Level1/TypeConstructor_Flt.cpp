@@ -10,11 +10,16 @@ void metil_gen_reassign_inplace__when__a__isa__Flt( MethodWriter &mw, const Mos 
     TypeConstructor_Flt *c = static_cast<TypeConstructor_Flt *>( mw.get_type( 0 )->constructor );
     if ( String cpp = c->cpp_type() ) {
         String ret; ret << "*reinterpret_cast<" << cpp << " *>( " << a[ 0 ].data << " ) = ";
-        if ( cpp == "FP32" ) call_gene<MethodName_convert_to_FP32>( mw, mw.get_type( 1 ), 0, 0, a + 1, ret );
-        if ( cpp == "FP64" ) call_gene<MethodName_convert_to_FP64>( mw, mw.get_type( 1 ), 0, 0, a + 1, ret );
-        if ( cpp == "FP80" ) call_gene<MethodName_convert_to_FP80>( mw, mw.get_type( 1 ), 0, 0, a + 1, ret );
+        if      ( cpp == "FP32" ) call_gene<MethodName_convert_to_FP32>( mw, mw.get_type( 1 ), 0, 0, a + 1, ret );
+        else if ( cpp == "FP64" ) call_gene<MethodName_convert_to_FP64>( mw, mw.get_type( 1 ), 0, 0, a + 1, ret );
+        else if ( cpp == "FP80" ) call_gene<MethodName_convert_to_FP80>( mw, mw.get_type( 1 ), 0, 0, a + 1, ret );
+        else ERROR("unknown cpp type");
     } else
         TODO;
+}
+
+void metil_gen_init_arg__when__a__isa__Flt( MethodWriter &mw, const Mos *a, const String &ret ) {
+    metil_gen_reassign_inplace__when__a__isa__Flt( mw, a, ret );
 }
 
 void TypeConstructor_Flt::write_convert_to_Bool( MethodWriter &mw, const Mos *a, const String &ret ) const { write_convert_to_( mw, a, ret ); }
@@ -26,7 +31,8 @@ void TypeConstructor_Flt::write_convert_to_FP80( MethodWriter &mw, const Mos *a,
 
 void TypeConstructor_Flt::write_convert_to_( MethodWriter &mw, const Mos *a, const String &ret ) const {
     if ( String cpp = cpp_type() ) {
-        mw.n << ret << "*reinterpret_cast<const " << cpp << " *>( " << a->data << " );";
+        mw.add_include("String.h");
+        mw.n << ret << "*reinterpret_cast<const " << cpp << " *>( " << a->data << " );\n";
     } else
         TODO;
 }

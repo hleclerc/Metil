@@ -322,6 +322,8 @@ void CompilationEnvironment::extra_lnk_cmd( String &cmd, bool lib, bool dyn ) co
         cmd << " -L" << lib_paths[ i ];
     for( int i = 0; i < lib_names.size(); ++i )
         cmd << " -l" << lib_names[ i ];
+    if ( dbg_level > 0 )
+        cmd << " -g" << dbg_level;
     if ( child )
         child->extra_lnk_cmd( cmd, lib, dyn );
 }
@@ -484,12 +486,12 @@ struct Lib {
     BasicVec<Ptr<CompilationTree> > obj;
 };
 
-Ptr<CompilationTree> CompilationEnvironment::make_compilation_tree( const String &app, const String &cpp, bool lib, bool dyn, bool make_so ) {
+Ptr<CompilationTree> CompilationEnvironment::make_compilation_tree( const String &app, const String &cpp, bool lib, bool dyn, bool make_libs ) {
     BasicVec<Ptr<CompilationTree> > obj;
     parse_cpp( obj, cpp, dyn );
 
     // sort by directory
-    if ( make_so ) {
+    if ( make_libs ) {
         String base_dir = directory_of( cpp );
         std::map<String,Lib> map_lib;
         for( int i = 0; i < obj.size(); ++i ) {
@@ -504,7 +506,7 @@ Ptr<CompilationTree> CompilationEnvironment::make_compilation_tree( const String
         int cpt = 0;
         for( std::map<String,Lib>::iterator iter = map_lib.begin(); iter != map_lib.end(); ++iter ) {
             String name; name << app << "_" << cpt++;
-            obj << make_lnk_compilation_tree( lib_for( name, true ), iter->second.obj, true, true );
+            obj << make_lnk_compilation_tree( lib_for( name, dyn ), iter->second.obj, true, dyn );
         }
     }
 
@@ -512,8 +514,8 @@ Ptr<CompilationTree> CompilationEnvironment::make_compilation_tree( const String
     return make_lnk_compilation_tree( app, obj, lib, dyn );
 }
 
-int CompilationEnvironment::make_app( const String &app, const String &cpp, bool lib, bool dyn ) {
-    Ptr<CompilationTree> res = make_compilation_tree( app, cpp, lib, dyn );
+int CompilationEnvironment::make_app( const String &app, const String &cpp, bool lib, bool dyn, bool want_libs ) {
+    Ptr<CompilationTree> res = make_compilation_tree( app, cpp, lib, dyn, want_libs );
     return res->exec( get_nb_threads(), &cout );
 }
 

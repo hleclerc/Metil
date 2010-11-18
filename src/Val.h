@@ -146,6 +146,9 @@ template<class T> typename EnableIf<IsAnInteger<T>::res,Val>::T exp ( T b ) { re
 extern Val zero;              // 0
 extern Val one;               // 1
 extern Val two;               // 2
+extern Val three;             // 3
+extern Val four;              // 4
+extern Val five;              // 5
 extern Val minus_one;         // -1
 //extern Val pi;                // 3.14159...
 //extern Val i;                 // sqrt(-1)

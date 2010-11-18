@@ -24,6 +24,9 @@ Val::Val( const char *str ) {
 Val zero             ( Level1::MO( &Level1::metil_type_cst_Cst_0   ) );
 Val one              ( Level1::MO( &Level1::metil_type_cst_Cst_1   ) );
 Val two              ( Level1::MO( &Level1::metil_type_cst_Cst_2   ) );
+Val three            ( Level1::MO( &Level1::metil_type_cst_Cst_3   ) );
+Val four             ( Level1::MO( &Level1::metil_type_cst_Cst_4   ) );
+Val five             ( Level1::MO( &Level1::metil_type_cst_Cst_5   ) );
 Val minus_one        ( Level1::MO( &Level1::metil_type_cst_Cst_m_1 ) );
 Val pi               ( Level1::MO( &Level1::metil_type_cst_Cst_pi  ) );
 Val i                ( Level1::MO( &Level1::metil_type_cst_Cst_i   ) );

@@ -1,10 +1,6 @@
 #include "Level1/ArrayHeader.h"
 #include "Array.h"
 
-#ifdef METIL_COMP_DIRECTIVE
-#pragma lib_path /usr/local/lib
-#endif
-
 BEG_METIL_NAMESPACE;
 
 Vec::Vec() {
@@ -62,20 +58,9 @@ Vec::Vec( Size, ST size ) {
     CM_2( init_arg, *this, Level1::MO( &Level1::metil_type_cst_Cst_0 ) );
 }
 
-//Vec::Vec( Level1::Type *item_type, ST size, const MachineId *machine_id ) {
-//    //type = item_type ? item_type->type_of_dyn_array(  );
-//    type = &Level1::metil_type_bas_Array_4NULL_1_m_m_CptUse;
-//    CM_2( allocate, *this, Level1::REF_Number( size ) );
-//    //Level1::init_dyn_array( *this, &size, Number<1>(), type, machine_id );
-//    //CM_2( *this, init_2, &Level1::metil_type_cst_Cst_0 );
-//}
-
-//Level1::MO *Vec::init_dyn_vec( Level1::Type *type, ST size ) {
-//    return Level1::init_dyn_array( *this, &size, Number<1>(), type );
-//}
-
-//Level1::MO *Vec::init_dyn_vec( ST size ) {
-//    return Level1::init_dyn_array( *this, &size, Number<1>() );
-//}
+Vec::Vec( Size, ST size, Level1::Type *item_type, const MachineId */*machine_id*/ ) {
+    type = item_type;
+    CM_2( allocate_array, *this, Level1::REF_Number( size ) );
+}
 
 END_METIL_NAMESPACE;

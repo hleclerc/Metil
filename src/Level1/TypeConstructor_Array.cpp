@@ -1,5 +1,6 @@
 #include "TypeConstructor_Select.h"
 #include "TypeConstructor_Array.h"
+#include "TypeConstructor_Cst.h"
 #include "MethodFinder.h"
 #include "Tokenize.h"
 
@@ -7,6 +8,34 @@ BEG_METIL_LEVEL1_NAMESPACE;
 
 static TypeConstructor_Array *sc( Type *type ) {
     return static_cast<TypeConstructor_Array *>( type->constructor );
+}
+
+void metil_gen_allocate_array__when__b__isa__Cst( MethodWriter &mw, const Mos *args, const String &ret ) {
+    mw.add_include( "Level1/TypeConstructor_Array.h" );
+
+    // type
+    TypeConstructor_Cst *c = static_cast<TypeConstructor_Cst *>( mw.get_type( 1 )->constructor );
+    SI64 size; c->conversion_to( size );
+    String type_vec, item_type = mw.get_type( 0 )->name;
+    type_vec << "Array_" << item_type.size() << item_type << "_1_" << size << '_' << size;
+    mw.add_type_decl( type_vec);
+    int ss = mw.get_type( 0 )->constructor->static_size_in_bytes();
+    ASSERT( ss >= 0, "TODO: static vectors of varying sizes" );
+
+    // data
+    mw.n << args[ 0 ].type << " = &metil_type_bas_" << type_vec << ";";
+    mw.n << args[ 0 ].data << " = MALLOC( Number<" << size * ss << ">() );";
+    mw.n << ret << args[ 0 ].data << ";";
+}
+
+void metil_gen_allocate_array__when__b__isa__Int( MethodWriter &mw, const Mos *args, const String &ret ) {
+    // get type
+    String type_vec, item_type = mw.get_type( 0 )->name;
+    type_vec << "Array_" << item_type.size() << item_type << "_1_m_m_CptUse";
+    mw.add_type_decl( type_vec );
+
+    mw.n << args[ 0 ].type << " = &metil_type_bas_" << type_vec << ";";
+    mw.n << ret << "CM_2( allocate, " << args[ 0 ] << ", " << args[ 1 ] << " );";
 }
 
 void metil_gen_allocate__when__a__isa__Array__and__b__isa__Int__pert__1( MethodWriter &mw, const Mos *args, const String &ret ) {
@@ -227,14 +256,12 @@ void TypeConstructor_Array::write_sizes( MethodWriter &mw, const Mos *a, const S
         mw.n << "Type *type = sizeof( void *) == 8 ? &metil_type_cst_" << type_vec_64 << " : &metil_type_cst_" << type_vec_32 << ";";
         mw.n << ret_ins << "MO( data, type );";
     } else {
-        mw.n << "TODO;";
-        mw.n << ret_ins << "0;";
-        //        mw.n << "typedef BasicVec<ST," << dim() << "> B;";
-        //        mw << "B *data = NEW( B";
-        //        for(int d = 0; d < dim(); ++d )
-        //            mw << ", " << get_size_n( "h", d );
-        //        mw.n << " );";
-        //        mw.n << "Type *type = type_ptr( S<ST>() )->static_vec_type( " << dim() << " );";
+        String type; type << "Array_8Int_s_64_1_" << dim() << "_" << dim();
+        mw.add_type_decl( type );
+        mw.n << "SI64 *data = ALLOC_STATIC_VEC( SI64, " << dim() << " );";
+        for(int d = 0; d < dim(); ++d )
+            mw.n << "data[ " << d << " ] = " << get_size_n( "h", d ) << ";";
+        mw.n << ret_ins << "MO( data, &metil_type_bas_" << type << " );";
     }
 }
 

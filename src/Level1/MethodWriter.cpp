@@ -7,7 +7,7 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-MethodWriter::MethodWriter( Type *type_0, Type *type_1, Type *type_2, MethodWriter *parent ) : n( parent ? parent->code : code ), parent( parent ) {
+MethodWriter::MethodWriter( Type *type_0, Type *type_1, Type *type_2, MethodWriter *parent ) : n( parent ? parent->n.string : code ), parent( parent ) {
     type[ 0 ] = type_0;
     type[ 1 ] = type_1;
     type[ 2 ] = type_2;
@@ -45,8 +45,7 @@ void MethodWriter::add_type_decl( const String &name ) {
         String cons = p >= 0 ? name.beg_upto( p ) : name;
         ext_types << name;
         add_include( "Level1/TypeConstructor_" + cons + ".h" );
-        add_preliminary( "DECL_TYPE( " + name + " );\n" );
-        add_preliminary( "DEFI_TYPE( " + cons + ", " + name + " );\n" );
+        add_preliminary( "DECL_AND_DEFI_TYPE( " + cons + ", " + name + " );\n" );
     }
 }
 
@@ -76,7 +75,7 @@ void MethodWriter::beg_def( const String &def_name ) {
 
 void MethodWriter::end_def() {
     ASSERT( parent == 0, "end_def should be done in main MethodWriter" );
-    code << "}\n";
+    code << "}\n\n";
 }
 
 void MethodWriter::ret() {

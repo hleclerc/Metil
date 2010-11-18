@@ -57,8 +57,8 @@ public:
     String obj_cmd( const String &obj, const String &cpp, bool dyn ) const;
     String lnk_cmd( const String &exe, const BasicVec<String> &obj, bool lib, bool dyn ) const;
 
-    Ptr<CompilationTree> make_compilation_tree( const String &app, const String &cpp, bool lib, bool dyn, bool make_so = true );
-    int make_app( const String &app, const String &cpp, bool lib, bool dyn );
+    Ptr<CompilationTree> make_compilation_tree( const String &app, const String &cpp, bool lib, bool dyn, bool make_libs = true );
+    int make_app( const String &app, const String &cpp, bool lib, bool dyn, bool want_libs = true );
     int make_lib( const String &lib, const String &cpp, bool dyn );
     int make_exe( const String &exe, const String &cpp );
 

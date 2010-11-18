@@ -72,9 +72,9 @@ int main( int argc, char **argv ) {
     BasicVec<String> exec_args;
     bool execution   = true;
     bool compilation = true;
+    bool want_dyn    = true;
     bool want_mex    = false;
     bool want_lib    = false;
-    bool want_dyn    = true;
 
     //
     for( int i = 1; i < argc; ++i ) {
@@ -191,7 +191,7 @@ int main( int argc, char **argv ) {
 
     // compilation
     if ( compilation )
-        if ( int res_make = ce.make_app( out_file, cpp_file, want_lib, want_dyn ) )
+        if ( int res_make = ce.make_app( out_file, cpp_file, want_lib, want_dyn, true ) )
             return res_make;
 
     // execute

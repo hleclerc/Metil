@@ -82,6 +82,10 @@ public:
     Type metil_type_ref_##N( &inst_type_##N, #N, &metil_type_bas_##N, &metil_type_ref_##N, &metil_type_cst_##N, Type::Ref ); \
     Type metil_type_cst_##N( &inst_type_##N, #N, &metil_type_bas_##N, &metil_type_ref_##N, &metil_type_cst_##N, Type::Cst )
 
+#define DECL_AND_DEFI_TYPE( B, N ) \
+    DECL_TYPE( N ); \
+    DEFI_TYPE( B, N )
+
 END_METIL_LEVEL1_NAMESPACE;
 
 #endif // TYPECONSTRUCTOR_H
