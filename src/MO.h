@@ -21,6 +21,8 @@ public:
 
     void operator=( MO obj ) { data = obj.data; type = obj.type; }
 
+    ST size_in_mem() const;
+
     void write_str( String &os ) const;
     void write_dot( String &os, bool want_parents = false ) const;
     void write_tex( String &os ) const;

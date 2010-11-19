@@ -31,6 +31,8 @@ public:
     Type            *cst_type;    ///< constant reference (e.g. "const int &")
     BRC             k;
 
+    int             cpt_use;      ///< because Type can appear in different .so, it can be constructed several times, at the same adress...
+
     // typedef MO Method_OC( ... );
     #include "MethodTypes.h"
 

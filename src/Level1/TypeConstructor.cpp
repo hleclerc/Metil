@@ -1,4 +1,5 @@
 #include "TypeConstructor_Array.h"
+#include "MethodFinder.h"
 #include "Ad.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
@@ -20,6 +21,7 @@ void metil_gen_copy__when__a__has__is_void( MethodWriter &mw, const Mos *a, cons
 #include "DeclMethodsUnary.h"
 #undef DECL_MET
 
+// string << ...
 void metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) {
     cw.add_include( "String.h" );
     if ( cw.get_os_defined() == false ) {
@@ -48,6 +50,24 @@ void metil_gen_copy__when__a__has__is_a_POD__pert__1( MethodWriter &mw, const Mo
         mw.n << ret << "MO( &metil_type_cst_" << mw.get_type( 0 )->name << " );";
     }
 }
+
+// allocate_...on
+void metil_gen_allocate_2_on( MethodWriter &mw, const Mos *args, const String &ret ) {
+//    // lazy exec or other machine ?
+//    String type; type << "LazyObject_Cpu_" << mw.get_type( 0 )->name;
+//    mw.add_type_decl( type );
+//    mw.n << "if ( " << args[ 2 ] << " ) {";
+//    bool res = call_gene<MethodName_allocate_2>( mw, mw.get_type( 0 ), mw.get_type( 1 ), mw.get_type( 2 ), args, ret, false );
+//    mw.n << "}";
+//    // else, normal allocate
+//    bool res = call_gene<MethodName_allocate_2>( mw, mw.get_type( 0 ), mw.get_type( 1 ), mw.get_type( 2 ), args, ret, false );
+//    if ( not res )
+//        mw.n << "ERROR( \"Type " << mw.get_type( 0 )->name << " does not have any allocate_2 method.\" );" << ret << "0;";
+
+//    mw.add_type_decl( type );
+}
+
+
 
 
 
@@ -82,7 +102,7 @@ int TypeConstructor::needed_alignement_in_bits() const { return 8; }
 int TypeConstructor::needed_alignement_in_bits_if_in_vec( MachineId::Type mid ) const { return 1; }
 int TypeConstructor::tensor_order() const { return 0; }
 
-int TypeConstructor::static_size_in_bytes() const { return ( static_size_in_bits() + 7 ) / 8; }
+int TypeConstructor::static_size_in_bytes() const { int sb = static_size_in_bits(); return sb < 0 ? -1 : ( sb + 7 ) / 8; }
 int TypeConstructor::needed_alignement_in_bytes() const { return ( needed_alignement_in_bits() + 7 ) / 8; }
 int TypeConstructor::needed_alignement_in_bytes_if_in_vec( MachineId::Type mid ) const { return ( needed_alignement_in_bits_if_in_vec( mid ) + 7 ) / 8; }
 

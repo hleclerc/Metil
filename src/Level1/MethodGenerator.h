@@ -10,8 +10,8 @@ template<class T,class N>
 struct MethodGenerator {};
 
 template<class N>
-struct MethodGenerator<Type::Method_Vo,N> {
-    static void generator( MO &a ) {
+struct MethodGenerator<Type::Method_DO,N> {
+    static FP64 generator( MO a ) {
         a.type->init_if_necessary();
         N::access( a.type ) = MethodFinder<N>::find( a.type );
         return N::access( a.type )( a );
@@ -19,11 +19,21 @@ struct MethodGenerator<Type::Method_Vo,N> {
 };
 
 template<class N>
-struct MethodGenerator<Type::Method_OO,N> {
-    static MO generator( MO a ) {
+struct MethodGenerator<Type::Method_YO,N> {
+    static struct OwcpChild *generator( MO a ) {
         a.type->init_if_necessary();
         N::access( a.type ) = MethodFinder<N>::find( a.type );
         return N::access( a.type )( a );
+    }
+};
+
+template<class N>
+struct MethodGenerator<Type::Method_OoO,N> {
+    static MO generator( MO &a, MO b ) {
+        a.type->init_if_necessary();
+        b.type->init_if_necessary();
+        N::access( a.type )[ b.type->number ] = MethodFinder<N>::find( a.type, b.type );
+        return N::access( a.type )[ b.type->number ]( a, b );
     }
 };
 
@@ -37,17 +47,27 @@ struct MethodGenerator<Type::Method_BO,N> {
 };
 
 template<class N>
-struct MethodGenerator<Type::Method_IO,N> {
-    static SI32 generator( MO a ) {
+struct MethodGenerator<Type::Method_VOpS,N> {
+    static void generator( MO a, void *b, ST c ) {
         a.type->init_if_necessary();
         N::access( a.type ) = MethodFinder<N>::find( a.type );
-        return N::access( a.type )( a );
+        return N::access( a.type )( a, b, c );
     }
 };
 
 template<class N>
-struct MethodGenerator<Type::Method_LO,N> {
-    static SI64 generator( MO a ) {
+struct MethodGenerator<Type::Method_BOO,N> {
+    static bool generator( MO a, MO b ) {
+        a.type->init_if_necessary();
+        b.type->init_if_necessary();
+        N::access( a.type )[ b.type->number ] = MethodFinder<N>::find( a.type, b.type );
+        return N::access( a.type )[ b.type->number ]( a, b );
+    }
+};
+
+template<class N>
+struct MethodGenerator<Type::Method_pO,N> {
+    static void *generator( MO a ) {
         a.type->init_if_necessary();
         N::access( a.type ) = MethodFinder<N>::find( a.type );
         return N::access( a.type )( a );
@@ -64,8 +84,27 @@ struct MethodGenerator<Type::Method_FO,N> {
 };
 
 template<class N>
-struct MethodGenerator<Type::Method_DO,N> {
-    static FP64 generator( MO a ) {
+struct MethodGenerator<Type::Method_LO,N> {
+    static SI64 generator( MO a ) {
+        a.type->init_if_necessary();
+        N::access( a.type ) = MethodFinder<N>::find( a.type );
+        return N::access( a.type )( a );
+    }
+};
+
+template<class N>
+struct MethodGenerator<Type::Method_poO,N> {
+    static void *generator( MO &a, MO b ) {
+        a.type->init_if_necessary();
+        b.type->init_if_necessary();
+        N::access( a.type )[ b.type->number ] = MethodFinder<N>::find( a.type, b.type );
+        return N::access( a.type )[ b.type->number ]( a, b );
+    }
+};
+
+template<class N>
+struct MethodGenerator<Type::Method_po,N> {
+    static void *generator( MO &a ) {
         a.type->init_if_necessary();
         N::access( a.type ) = MethodFinder<N>::find( a.type );
         return N::access( a.type )( a );
@@ -82,17 +121,18 @@ struct MethodGenerator<Type::Method_EO,N> {
 };
 
 template<class N>
-struct MethodGenerator<Type::Method_VOt,N> {
-    static void generator( MO a, String &b ) {
+struct MethodGenerator<Type::Method_VoO,N> {
+    static void generator( MO &a, MO b ) {
         a.type->init_if_necessary();
-        N::access( a.type ) = MethodFinder<N>::find( a.type );
-        return N::access( a.type )( a, b );
+        b.type->init_if_necessary();
+        N::access( a.type )[ b.type->number ] = MethodFinder<N>::find( a.type, b.type );
+        return N::access( a.type )[ b.type->number ]( a, b );
     }
 };
 
 template<class N>
-struct MethodGenerator<Type::Method_pO,N> {
-    static void *generator( MO a ) {
+struct MethodGenerator<Type::Method_IO,N> {
+    static SI32 generator( MO a ) {
         a.type->init_if_necessary();
         N::access( a.type ) = MethodFinder<N>::find( a.type );
         return N::access( a.type )( a );
@@ -100,8 +140,8 @@ struct MethodGenerator<Type::Method_pO,N> {
 };
 
 template<class N>
-struct MethodGenerator<Type::Method_Vot,N> {
-    static void generator( MO &a, String &b ) {
+struct MethodGenerator<Type::Method_VoY,N> {
+    static void generator( MO &a, struct OwcpChild *b ) {
         a.type->init_if_necessary();
         N::access( a.type ) = MethodFinder<N>::find( a.type );
         return N::access( a.type )( a, b );
@@ -109,55 +149,27 @@ struct MethodGenerator<Type::Method_Vot,N> {
 };
 
 template<class N>
-struct MethodGenerator<Type::Method_po,N> {
-    static void *generator( MO &a ) {
+struct MethodGenerator<Type::Method_poOM,N> {
+    static void *generator( MO &a, MO b, const MachineId *c ) {
+        a.type->init_if_necessary();
+        b.type->init_if_necessary();
+        N::access( a.type )[ b.type->number ] = MethodFinder<N>::find( a.type, b.type );
+        return N::access( a.type )[ b.type->number ]( a, b, c );
+    }
+};
+
+template<class N>
+struct MethodGenerator<Type::Method_OO,N> {
+    static MO generator( MO a ) {
         a.type->init_if_necessary();
         N::access( a.type ) = MethodFinder<N>::find( a.type );
         return N::access( a.type )( a );
-    }
-};
-
-template<class N>
-struct MethodGenerator<Type::Method_VoPS,N> {
-    static void generator( MO &a, const void *b, ST c ) {
-        a.type->init_if_necessary();
-        N::access( a.type ) = MethodFinder<N>::find( a.type );
-        return N::access( a.type )( a, b, c );
-    }
-};
-
-template<class N>
-struct MethodGenerator<Type::Method_VOpS,N> {
-    static void generator( MO a, void *b, ST c ) {
-        a.type->init_if_necessary();
-        N::access( a.type ) = MethodFinder<N>::find( a.type );
-        return N::access( a.type )( a, b, c );
     }
 };
 
 template<class N>
 struct MethodGenerator<Type::Method_OOO,N> {
     static MO generator( MO a, MO b ) {
-        a.type->init_if_necessary();
-        b.type->init_if_necessary();
-        N::access( a.type )[ b.type->number ] = MethodFinder<N>::find( a.type, b.type );
-        return N::access( a.type )[ b.type->number ]( a, b );
-    }
-};
-
-template<class N>
-struct MethodGenerator<Type::Method_BOO,N> {
-    static bool generator( MO a, MO b ) {
-        a.type->init_if_necessary();
-        b.type->init_if_necessary();
-        N::access( a.type )[ b.type->number ] = MethodFinder<N>::find( a.type, b.type );
-        return N::access( a.type )[ b.type->number ]( a, b );
-    }
-};
-
-template<class N>
-struct MethodGenerator<Type::Method_VoO,N> {
-    static void generator( MO &a, MO b ) {
         a.type->init_if_necessary();
         b.type->init_if_necessary();
         N::access( a.type )[ b.type->number ] = MethodFinder<N>::find( a.type, b.type );
@@ -176,32 +188,20 @@ struct MethodGenerator<Type::Method_VOO,N> {
 };
 
 template<class N>
-struct MethodGenerator<Type::Method_OoO,N> {
-    static MO generator( MO &a, MO b ) {
+struct MethodGenerator<Type::Method_VoPS,N> {
+    static void generator( MO &a, const void *b, ST c ) {
         a.type->init_if_necessary();
-        b.type->init_if_necessary();
-        N::access( a.type )[ b.type->number ] = MethodFinder<N>::find( a.type, b.type );
-        return N::access( a.type )[ b.type->number ]( a, b );
+        N::access( a.type ) = MethodFinder<N>::find( a.type );
+        return N::access( a.type )( a, b, c );
     }
 };
 
 template<class N>
-struct MethodGenerator<Type::Method_PoO,N> {
-    static const void *generator( MO &a, MO b ) {
+struct MethodGenerator<Type::Method_Vo,N> {
+    static void generator( MO &a ) {
         a.type->init_if_necessary();
-        b.type->init_if_necessary();
-        N::access( a.type )[ b.type->number ] = MethodFinder<N>::find( a.type, b.type );
-        return N::access( a.type )[ b.type->number ]( a, b );
-    }
-};
-
-template<class N>
-struct MethodGenerator<Type::Method_poO,N> {
-    static void *generator( MO &a, MO b ) {
-        a.type->init_if_necessary();
-        b.type->init_if_necessary();
-        N::access( a.type )[ b.type->number ] = MethodFinder<N>::find( a.type, b.type );
-        return N::access( a.type )[ b.type->number ]( a, b );
+        N::access( a.type ) = MethodFinder<N>::find( a.type );
+        return N::access( a.type )( a );
     }
 };
 
@@ -211,24 +211,6 @@ struct MethodGenerator<Type::Method_OOS,N> {
         a.type->init_if_necessary();
         N::access( a.type ) = MethodFinder<N>::find( a.type );
         return N::access( a.type )( a, b );
-    }
-};
-
-template<class N>
-struct MethodGenerator<Type::Method_VoY,N> {
-    static void generator( MO &a, struct OwcpChild *b ) {
-        a.type->init_if_necessary();
-        N::access( a.type ) = MethodFinder<N>::find( a.type );
-        return N::access( a.type )( a, b );
-    }
-};
-
-template<class N>
-struct MethodGenerator<Type::Method_YO,N> {
-    static struct OwcpChild *generator( MO a ) {
-        a.type->init_if_necessary();
-        N::access( a.type ) = MethodFinder<N>::find( a.type );
-        return N::access( a.type )( a );
     }
 };
 

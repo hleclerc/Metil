@@ -1,34 +1,15 @@
 # -*- coding: utf-8 -*-
-import string
+import string, os, re
 
-methods = [
-    "Vo",
-    "OO",
-    "BO",
-    "IO",
-    "LO",
-    "SO",
-    "FO",
-    "DO",
-    "EO",
-    "VOt",
-    "pO",
-    "Vot",
-    "po",
-    "VoPS",
-    "VOpS",
-    "OOO",
-    "BOO",
-    "VoO",
-    "VOO",
-    "OoO",
-    "PoO",
-    "poO",
-    "OOS",
-    "VoY",
-    "YO",
-    "MO",
-]
+methods = {}
+for h in os.listdir( "src/Level1/" ):
+    if "DeclMethods" in h:
+        for l in file( "src/Level1/" + h ).readlines():
+            res = re.findall( '^DECL_MET\( ([^ ,]*)', l )
+            if len( res ):
+                methods[ res[ 0 ] ] = 0
+
+methods = methods.keys()
 
 def cor( c ):
     if c == "O": return "MO "
@@ -60,6 +41,16 @@ def nb_MO_args( m ):
     for c in m[ 1: ]:
         res += c == 'o'
         res += c == 'O'
+    return res
+
+def remaining_args( m, beg ):
+    res = ""
+    l = "abcdefgh"
+    n = beg
+    for c in m[ beg + 1: ]:
+        res += ', '
+        res += l[ n ]
+        n += 1
     return res
 
 def args( m ):

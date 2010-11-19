@@ -146,9 +146,9 @@ struct Socket : public String {
 };
 
 #define PRINT( A ) \
-    Metil::coutn << "  " << #A << " -> " << (A)
+    Metil::cout << "  " << #A << " -> " << (A) << String::endl
 #define PRINTN( A ) \
-    Metil::coutn << "  " << #A << " ->\n" << (A)
+    Metil::cout << "  " << #A << " ->\n" << (A) << String::endl
 
 END_METIL_NAMESPACE;
 

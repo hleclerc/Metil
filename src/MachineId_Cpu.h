@@ -8,9 +8,11 @@ BEG_METIL_NAMESPACE;
 
 struct MachineId_Cpu : public MachineId {
     MachineId_Cpu( int cpu_number );
+    virtual ~MachineId_Cpu();
 
     virtual void write_str( class String &os ) const;
     virtual const MachineId *gpu( int nb ) const;
+    virtual Type type() const;
 
     int cpu_number;
     mutable BasicVec<const MachineId *> gpus;

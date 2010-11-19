@@ -244,3 +244,6 @@ src/Thread.h
 src/Thread.cpp
 src/WaitCondition.h
 src/WaitCondition.cpp
+src/Level1/TypeConstructor_LazyObject.h
+src/Level1/TypeConstructor_LazyObject.cpp
+src/Level1/LazyObject_Header.h

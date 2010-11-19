@@ -7,7 +7,7 @@
 BEG_METIL_LEVEL1_NAMESPACE;
 
 /**
-  name -> contains
+  name contains
     - (len type)type
     - dim
     - size[ 0 ]
@@ -37,6 +37,7 @@ public:
     DECL_WRITER( sizes );
     DECL_WRITER( write_str );
     DECL_WRITER( machine_id );
+    DECL_WRITER( size_in_mem );
 
     int  dim() const;
     bool dyn() const; ///< true if dynamic

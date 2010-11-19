@@ -10,6 +10,7 @@ struct MachineId_Gpu : public MachineId {
 
     virtual void write_str( class String &os ) const;
     virtual bool is_a_gpu() const;
+    virtual Type type() const;
 
     const MachineId *cpu;
     int gpu_number;

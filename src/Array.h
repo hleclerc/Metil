@@ -46,13 +46,14 @@ struct Array : public Level1::MO {
     // 2 args
     T operator()( const Val &a, const Val &b ) const {
         Level1::MO data[] = { a, b };
-        return CM_2( select_C, *this, MO( data, &Level1::metil_type_ref_Array_4NULL_1_2_2 ) );
+        return CM_2( select_C, *this, MO( data, &Level1::metil_type_cst_Array_4NULL_1_2_2 ) );
     }
 
     T operator()( const Val &a, const Val &b ) {
         Level1::MO data[] = { a, b };
-        return CM_2( select, *this, MO( data, &Level1::metil_type_ref_Array_4NULL_1_2_2 ) );
+        return CM_2( select, *this, MO( data, &Level1::metil_type_cst_Array_4NULL_1_2_2 ) );
     }
+
 
     /// obj[ ... ] = val
     void set_values( const Val &val ) { CM_2( set_values, *this, val ); }

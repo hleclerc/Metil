@@ -84,9 +84,12 @@ static void update_bin_methods_data( int nb_types ) {
 }
 
 Type::Type( TypeConstructor *constructor, const char *name, Type *bas, Type *ref, Type *cst, BRC k ) {
-    for( Type *t = last_type; t; t = t->prev_type )
-        if ( t == this )
+    for( Type *t = last_type; t; t = t->prev_type ) {
+        if ( t == this ) {
+            ++cpt_use;
             return; // this has already been initalised during a preceding lib load
+        }
+    }
 
     this->number = 0;
     this->name = name;
@@ -94,6 +97,7 @@ Type::Type( TypeConstructor *constructor, const char *name, Type *bas, Type *ref
     this->bas_type = bas;
     this->ref_type = ref;
     this->cst_type = cst;
+    this->cpt_use = 0;
 
     prev_type = last_type;
     last_type = this;
@@ -122,8 +126,9 @@ Type::Type( TypeConstructor *constructor, const char *name, Type *bas, Type *ref
 }
 
 Type::~Type() {
-    if( prev_type == 0 and bin_methods_info.data_ptr )
-        FREE( bin_methods_info.data_ptr, bin_methods_info.rese_mem );
+    if ( --cpt_use < 0 )
+        if( prev_type == 0 and bin_methods_info.data_ptr )
+            FREE( bin_methods_info.data_ptr, bin_methods_info.rese_mem );
 }
 
 Type *Type::init_if_necessary() {

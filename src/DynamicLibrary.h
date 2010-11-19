@@ -8,9 +8,9 @@ BEG_METIL_NAMESPACE;
 class DynamicLibrary {
 public:
     DynamicLibrary();
-    bool open( String name );
     ~DynamicLibrary();
 
+    bool open( String name );
     operator bool() const;
     String error() const;
     void *get_sym( String name );

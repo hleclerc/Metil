@@ -103,11 +103,14 @@ public:
 };
 
 template<class MethodName>
-void call_gene( MethodWriter &cw, Type *type_0, Type *type_1, Type *type_2, const Mos *a, const String &ret = "return " ) {
+bool call_gene( MethodWriter &cw, Type *type_0, Type *type_1, Type *type_2, const Mos *a, const String &ret = "return ", bool abort_if_not_found = true ) {
     typedef MethodFinder<MethodName> MF;
-    typename MF::Item *item = MF::find_item( type_0, type_1, type_2, true, true );
+    typename MF::Item *item = MF::find_item( type_0, type_1, type_2, abort_if_not_found, true );
+    if ( not item )
+        return false;
     MethodWriter mw( type_0, type_1, type_2, &cw );
     item->gene( mw, a, ret );
+    return true;
 }
 
 END_METIL_LEVEL1_NAMESPACE;

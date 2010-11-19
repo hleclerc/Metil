@@ -62,7 +62,10 @@ WCONV( ST   );
 // gene
 void TypeConstructor_Int::write_write_str( MethodWriter &mw, const Mos *a, const String & ) const {
     mw.add_include( "Level1/DisplayInt.h" );
-    mw.n << "DisplayInt<" << mant - sign << "," << sign << ",0," << mant - sign << ">::display( os, (const PI8 *)" << a->data << " );";
+    if ( sign == -1 )
+        mw.n << "os << '-';";
+    bool lesi = sign == 0;
+    mw.n << "DisplayInt<" << mant - lesi << "," << lesi << ",0," << mant - lesi << ">::display( os, (const PI8 *)" << a->data << " );";
 }
 
 static void gen_self_op_inplace( MethodWriter &mw, const Mos *a, const String &op ) {

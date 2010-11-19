@@ -6,6 +6,10 @@ BEG_METIL_LEVEL1_NAMESPACE;
 
 SI64 current_op_id = 0;
 
+ST MO::size_in_mem() const {
+    return CM_1( size_in_mem, *this );
+}
+
 void MO::write_str( String &os ) const {
     CM_2( self_append, os, *this );
 }

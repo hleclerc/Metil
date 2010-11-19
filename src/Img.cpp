@@ -10,12 +10,9 @@ Img::Img() {
 }
 
 Img::Img( ST w, ST h, Level1::Type *base_type ) {
-    TODO;
-    //    ST size[ 2 ] = { w, h };
-    //    Level1::MO *d = Level1::init_dyn_array( *this, size, Number<2>(), base_type );
-    //    if ( not base_type )
-    //        for( int i = 0; i < w * h; ++i )
-    //            new( d + i ) Val;
+    type = base_type;
+    ST size[ 2 ] = { w, h };
+    CM_2( allocate_array, *this, Level1::REF_Vec( Number<2>(), size ) );
 }
 
 Img::Img( const String &filename, const MachineId *machine ) {

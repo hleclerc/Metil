@@ -17,6 +17,7 @@ DECL_MET( OO  , copy_ref                ); // make a copy of a data reference @s
 
 DECL_MET( Vo  , init_1                  ); //
 
+DECL_MET( SO  , size_in_mem             ); // size in bytes of the object
 
 //DECL_MET( VOt , write_str               ); // string or file output
 //DECL_MET( VOt , write_dot               ); // string or file output

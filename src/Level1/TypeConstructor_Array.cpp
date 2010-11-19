@@ -35,10 +35,10 @@ void metil_gen_allocate_array__when__b__isa__Int( MethodWriter &mw, const Mos *a
     mw.add_type_decl( type_vec );
 
     mw.n << args[ 0 ].type << " = &metil_type_bas_" << type_vec << ";";
-    mw.n << ret << "CM_2( allocate, " << args[ 0 ] << ", " << args[ 1 ] << " );";
+    mw.n << ret << "CM_2( allocate_2, " << args[ 0 ] << ", " << args[ 1 ] << " );";
 }
 
-void metil_gen_allocate__when__a__isa__Array__and__b__isa__Int__pert__1( MethodWriter &mw, const Mos *args, const String &ret ) {
+void metil_gen_allocate_2__when__a__isa__Array__and__b__isa__Int__pert__1( MethodWriter &mw, const Mos *args, const String &ret ) {
     TypeConstructor_Array *c = sc( mw.get_type( 0 ) );
     if ( c->len() == 0 ) // nothing to allocate
         return;
@@ -57,19 +57,16 @@ void metil_gen_allocate__when__a__isa__Array__and__b__isa__Int__pert__1( MethodW
         mw.n << "header->rese_mem = rese_mem;";
         mw.n << "header->size[ 0 ] = size;";
         mw.n << "header->rese[ 0 ] = ( rese_mem - sizeof( AH ) ) / ss;";
-
-        // ret
-        mw.n << args->data << " = header;";
-        mw.n << ret << "header;";
     } else {
         mw.n << "ST rese_mem = size * ss;";
         mw.n << "void *header = MALLOC( rese_mem );";
     }
 
+    mw.n << args->data << " = header;";
     mw.n << ret << "header;";
 }
 
-void metil_gen_allocate__when__a__isa__Array__and__b__isa__Array__pert__1( MethodWriter &mw, const Mos *args, const String &ret ) {
+void metil_gen_allocate_2__when__a__isa__Array__and__b__isa__Array__pert__1( MethodWriter &mw, const Mos *args, const String &ret ) {
     TypeConstructor_Array *c = sc( mw.get_type( 0 ) );
     if ( c->len() == 0 ) // nothing to allocate
         return;
@@ -78,40 +75,57 @@ void metil_gen_allocate__when__a__isa__Array__and__b__isa__Array__pert__1( Metho
     mw.add_include( "Vec.h" );
     for( int d = 0; d < c->dim(); ++d )
         mw.n << "ST size_" << String( d ) << " = reinterpret_cast<const Vec &>( " << args[ 1 ] << " )[ " << d << " ];";
-    mw.n << "ST rese_0 = ceil( size_0, " << c->bas_type->constructor->needed_alignement_in_bytes_if_in_vec( MachineId::Cpu )  << " );";
+    int al = c->bas_type ? c->bas_type->constructor->needed_alignement_in_bytes_if_in_vec( MachineId::Cpu ) : 1;
+    if ( al > 1 )
+        mw.n << "ST rese_0 = ceil( size_0, " << al  << " );";
+    else
+        mw.n << "ST rese_0 = size_0;";
+
+    // nb_items
+    mw << "ST nb_items = rese_0";
+    for( int d = 1; d < c->dim(); ++d )
+        mw << " * size_" << d;
+    mw.n << ";";
 
     // rese_mem
-//    c->write_get_static_s( mw, "ss" );
-//    if ( c->need_header() ) {
-//        c->write_get_t_header( mw, "AH" );
-//        mw.n << "ST rese_mem = sizeof( AH ) + size * ss;";
+    c->write_get_static_s( mw, "ss" );
+    if ( c->need_header() ) {
+        c->write_get_t_header( mw, "AH" );
+        mw.n << "ST rese_mem = sizeof( AH ) + nb_items * ss;";
 
-//        // fill header
-//        mw.n << "AH *header = (AH *)MALLOC( rese_mem );";
-//        mw.n << "new( header ) AH;";
-//        mw.n << "header->rese_mem = rese_mem;";
-//        mw.n << "header->size[ 0 ] = size;";
-//        mw.n << "header->rese[ 0 ] = ( rese_mem - sizeof( AH ) ) / ss;";
+        // fill header
+        mw.n << "AH *header = (AH *)MALLOC( rese_mem );";
+        mw.n << "new( header ) AH;";
+        mw.n << "header->rese_mem = rese_mem;";
+        for( int d = 0; d < c->dim(); ++d )
+            mw.n << "header->size[ " << d << " ] = size_" << d << ";";
+        for( int d = 0; d < c->dim() - 1; ++d )
+            mw.n << "header->rese[ " << d << " ] = rese_" << d << ";";
+        mw << "header->rese[ " << c->dim() - 1 << " ] = ( rese_mem - sizeof( AH ) ) / ( ss";
+        for( int d = 0; d < c->dim() - 1; ++d )
+            mw << " * rese_" << d;
+        mw.n << " );";
 
-//        // ret
-//        mw.n << args->data << " = header;";
-//        mw.n << ret << "header;";
-//    } else {
-//        mw.n << "ST rese_mem = size * ss;";
-//        mw.n << "void *header = MALLOC( rese_mem );";
-//    }
+        mw.n << args->data << " = header;";
+        mw.n << ret << "header + 1;";
+    } else {
+        mw.n << "ST rese_mem = nb_items * ss;";
+        mw.n << "void *data = MALLOC( rese_mem );";
 
-//    mw.n << ret << "header;";
-mw.n << ret << "0;";
+        mw.n << args->data << " = data;";
+        mw.n << ret << "data;";
+    }
 }
 
-void metil_gen_init_arg__when__a__isa__Array__pert__1( MethodWriter &mw, const Mos *args, const String &ret ) {
+void metil_gen_init_arg__when__a__isa__Array__pert__1( MethodWriter &mw, const Mos *args, const String & ) {
     TypeConstructor_Array *c = sc( mw.get_type( 0 ) );
     c->write_smp_beg_loop( mw, args[ 0 ].data, false );
-    Mos loc_args[ 2 ] = { Mos( "d", "" ), args[ 1 ] };
-    if ( c->item_type_bas )
-        call_gene<MethodName_init_arg>( mw, c->item_type_bas, mw.get_type( 1 ), 0, loc_args );
-    else
+    if ( c->item_type_bas ) {
+        Mos loc_args[ 2 ] = { Mos( "d", "" ), args[ 1 ] };
+        bool res = call_gene<MethodName_init_arg>( mw, c->item_type_bas, mw.get_type( 1 ), 0, loc_args, "unused", false );
+        if ( not res )
+            mw.n << "ERROR( \"There's no init_arg generator for type " << mw.get_type( 0 )->name << " and " << mw.get_type( 1 )->name << "\" );";
+    } else
         call_gene<MethodName_copy>( mw, mw.get_type( 1 ), 0, 0, args + 1, "*d = " );
     c->write_smp_end_loop( mw );
 }
@@ -290,7 +304,7 @@ void TypeConstructor_Array::write_sizes( MethodWriter &mw, const Mos *a, const S
         mw.add_type_decl( type_vec_32 );
         mw.add_type_decl( type_vec_64 );
         mw << "ST *data = h->size;";
-        mw.n << "Type *type = sizeof( void *) == 8 ? &metil_type_cst_" << type_vec_64 << " : &metil_type_cst_" << type_vec_32 << ";";
+        mw.n << "Type *type = sizeof( void * ) == 8 ? &metil_type_cst_" << type_vec_64 << " : &metil_type_cst_" << type_vec_32 << ";";
         mw.n << ret_ins << "MO( data, type );";
     } else {
         String type; type << "Array_8Int_s_64_1_" << dim() << "_" << dim();
@@ -309,6 +323,16 @@ void TypeConstructor_Array::write_machine_id( MethodWriter &mw, const Mos *a, co
         mw.n << ret_ins << "h->machine_id;";
     } else {
         mw.n << ret_ins << "MachineId::cur();";
+    }
+}
+
+void TypeConstructor_Array::write_size_in_mem( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
+    if ( static_size_in_bytes() >= 0 ) {
+        mw.n << ret_ins << static_size_in_bytes() << ";";
+    } else {
+        write_get_t_header( mw, "AH" );
+        write_get_header( mw, "h", a[ 0 ].data, "AH" );
+        mw.n << ret_ins << "h->rese_mem;";
     }
 }
 
@@ -345,11 +369,10 @@ void TypeConstructor_Array::write_get_index( MethodWriter &cw, const String &nam
     if ( to == 0 ) {
         cw.n << "ST index = static_cast<const Val &>( " << d_1 << " );";
     } else if ( to == 1 ) {
-        cw.n << "ST i = 0, c = 1, index = 0;";
+        cw.add_include( "Vec.h" );
+        cw.n << "ST c = 1, index = 0;";
         for( int d = 0; d < tensor_order(); ++d ) {
-            if ( d )
-                cw.n << "i = " << d << ";";
-            cw.n << "index += c * static_cast<const Val &>( CM_2( select_C, " << d_1 << ", REF_Number( i ) ) );";
+            cw.n << "index += c * ST( static_cast<const Vec &>( " << d_1 << " )[ " << d << " ] );";
             if ( d < tensor_order() - 1 )
                 cw.n << "c *= " << get_rese_n( "h", d ) << ";";
         }
@@ -585,7 +608,13 @@ void TypeConstructor_Array::init( Type *type ) {
 
     // type_name
     String type_name = String::read_sized( name );
-    item_type_bas = Type::find_with_name( type_name.c_str() );
+    if ( type_name == "NULL" ) {
+        item_type_bas = 0;
+    } else {
+        item_type_bas = Type::find_with_name( type_name.c_str() );
+        ASSERT( item_type_bas, "Type %s not found", type_name.c_str() );
+        item_type_bas->init_if_necessary();
+    }
 
     BasicVec<String> lst = tokenize( name + 1, '_' );
 

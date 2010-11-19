@@ -12,7 +12,7 @@ test_gdb:
 	${LOC_MC} -o tests/main --gdb -g3 -Isrc tests/main.cpp
 
 test_valgrind:
-	${LOC_MC} -o tests/main --exec-using "valgrind --num-callers=30" -g3 tests/main.cpp
+	${LOC_MC} -o tests/main --exec-using "valgrind --db-attach=yes --num-callers=30" -g3 tests/main.cpp
 	
 test_valgrind_full:
 	${LOC_MC} -o tests/main --exec-using "valgrind --leak-check=full --show-reachable=yes" -g3 tests/main.cpp

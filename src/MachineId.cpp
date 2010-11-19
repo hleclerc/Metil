@@ -6,15 +6,14 @@
 
 BEG_METIL_NAMESPACE;
 
+MachineId::~MachineId() {
+}
+
 const MachineId *MachineId::cpu( int nb ) {
-    static BasicVec<MachineId *> res;
-    ST os = res.size();
-    if ( os <= nb ) {
-        res.resize( nb + 1 );
-        for( int i = os; i <= nb; ++i )
-            res[ i ] = NEW( MachineId_Cpu, i );
-    }
-    return res[ nb ];
+    static BasicVec<MachineId_Cpu> res;
+    while ( res.size() <= nb )
+        res.push_back( res.size() );
+    return &res[ nb ];
 }
 
 const MachineId *MachineId::gpu( const MachineId *cpu, int nb ) {
@@ -36,6 +35,12 @@ bool MachineId::is_a_gpu() const {
 const MachineId *MachineId::gpu( int nb ) const { ///< @todo cpu != cur
     ASSERT( 0, "Machine do not has any Gpu" );
     return 0;
+}
+
+MachineId_Cpu::Type MachineId::type( const String &name ) {
+    if ( name == "Cpu" ) return Cpu;
+    if ( name == "Gpu" ) return Gpu;
+    ERROR( "type %s not known", name.c_str() );
 }
 
 END_METIL_NAMESPACE;
