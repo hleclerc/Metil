@@ -65,9 +65,44 @@ void metil_gen_allocate__when__a__isa__Array__and__b__isa__Int__pert__1( MethodW
         mw.n << "ST rese_mem = size * ss;";
         mw.n << "void *header = MALLOC( rese_mem );";
     }
-    // mw.n << "set_machine_id( wmi, header, mid );";
 
     mw.n << ret << "header;";
+}
+
+void metil_gen_allocate__when__a__isa__Array__and__b__isa__Array__pert__1( MethodWriter &mw, const Mos *args, const String &ret ) {
+    TypeConstructor_Array *c = sc( mw.get_type( 0 ) );
+    if ( c->len() == 0 ) // nothing to allocate
+        return;
+
+    // wanted size
+    mw.add_include( "Vec.h" );
+    for( int d = 0; d < c->dim(); ++d )
+        mw.n << "ST size_" << String( d ) << " = reinterpret_cast<const Vec &>( " << args[ 1 ] << " )[ " << d << " ];";
+    mw.n << "ST rese_0 = ceil( size_0, " << c->bas_type->constructor->needed_alignement_in_bytes_if_in_vec( MachineId::Cpu )  << " );";
+
+    // rese_mem
+//    c->write_get_static_s( mw, "ss" );
+//    if ( c->need_header() ) {
+//        c->write_get_t_header( mw, "AH" );
+//        mw.n << "ST rese_mem = sizeof( AH ) + size * ss;";
+
+//        // fill header
+//        mw.n << "AH *header = (AH *)MALLOC( rese_mem );";
+//        mw.n << "new( header ) AH;";
+//        mw.n << "header->rese_mem = rese_mem;";
+//        mw.n << "header->size[ 0 ] = size;";
+//        mw.n << "header->rese[ 0 ] = ( rese_mem - sizeof( AH ) ) / ss;";
+
+//        // ret
+//        mw.n << args->data << " = header;";
+//        mw.n << ret << "header;";
+//    } else {
+//        mw.n << "ST rese_mem = size * ss;";
+//        mw.n << "void *header = MALLOC( rese_mem );";
+//    }
+
+//    mw.n << ret << "header;";
+mw.n << ret << "0;";
 }
 
 void metil_gen_init_arg__when__a__isa__Array__pert__1( MethodWriter &mw, const Mos *args, const String &ret ) {
@@ -94,7 +129,7 @@ void metil_gen_select_C__when__a__isa__Array__pert__1( MethodWriter &cw, const M
 
     if ( c->item_type_bas ) {
         Mos d; d.data << "d + index * " << c->item_type_bas->constructor->static_size_in_bytes();
-        call_gene<MethodName_copy>( cw, c->item_type_bas, 0, 0, &d );
+        call_gene<MethodName_copy>( cw, c->item_type_bas, 0, 0, &d, ret );
     } else
         cw.n << ret << "CM_1( copy, d[ index ] );";
 }
@@ -109,8 +144,10 @@ void metil_gen_select__when__a__isa__Array__pert__1( MethodWriter &cw, const Mos
     select_type << strlen( cw.get_type( 0 )->name ) << cw.get_type( 0 )->name;
     select_type << "8Int_s_64";
 
-    if ( c_0->dim() > 1 )
+    if ( c_0->dim() > 1 ) {
+        c_0->write_get_t_header( cw, "AH" );
         c_0->write_get_header( cw, "h", args[ 0 ].data );
+    }
     c_0->write_get_index( cw, "index", c_1, args[ 1 ], "h" );
 
     cw.add_type_decl( select_type );
@@ -420,8 +457,7 @@ bool TypeConstructor_Array::need_header() const {
 void TypeConstructor_Array::write_get_t_header( MethodWriter &cw, const String &name_type ) const {
     if ( need_header() ) {
         int al = bas_type ? bas_type->constructor->needed_alignement_in_bytes_if_in_vec(
-                                want_Gpu ? MachineId::gpu( MachineId::cur(), 0 ) : MachineId::cur()
-                                           ) : 1;
+                                want_Gpu ? MachineId::Gpu : MachineId::Cpu ) : 1;
         cw.n << "typedef ArrayHeader<"
            << len_size() << ","
            << len_rese() << ","

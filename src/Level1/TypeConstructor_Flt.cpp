@@ -54,8 +54,8 @@ int TypeConstructor_Flt::static_size_in_bits() const {
     return max( max( expo.len + expo.off, mant.len + mant.off ), sign.len + sign.off );
 }
 
-int TypeConstructor_Flt::needed_alignement_in_bits_if_in_vec( const MachineId *mid ) const {
-    return mid->simd_alignement();
+int TypeConstructor_Flt::needed_alignement_in_bits_if_in_vec( MachineId::Type mid ) const {
+    return MachineId::simd_alignement( mid );
 }
 
 bool TypeConstructor_Flt::is_a_POD() const {

@@ -17,10 +17,10 @@ extern "C" void load_tiff( Level1::MO &res, const String &filename, const Machin
     if ( not tif )
         throw "impossible to read " + filename + " using libtiff";
 
-    // int bits_per_sample = type->nb_bits_in_mantissa() > 8 ? 16 : 8;
+    //
     PI32 w = 0, h = 0, bps = 8;
-    TIFFGetField( tif, TIFFTAG_IMAGEWIDTH     , &w );
-    TIFFGetField( tif, TIFFTAG_IMAGELENGTH    , &h );
+    TIFFGetField( tif, TIFFTAG_IMAGEWIDTH     , &w   );
+    TIFFGetField( tif, TIFFTAG_IMAGELENGTH    , &h   );
     TIFFGetField( tif, TIFFTAG_BITSPERSAMPLE  , &bps );
 
     ST size[ 2 ];
@@ -28,8 +28,8 @@ extern "C" void load_tiff( Level1::MO &res, const String &filename, const Machin
     size[ 1 ] = h;
 
     // new Array
-    // cudaMalloc( &data, sizeof( float ) * size[ 0 ] * size[ 1 ] );
-    PI8 *data = reinterpret_cast<PI8 *>( init_dyn_array( res, size, Number<2>(), bps == 16 ? type_ptr<PI16>() : type_ptr<PI8>(), machine ) );
+    res.type = bps == 16 ? &Level1::metil_type_bas_Array_4PI16_2_m_m_m_m_CptUse : &Level1::metil_type_bas_Array_3PI8_2_m_m_m_m_CptUse;
+    char *data = (char *)CM_2( allocate, res, Level1::REF_Vec( Number<2>(), size ) );
 
     ST line_size = size[ 0 ] * bps / 8;
     tdata_t buf = _TIFFmalloc( TIFFScanlineSize( tif ) );
