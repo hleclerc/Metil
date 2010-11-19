@@ -2,18 +2,18 @@
 #define MACHINEID_CPU_H
 
 #include "MachineId.h"
+#include "BasicVec.h"
 
 BEG_METIL_NAMESPACE;
 
 struct MachineId_Cpu : public MachineId {
     MachineId_Cpu( int cpu_number );
 
-    virtual int simd_alignement() const;
     virtual void write_str( class String &os ) const;
-    virtual void *alloc( ST &rese );
-    virtual void free( void *data, ST rese );
+    virtual const MachineId *gpu( int nb ) const;
 
     int cpu_number;
+    mutable BasicVec<const MachineId *> gpus;
 };
 
 END_METIL_NAMESPACE;

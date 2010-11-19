@@ -106,8 +106,8 @@ int TypeConstructor_Int::static_size_in_bits() const {
     return mant;
 }
 
-int TypeConstructor_Int::needed_alignement_in_bits_if_in_vec( const MachineId *mid ) const {
-    return mid->simd_alignement();
+int TypeConstructor_Int::needed_alignement_in_bits_if_in_vec( MachineId::Type mid ) const {
+    return MachineId::simd_alignement( mid );
 }
 
 int TypeConstructor_Int::equ_code( MethodWriter &mw, const Mos &arg, const String &val ) const {

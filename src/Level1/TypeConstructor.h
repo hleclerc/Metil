@@ -61,12 +61,12 @@ public:
     virtual int tensor_order() const;
     virtual int static_size_in_bits() const;
     virtual int needed_alignement_in_bits() const;
-    virtual int needed_alignement_in_bits_if_in_vec( const MachineId *mid ) const;
+    virtual int needed_alignement_in_bits_if_in_vec( MachineId::Type mid ) const;
     virtual String cpp_type() const;
 
     int static_size_in_bytes() const;
     int needed_alignement_in_bytes() const;
-    int needed_alignement_in_bytes_if_in_vec( const MachineId *mid ) const;
+    int needed_alignement_in_bytes_if_in_vec( MachineId::Type mid ) const;
 
     virtual int equ_code( MethodWriter &mw, const Mos &arg, const String &val ) const;
 

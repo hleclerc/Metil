@@ -16,7 +16,7 @@ public:
     virtual int static_size_in_bits() const;
     virtual bool is_a_POD() const;
     virtual String cpp_type() const;
-    virtual int needed_alignement_in_bits_if_in_vec( const MachineId *mid ) const;
+    virtual int needed_alignement_in_bits_if_in_vec( MachineId::Type mid ) const;
 
     DECL_WRITER( convert_to_Bool );
     DECL_WRITER( convert_to_SI32 );

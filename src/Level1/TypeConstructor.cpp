@@ -16,7 +16,7 @@ MO metil_def_copy__when__a__has__is_void__pert__1( MO a ) { return a.type; }
 void metil_gen_copy__when__a__has__is_void( MethodWriter &mw, const Mos *a, const String &ret ) { mw.n << ret << " " << a->type << ";"; }
 
 // static gen...( MethodWriter & ) { constructor->write_... }
-#define DECL_MET( T, N ) void metil_gen_##N##__when__a__has__has_writer_for_##N##__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) { PRINT(#N); PRINT( cw.get_type(0)->name ); cw.get_type( 0 )->constructor->write_##N( cw, a, ret ); }
+#define DECL_MET( T, N ) void metil_gen_##N##__when__a__has__has_writer_for_##N##__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) { cw.get_type( 0 )->constructor->write_##N( cw, a, ret ); }
 #include "DeclMethodsUnary.h"
 #undef DECL_MET
 
@@ -79,12 +79,12 @@ void TypeConstructor::default_mw( MethodWriter &mw ) const {}
 int TypeConstructor::Owcp_size() const { return -1; }
 int TypeConstructor::static_size_in_bits() const { return -1; }
 int TypeConstructor::needed_alignement_in_bits() const { return 8; }
-int TypeConstructor::needed_alignement_in_bits_if_in_vec( const MachineId *mid ) const { return 1; }
+int TypeConstructor::needed_alignement_in_bits_if_in_vec( MachineId::Type mid ) const { return 1; }
 int TypeConstructor::tensor_order() const { return 0; }
 
 int TypeConstructor::static_size_in_bytes() const { return ( static_size_in_bits() + 7 ) / 8; }
 int TypeConstructor::needed_alignement_in_bytes() const { return ( needed_alignement_in_bits() + 7 ) / 8; }
-int TypeConstructor::needed_alignement_in_bytes_if_in_vec( const MachineId *mid ) const { return ( needed_alignement_in_bits_if_in_vec( mid ) + 7 ) / 8; }
+int TypeConstructor::needed_alignement_in_bytes_if_in_vec( MachineId::Type mid ) const { return ( needed_alignement_in_bits_if_in_vec( mid ) + 7 ) / 8; }
 
 int TypeConstructor::equ_code( MethodWriter &, const Mos &, const String & ) const { return 0; }
 
