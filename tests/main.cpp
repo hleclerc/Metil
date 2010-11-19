@@ -18,10 +18,9 @@ int main() {
 //    PRINT( 2 * two );
     // PRINT( ST( minus_one ) );
     // PRINT( a );
-    Vec a( Size(), 6, type_ptr<double>() );
-    for( int i = 0; i < a.size(); ++i )
-        a[ i ] = i;
-    PRINT( a );
-    PRINT( a.sizes() );
-    PRINT( a.sizes() );
+    Vec a( Size(), 6, type_ptr<double>(), MachineId::gpu( MachineId::cpu( 0 ), 1 ) );
+    //    for( int i = 0; i < a.size(); ++i )
+    //        a[ i ] = i;
+    // PRINT( a );
+    // PRINT( a.sizes() );
 }
