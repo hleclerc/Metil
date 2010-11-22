@@ -1,6 +1,11 @@
 LOC_MC = ./metil_comp --comp-dir compilations
+INSTALL = `pwd`
 
-all: ./metil_comp
+all: make_metil_comp
+
+make_metil_comp:
+	export D="#define INSTALL_DIR \"${INSTALL}\""; grep "$$D" src/Level1/InstallDir.h || echo "$$D" > src/Level1/InstallDir.h
+	make -j8 metil_comp
 
 install: ./metil_comp
 	./install.sh
@@ -45,7 +50,6 @@ continuous_integration:
 
 archive:
 	git archive -o Metil-0.zip --prefix=Metil-0.0.0/ HEAD
-	#git archive -oo -format=tar --prefix=Metil-0.0.0/ HEAD | gzip > Metil-0.0.0.tgz
 
 clean:
 	rm -rf compilations 2> /dev/null

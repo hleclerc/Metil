@@ -10,10 +10,16 @@
    a + 1 - a -> ...
 * indices muets
 
-Comment gérer les .a ? Proposition : par répertoire
-Comment gérer les compil parallèles ?
-  Proposition : avec les Val dans un futur proche
-  OK
+
+
+
+Remarques sur l'évaluation paresseuse :
+  - on peut dans un premier temps imposer la destination.
+  - quand on crée l'objet, c'est fait de façon paresseuse et c'est quand c'est exécuté, qu'on a un type différent... bof
+  - le type différent reste quoiqu'il en soit un LazyObject_Gpu...
+
+
+
 
 A quoi sert la base de données ?
   -> dire qu'un fichier a été fait à partir de telle commande

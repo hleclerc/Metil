@@ -17,8 +17,7 @@ int main() {
     //    PRINT( two * two );
     //    PRINT( 2 * two );
     // Vec v( S<double>(), 1, 2 );
-    // Img a( "/home/leclerc/Data/grad.tif" ); // plateblanche/plateblanche001_0121.tif
-    PRINT( ST(49) == Val(49) );
+    Img a( "/home/leclerc/Data/grad.tif" ); // plateblanche/plateblanche001_0121.tif
     // MachineId::cur()->gpu( 0 )
     // PRINT( a.sizes() );
 
