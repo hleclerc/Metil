@@ -10,12 +10,12 @@ class Img : public Array<Val> {
 public:
     Img();
     Img( ST w, ST h, Level1::Type *bas_type );
-    Img( const String &filename, const MachineId *machine = 0 ); ///< load( filename )
+    Img( const String &filename ); ///< load( filename )
 
-    void load( const String &filename, const MachineId *machine = 0 ); ///< try to guess the type using the filename extension
+    void load( const String &filename ); ///< try to guess the type using the filename extension
 
-    void load_tiff( const String &filename, const MachineId *machine );
-    void load_qimg( const String &filename, const MachineId *machine );
+    void load_tiff( const String &filename );
+    void load_qimg( const String &filename );
 
     Val w() const; ///< width
     Val h() const; ///< height

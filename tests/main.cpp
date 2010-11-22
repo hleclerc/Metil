@@ -17,14 +17,14 @@ int main() {
     //    PRINT( two * two );
     //    PRINT( 2 * two );
     // Vec v( S<double>(), 1, 2 );
-    Img a( "/home/leclerc/Data/grad.tif", MachineId::cur()->gpu( 0 ) ); // plateblanche/plateblanche001_0121.tif
-    PRINT( a.sizes() );
+    Img a( "/home/leclerc/Data/grad.tif" ); // plateblanche/plateblanche001_0121.tif
+    // MachineId::cur()->gpu( 0 )
+    // PRINT( a.sizes() );
 
     //    File f( "res.m", "w" );
     //    f << "m = [";
     //    for( int x = 0; x < 500; ++x )
     //        f << " " << a( x, 0 );
     //    f << "];";
-
-    PRINT( a.size_in_mem() );
+    // PRINT( a.size_in_mem() );
 }

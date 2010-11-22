@@ -15,31 +15,33 @@ Img::Img( ST w, ST h, Level1::Type *base_type ) {
     CM_2( allocate_array, *this, Level1::REF_Vec( Number<2>(), size ) );
 }
 
-Img::Img( const String &filename, const MachineId *machine ) {
+Img::Img( const String &filename ) {
     type = &Level1::metil_type_ref_Array_4NULL_2_0_0_0_0;
-    load( filename, machine );
+    load( filename );
 }
 
-void Img::load( const String &filename, const MachineId *machine ) {
+void Img::load( const String &filename ) {
     if ( filename.ends_with( ".tif" ) or filename.ends_with( ".tiff" ) or
          filename.ends_with( ".TIF" ) or filename.ends_with( ".TIFF" ) )
-        load_tiff( filename, machine );
+        load_tiff( filename );
     else
-        load_qimg( filename, machine );
+        load_qimg( filename );
 }
 
-void Img::load_tiff( const String &filename, const MachineId *machine ) {
+void Img::load_tiff( const String &filename ) {
     CM_1( del, *this );
-    static DynamicCppLib dl( directory_of( __FILE__ ) + "/TiffLoader.cpp" );
-    typedef void LoadTiff( Level1::MO &res, const String &filename, const MachineId *machine );
-    reinterpret_cast<LoadTiff *>( dl.get_sym( "load_tiff" ) )( *this, filename, machine );
+    TODO;
+    //    static DynamicCppLib dl( directory_of( __FILE__ ) + "/TiffLoader.cpp" );
+    //    typedef void LoadTiff( Level1::MO &res, const String &filename );
+    //    reinterpret_cast<LoadTiff *>( dl.get_sym( "load_tiff" ) )( *this, filename );
 }
 
-void Img::load_qimg( const String &filename, const MachineId *machine ) {
+void Img::load_qimg( const String &filename ) {
     CM_1( del, *this );
-    static DynamicCppLib dl( directory_of( __FILE__ ) + "/QimgLoader.cpp" );
-    typedef void LoadQimg( Level1::MO &res, const String &filename, const MachineId *machine );
-    reinterpret_cast<LoadQimg *>( dl.get_sym( "load_qimg" ) )( *this, filename, machine );
+    TODO;
+    //    static DynamicCppLib dl( directory_of( __FILE__ ) + "/QimgLoader.cpp" );
+    //    typedef void LoadQimg( Level1::MO &res, const String &filename );
+    //    reinterpret_cast<LoadQimg *>( dl.get_sym( "load_qimg" ) )( *this, filename );
 }
 
 Val Img::w() const { return size( 0 ); }
