@@ -1,4 +1,5 @@
 #include "CompilationCppParser.h"
+#include "InstallDir.h"
 #include "Tokenize.h"
 #include "System.h"
 
@@ -7,14 +8,14 @@ BEG_METIL_LEVEL1_NAMESPACE;
 CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch ) : child( ch ) {
     if ( child == 0 ) {
         // inc_paths
-        String dir = directory_of( __FILE__ );
-        add_inc_path( dir.beg_upto( dir.size() - 7 ) ); // Level1
+        // String dir = directory_of( __FILE__ );
+        add_inc_path( INSTALL_DIR "/src" ); // Level1
 
         // default values
         CXX  = "g++";
         CC   = "gcc";
         LD   = "g++";
-        NVCC = "/usr/local/cuda/bin/nvcc";
+        NVCC = "/usr/local/cuda/bin/nvcc ";
         _comp_dir = absolute_filename( "compilations" ) + "/";
 
         device_emulation = 0;

@@ -438,6 +438,14 @@ extern MethodName_infeq::TM metil_def_infeq__when__a__is__Int_s_32__and__b__is__
 extern MethodName_infeq::TM metil_def_infeq__when__a__is__Int_s_32__and__b__is__Int_s_64;
 extern MethodName_infeq::TM metil_def_infeq__when__a__is__Int_s_64__and__b__is__Int_s_32;
 extern MethodName_infeq::TM metil_def_infeq__when__a__is__Int_s_64__and__b__is__Int_s_64;
+extern MethodName_equal::TM metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_32;
+extern MethodName_equal::TM metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_64;
+extern MethodName_equal::TM metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_32;
+extern MethodName_equal::TM metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_64;
+extern MethodName_noteq::TM metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_32;
+extern MethodName_noteq::TM metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_64;
+extern MethodName_noteq::TM metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_32;
+extern MethodName_noteq::TM metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_64;
 extern MethodName_boolean_or::TM metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_32;
 extern MethodName_boolean_or::TM metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_64;
 extern MethodName_boolean_or::TM metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_32;
@@ -820,7 +828,7 @@ extern MethodMaker metil_gen_end_from__when__a__isa__LazyObject__pert_100;
 extern MethodMaker metil_gen_always_equal__when__a__isa__LazyObject__pert_100;
 extern MethodMaker metil_gen_set_values__when__a__isa__LazyObject__pert_100;
 extern MethodMaker metil_gen_call_C__when__a__isa__LazyObject__pert_100;
-extern MethodMaker metil_gen_allocate_array__when__b__isa__Cst;
+extern MethodMaker metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst;
 extern MethodMaker metil_gen_allocate_array__when__b__isa__Int;
 extern MethodMaker metil_gen_allocate_2__when__a__isa__Array__and__b__isa__Int__pert__1;
 extern MethodMaker metil_gen_allocate_2__when__a__isa__Array__and__b__isa__Array__pert__1;
@@ -932,7 +940,7 @@ void reg_def() {
     item_metil_def_self_append__pert__0.meth = metil_def_self_append__pert__0;
     item_metil_def_self_append__pert__0.gene = 0;
     item_metil_def_self_append__pert__0.file = string_2;
-    item_metil_def_self_append__pert__0.line = 8;
+    item_metil_def_self_append__pert__0.line = 9;
     item_metil_def_self_append__pert__0.pert = 0;
     MethodFinder<MethodName_self_append>::last = &item_metil_def_self_append__pert__0;
 
@@ -942,7 +950,7 @@ void reg_def() {
     item_metil_def_reassign__pert__0.meth = metil_def_reassign__pert__0;
     item_metil_def_reassign__pert__0.gene = 0;
     item_metil_def_reassign__pert__0.file = string_2;
-    item_metil_def_reassign__pert__0.line = 9;
+    item_metil_def_reassign__pert__0.line = 10;
     item_metil_def_reassign__pert__0.pert = 0;
     MethodFinder<MethodName_reassign>::last = &item_metil_def_reassign__pert__0;
 
@@ -952,7 +960,7 @@ void reg_def() {
     item_metil_def_add_parent__pert__0.meth = metil_def_add_parent__pert__0;
     item_metil_def_add_parent__pert__0.gene = 0;
     item_metil_def_add_parent__pert__0.file = string_2;
-    item_metil_def_add_parent__pert__0.line = 10;
+    item_metil_def_add_parent__pert__0.line = 11;
     item_metil_def_add_parent__pert__0.pert = 0;
     MethodFinder<MethodName_add_parent>::last = &item_metil_def_add_parent__pert__0;
 
@@ -962,7 +970,7 @@ void reg_def() {
     item_metil_def_rem_parent__pert__0.meth = metil_def_rem_parent__pert__0;
     item_metil_def_rem_parent__pert__0.gene = 0;
     item_metil_def_rem_parent__pert__0.file = string_2;
-    item_metil_def_rem_parent__pert__0.line = 11;
+    item_metil_def_rem_parent__pert__0.line = 12;
     item_metil_def_rem_parent__pert__0.pert = 0;
     MethodFinder<MethodName_rem_parent>::last = &item_metil_def_rem_parent__pert__0;
 
@@ -972,7 +980,7 @@ void reg_def() {
     item_metil_def_cur_op_id__pert__0.meth = metil_def_cur_op_id__pert__0;
     item_metil_def_cur_op_id__pert__0.gene = 0;
     item_metil_def_cur_op_id__pert__0.file = string_2;
-    item_metil_def_cur_op_id__pert__0.line = 12;
+    item_metil_def_cur_op_id__pert__0.line = 13;
     item_metil_def_cur_op_id__pert__0.pert = 0;
     MethodFinder<MethodName_cur_op_id>::last = &item_metil_def_cur_op_id__pert__0;
 
@@ -982,7 +990,7 @@ void reg_def() {
     item_metil_def_machine_id__pert__0.meth = metil_def_machine_id__pert__0;
     item_metil_def_machine_id__pert__0.gene = 0;
     item_metil_def_machine_id__pert__0.file = string_2;
-    item_metil_def_machine_id__pert__0.line = 13;
+    item_metil_def_machine_id__pert__0.line = 14;
     item_metil_def_machine_id__pert__0.pert = 0;
     MethodFinder<MethodName_machine_id>::last = &item_metil_def_machine_id__pert__0;
 
@@ -994,7 +1002,7 @@ void reg_def() {
     item_metil_def_copy__when__a__has__is_void__pert__1.meth = metil_def_copy__when__a__has__is_void__pert__1;
     item_metil_def_copy__when__a__has__is_void__pert__1.gene = 0;
     item_metil_def_copy__when__a__has__is_void__pert__1.file = string_2;
-    item_metil_def_copy__when__a__has__is_void__pert__1.line = 16;
+    item_metil_def_copy__when__a__has__is_void__pert__1.line = 17;
     item_metil_def_copy__when__a__has__is_void__pert__1.pert = 1;
     MethodFinder<MethodName_copy>::last = &item_metil_def_copy__when__a__has__is_void__pert__1;
 
@@ -1846,13 +1854,93 @@ void reg_def() {
     item_metil_def_infeq__when__a__is__Int_s_64__and__b__is__Int_s_64.pert = 0;
     MethodFinder<MethodName_infeq>::last = &item_metil_def_infeq__when__a__is__Int_s_64__and__b__is__Int_s_64;
 
+    static MethodFinder<MethodName_equal>::Item item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_32;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_32.prev = MethodFinder<MethodName_equal>::last;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_32.cond = &cond_metil_def_add__when__a__is__Int_s_32__and__b__is__Int_s_32;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_32.meth = metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_32;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_32.gene = 0;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_32.file = string_6;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_32.line = 42;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_32.pert = 0;
+    MethodFinder<MethodName_equal>::last = &item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_32;
+
+    static MethodFinder<MethodName_equal>::Item item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_64;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_64.prev = MethodFinder<MethodName_equal>::last;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_64.cond = &cond_metil_def_add__when__a__is__Int_s_32__and__b__is__Int_s_64;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_64.meth = metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_64;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_64.gene = 0;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_64.file = string_6;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_64.line = 42;
+    item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_64.pert = 0;
+    MethodFinder<MethodName_equal>::last = &item_metil_def_equal__when__a__is__Int_s_32__and__b__is__Int_s_64;
+
+    static MethodFinder<MethodName_equal>::Item item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_32;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_32.prev = MethodFinder<MethodName_equal>::last;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_32.cond = &cond_metil_def_add__when__a__is__Int_s_64__and__b__is__Int_s_32;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_32.meth = metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_32;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_32.gene = 0;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_32.file = string_6;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_32.line = 42;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_32.pert = 0;
+    MethodFinder<MethodName_equal>::last = &item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_32;
+
+    static MethodFinder<MethodName_equal>::Item item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_64;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_64.prev = MethodFinder<MethodName_equal>::last;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_64.cond = &cond_metil_def_add__when__a__is__Int_s_64__and__b__is__Int_s_64;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_64.meth = metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_64;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_64.gene = 0;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_64.file = string_6;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_64.line = 42;
+    item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_64.pert = 0;
+    MethodFinder<MethodName_equal>::last = &item_metil_def_equal__when__a__is__Int_s_64__and__b__is__Int_s_64;
+
+    static MethodFinder<MethodName_noteq>::Item item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_32;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_32.prev = MethodFinder<MethodName_noteq>::last;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_32.cond = &cond_metil_def_add__when__a__is__Int_s_32__and__b__is__Int_s_32;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_32.meth = metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_32;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_32.gene = 0;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_32.file = string_6;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_32.line = 43;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_32.pert = 0;
+    MethodFinder<MethodName_noteq>::last = &item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_32;
+
+    static MethodFinder<MethodName_noteq>::Item item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_64;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_64.prev = MethodFinder<MethodName_noteq>::last;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_64.cond = &cond_metil_def_add__when__a__is__Int_s_32__and__b__is__Int_s_64;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_64.meth = metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_64;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_64.gene = 0;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_64.file = string_6;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_64.line = 43;
+    item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_64.pert = 0;
+    MethodFinder<MethodName_noteq>::last = &item_metil_def_noteq__when__a__is__Int_s_32__and__b__is__Int_s_64;
+
+    static MethodFinder<MethodName_noteq>::Item item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_32;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_32.prev = MethodFinder<MethodName_noteq>::last;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_32.cond = &cond_metil_def_add__when__a__is__Int_s_64__and__b__is__Int_s_32;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_32.meth = metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_32;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_32.gene = 0;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_32.file = string_6;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_32.line = 43;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_32.pert = 0;
+    MethodFinder<MethodName_noteq>::last = &item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_32;
+
+    static MethodFinder<MethodName_noteq>::Item item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_64;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_64.prev = MethodFinder<MethodName_noteq>::last;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_64.cond = &cond_metil_def_add__when__a__is__Int_s_64__and__b__is__Int_s_64;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_64.meth = metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_64;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_64.gene = 0;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_64.file = string_6;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_64.line = 43;
+    item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_64.pert = 0;
+    MethodFinder<MethodName_noteq>::last = &item_metil_def_noteq__when__a__is__Int_s_64__and__b__is__Int_s_64;
+
     static MethodFinder<MethodName_boolean_or>::Item item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_32;
     item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_32.prev = MethodFinder<MethodName_boolean_or>::last;
     item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_32.cond = &cond_metil_def_add__when__a__is__Int_s_32__and__b__is__Int_s_32;
     item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_32.meth = metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_32;
     item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_32.gene = 0;
     item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_32.file = string_6;
-    item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_32.line = 43;
+    item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_32.line = 45;
     item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_32.pert = 0;
     MethodFinder<MethodName_boolean_or>::last = &item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_32;
 
@@ -1862,7 +1950,7 @@ void reg_def() {
     item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_64.meth = metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_64;
     item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_64.gene = 0;
     item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_64.file = string_6;
-    item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_64.line = 43;
+    item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_64.line = 45;
     item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_64.pert = 0;
     MethodFinder<MethodName_boolean_or>::last = &item_metil_def_boolean_or__when__a__is__Int_s_32__and__b__is__Int_s_64;
 
@@ -1872,7 +1960,7 @@ void reg_def() {
     item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_32.meth = metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_32;
     item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_32.gene = 0;
     item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_32.file = string_6;
-    item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_32.line = 43;
+    item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_32.line = 45;
     item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_32.pert = 0;
     MethodFinder<MethodName_boolean_or>::last = &item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_32;
 
@@ -1882,7 +1970,7 @@ void reg_def() {
     item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_64.meth = metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_64;
     item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_64.gene = 0;
     item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_64.file = string_6;
-    item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_64.line = 43;
+    item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_64.line = 45;
     item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_64.pert = 0;
     MethodFinder<MethodName_boolean_or>::last = &item_metil_def_boolean_or__when__a__is__Int_s_64__and__b__is__Int_s_64;
 
@@ -1892,7 +1980,7 @@ void reg_def() {
     item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_32.meth = metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_32;
     item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_32.gene = 0;
     item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_32.file = string_6;
-    item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_32.line = 44;
+    item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_32.line = 46;
     item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_32.pert = 0;
     MethodFinder<MethodName_boolean_and>::last = &item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_32;
 
@@ -1902,7 +1990,7 @@ void reg_def() {
     item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_64.meth = metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_64;
     item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_64.gene = 0;
     item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_64.file = string_6;
-    item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_64.line = 44;
+    item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_64.line = 46;
     item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_64.pert = 0;
     MethodFinder<MethodName_boolean_and>::last = &item_metil_def_boolean_and__when__a__is__Int_s_32__and__b__is__Int_s_64;
 
@@ -1912,7 +2000,7 @@ void reg_def() {
     item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_32.meth = metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_32;
     item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_32.gene = 0;
     item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_32.file = string_6;
-    item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_32.line = 44;
+    item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_32.line = 46;
     item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_32.pert = 0;
     MethodFinder<MethodName_boolean_and>::last = &item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_32;
 
@@ -1922,7 +2010,7 @@ void reg_def() {
     item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_64.meth = metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_64;
     item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_64.gene = 0;
     item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_64.file = string_6;
-    item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_64.line = 44;
+    item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_64.line = 46;
     item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_64.pert = 0;
     MethodFinder<MethodName_boolean_and>::last = &item_metil_def_boolean_and__when__a__is__Int_s_64__and__b__is__Int_s_64;
 
@@ -4030,7 +4118,7 @@ void reg_def() {
     item_metil_gen_copy__when__a__has__is_void.meth = 0;
     item_metil_gen_copy__when__a__has__is_void.gene = metil_gen_copy__when__a__has__is_void;
     item_metil_gen_copy__when__a__has__is_void.file = string_2;
-    item_metil_gen_copy__when__a__has__is_void.line = 17;
+    item_metil_gen_copy__when__a__has__is_void.line = 18;
     item_metil_gen_copy__when__a__has__is_void.pert = 0;
     MethodFinder<MethodName_copy>::last = &item_metil_gen_copy__when__a__has__is_void;
 
@@ -4690,7 +4778,7 @@ void reg_def() {
     item_metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1.meth = 0;
     item_metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1.gene = metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1;
     item_metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1.file = string_2;
-    item_metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1.line = 25;
+    item_metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1.line = 26;
     item_metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1.pert = 1;
     MethodFinder<MethodName_self_append>::last = &item_metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1;
 
@@ -4702,7 +4790,7 @@ void reg_def() {
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.meth = 0;
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.gene = metil_gen_del__when__a__has__is_a_POD__pert__1;
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.file = string_2;
-    item_metil_gen_del__when__a__has__is_a_POD__pert__1.line = 35;
+    item_metil_gen_del__when__a__has__is_a_POD__pert__1.line = 36;
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.pert = 1;
     MethodFinder<MethodName_del>::last = &item_metil_gen_del__when__a__has__is_a_POD__pert__1;
 
@@ -4712,7 +4800,7 @@ void reg_def() {
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.meth = 0;
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.gene = metil_gen_copy__when__a__has__is_a_POD__pert__1;
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.file = string_2;
-    item_metil_gen_copy__when__a__has__is_a_POD__pert__1.line = 41;
+    item_metil_gen_copy__when__a__has__is_a_POD__pert__1.line = 42;
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.pert = 1;
     MethodFinder<MethodName_copy>::last = &item_metil_gen_copy__when__a__has__is_a_POD__pert__1;
 
@@ -4722,7 +4810,7 @@ void reg_def() {
     item_metil_gen_allocate_2_on.meth = 0;
     item_metil_gen_allocate_2_on.gene = metil_gen_allocate_2_on;
     item_metil_gen_allocate_2_on.file = string_2;
-    item_metil_gen_allocate_2_on.line = 55;
+    item_metil_gen_allocate_2_on.line = 56;
     item_metil_gen_allocate_2_on.pert = 0;
     MethodFinder<MethodName_allocate_2_on>::last = &item_metil_gen_allocate_2_on;
 
@@ -5838,19 +5926,19 @@ void reg_def() {
     item_metil_gen_call_C__when__a__isa__LazyObject__pert_100.pert = 0;
     MethodFinder<MethodName_call_C>::last = &item_metil_gen_call_C__when__a__isa__LazyObject__pert_100;
 
-    static MethodCond_1_isa<TypeConstructor_Cst> cond_metil_gen_allocate_array__when__b__isa__Cst;
+    static TypeConstructor::C0_has_staticsize cond_metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst;
 
     static const char *string_17 = "src/Level1/TypeConstructor_Array.cpp";
 
-    static MethodFinder<MethodName_allocate_array>::Item item_metil_gen_allocate_array__when__b__isa__Cst;
-    item_metil_gen_allocate_array__when__b__isa__Cst.prev = MethodFinder<MethodName_allocate_array>::last;
-    item_metil_gen_allocate_array__when__b__isa__Cst.cond = &cond_metil_gen_allocate_array__when__b__isa__Cst;
-    item_metil_gen_allocate_array__when__b__isa__Cst.meth = 0;
-    item_metil_gen_allocate_array__when__b__isa__Cst.gene = metil_gen_allocate_array__when__b__isa__Cst;
-    item_metil_gen_allocate_array__when__b__isa__Cst.file = string_17;
-    item_metil_gen_allocate_array__when__b__isa__Cst.line = 13;
-    item_metil_gen_allocate_array__when__b__isa__Cst.pert = 0;
-    MethodFinder<MethodName_allocate_array>::last = &item_metil_gen_allocate_array__when__b__isa__Cst;
+    static MethodFinder<MethodName_allocate_array>::Item item_metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst;
+    item_metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst.prev = MethodFinder<MethodName_allocate_array>::last;
+    item_metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst.cond = &cond_metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst;
+    item_metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst.meth = 0;
+    item_metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst.gene = metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst;
+    item_metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst.file = string_17;
+    item_metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst.line = 13;
+    item_metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst.pert = 0;
+    MethodFinder<MethodName_allocate_array>::last = &item_metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst;
 
     static MethodCond_1_isa<TypeConstructor_Int> cond_metil_gen_allocate_array__when__b__isa__Int;
 
@@ -5954,7 +6042,7 @@ void reg_def() {
     item_metil_gen_reassign_inplace__when__a__isa__Int__and__b__isa__Int.meth = 0;
     item_metil_gen_reassign_inplace__when__a__isa__Int__and__b__isa__Int.gene = metil_gen_reassign_inplace__when__a__isa__Int__and__b__isa__Int;
     item_metil_gen_reassign_inplace__when__a__isa__Int__and__b__isa__Int.file = string_6;
-    item_metil_gen_reassign_inplace__when__a__isa__Int__and__b__isa__Int.line = 82;
+    item_metil_gen_reassign_inplace__when__a__isa__Int__and__b__isa__Int.line = 84;
     item_metil_gen_reassign_inplace__when__a__isa__Int__and__b__isa__Int.pert = 0;
     MethodFinder<MethodName_reassign_inplace>::last = &item_metil_gen_reassign_inplace__when__a__isa__Int__and__b__isa__Int;
 
@@ -5964,7 +6052,7 @@ void reg_def() {
     item_metil_gen_init_arg__when__a__isa__Int__and__b__isa__Int.meth = 0;
     item_metil_gen_init_arg__when__a__isa__Int__and__b__isa__Int.gene = metil_gen_init_arg__when__a__isa__Int__and__b__isa__Int;
     item_metil_gen_init_arg__when__a__isa__Int__and__b__isa__Int.file = string_6;
-    item_metil_gen_init_arg__when__a__isa__Int__and__b__isa__Int.line = 83;
+    item_metil_gen_init_arg__when__a__isa__Int__and__b__isa__Int.line = 85;
     item_metil_gen_init_arg__when__a__isa__Int__and__b__isa__Int.pert = 0;
     MethodFinder<MethodName_init_arg>::last = &item_metil_gen_init_arg__when__a__isa__Int__and__b__isa__Int;
 

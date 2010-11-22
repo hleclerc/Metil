@@ -10,7 +10,7 @@ static TypeConstructor_Array *sc( Type *type ) {
     return static_cast<TypeConstructor_Array *>( type->constructor );
 }
 
-void metil_gen_allocate_array__when__b__isa__Cst( MethodWriter &mw, const Mos *args, const String &ret ) {
+void metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst( MethodWriter &mw, const Mos *args, const String &ret ) {
     mw.add_include( "Level1/TypeConstructor_Array.h" );
 
     // type

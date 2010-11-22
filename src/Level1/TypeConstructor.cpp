@@ -95,6 +95,7 @@ bool TypeConstructor::is_a_POD() const { return 0; }
 bool TypeConstructor::tensor_order_0() const { return tensor_order() == 0; }
 bool TypeConstructor::tensor_order_1() const { return tensor_order() == 1; }
 bool TypeConstructor::is_void() const { return static_size_in_bits() == 0; }
+bool TypeConstructor::staticsize() const { return static_size_in_bits() >= 0; }
 
 void TypeConstructor::default_mw( MethodWriter &mw ) const {}
 int TypeConstructor::Owcp_size() const { return -1; }

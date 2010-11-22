@@ -39,6 +39,8 @@ BOP( sup  , >  );
 BOP( supeq, >= );
 BOP( inf  , <  );
 BOP( infeq, <= );
+BOP( equal, == );
+BOP( noteq, != );
 
 BOP( boolean_or , || );
 BOP( boolean_and, && );

@@ -43,7 +43,7 @@ class Tests:
         self.iconDownload = '../doc/images/eye.png'
         self.textOfIcon = [ 'FAIL', 'OK' ]
         #self.command = 'metil_comp -DDEBUG_ALLOC_LEVEL_1 '
-        self.command = 'metil_comp -DTESTING -DNO_SIG_NAN '
+        self.command = '../metil_comp -DTESTING -DNO_SIG_NAN '
         for dir in list_dir_include:
             self.command = self.command + ' -I' + dir + ' '
         self.relative_dir_unit_test = relative_dir_unit_test

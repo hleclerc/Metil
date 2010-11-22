@@ -57,7 +57,7 @@ public:
     virtual void beg_local_data( void **dst, void **loc, ST &size, ST alig );
     virtual void end_local_data( void *dst, void *loc, ST size );
     virtual void copy( void **dst, const void *src, ST size, ST alig );
-    static const MachineId *machine_id() { return MachineId::gpu( 0 ); }
+    static const MachineId *machine_id() { return MachineId::cpu( 0 )->gpu( 0 ); }
 
     char *res;
     ST off;

@@ -30,6 +30,7 @@ public:
     DECL_COND( tensor_order_0 );
     DECL_COND( tensor_order_1 );
     DECL_COND( is_void );
+    DECL_COND( staticsize );
 
     #define DECL_MET( T, N ) DECL_COND( has_writer_for_##N );
     #include "DeclMethodsUnary.h"

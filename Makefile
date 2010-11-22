@@ -24,8 +24,11 @@ metil_gen:
 comp:
 	${LOC_MC} src/make_compressed_struct.cpp
 
-make_unit_tests: clean
+make_unit_tests:
+	make clean
+	make -j8 metil_comp
 	cd unit_tests; python run_unit_test.py
+	mkdir -p html; cp unit_tests/report.html html
 
 documentation:
 	doxygen doc/Doxyfile
@@ -33,6 +36,12 @@ documentation:
 	sed -e "s/ = html/ = html\/Level1/g; s/= Level1/= /g" doc/Doxyfile > html/Doxyfile_Level1
 	doxygen html/Doxyfile_Level1
 	mkdir -p html/Level1/images; cp doc/images/* html/Level1/images
+
+continuous_integration:
+	git pull
+	make -j8 make_unit_tests
+	make documentation
+	git push production
 
 archive:
 	git archive -o Metil-0.zip --prefix=Metil-0.0.0/ HEAD
