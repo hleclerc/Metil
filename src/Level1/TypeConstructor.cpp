@@ -1,4 +1,5 @@
 #include "TypeConstructor_Array.h"
+#include "TypeConstructor_LazyObject.h"
 #include "MethodFinder.h"
 #include "Ad.h"
 

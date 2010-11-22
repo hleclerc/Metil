@@ -33,8 +33,7 @@ extern "C" void load_tiff( Level1::MO &res, const String &filename, const Machin
     res.type = bps == 16 ? &Level1::metil_type_bas_Array_8Int_p_16_2_m_m_m_m_CptUse : &Level1::metil_type_bas_Array_7Int_p_8_2_m_m_m_m_CptUse;
 
     // new Array
-    // char *data = (char *)CM_2( allocate_2_on, res, Level1::REF_Vec( Number<2>(), size ), machine );
-    char *data = (char *)CM_2( allocate_2, res, Level1::REF_Vec( Number<2>(), size ) );
+    char *data = (char *)CM_2( allocate_2_on, res, Level1::REF_Vec( Number<2>(), size ), machine );
 
     ST line_size = size[ 0 ] * bps / 8;
     tdata_t buf = _TIFFmalloc( TIFFScanlineSize( tif ) );
