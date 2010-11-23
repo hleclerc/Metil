@@ -6,12 +6,17 @@
 BEG_METIL_LEVEL1_NAMESPACE;
 
 // default behavior
-void             metil_def_self_append__pert__0( MO &a, MO b ) { Ad c = a; a = CM_2( append, a, b ); }
-void             metil_def_reassign__pert__0( MO &a, MO b ) { Ad c = a; a = CM_1( copy, b ); }
-void             metil_def_add_parent__pert__0( MO &a, struct OwcpChild *b ) {}
-void             metil_def_rem_parent__pert__0( MO &a, struct OwcpChild *b ) {}
-bool             metil_def_cur_op_id__pert__0( MO a ) { return false; }
-const MachineId *metil_def_machine_id__pert__0( MO a ) { return MachineId::cur(); }
+void metil_def_self_append__pert__0( MO &a, MO b ) { Ad c = a; a = CM_2( append, a, b ); }
+void metil_def_reassign__pert__0( MO &a, MO b ) { Ad c = a; a = CM_1( copy, b ); }
+void metil_def_add_parent__pert__0( MO &a, struct OwcpChild *b ) {}
+void metil_def_rem_parent__pert__0( MO &a, struct OwcpChild *b ) {}
+bool metil_def_cur_op_id__pert__0( MO a ) { return false; }
+ST   metil_def_nb_children__pert__0( MO a ) { return 0; }
+MO   metil_def_get_op_mp__pert__0( MO a ) { return MO( 0, 0 ); }
+void metil_def_set_op_mp__pert__0( MO &a, void *data, void *type ) {}
+
+const  MachineId *metil_def_machine_id__pert__0( MO a ) { return MachineId::cur(); }
+struct OwcpChild *metil_def_get_parent__pert__0( MO a ) { return 0; }
 
 // void objects
 MO metil_def_copy__when__a__has__is_void__pert__1( MO a ) { return a.type; }

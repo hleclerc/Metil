@@ -29,6 +29,7 @@ def cor( c ):
     if c == "t": return "String &"
     if c == "Y": return "struct OwcpChild *"
     if c == "M": return "const MachineId *"
+    if c == "X": return "struct MetilException *"
     print "unknown char " + c
     return "Bing"
 

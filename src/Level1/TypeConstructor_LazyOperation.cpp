@@ -1,7 +1,14 @@
 #include "TypeConstructor_LazyOperation.h"
+#include "LazyObjectOperationData.h"
 #include "NbArgsMethods.h"
+#include "Owcp.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
+
+/// necessary because the generator will PRINT(cmd), which ma
+void metil_def_del__when__a__is__LazyOperation_append__pert__100( MO &a ) {
+    reinterpret_cast<Owcp<2,LazyObjectOperationData_OOO> *>( a.data )->dec_ref();
+}
 
 int TypeConstructor_LazyOperation::Owcp_size() const {
     return nb_args;
@@ -13,7 +20,7 @@ String TypeConstructor_LazyOperation::Owcp_data() const {
 
 void TypeConstructor_LazyOperation::default_mw( MethodWriter &mw ) {
     TypeConstructor_LazyObject::default_mw( mw );
-    mw.add_include( "Level1/def_LazyObj.h" );
+    mw.add_include( "Level1/LazyObjectOperationData.h" );
 }
 
 

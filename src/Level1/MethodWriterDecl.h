@@ -10,7 +10,9 @@
     if ( type == "poO" ) return "void *" + def_name + "( MO &a, MO b )";
     if ( type == "po" ) return "void *" + def_name + "( MO &a )";
     if ( type == "EO" ) return "FP80 " + def_name + "( MO a )";
+    if ( type == "XO" ) return "struct MetilException *" + def_name + "( MO a )";
     if ( type == "VoO" ) return "void " + def_name + "( MO &a, MO b )";
+    if ( type == "Vopp" ) return "void " + def_name + "( MO &a, void *b, void *c )";
     if ( type == "IO" ) return "SI32 " + def_name + "( MO a )";
     if ( type == "VoY" ) return "void " + def_name + "( MO &a, struct OwcpChild *b )";
     if ( type == "poOM" ) return "void *" + def_name + "( MO &a, MO b, const MachineId *c )";

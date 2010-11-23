@@ -15,6 +15,7 @@ public:
     String error() const;
     void *get_sym( String name );
 
+    String file;
     void *data;
 };
 

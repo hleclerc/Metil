@@ -121,12 +121,30 @@ struct MethodGenerator<Type::Method_EO,N> {
 };
 
 template<class N>
+struct MethodGenerator<Type::Method_XO,N> {
+    static struct MetilException *generator( MO a ) {
+        a.type->init_if_necessary();
+        N::access( a.type ) = MethodFinder<N>::find( a.type );
+        return N::access( a.type )( a );
+    }
+};
+
+template<class N>
 struct MethodGenerator<Type::Method_VoO,N> {
     static void generator( MO &a, MO b ) {
         a.type->init_if_necessary();
         b.type->init_if_necessary();
         N::access( a.type )[ b.type->number ] = MethodFinder<N>::find( a.type, b.type );
         return N::access( a.type )[ b.type->number ]( a, b );
+    }
+};
+
+template<class N>
+struct MethodGenerator<Type::Method_Vopp,N> {
+    static void generator( MO &a, void *b, void *c ) {
+        a.type->init_if_necessary();
+        N::access( a.type ) = MethodFinder<N>::find( a.type );
+        return N::access( a.type )( a, b, c );
     }
 };
 

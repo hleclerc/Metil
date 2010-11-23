@@ -35,11 +35,13 @@ public:
 
     const MachineId *machine_id() const;
 
+    void exec(); ///< if LazyObject, replace *this by the result of the operation. Else, do nothing
+
     void *data;
     Type *type;
 };
 
-extern SI64 current_op_id; /// @see Owcp::op_id...
+extern SI64 current_MO_op_id; /// @see Owcp::op_id...
 
 END_METIL_LEVEL1_NAMESPACE
 

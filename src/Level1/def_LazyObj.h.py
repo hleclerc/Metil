@@ -1,16 +1,6 @@
 # -*- coding: utf-8 -*-
 from MethodHelper import *
 
-for m in methods:
-    if m[ 0 ] == 'O':
-        print 'struct LazyObjectOperationData_' + m + ' {'
-        c = 0
-        for l in m[ 1: ]:
-            if l != 'o' and l != 'O':
-                print '    ' + cor( l ) + ' ' + letters[ c ] + ';'
-            c += 1
-        print '};'
-
 def p_m( pref, obj ):
     print '#define MET_' + pref + m + '( N ) \\'
     print '    ' + cor( m[ 0 ] ) + ' metil_def_##N##__when__' + obj + '__isa__LazyObject__pert__10( ' + args( m ) + ' ) { \\'

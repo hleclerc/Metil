@@ -30,6 +30,8 @@ bool DynamicLibrary::open( String name ) {
         dlopen( 0, RTLD_GLOBAL );
     }
 
+    file = name;
+
     #ifdef WIN32
     data = LoadLibrary( (const WCHAR *)lib );
     #else

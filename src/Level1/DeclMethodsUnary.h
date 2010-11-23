@@ -58,18 +58,17 @@ DECL_MET( EO  , convert_to_FP80         ); // operator FP80
 
 DECL_MET( BO  , ok                      ); //
 
-// display
-DECL_MET( DO  , priority                ); // + -> 10, * -> 20, ...
-
-
 //// graph and lazy evaluation
+#ifndef AVOID_LAZY_OP
 DECL_MET( OOS , get_child               ); //
 DECL_MET( VoY , add_parent              ); // add_parent( OwcpChild )
 DECL_MET( VoY , rem_parent              ); // rem_parent( OwcpChild )
 DECL_MET( SO  , nb_children             ); // return -1 if not an Owcp
 DECL_MET( YO  , get_parent              ); // get_parent
 DECL_MET( BO  , cur_op_id               ); // return true if op_id == current_op_id
-//DECL_MET( GO<MetilException *>, exec_node     ); // exec_node
-//DECL_MET( GC<MO *>            , get_op_mp     ); // return op_mp if an Owcp, 0 if not
-
+DECL_MET( DO  , priority                ); // + -> 10, * -> 20, ...
 DECL_MET( MO  , machine_id              ); // return info on where the object is stored
+DECL_MET( XO  , exec_node               ); // exec_node, return a MetilException *
+DECL_MET( OO  , get_op_mp               ); // return op_mp if an Owcp, 0 if not
+DECL_MET( Vopp, set_op_mp               ); // set op_mp if an Owcp, 0 if not
+#endif // AVOID_LAZY_OP

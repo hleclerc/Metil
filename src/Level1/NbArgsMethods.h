@@ -14,7 +14,9 @@
 #define NB_ARGS_METHOD_poO 2
 #define NB_ARGS_METHOD_po 1
 #define NB_ARGS_METHOD_EO 1
+#define NB_ARGS_METHOD_XO 1
 #define NB_ARGS_METHOD_VoO 2
+#define NB_ARGS_METHOD_Vopp 1
 #define NB_ARGS_METHOD_IO 1
 #define NB_ARGS_METHOD_VoY 1
 #define NB_ARGS_METHOD_poOM 2

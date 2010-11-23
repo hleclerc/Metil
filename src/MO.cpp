@@ -1,10 +1,11 @@
+#include "Level1/LazyObjectScheduler.h"
 #include "Level1/TypeConstructor.h"
 #include "Level1/Owcp.h"
 #include "System.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-SI64 current_op_id = 0;
+SI64 current_MO_op_id = 0;
 
 ST MO::size_in_mem() const {
     return CM_1( size_in_mem, *this );
@@ -40,7 +41,7 @@ void write_dot_rec( String &os, const MO &obj, bool want_parents ) {
 }
 
 void MO::write_dot( String &os, bool want_parents ) const {
-    ++current_op_id;
+    ++current_MO_op_id;
     write_dot_rec( os, *this, want_parents );
 }
 
@@ -93,6 +94,12 @@ void MO::display_tex() const {
 
 const MachineId *MO::machine_id() const {
     return CM_1( machine_id, *this );
+}
+
+void MO::exec() {
+    LazyObjectScheduler sch;
+    sch.add( this );
+    sch.exec();
 }
 
 END_METIL_LEVEL1_NAMESPACE

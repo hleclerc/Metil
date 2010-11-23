@@ -92,7 +92,7 @@ public:
             DynamicLibrary &dl = MethodWriter::get_lib_for_types( type_0, type_1, type_2, item->file );
             String sym = MethodWriter::symb_of( N::get_name(), type_0, type_1, type_2, false );
             TM *res = (TM *)dl.get_sym( sym );
-            ASSERT( res, "%s not found in %s", sym.c_str(), item->file );
+            ASSERT( res, "%s not found in %s", sym.c_str(), dl.file.c_str() );
             return res;
         }
 

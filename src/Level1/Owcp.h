@@ -28,8 +28,8 @@ struct OwcpAncestor : public ObjectWithCptUse {
         first_parent = 0;
     }
 
-    /// operation id (every new operation on the graph begins with ++current_op_id
-    /// and one can compare op_id with current_op_id to see if operation on this node has been done or not).
+    /// operation id (every new operation on the graph begins with ++current_MO_op_id
+    /// and one can compare op_id with current_MO_op_id to see if operation on this node has been done or not).
     SI64  op_id;
 
     /// if used somewhere...
