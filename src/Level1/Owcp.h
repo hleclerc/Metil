@@ -132,19 +132,19 @@ struct Owcp : public OwcpAncestor {
         ch( num ).type->add_parent( ch( num ), children + num );
     }
 
+    void dec_ref() {
+        if ( --cpt_use < 0 )
+            DEL( this );
+    }
+
     /// an Owcp can contain from 0 to ... children meaning that sizeof( Owcp ) does not represent
     /// the room occupied in memory
     OwcpChild children[ nb_children ];
 
-    ///
+    /// must be after children...
     AdditionalData data;
 };
 
-template<class T>
-void owcp_DEL( T *val ) {
-    if ( --val->cpt_use < 0 )
-        DEL( val );
-}
 
 END_METIL_LEVEL1_NAMESPACE;
 

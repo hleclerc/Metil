@@ -98,6 +98,7 @@ bool TypeConstructor::is_void() const { return static_size_in_bits() == 0; }
 bool TypeConstructor::staticsize() const { return static_size_in_bits() >= 0; }
 
 void TypeConstructor::default_mw( MethodWriter &mw ) const {}
+String TypeConstructor::Owcp_data() const { return "AdditionalDataVoid"; }
 int TypeConstructor::Owcp_size() const { return -1; }
 int TypeConstructor::static_size_in_bits() const { return -1; }
 int TypeConstructor::needed_alignement_in_bits() const { return 8; }

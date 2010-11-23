@@ -57,7 +57,8 @@ public:
     #undef DECL_COND
 
     // generic properties
-    virtual int Owcp_size() const;
+    virtual int Owcp_size() const; /// if >= 0, assume type is Owcp<Owcp_size(),OwcpData()>
+    virtual String Owcp_data() const;
     virtual void default_mw( MethodWriter &mw ) const;
     virtual int tensor_order() const;
     virtual int static_size_in_bits() const;

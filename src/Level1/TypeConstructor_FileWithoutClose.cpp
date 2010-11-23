@@ -72,5 +72,11 @@ MO metil_def_size__when__a__isa__FileWithoutClose__pert__1( MO a ) {
     return NEW_Number( end );
 }
 
+MO metil_def_copy__when__a__isa__FileWithoutClose( MO a ) {
+    return a;
+    //    if ( not a.data )
+    //        return a;
+    //    return MO( a.data, a.type->bas_type );
+}
 
 END_METIL_LEVEL1_NAMESPACE;

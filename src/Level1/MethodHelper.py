@@ -11,6 +11,8 @@ for h in os.listdir( "src/Level1/" ):
 
 methods = methods.keys()
 
+letters = "abcdefgh"
+
 def cor( c ):
     if c == "O": return "MO "
     if c == "o": return "MO &"
@@ -54,12 +56,12 @@ def remaining_args( m, beg ):
     return res
 
 def args( m ):
-    l = "abcdefgh"
-    return string.join( [ cor( c ) + l[ n ] for c, n in zip( m[1:], range( 100 ) ) ], ", " )
+    return string.join( [ cor( c ) + letters[ n ] for c, n in zip( m[1:], range( 100 ) ) ], ", " )
 
 def arg_names( m ):
-    l = "abcdefgh"
-    return string.join( [ l[ n ] for n in range( len( m[1:] ) ) ], ", " )
+    return string.join( [ letters[ n ] for n in range( len( m[1:] ) ) ], ", " )
 
+def MO_arg_names( m ):
+    return string.join( [ letters[ n ] for n in range( nb_MO_args( m ) ) ], ", " )
 
 

@@ -1,4 +1,5 @@
 #include "TypeConstructor_LazyObject.h"
+#include "LazyObjectData.h"
 #include "MethodFinder.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
@@ -7,37 +8,23 @@ static TypeConstructor_LazyObject *sc( Type *type ) {
     return static_cast<TypeConstructor_LazyObject *>( type->constructor );
 }
 
+// ... metil_def__...__when__a__isa__MORef( ... ) { Ad v = CM_1( copy, a ); return ... }
+#include "def_LazyObj.h"
 
-#define DECL_MET( T, N ) \
-    void metil_gen_##N##__when__a__isa__LazyObject__pert_100( MethodWriter &mw, const Mos *args, const String &ret ) { \
-        if ( not call_gene<MethodName_##N>( mw, static_cast<TypeConstructor_LazyObject *>( mw.get_type( 0 )->constructor )->base_type, mw.get_type( 1 ), mw.get_type( 2 ), args, ret, false ) ) mw.n << "ERROR(\"not defined\");"; \
-    }
-#include "DeclMethodsUnary.h"
+#define AVOID_DEL
+#define AVOID_COPY
+
+#define DECL_MET( T, N ) MET_##T( N )
+#include "DeclMethods.h"
 #undef DECL_MET
 
-#define DECL_MET( T, N ) \
-    void metil_gen_##N##__when__a__isa__LazyObject__pert_100( MethodWriter &mw, const Mos *args, const String &ret ) { \
-        if ( not call_gene<MethodName_##N>( mw, static_cast<TypeConstructor_LazyObject *>( mw.get_type( 0 )->constructor )->base_type, mw.get_type( 1 ), mw.get_type( 2 ), args, ret, false ) ) mw.n << "ERROR(\"not defined\");"; \
-    }
+#define DECL_MET( T, N ) MET_1_##T( N )
 #include "DeclMethodsBinary.h"
 #undef DECL_MET
 
 
 void TypeConstructor_LazyObject::default_mw( MethodWriter &mw ) const {
-    mw.add_include( "Level1/LazyObject_Header.h" );
-    if ( base_type )
-        base_type->constructor->default_mw( mw );
-}
-
-void TypeConstructor_LazyObject::init( Type *type ) {
-    const char *name = type->name + 11;
-
-    // provenance
-    provenance = MachineId::type( NewString( name, name + 3 ) );
-
-    // type_name
-    base_type = Type::find_with_name( name + 4 );
-    ASSERT( base_type, "type %s not found", name + 4 );
+    mw.add_include( "Level1/LazyObjectData.h" );
 }
 
 END_METIL_LEVEL1_NAMESPACE;

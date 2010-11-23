@@ -7,7 +7,7 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-void metil_def_del__when__a__isa__OwcpString( MO &a ) {
+void metil_def_del__when__a__isa__OwcpString__pert__100( MO &a ) {
     OwcpStringData *o = reinterpret_cast<OwcpStringData *>( a.data );
     if ( --o->cpt_use < 0 )
         FREE( o, o->rese() );

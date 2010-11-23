@@ -8,7 +8,6 @@ BEG_METIL_LEVEL1_NAMESPACE;
 CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch ) : child( ch ) {
     if ( child == 0 ) {
         // inc_paths
-        // String dir = directory_of( __FILE__ );
         add_inc_path( INSTALL_DIR "/src" ); // Level1
 
         // default values

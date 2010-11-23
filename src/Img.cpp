@@ -1,6 +1,5 @@
+#include "Level1/LazyObjectData.h"
 #include "Level1/ArrayHeader.h"
-#include "DynamicCppLib.h"
-#include "System.h"
 #include "Img.h"
 
 BEG_METIL_NAMESPACE;
@@ -30,10 +29,9 @@ void Img::load( const String &filename ) {
 
 void Img::load_tiff( const String &filename ) {
     CM_1( del, *this );
-    TODO;
-    //    static DynamicCppLib dl( directory_of( __FILE__ ) + "/TiffLoader.cpp" );
-    //    typedef void LoadTiff( Level1::MO &res, const String &filename );
-    //    reinterpret_cast<LoadTiff *>( dl.get_sym( "load_tiff" ) )( *this, filename );
+    typedef Level1::Owcp<1,Level1::LazyObjectData> L;
+    type = &Level1::metil_type_bas_TiffLoader;
+    data = NEW( L, type, filename );
 }
 
 void Img::load_qimg( const String &filename ) {

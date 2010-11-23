@@ -79,11 +79,11 @@ src/Level1/MethodWriterDecl.h
 src/Level1/MethodFinder.h
 src/Level1/StringHelp.h
 src/Level1/MethodName.h
+src/Level1/LazyObjectData.h
 src/Level1/parser_if.h
 src/Level1/OwcpStringData.h
 src/Level1/TypeConstructor_Cst.h
 src/Level1/TypeConstructor_VoidString.h
-src/Level1/LazyObject_Header.h
 src/Level1/DefStr.h
 src/Level1/CompilationTree.h
 src/Level1/ArrayHeader.h
@@ -249,3 +249,11 @@ unit_tests/number.cpp
 unit_tests/number2.cpp
 unit_tests/run_unit_test.py
 unit_tests/report.html
+src/Level1/TypeConstructor_DistantObject.h
+src/Level1/TypeConstructor_DistantObject.cpp
+src/Level1/TypeConstructor_TiffLoader.h
+src/Level1/TypeConstructor_TiffLoader.cpp
+src/Level1/TypeConstructor_LazyOperation.h
+src/Level1/TypeConstructor_LazyOperation.cpp
+src/Level1/def_LazyObj.h
+src/Level1/def_LazyObj.h.py

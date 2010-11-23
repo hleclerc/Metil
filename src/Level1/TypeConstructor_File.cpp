@@ -14,6 +14,12 @@ void metil_def_close__when__a__isa__File( MO &a ) {
     a.data = 0;
 }
 
+//MO metil_copy_del__when__a__isa__File( MO a ) {
+//    if ( not a.data )
+//        return a;
+//    return MO( fdopen( fileno( reinterpret_cast<FILE *>( a.data ) ),  ), a.type->bas_type );
+//}
+
 END_METIL_LEVEL1_NAMESPACE;
 
 //#include "MethodFinder.h"
