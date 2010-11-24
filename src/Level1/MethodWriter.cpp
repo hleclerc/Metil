@@ -7,10 +7,11 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-MethodWriter::MethodWriter( Type *type_0, Type *type_1, Type *type_2, MethodWriter *parent ) : n( parent ? parent->n.string : code ), parent( parent ) {
-    type[ 0 ] = type_0;
-    type[ 1 ] = type_1;
-    type[ 2 ] = type_2;
+MethodWriter::MethodWriter( MethodWriter *parent ) : n( parent ? parent->n.string : code ), parent( parent ) {
+    for( int i = 0; i < nb_args_max; ++i )
+        type[ i ] = 0;
+    ret_ins = "return ";
+    machine_type = MachineId::Cpu;
     add_include( "Level1/Type.h" );
 }
 
@@ -49,10 +50,6 @@ void MethodWriter::add_type_decl( const String &name ) {
     }
 }
 
-Type *MethodWriter::get_type( int n ) const {
-    return type[ n ];
-}
-
 bool MethodWriter::get_os_defined() const {
     if ( parent )
         return parent->os_defined;
@@ -78,7 +75,8 @@ void MethodWriter::end_def() {
     code << "}\n\n";
 }
 
-void MethodWriter::ret() {
+StringWithSepInCppLine MethodWriter::ret() {
+    return StringWithSepInCppLine( n.string << "return ", " ", "" );
 }
 
 int MethodWriter::nb_types() const {
@@ -164,16 +162,21 @@ void try_to_generate( MethodWriter &mw ) {
     typedef MethodFinder<MethodName> MF;
     typename MF::Item *item = MF::find_item( mw.get_type( 0 ), mw.get_type( 1 ), mw.get_type( 2 ), false );
     if ( item and item->gene and not item->meth ) {
-        BasicVec<Mos> mos( "a", "b", "c" );
         mw.beg_def( MethodName::get_name() );
-        item->gene( mw, mos.ptr(), "return " );
+        item->gene( mw );
         mw.end_def();
     }
 }
 
 
 void MethodWriter::make_cpp_for_types( const String cpp_name, Type *type_0, Type *type_1, Type *type_2 ) {
-    MethodWriter mw( type_0, type_1, type_2 );
+    MethodWriter mw;
+    mw.type[ 0 ] = type_0;
+    mw.type[ 1 ] = type_1;
+    mw.type[ 2 ] = type_2;
+    mw.arg[ 0 ] = "a";
+    mw.arg[ 1 ] = "b";
+    mw.arg[ 2 ] = "c";
     if ( type_0 ) type_0->constructor->default_mw( mw );
     if ( type_1 ) type_1->constructor->default_mw( mw );
     if ( type_2 ) type_2->constructor->default_mw( mw );
@@ -232,6 +235,48 @@ DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Typ
 
     //
     return res;
+}
+
+bool MethodWriter::call_gene( const String &method, Type *type_0, const Mos &arg_0, const String &ret, bool abort_if_not_found ) {
+    MethodWriter nw( this );
+    nw.type[ 0 ] = type_0;
+    nw.arg [ 0 ] = arg_0;
+    nw.ret_ins = ret ? ret : ret_ins;
+    #define DECL_MET( T, N ) \
+        if ( method == #N ) { \
+            typedef MethodFinder<MethodName_##N> MF; \
+            if ( MF::Item *item = MF::find_item( type_0, 0, 0, abort_if_not_found, true ) ) { \
+                item->gene( nw ); \
+                return true; \
+            } \
+            return false; \
+        }
+    #include "DeclMethodsUnary.h"
+    #undef DECL_MET
+    ERROR( "unknown method name %s (assuming nb_arg == 1)", method.c_str() );
+    return false;
+}
+
+bool MethodWriter::call_gene( const String &method, Type *type_0, Type *type_1, const Mos &arg_0, const Mos &arg_1, const String &ret, bool abort_if_not_found ) {
+    MethodWriter nw( this );
+    nw.type[ 0 ] = type_0;
+    nw.type[ 1 ] = type_1;
+    nw.arg [ 0 ] = arg_0;
+    nw.arg [ 1 ] = arg_1;
+    nw.ret_ins = ret ? ret : ret_ins;
+    #define DECL_MET( T, N ) \
+        if ( method == #N ) { \
+            typedef MethodFinder<MethodName_##N> MF; \
+            if ( MF::Item *item = MF::find_item( type_0, type_1, 0, abort_if_not_found, true ) ) { \
+                item->gene( nw ); \
+                return true; \
+            } \
+            return false; \
+        }
+    #include "DeclMethodsBinary.h"
+    #undef DECL_MET
+        ERROR( "unknown method name %s (assuming nb_arg == 2)", method.c_str() );
+    return false;
 }
 
 END_METIL_LEVEL1_NAMESPACE;

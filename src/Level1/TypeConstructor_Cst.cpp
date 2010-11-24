@@ -19,8 +19,8 @@ static TypeConstructor_Cst *sc( Type *type ) {
 }
 
 #define CONV_TO( N ) \
-    void TypeConstructor_Cst::write_convert_to_##N( MethodWriter &mw, const Mos *a, const String &ret_ins ) const { \
-        mw.n << ret_ins << " " << disp_str( true ) << ";"; \
+    void TypeConstructor_Cst::write_convert_to_##N( MethodWriter &mw ) const { \
+        mw.ret() << disp_str( true ) << ";"; \
     }
 
 CONV_TO( Bool );
@@ -30,7 +30,7 @@ CONV_TO( FP32 );
 CONV_TO( FP64 );
 CONV_TO( FP80 );
 
-void TypeConstructor_Cst::write_write_str( MethodWriter &cw, const Mos *args, const String &ret ) const {
+void TypeConstructor_Cst::write_write_str( MethodWriter &cw ) const {
     cw.n << "os << " << disp_str() << ";";
 }
 

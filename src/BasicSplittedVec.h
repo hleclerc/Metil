@@ -136,6 +136,12 @@ public:
                 op( *p );
     }
 
+    template<class Op> void apply( Op &op ) {
+        for( Item *i = &first; i; i = i->next )
+            for( T *p = i->ptr(); p < i->cur; ++p )
+                op( *p );
+    }
+
     const T &back() const { return operator[]( size() - 1 ); }
     T &back() { return operator[]( size() - 1 ); }
 

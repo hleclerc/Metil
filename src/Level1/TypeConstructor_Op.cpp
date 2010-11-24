@@ -2,8 +2,8 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-void TypeConstructor_Op::write_write_str( MethodWriter &mw, const Mos *a, const String & ) const {
-    mw.n << "Owcp<" << child_types.size() << "> *s = reinterpret_cast<Owcp<" << child_types.size() << "> *>( " << a->data << " );";
+void TypeConstructor_Op::write_write_str( MethodWriter &mw ) const {
+    mw.n << "Owcp<" << child_types.size() << "> *s = reinterpret_cast<Owcp<" << child_types.size() << "> *>( " << mw.arg[ 0 ].data << " );";
     mw << "os << \"" << name << "(\"";
     for( int i = 0; i < child_types.size(); ++i )
         mw << ( i ? " << ','": "" ) << " << s->ch( " << i << " )";

@@ -7,8 +7,14 @@
 BEG_METIL_LEVEL1_NAMESPACE;
 
 struct LazyObjectData {
-    LazyObjectData() : machine( 0 ) {}
+    LazyObjectData() : machine( 0 ), op_mp( 0 ) {
+    }
+    ~LazyObjectData() {
+        if ( op_mp.type )
+            CM_1( del, op_mp );
+    }
     const MachineId *machine;
+    MO op_mp;
 };
 
 // template<class nb_children>

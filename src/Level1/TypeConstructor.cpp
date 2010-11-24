@@ -20,57 +20,44 @@ struct OwcpChild *metil_def_get_parent__pert__0( MO a ) { return 0; }
 
 // void objects
 MO metil_def_copy__when__a__has__is_void__pert__1( MO a ) { return a.type; }
-void metil_gen_copy__when__a__has__is_void( MethodWriter &mw, const Mos *a, const String &ret ) { mw.n << ret << " " << a->type << ";"; }
+void metil_gen_copy__when__a__has__is_void( MethodWriter &mw ) { mw.ret() << mw.arg[ 0 ].type << ";"; }
 
 // static gen...( MethodWriter & ) { constructor->write_... }
-#define DECL_MET( T, N ) void metil_gen_##N##__when__a__has__has_writer_for_##N##__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) { cw.get_type( 0 )->constructor->write_##N( cw, a, ret ); }
+#define DECL_MET( T, N ) void metil_gen_##N##__when__a__has__has_writer_for_##N##__pert__1( MethodWriter &mw ) { mw.get_type( 0 )->constructor->write_##N( mw ); }
 #include "DeclMethodsUnary.h"
 #undef DECL_MET
 
 // string << ...
-void metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1( MethodWriter &cw, const Mos *a, const String &ret ) {
-    cw.add_include( "String.h" );
-    if ( cw.get_os_defined() == false ) {
-        cw.set_os_defined( true );
-        cw.n << "String &os = static_cast<String &>( " << a[ 0 ] << " );";
+void metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1( MethodWriter &mw ) {
+    mw.add_include( "String.h" );
+    if ( mw.get_os_defined() == false ) {
+        mw.set_os_defined( true );
+        mw.n << "String &os = static_cast<String &>( " << mw.arg[ 0 ] << " );";
     }
-    cw.get_type( 1 )->constructor->write_write_str( cw, a + 1 );
+    MethodWriter mw_d( mw );
+    mw_d.type[ 0 ] = mw.type[ 1 ];
+    mw_d.arg [ 0 ] = mw.arg [ 1 ];
+    mw.get_type( 1 )->constructor->write_write_str( mw_d );
 }
 
 // POD
-void metil_gen_del__when__a__has__is_a_POD__pert__1( MethodWriter &mw, const Mos *a, const String &ret ) {
+void metil_gen_del__when__a__has__is_a_POD__pert__1( MethodWriter &mw ) {
     int size = mw.get_type( 0 )->constructor->static_size_in_bytes();
     if ( size > 0 )
-        mw.n << "FREE( " << a->data << ", Number<" << size << ">() );";
+        mw.n << "FREE( " << mw.arg[ 0 ].data << ", Number<" << size << ">() );";
 }
 
-void metil_gen_copy__when__a__has__is_a_POD__pert__1( MethodWriter &mw, const Mos *a, const String &ret ) {
+void metil_gen_copy__when__a__has__is_a_POD__pert__1( MethodWriter &mw ) {
     int size = mw.get_type( 0 )->constructor->static_size_in_bytes();
     if ( size > 0 ) {
         mw.add_include( "Level1/StringHelp.h" );
         String s; s << "Number<" << size << ">()";
         mw.n << "void *res = MALLOC( " << s << " );";
-        mw.n << "memcpy( res, " << a->data << ", " << s << " );";
-        mw.n << ret << "MO( res, &metil_type_bas_" << mw.get_type( 0 )->name << " );";
+        mw.n << "memcpy( res, " << mw.arg[ 0 ].data << ", " << s << " );";
+        mw.ret() << "MO( res, &metil_type_bas_" << mw.get_type( 0 )->name << " );";
     } else {
-        mw.n << ret << "MO( &metil_type_cst_" << mw.get_type( 0 )->name << " );";
+        mw.ret() << "MO( &metil_type_cst_" << mw.get_type( 0 )->name << " );";
     }
-}
-
-// allocate_...on
-void metil_gen_allocate_2_on( MethodWriter &mw, const Mos *args, const String &ret ) {
-//    // lazy exec or other machine ?
-//    String type; type << "LazyObject_Cpu_" << mw.get_type( 0 )->name;
-//    mw.add_type_decl( type );
-//    mw.n << "if ( " << args[ 2 ] << " ) {";
-//    bool res = call_gene<MethodName_allocate_2>( mw, mw.get_type( 0 ), mw.get_type( 1 ), mw.get_type( 2 ), args, ret, false );
-//    mw.n << "}";
-//    // else, normal allocate
-//    bool res = call_gene<MethodName_allocate_2>( mw, mw.get_type( 0 ), mw.get_type( 1 ), mw.get_type( 2 ), args, ret, false );
-//    if ( not res )
-//        mw.n << "ERROR( \"Type " << mw.get_type( 0 )->name << " does not have any allocate_2 method.\" );" << ret << "0;";
-
-//    mw.add_type_decl( type );
 }
 
 
@@ -116,11 +103,11 @@ int TypeConstructor::needed_alignement_in_bytes_if_in_vec( MachineId::Type mid )
 
 int TypeConstructor::equ_code( MethodWriter &, const Mos &, const String & ) const { return 0; }
 
-void TypeConstructor::write_convert_to_ST( MethodWriter &mw, const Mos *a, const String &ret_ins ) const {
+void TypeConstructor::write_convert_to_ST( MethodWriter &mw ) const {
     mw.n << "if ( sizeof( ST ) == 8 ) {";
-    write_convert_to_SI64( mw, a, ret_ins );
+    write_convert_to_SI64( mw );
     mw.n << "} else {";
-    write_convert_to_SI32( mw, a, ret_ins );
+    write_convert_to_SI32( mw );
     mw.n << "}";
 }
 
@@ -130,13 +117,13 @@ void TypeConstructor::write_convert_to_ST( MethodWriter &mw, const Mos *a, const
 #undef DECL_MET
 
 // virtual write_...
-#define DECL_MET( T, N ) void TypeConstructor::write_##N( MethodWriter &, const Mos *, const String & ) const { ERROR( "What do we do here (%s, %s) ?", bas_type->name, #N ); }
+#define DECL_MET( T, N ) void TypeConstructor::write_##N( MethodWriter & ) const { ERROR( "What do we do here (%s, %s) ?", bas_type->name, #N ); }
 #include "DeclMethodsUnary.h"
 #undef DECL_MET
 
-void TypeConstructor::write_write_str( MethodWriter &, const Mos *, const String & ) const { ERROR( "What do we do here (%s) ?", bas_type->name ); }
+void TypeConstructor::write_write_str( MethodWriter & ) const { ERROR( "What do we do here (%s) ?", bas_type->name ); }
 
-void TypeConstructor::write_select_op( MethodWriter &mw, const Mos *a, TypeConstructor *index_type, const String &op ) const {
+void TypeConstructor::write_select_op( MethodWriter &mw, TypeConstructor *index_type, const String &op ) const {
     ERROR( "write_select_op is not defined for %s", bas_type->name );
 }
 

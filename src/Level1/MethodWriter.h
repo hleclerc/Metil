@@ -11,7 +11,8 @@ BEG_METIL_LEVEL1_NAMESPACE;
 */
 class MethodWriter {
 public:
-    MethodWriter( Type *type_0, Type *type_1, Type *type_2, MethodWriter *parent = 0 );
+    enum { nb_args_max = 3 };
+    MethodWriter( MethodWriter *parent = 0 );
 
     MethodWriter &operator<<( const String &str );
     void beg_def( const String &def_name );
@@ -21,11 +22,11 @@ public:
     void add_include( const String &include );
     void add_preliminary( const String &txt ); ///< after includes and namespace
     void add_type_decl( const String &name ); ///< add declaration for type "name" and look if there's a declaration somewhere
-    void ret(); ///< signal return
+    StringWithSepInCppLine ret(); ///< signal return
 
-    Type *get_type( int n ) const;
     bool get_os_defined() const;
     void set_os_defined( bool v );
+    Type *get_type( int n ) const { return type[ n ]; }
 
     static String def_str( const String &method_name, Type *type_0, Type *type_1, Type *type_2 );
     static String decl_of( const String &method_name, Type *type_0, Type *type_1, Type *type_2 );
@@ -33,18 +34,24 @@ public:
     static DynamicLibrary &get_lib_for_types( Type *type_0, Type *type_1, Type *type_2, const char *dep_file );
     static void make_cpp_for_types( const String cpp_name, Type *type_0, Type *type_1, Type *type_2 );
 
+    bool call_gene( const String &method, Type *type_0, const Mos &arg_0, const String &ret = "", bool abort_if_not_found = false );
+    bool call_gene( const String &method, Type *type_0, Type *type_1, const Mos &arg_0, const Mos &arg_1, const String &ret = "", bool abort_if_not_found = false );
+
+    Type *type[ 3 ];
+    Mos   arg [ 3 ];
+    String ret_ins;
+    MachineId::Type machine_type;
     StringWithSepInCppLineMaker n; ///< used to output lines with CR at the end
 private:
     MethodWriter *parent;
     String preliminary;
     String code;
-    Type *type[ 3 ];
     BasicVec<String> includes;
     BasicVec<String> ext_types;
     bool os_defined;
 };
 
-typedef void MethodMaker( MethodWriter &mw, const Mos *mos, const String &ret = "return " );
+typedef void MethodMaker( MethodWriter &mw );
 
 END_METIL_LEVEL1_NAMESPACE;
 

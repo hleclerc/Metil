@@ -6,38 +6,38 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-void metil_gen_reassign_inplace__when__a__isa__Flt( MethodWriter &mw, const Mos *a, const String & ) {
+void metil_gen_reassign_inplace__when__a__isa__Flt( MethodWriter &mw ) {
     TypeConstructor_Flt *c = static_cast<TypeConstructor_Flt *>( mw.get_type( 0 )->constructor );
     if ( String cpp = c->cpp_type() ) {
-        String ret; ret << "*reinterpret_cast<" << cpp << " *>( " << a[ 0 ].data << " ) = ";
-        if      ( cpp == "FP32" ) call_gene<MethodName_convert_to_FP32>( mw, mw.get_type( 1 ), 0, 0, a + 1, ret );
-        else if ( cpp == "FP64" ) call_gene<MethodName_convert_to_FP64>( mw, mw.get_type( 1 ), 0, 0, a + 1, ret );
-        else if ( cpp == "FP80" ) call_gene<MethodName_convert_to_FP80>( mw, mw.get_type( 1 ), 0, 0, a + 1, ret );
+        String ret; ret << "*reinterpret_cast<" << cpp << " *>( " << mw.arg[ 0 ].data << " ) = ";
+        if      ( cpp == "FP32" ) mw.call_gene( "convert_to_FP32", mw.get_type( 1 ), mw.arg[ 1 ], ret );
+        else if ( cpp == "FP64" ) mw.call_gene( "convert_to_FP64", mw.get_type( 1 ), mw.arg[ 1 ], ret );
+        else if ( cpp == "FP80" ) mw.call_gene( "convert_to_FP80", mw.get_type( 1 ), mw.arg[ 1 ], ret );
         else ERROR("unknown cpp type");
     } else
         TODO;
 }
 
-void metil_gen_init_arg__when__a__isa__Flt( MethodWriter &mw, const Mos *a, const String &ret ) {
-    metil_gen_reassign_inplace__when__a__isa__Flt( mw, a, ret );
+void metil_gen_init_arg__when__a__isa__Flt( MethodWriter &mw ) {
+    metil_gen_reassign_inplace__when__a__isa__Flt( mw );
 }
 
-void TypeConstructor_Flt::write_convert_to_Bool( MethodWriter &mw, const Mos *a, const String &ret ) const { write_convert_to_( mw, a, ret ); }
-void TypeConstructor_Flt::write_convert_to_SI32( MethodWriter &mw, const Mos *a, const String &ret ) const { write_convert_to_( mw, a, ret ); }
-void TypeConstructor_Flt::write_convert_to_SI64( MethodWriter &mw, const Mos *a, const String &ret ) const { write_convert_to_( mw, a, ret ); }
-void TypeConstructor_Flt::write_convert_to_FP32( MethodWriter &mw, const Mos *a, const String &ret ) const { write_convert_to_( mw, a, ret ); }
-void TypeConstructor_Flt::write_convert_to_FP64( MethodWriter &mw, const Mos *a, const String &ret ) const { write_convert_to_( mw, a, ret ); }
-void TypeConstructor_Flt::write_convert_to_FP80( MethodWriter &mw, const Mos *a, const String &ret ) const { write_convert_to_( mw, a, ret ); }
+void TypeConstructor_Flt::write_convert_to_Bool( MethodWriter &mw ) const { write_convert_to_( mw ); }
+void TypeConstructor_Flt::write_convert_to_SI32( MethodWriter &mw ) const { write_convert_to_( mw ); }
+void TypeConstructor_Flt::write_convert_to_SI64( MethodWriter &mw ) const { write_convert_to_( mw ); }
+void TypeConstructor_Flt::write_convert_to_FP32( MethodWriter &mw ) const { write_convert_to_( mw ); }
+void TypeConstructor_Flt::write_convert_to_FP64( MethodWriter &mw ) const { write_convert_to_( mw ); }
+void TypeConstructor_Flt::write_convert_to_FP80( MethodWriter &mw ) const { write_convert_to_( mw ); }
 
-void TypeConstructor_Flt::write_convert_to_( MethodWriter &mw, const Mos *a, const String &ret ) const {
+void TypeConstructor_Flt::write_convert_to_( MethodWriter &mw ) const {
     if ( String cpp = cpp_type() ) {
         mw.add_include("String.h");
-        mw.n << ret << "*reinterpret_cast<const " << cpp << " *>( " << a->data << " );\n";
+        mw.ret() << "*reinterpret_cast<const " << cpp << " *>( " << mw.arg[ 0 ].data << " );\n";
     } else
         TODO;
 }
 
-void TypeConstructor_Flt::write_write_str( MethodWriter &mw, const Mos *a, const String & ) const {
+void TypeConstructor_Flt::write_write_str( MethodWriter &mw ) const {
     mw.add_include( "Level1/DisplayFlt.h" );
     if ( mant.len == 64 )
         mw.n << "ERROR(\"TODO: correction bug disp FP80\");";
@@ -46,7 +46,7 @@ void TypeConstructor_Flt::write_write_str( MethodWriter &mw, const Mos *a, const
          << expo.off << "," << expo.len << ","
          << sign.off << "," << sign.len << ","
          << - bia_expo
-         << ">::display( os, (const PI8 *)" << a->data << " );";
+         << ">::display( os, (const PI8 *)" << mw.arg[ 0 ].data << " );";
 }
 
 

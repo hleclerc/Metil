@@ -48,8 +48,8 @@ BOP( boolean_and, && );
 #undef BOP
 
 #define WCONV( T ) \
-    void TypeConstructor_Int::write_convert_to_##T( MethodWriter &mw, const Mos *a, const String &ret_ins ) const { \
-       mw.n << ret_ins << "*reinterpret_cast<const " << cpp_type() << " *>( " << a[ 0 ].data << " );"; \
+    void TypeConstructor_Int::write_convert_to_##T( MethodWriter &mw ) const { \
+       mw.ret() << "*reinterpret_cast<const " << cpp_type() << " *>( " << mw.arg[ 0 ].data << " );"; \
     }
 WCONV( Bool );
 WCONV( SI32 );
@@ -62,27 +62,27 @@ WCONV( ST   );
 
 
 // gene
-void TypeConstructor_Int::write_write_str( MethodWriter &mw, const Mos *a, const String & ) const {
+void TypeConstructor_Int::write_write_str( MethodWriter &mw ) const {
     mw.add_include( "Level1/DisplayInt.h" );
     if ( sign == -1 )
         mw.n << "os << '-';";
     bool lesi = sign == 0;
-    mw.n << "DisplayInt<" << mant - lesi << "," << lesi << ",0," << mant - lesi << ">::display( os, (const PI8 *)" << a->data << " );";
+    mw.n << "DisplayInt<" << mant - lesi << "," << lesi << ",0," << mant - lesi << ">::display( os, (const PI8 *)" << mw.arg[ 0 ].data << " );";
 }
 
-static void gen_self_op_inplace( MethodWriter &mw, const Mos *a, const String &op ) {
-    const TypeConstructor_Int *c_0 = static_cast<const TypeConstructor_Int *>( mw.get_type( 0 )->constructor );
-    const TypeConstructor_Int *c_1 = static_cast<const TypeConstructor_Int *>( mw.get_type( 1 )->constructor );
+static void gen_self_op_inplace( MethodWriter &mw, const String &op ) {
+    const TypeConstructor_Int *c_0 = static_cast<const TypeConstructor_Int *>( mw.type[ 0 ]->constructor );
+    const TypeConstructor_Int *c_1 = static_cast<const TypeConstructor_Int *>( mw.type[ 1 ]->constructor );
     String t_0 = c_0->cpp_type();
     String t_1 = c_1->cpp_type();
     if ( t_0 and t_1 )
-        mw.n << "*reinterpret_cast<" << t_0 << " *>( " << a[ 0 ].data << " ) " << op << " *reinterpret_cast<const " << t_1 << " *>( " << a[ 1 ].data << " );";
+        mw.n << "*reinterpret_cast<" << t_0 << " *>( " << mw.arg[ 0 ].data << " ) " << op << " *reinterpret_cast<const " << t_1 << " *>( " << mw.arg[ 1 ].data << " );";
     else
         TODO;
 }
 
-void metil_gen_reassign_inplace__when__a__isa__Int__and__b__isa__Int( MethodWriter &mw, const Mos *a, const String & ) { gen_self_op_inplace( mw, a, "=" ); }
-void metil_gen_init_arg__when__a__isa__Int__and__b__isa__Int        ( MethodWriter &mw, const Mos *a, const String & ) { gen_self_op_inplace( mw, a, "=" ); }
+void metil_gen_reassign_inplace__when__a__isa__Int__and__b__isa__Int( MethodWriter &mw ) { gen_self_op_inplace( mw, "=" ); }
+void metil_gen_init_arg__when__a__isa__Int__and__b__isa__Int        ( MethodWriter &mw ) { gen_self_op_inplace( mw, "=" ); }
 
 String TypeConstructor_Int::cpp_type() const {
     if ( sign == 0 ) {

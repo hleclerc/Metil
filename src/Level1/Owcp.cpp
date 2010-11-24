@@ -44,8 +44,8 @@ void metil_def_set_op_mp__when__a__has__Owcp_type__pert__1( MO &a, void *data, v
 }
 
 //
-void metil_gen_del__when__a__has__Owcp_type__pert__0( MethodWriter &mw, const Mos *args, const String & ) {
-    mw.n << "reinterpret_cast<Owcp<" << mw.get_type( 0 )->constructor->Owcp_size() << "," << mw.get_type( 0 )->constructor->Owcp_data() << " > *>( " << args[ 0 ].data << " )->dec_ref();";
+void metil_gen_del__when__a__has__Owcp_type__pert__0( MethodWriter &mw ) {
+    mw.n << "reinterpret_cast<Owcp<" << mw.get_type( 0 )->constructor->Owcp_size() << "," << mw.get_type( 0 )->constructor->Owcp_data() << " > *>( " << mw.arg[ 0 ].data << " )->dec_ref();";
 }
 
 END_METIL_LEVEL1_NAMESPACE;

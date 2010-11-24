@@ -37,22 +37,22 @@ public:
     #undef DECL_MET
 
     // writers for unary methods
-    #define DECL_MET( T, N ) virtual void write_##N( MethodWriter &mw, const Mos *a, const String &ret_ins = "return " ) const;
+    #define DECL_MET( T, N ) virtual void write_##N( MethodWriter &mw ) const;
     #include "DeclMethodsUnary.h"
     #undef DECL_MET
 
     // write_str (used with self_append and String)
     DECL_COND( has_writer_for_write_str ) { return 0; }
-    virtual void write_write_str( MethodWriter &mw, const Mos *a, const String &ret_ins = "return " ) const;
+    virtual void write_write_str( MethodWriter &mw ) const;
 
     // for inherited classes
     #define DECL_WRITER( N ) \
         virtual bool has_writer_for_##N() const { return 1; } \
-        virtual void write_##N( MethodWriter &mw, const Mos *a, const String &ret_ins ) const
+        virtual void write_##N( MethodWriter &mw ) const
 
     DECL_COND( has_writer_for_convert_to_ST ) { return 0; }
-    virtual void write_convert_to_ST( MethodWriter &mw, const Mos *a, const String &ret_ins ) const;
-    virtual void write_select_op( MethodWriter &mw, const Mos *a, TypeConstructor *index_type, const String &op ) const;
+    virtual void write_convert_to_ST( MethodWriter &mw ) const;
+    virtual void write_select_op( MethodWriter &mw, TypeConstructor *index_type, const String &op ) const;
 
     #undef DECL_COND
 

@@ -2,19 +2,18 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-void metil_gen_reassign__when__a__isa__Select__pert__1( MethodWriter &mw, const Mos *args, const String & ) {
+void metil_gen_reassign__when__a__isa__Select__pert__1( MethodWriter &mw ) {
     TypeConstructor_Select *c = static_cast<TypeConstructor_Select *>( mw.get_type( 0 )->constructor );
-    c->type_a->constructor->write_select_op( mw, args, c->type_b->constructor, "reassign" );
+    c->type_a->constructor->write_select_op( mw, c->type_b->constructor, "reassign" );
 }
 
-void TypeConstructor_Select::write_copy( MethodWriter &mw, const Mos *args, const String & ) const {
-    type_a->constructor->write_select_op( mw, args, type_b->constructor, "copy" );
+void TypeConstructor_Select::write_copy( MethodWriter &mw ) const {
+    type_a->constructor->write_select_op( mw, type_b->constructor, "copy" );
 }
 
-void TypeConstructor_Select::write_del( MethodWriter &mw, const Mos *a, const String & ) const {
+void TypeConstructor_Select::write_del( MethodWriter &mw ) const {
     ASSERT( type_b->constructor->is_a_POD(), "TODO" );
-    mw.n << "FREE( " << a[ 0 ].data << ", Number< sizeof( void * ) + "
-         << type_b->constructor->static_size_in_bytes() << " >() );";
+    mw.n << "FREE( " << mw.arg[ 0 ].data << ", Number< sizeof( void * ) + " << type_b->constructor->static_size_in_bytes() << " >() );";
 }
 
 void TypeConstructor_Select::init( Type *type ) {

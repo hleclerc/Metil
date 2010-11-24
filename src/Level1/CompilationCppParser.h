@@ -35,6 +35,7 @@ private:
     BasicVec<String> ce_inc_paths; ///< -I... which come from CompilationEnvironment
     BasicVec<String> ce_def_procs; ///< -D... which come from CompilationEnvironmentd
 
+    BasicVec<String> already_parsed;
     std::map<String,Define> defines;
     String dep_file;
 };

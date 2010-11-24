@@ -28,7 +28,7 @@ public:
     virtual int static_size_in_bits() const;
     virtual int tensor_order() const;
     virtual int needed_alignement_in_bits() const;
-    virtual void write_select_op( MethodWriter &mw, const Mos *a, TypeConstructor *index_type, const String &op ) const;
+    virtual void write_select_op( MethodWriter &mw, TypeConstructor *index_type, const String &op ) const;
 
     DECL_WRITER( del );
     DECL_WRITER( init );

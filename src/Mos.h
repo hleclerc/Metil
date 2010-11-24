@@ -11,6 +11,12 @@ public:
     Mos( String base ) : base( base ), data( base + ".data"), type( base + ".type" ) {}
     Mos( String data, String type ) : data( data ), type( type ) {}
 
+    Mos &operator=( String base ) {
+        this->base = base;
+        this->data = base + ".data";
+        this->type = base + ".type";
+    }
+
     void write_str( String &os ) const { os << base; }
 
     String base;

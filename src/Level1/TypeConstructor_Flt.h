@@ -33,7 +33,7 @@ public:
     int bia_expo;
 
 private:
-    void write_convert_to_( MethodWriter &mw, const Mos *a, const String & ) const;
+    void write_convert_to_( MethodWriter &mw ) const;
 };
 
 END_METIL_LEVEL1_NAMESPACE;
