@@ -23,7 +23,6 @@ void TypeConstructor_LazyOperation::default_mw( MethodWriter &mw ) {
     mw.add_include( "Level1/LazyObjectOperationData.h" );
 }
 
-
 void TypeConstructor_LazyOperation::init( Type *type ) {
     name_operation = type->name + 14; /// LazyOperation_
 

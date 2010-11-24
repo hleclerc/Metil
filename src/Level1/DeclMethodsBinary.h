@@ -5,7 +5,6 @@
 
 //
 DECL_MET( poO , allocate_2     ); // allocate( array with type defined but data, size or other kind of argument ).
-DECL_MET( poOM, allocate_2_on  ); // allocate( array with type defined but data, size or other kind of argument, machine_id * ).
 DECL_MET( poO , allocate_array ); // allocate an array of type a->type and size defined by b. returns a pointer on data.
 DECL_MET( VoO , init_arg       ); // obj->init( arg )
 
@@ -36,3 +35,7 @@ DECL_MET( BOO , always_equal   ); //
 DECL_MET( VoO , set_values     ); // obj[ ... ] = val
 
 DECL_MET( VOO , call_C         ); // used e.g. functor objects
+
+#ifndef AVOID_LAZY_OP
+DECL_MET( XOO , exec_node      ); // exec lazy node on cpu, return a MetilException *
+#endif // AVOID_LAZY_OP

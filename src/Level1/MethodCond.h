@@ -47,6 +47,14 @@ struct MethodCond_or : public MethodCond {
     C_1 cond_1;
 };
 
+template<class C_0>
+struct MethodCond_not : public MethodCond {
+    virtual bool valid( Type *type_0, Type *type_1, Type *type_2 ) const {
+        return not cond_0.valid( type_0, type_1, type_2 );
+    }
+    C_0 cond_0;
+};
+
 struct MethodCond_0_is : public MethodCond {
     virtual bool valid( Type *type_0, Type *, Type * ) const { return equal( type_0->name, type ); }
     const char *type;

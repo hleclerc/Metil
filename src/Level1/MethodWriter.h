@@ -22,7 +22,7 @@ public:
     void add_include( const String &include );
     void add_preliminary( const String &txt ); ///< after includes and namespace
     void add_type_decl( const String &name ); ///< add declaration for type "name" and look if there's a declaration somewhere
-    StringWithSepInCppLine ret(); ///< signal return
+    StringWithSepInCppLineMaker ret(); ///< signal return
 
     bool get_os_defined() const;
     void set_os_defined( bool v );
@@ -37,8 +37,8 @@ public:
     bool call_gene( const String &method, Type *type_0, const Mos &arg_0, const String &ret = "", bool abort_if_not_found = false );
     bool call_gene( const String &method, Type *type_0, Type *type_1, const Mos &arg_0, const Mos &arg_1, const String &ret = "", bool abort_if_not_found = false );
 
-    Type *type[ 3 ];
-    Mos   arg [ 3 ];
+    Type *type[ nb_args_max ];
+    Mos   arg [ nb_args_max ];
     String ret_ins;
     MachineId::Type machine_type;
     StringWithSepInCppLineMaker n; ///< used to output lines with CR at the end

@@ -68,8 +68,6 @@ DECL_MET( YO  , get_parent              ); // get_parent
 DECL_MET( BO  , cur_op_id               ); // return true if op_id == current_op_id
 DECL_MET( DO  , priority                ); // + -> 10, * -> 20, ...
 DECL_MET( MO  , machine_id              ); // return info on where the object is stored
-DECL_MET( XO  , exec_node_cpu           ); // exec lazy node on cpu, return a MetilException *
-DECL_MET( XO  , exec_node_gpu           ); // exec lazy node on gpu, return a MetilException *
 DECL_MET( OO  , get_op_mp               ); // return op_mp if an Owcp, 0 if not
 DECL_MET( Vopp, set_op_mp               ); // set op_mp if an Owcp, 0 if not
 #endif // AVOID_LAZY_OP

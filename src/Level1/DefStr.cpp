@@ -130,6 +130,7 @@ void DefStr::update_operators() {
         operators.push_back( "has" , Operator::lr );
         operators.push_back( "or"  , Operator::lr );
         operators.push_back( "and" , Operator::lr );
+        operators.push_back( "not" , Operator::r  );
         operators.push_back( "when", Operator::r  );
         operators.push_back( "pert", Operator::r  );
 
@@ -167,6 +168,11 @@ Str DefStr::item_to_cond_str_rec( Item *item, Str &type, BasicVec<Str> &init, St
         item_to_cond_str_rec( item->children[ 0 ], type, init, arg + ".cond_0" );
         type += ",";
         item_to_cond_str_rec( item->children[ 1 ], type, init, arg + ".cond_1" );
+        type += " >";
+    }
+    if ( item->name == "not" ) {
+        type += "MethodCond_not<";
+        item_to_cond_str_rec( item->children[ 0 ], type, init, arg + ".cond_0" );
         type += " >";
     }
     if ( item->name == "isa" ) {

@@ -18,6 +18,8 @@ void metil_def_set_op_mp__pert__0( MO &a, void *data, void *type ) {}
 const  MachineId *metil_def_machine_id__pert__0( MO a ) { return MachineId::cur(); }
 struct OwcpChild *metil_def_get_parent__pert__0( MO a ) { return 0; }
 
+struct MetilException *metil_def_exec_node__when__not__a__isa__LazyObject__pert__0( MO, MO ) { return 0; }
+
 // void objects
 MO metil_def_copy__when__a__has__is_void__pert__1( MO a ) { return a.type; }
 void metil_gen_copy__when__a__has__is_void( MethodWriter &mw ) { mw.ret() << mw.arg[ 0 ].type << ";"; }

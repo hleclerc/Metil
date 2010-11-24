@@ -10,7 +10,6 @@ BEG_METIL_LEVEL1_NAMESPACE;
 */
 class TypeConstructor_TiffLoader : public TypeConstructor_LazyObject {
 public:
-    virtual void write_exec_node( MethodWriter &mw );
     virtual int Owcp_size() const;
 };
 

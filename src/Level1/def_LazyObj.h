@@ -25,14 +25,13 @@
 #define MET_1_poO( N )
 #define MET_po( N )
 #define MET_EO( N )
-#define MET_XO( N )
 #define MET_VoO( N )
 #define MET_1_VoO( N )
 #define MET_Vopp( N )
 #define MET_IO( N )
+#define MET_XOO( N )
+#define MET_1_XOO( N )
 #define MET_VoY( N )
-#define MET_poOM( N )
-#define MET_1_poOM( N )
 #define MET_OO( N ) \
     MO  metil_def_##N##__when__a__isa__LazyObject__pert__10( MO a ) { \
         Type *type = &metil_type_bas_LazyOperation_##N; \

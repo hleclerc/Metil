@@ -31,9 +31,17 @@ void metil_def_flush__when__a__isa__LazyObject( MO &a ) {
 #include "DeclMethodsBinary.h"
 #undef DECL_MET
 
+void TypeConstructor_LazyObject::write_header( MethodWriter &mw, const String &name_header, const String &data ) const {
+    String t; t<< "Owcp<" << Owcp_size() << "," << Owcp_data() << ">";
+    mw.n << t << " *" << name_header << " = reinterpret_cast<" << t << " *>( " << data << " );";
+}
 
 void TypeConstructor_LazyObject::default_mw( MethodWriter &mw ) const {
     mw.add_include( "Level1/LazyObjectData.h" );
+}
+
+String TypeConstructor_LazyObject::Owcp_data() const {
+    return "LazyObjectData";
 }
 
 END_METIL_LEVEL1_NAMESPACE;

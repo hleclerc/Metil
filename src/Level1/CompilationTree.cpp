@@ -75,7 +75,7 @@ int CompilationTree::exec_node( String *out ) {
 
     // exec
     if ( out )
-        *out << cmd << String::endl;
+        *out << cmd << "\n";
     return exec_cmd( cmd, false );
 }
 

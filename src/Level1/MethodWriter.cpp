@@ -75,8 +75,9 @@ void MethodWriter::end_def() {
     code << "}\n\n";
 }
 
-StringWithSepInCppLine MethodWriter::ret() {
-    return StringWithSepInCppLine( n.string << "return ", " ", "" );
+StringWithSepInCppLineMaker MethodWriter::ret() {
+    n.string << ret_ins;
+    return n.string;
 }
 
 int MethodWriter::nb_types() const {
@@ -221,7 +222,6 @@ DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Typ
     if ( date_lib <= date_dep ) { // make cpp, compile and load it
         String cpp_name = ce.cpp_for( bas_name );
         make_cpp_for_types( cpp_name, type_0, type_1, type_2 );
-        DOUT( cpp_name.c_str() );
 
         CompilationEnvironment loc_ce( &ce );
         loc_ce.add_CPPFLAG( "-DMETIL_GENE_DYLIB" );

@@ -62,11 +62,10 @@ void LazyObjectScheduler::exec() {
         l->op_id = SchedItem::current_op_id;
 
         DOUT( l->obj.type->name );
-        // MachineId *mid = ;
         if ( l->mid == 0 or l->mid->type() == MachineId::Cpu )
-            CM_1( exec_node_cpu, l->obj );
+            CM_2( exec_node, l->obj, zero );
         else
-            CM_1( exec_node_gpu, l->obj );
+            CM_2( exec_node, l->obj, one  );
 
         // add _ready to go_ parent items
         for( int p = 0; p < l->nb_parents; ++p )

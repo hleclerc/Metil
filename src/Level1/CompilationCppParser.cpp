@@ -197,10 +197,26 @@ static String get_pragma_arg( const char *&c ) {
     return String( NewString( b, rstrip( c ) ) );
 }
 
+static void go_after_next_double_quote( const char *&c ) {
+    for( ; *c; ++c ) {
+        if ( *c == '\\' )
+            ++c;
+        else if ( *c == '"' ) {
+            ++c;
+            break;
+        }
+    }
+}
+
 void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const String &filename ) {
     String current_dir = directory_of( filename ) + "/";
     File file( filename, "r" );
     for ( const char *c = file.c_str(); *c; ) {
+        // string ?
+        if ( c[ 0 ] == '"' ) {
+            go_after_next_double_quote( ++c );
+            continue;
+        }
         // comment ?
         if ( c[ 0 ] == '/' ) {
             if ( c[ 1 ] == '/' ) {
