@@ -524,7 +524,7 @@ void TypeConstructor_Array::write_get_len( MethodWriter &cw, const String &name_
 }
 
 void TypeConstructor_Array::write_beg_loop( MethodWriter &cw, const String &name_header, int d ) const {
-    cw << "for( ST i_" << d << " = 0; i_" << d << " < " << get_size_n( name_header, d ) << "; ++i_" << d << " ) {\n";
+   cw.n << "for( ST i_" << d << " = 0; i_" << d << " < " << get_size_n( name_header, d ) << "; ++i_" << d << " ) {";
 }
 
 void TypeConstructor_Array::write_end_loop( MethodWriter &cw, const String &name_header, int d, const String &ptr_on_data, const String &inc ) const {

@@ -43,6 +43,7 @@ public:
     MachineId::Type machine_type;
     StringWithSepInCppLineMaker n; ///< used to output lines with CR at the end
 private:
+    MethodWriter( const MethodWriter &parent ) : n( parent.n ) { ERROR("..."); }
     MethodWriter *parent;
     String preliminary;
     String code;
