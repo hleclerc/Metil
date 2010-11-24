@@ -36,7 +36,7 @@ void metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_wr
         mw.set_os_defined( true );
         mw.n << "String &os = static_cast<String &>( " << mw.arg[ 0 ] << " );";
     }
-    MethodWriter mw_d( mw );
+    MethodWriter mw_d( &mw );
     mw_d.type[ 0 ] = mw.type[ 1 ];
     mw_d.arg [ 0 ] = mw.arg [ 1 ];
     mw.get_type( 1 )->constructor->write_write_str( mw_d );
