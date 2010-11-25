@@ -67,9 +67,9 @@ public:
     Vec &operator=( const Array<Val> &a ) { CM_2( reassign, *this, a ); return *this; }
     Vec &operator=( const Vec &a ) { CM_2( reassign, *this, a ); return *this; }
 
+    Vec( Level1::MO mo ) : Array<Val>( mo ) {}
 protected:
     friend class Array<Val>;
-    Vec( Level1::MO mo ) : Array<Val>( mo ) {}
 };
 
 END_METIL_NAMESPACE;

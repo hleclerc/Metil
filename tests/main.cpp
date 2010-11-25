@@ -19,9 +19,12 @@ int main() {
     // Vec v( S<double>(), 1, 2 );
     //Img a( "/home/leclerc/Data/grad.tif" ); // plateblanche/plateblanche001_0121.tif
     //PRINT( a.sizes() );
-    Vec a( S<int>(), 2, 3 );
-    PRINT( (*(const Vec *)&a)[ 0 ] );
-    PRINT( ((const Vec &)a)[ 1 ] );
+    int v[] = { 2, 3 };
+    Vec a( REF_Vec( Number<2>(), v ) );
+    PRINT( a[ 0 ] );
+    PRINT( a[ 1 ] );
+    PRINT( a );
+    // PRINT( ((const Vec &)a)[ 1 ] );
 
     // MachineId::cur()->gpu( 0 )
     // PRINT( a.sizes() );

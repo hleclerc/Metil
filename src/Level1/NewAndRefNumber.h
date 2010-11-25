@@ -9,9 +9,10 @@ BEG_METIL_LEVEL1_NAMESPACE;
 #define DECL_REF_AND_NEW( T, M, SI ) \
     inline MO NEW_Number( T  v ) { return MO( NEW( T, v ), &Level1::metil_type_bas_##M ); } \
     inline MO REF_Number( T &v ) { return MO(        &v  , &Level1::metil_type_ref_##M ); } \
-    inline MO REF_Vec( Number<1>, T *v ) { return MO( v, &Level1::metil_type_bas_Array_##SI##M##_1_1_1 ); } \
-    inline MO REF_Vec( Number<2>, T *v ) { return MO( v, &Level1::metil_type_bas_Array_##SI##M##_1_2_2 ); } \
-    inline MO REF_Vec( Number<3>, T *v ) { return MO( v, &Level1::metil_type_bas_Array_##SI##M##_1_3_3 ); } \
+    inline MO REF_Vec( Number<1>, T *v ) { return MO( v, &Level1::metil_type_cst_Array_##SI##M##_1_1_1 ); } \
+    inline MO REF_Vec( Number<2>, T *v ) { return MO( v, &Level1::metil_type_cst_Array_##SI##M##_1_2_2 ); } \
+    inline MO REF_Vec( Number<3>, T *v ) { return MO( v, &Level1::metil_type_cst_Array_##SI##M##_1_3_3 ); } \
+    inline MO REF_Vec( Number<4>, T *v ) { return MO( v, &Level1::metil_type_cst_Array_##SI##M##_1_4_4 ); } \
     inline Type *type_ptr( S<T> ) { return &Level1::metil_type_bas_##M; }
 
 DECL_REF_AND_NEW( SI8 , Int_s_8 , 7 );

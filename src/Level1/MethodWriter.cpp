@@ -241,7 +241,7 @@ bool MethodWriter::call_gene( const String &method, Type *type_0, const Mos &arg
     MethodWriter nw( this );
     nw.type[ 0 ] = type_0;
     nw.arg [ 0 ] = arg_0;
-    nw.ret_ins = ret ? ret : ret_ins;
+    nw.ret_ins = ret.size() ? ret : ret_ins;
     #define DECL_MET( T, N ) \
         if ( method == #N ) { \
             typedef MethodFinder<MethodName_##N> MF; \
@@ -263,7 +263,7 @@ bool MethodWriter::call_gene( const String &method, Type *type_0, Type *type_1, 
     nw.type[ 1 ] = type_1;
     nw.arg [ 0 ] = arg_0;
     nw.arg [ 1 ] = arg_1;
-    nw.ret_ins = ret ? ret : ret_ins;
+    nw.ret_ins = ret.size() ? ret : ret_ins;
     #define DECL_MET( T, N ) \
         if ( method == #N ) { \
             typedef MethodFinder<MethodName_##N> MF; \
@@ -275,7 +275,7 @@ bool MethodWriter::call_gene( const String &method, Type *type_0, Type *type_1, 
         }
     #include "DeclMethodsBinary.h"
     #undef DECL_MET
-        ERROR( "unknown method name %s (assuming nb_arg == 2)", method.c_str() );
+    ERROR( "unknown method name %s (assuming nb_arg == 2)", method.c_str() );
     return false;
 }
 
