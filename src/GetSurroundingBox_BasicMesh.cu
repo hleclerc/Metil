@@ -1,4 +1,6 @@
 #include "GetSurroundingBox_BasicMesh.h"
+#include "CudaMetil.h"
+#include "String.h"
 
 #define NB_THREADS_MIN_MAX 64
 #define NB_BLOCKS_MIN_MAX  64
@@ -88,14 +90,14 @@ void get_min_max_transformation_kernel_1( float *res ) {
 
 void get_surrounding_box( float *mi, float *ma, BasicMesh_Compacted *m, DisplayTrans *trans, int w, int h ) {
     float *res;
-    cudaMalloc( &res, 3 * 2 * NB_BLOCKS_MIN_MAX * sizeof( float ) );
+    CSC(( cudaMalloc( &res, 3 * 2 * NB_BLOCKS_MIN_MAX * sizeof( float ) ) ));
 
-    get_min_max_transformation_kernel_0<<<NB_BLOCKS_MIN_MAX,NB_THREADS_MIN_MAX>>>( res, m, trans, w, h );
-    get_min_max_transformation_kernel_1<<<                1,NB_BLOCKS_MIN_MAX >>>( res );
+    CSC(( get_min_max_transformation_kernel_0<<<NB_BLOCKS_MIN_MAX,NB_THREADS_MIN_MAX>>>( res, m, trans, w, h ) ));
+    CSC(( get_min_max_transformation_kernel_1<<<                1, NB_BLOCKS_MIN_MAX>>>( res ) ));
 
     for( int d = 0; d < 3; ++d ) {
-        cudaMemcpy( mi + d, res + ( 2 * d + 0 ) * NB_BLOCKS_MIN_MAX, sizeof( float ), cudaMemcpyDeviceToHost );
-        cudaMemcpy( ma + d, res + ( 2 * d + 1 ) * NB_BLOCKS_MIN_MAX, sizeof( float ), cudaMemcpyDeviceToHost );
+        CSC(( cudaMemcpy( mi + d, res + ( 2 * d + 0 ) * NB_BLOCKS_MIN_MAX, sizeof( float ), cudaMemcpyDeviceToHost ) ));
+        CSC(( cudaMemcpy( ma + d, res + ( 2 * d + 1 ) * NB_BLOCKS_MIN_MAX, sizeof( float ), cudaMemcpyDeviceToHost ) ));
     }
 }
 

@@ -8,13 +8,15 @@ struct ElemTypeTriangle : public ElemType {
     virtual int nvi() const { return 2; }
     virtual void make_rect( const BasicVec<float> &X0, const BasicVec<float> &X1, const BasicVec<int> &Xd, BasicVec<BasicVec<float> > &pos_nodes, BasicVec<BasicVec<int> > &connec ) const {
         // nodes
-        if ( pos_nodes.size() < 2 )
-            pos_nodes.resize( 2 );
+        if ( pos_nodes.size() < X0.size() )
+            pos_nodes.resize( X0.size() );
         ST os = pos_nodes[ 0 ].size();
         for( int y = 0; y < Xd[ 1 ]; ++y ) {
             for( int x = 0; x < Xd[ 0 ]; ++x ) {
                 pos_nodes[ 0 ] << X0[ 0 ] + ( X1[ 0 ] - X0[ 0 ] ) * x / ( Xd[ 0 ] - 1 );
                 pos_nodes[ 1 ] << X0[ 1 ] + ( X1[ 1 ] - X0[ 1 ] ) * y / ( Xd[ 1 ] - 1 );
+                if ( X0.size() >= 3 )
+                    pos_nodes[ 2 ] << X0[ 2 ] + ( X1[ 2 ] - X0[ 2 ] ) * y / ( Xd[ 2 ] - 1 );
             }
         }
         // elems

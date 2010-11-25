@@ -17,8 +17,8 @@ int main() {
     //    PRINT( two * two );
     //    PRINT( 2 * two );
     // Vec v( S<double>(), 1, 2 );
-    Img a( "/home/leclerc/Data/grad.tif" ); // plateblanche/plateblanche001_0121.tif
-    PRINT( a.sizes() );
+    // Img a( "/home/leclerc/Data/grad.tif" ); // plateblanche/plateblanche001_0121.tif
+    // PRINT( a.sizes() );
     // PRINT( ((const Vec &)a)[ 1 ] );
 
     // MachineId::cur()->gpu( 0 )

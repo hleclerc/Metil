@@ -10,6 +10,22 @@ void metil_def_del__when__a__is__LazyOperation_append__pert__100( MO &a ) {
     reinterpret_cast<Owcp<2,LazyObjectOperationData_OOO> *>( a.data )->dec_ref();
 }
 
+
+MetilException *metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1( MO a, MO ) {
+    typedef Owcp<1,LazyObjectOperationData_OO> TR;
+    TR *d = reinterpret_cast<TR *>( a.data );
+    MO op = CM_1( get_op_mp, d->ch( 0 ) );
+    d->op_mp = CM_1( sizes, op );
+}
+
+MetilException *metil_def_exec_node__when__a__is__LazyOperation_append__pert__1( MO a, MO ) {
+    typedef Owcp<2,LazyObjectOperationData_OOO> TR;
+    TR *d = reinterpret_cast<TR *>( a.data );
+    MO op_0 = CM_1( get_op_mp, d->ch( 0 ) );
+    MO op_1 = CM_1( get_op_mp, d->ch( 1 ) );
+    d->op_mp = CM_2( append, op_0, op_1 );
+}
+
 int TypeConstructor_LazyOperation::Owcp_size() const {
     return nb_args;
 }

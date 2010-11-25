@@ -72,6 +72,14 @@ void LazyObjectScheduler::exec() {
             if ( l->parents[ p ]->all_children_have_current_op_id() )
                 leaves << l->parents[ p ];
     }
+
+    // assign op_mp
+    for( ST i = 0; i < roots.size(); ++i ) {
+        MO old = *roots[ i ];
+        *roots[ i ] = CM_1( copy, CM_1( get_op_mp, old ) );
+        CM_1( del, old );
+    }
+
 }
 
 END_METIL_LEVEL1_NAMESPACE;

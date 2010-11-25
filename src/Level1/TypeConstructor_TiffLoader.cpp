@@ -30,10 +30,10 @@ void metil_gen_exec_node__when__a__isa__TiffLoader__pert__1( MethodWriter &mw ) 
     mw.n << "DOUT( w );";
 
     // type
-    mw.n << "l->data.op_mp.type = bps == 16 ? &Level1::metil_type_bas_Array_8Int_p_16_2_m_m_m_m_CptUse : &Level1::metil_type_bas_Array_7Int_p_8_2_m_m_m_m_CptUse;";
+    mw.n << "l->op_mp.type = bps == 16 ? &Level1::metil_type_bas_Array_8Int_p_16_2_m_m_m_m_CptUse : &Level1::metil_type_bas_Array_7Int_p_8_2_m_m_m_m_CptUse;";
 
     // new Array
-    mw.n << "char *data = (char *)CM_2( allocate_2, l->data.op_mp, Level1::REF_Vec( Number<2>(), size ) );";
+    mw.n << "char *data = (char *)CM_2( allocate_2, l->op_mp, Level1::REF_Vec( Number<2>(), size ) );";
 
     mw.n << "ST line_size = size[ 0 ] * bps / 8;";
     mw.n << "tdata_t buf = _TIFFmalloc( TIFFScanlineSize( tif ) );";

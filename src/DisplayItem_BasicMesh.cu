@@ -387,7 +387,7 @@ void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, const Di
 
 
 void DisplayItem_BasicMesh::render_to( BitmapDisplay *display ) {
-    ASSERT( mesh.pos.is_a_gpu(), "render works only with data on gpu" );
+    ASSERT( mesh.pos->is_a_gpu(), "render works only with data on gpu" );
 
     int w = display->get_w();
     int h = display->get_h();
@@ -395,8 +395,8 @@ void DisplayItem_BasicMesh::render_to( BitmapDisplay *display ) {
     int hb = iDivUp( h, NB_PIX_RASTER_BOX );
     int sb = wb * hb;
 
-    ST nb_types;
-    cudaMemcpy( &nb_types, &mesh->elem_groups.size_, sizeof( ST ), cudaMemcpyDeviceToHost );
+    ST nb_types = 0;
+    CSC(( cudaMemcpy( &nb_types, &mesh->elem_groups.size_, sizeof( ST ), cudaMemcpyDeviceToHost ) ));
 
     // fill elem_count
     unsigned *elem_count = get_elem_count_gpu_ptr( nb_types, sb );

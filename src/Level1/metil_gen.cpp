@@ -691,6 +691,8 @@ extern MethodName_beg_upto::TM metil_def_beg_upto__when__a__isa__OwcpString__and
 extern MethodName_end_from::TM metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
 extern MethodName_select_C::TM metil_def_select_C__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
 extern MethodName_del::TM metil_def_del__when__a__is__LazyOperation_append__pert__100;
+extern MethodName_exec_node::TM metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1;
+extern MethodName_exec_node::TM metil_def_exec_node__when__a__is__LazyOperation_append__pert__1;
 extern MethodName_flush::TM metil_def_flush__when__a__isa__FileWithoutClose__pert__1;
 extern MethodName_write::TM metil_def_write__when__a__isa__FileWithoutClose__pert__1;
 extern MethodName_convert_to_Bool::TM metil_def_convert_to_Bool__when__a__isa__FileWithoutClose__pert__1;
@@ -2438,6 +2440,29 @@ void reg_def() {
     item_metil_def_del__when__a__is__LazyOperation_append__pert__100.line = 9;
     item_metil_def_del__when__a__is__LazyOperation_append__pert__100.pert = 100;
     MethodFinder<MethodName_del>::last = &item_metil_def_del__when__a__is__LazyOperation_append__pert__100;
+
+    static MethodCond_0_is cond_metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1;
+    cond_metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1.type = "LazyOperation_sizes";
+
+    static MethodFinder<MethodName_exec_node>::Item item_metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1;
+    item_metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1.prev = MethodFinder<MethodName_exec_node>::last;
+    item_metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1.cond = &cond_metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1;
+    item_metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1.meth = metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1;
+    item_metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1.gene = 0;
+    item_metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1.file = string_10;
+    item_metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1.line = 14;
+    item_metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1.pert = 1;
+    MethodFinder<MethodName_exec_node>::last = &item_metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1;
+
+    static MethodFinder<MethodName_exec_node>::Item item_metil_def_exec_node__when__a__is__LazyOperation_append__pert__1;
+    item_metil_def_exec_node__when__a__is__LazyOperation_append__pert__1.prev = MethodFinder<MethodName_exec_node>::last;
+    item_metil_def_exec_node__when__a__is__LazyOperation_append__pert__1.cond = &cond_metil_def_del__when__a__is__LazyOperation_append__pert__100;
+    item_metil_def_exec_node__when__a__is__LazyOperation_append__pert__1.meth = metil_def_exec_node__when__a__is__LazyOperation_append__pert__1;
+    item_metil_def_exec_node__when__a__is__LazyOperation_append__pert__1.gene = 0;
+    item_metil_def_exec_node__when__a__is__LazyOperation_append__pert__1.file = string_10;
+    item_metil_def_exec_node__when__a__is__LazyOperation_append__pert__1.line = 21;
+    item_metil_def_exec_node__when__a__is__LazyOperation_append__pert__1.pert = 1;
+    MethodFinder<MethodName_exec_node>::last = &item_metil_def_exec_node__when__a__is__LazyOperation_append__pert__1;
 
     static MethodCond_0_isa<TypeConstructor_FileWithoutClose> cond_metil_def_flush__when__a__isa__FileWithoutClose__pert__1;
 
@@ -5979,7 +6004,7 @@ void reg_def() {
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.meth = 0;
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.gene = metil_gen_del__when__a__has__is_a_POD__pert__1;
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.file = string_2;
-    item_metil_gen_del__when__a__has__is_a_POD__pert__1.line = 46;
+    item_metil_gen_del__when__a__has__is_a_POD__pert__1.line = 47;
     item_metil_gen_del__when__a__has__is_a_POD__pert__1.pert = 1;
     MethodFinder<MethodName_del>::last = &item_metil_gen_del__when__a__has__is_a_POD__pert__1;
 
@@ -5989,7 +6014,7 @@ void reg_def() {
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.meth = 0;
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.gene = metil_gen_copy__when__a__has__is_a_POD__pert__1;
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.file = string_2;
-    item_metil_gen_copy__when__a__has__is_a_POD__pert__1.line = 52;
+    item_metil_gen_copy__when__a__has__is_a_POD__pert__1.line = 53;
     item_metil_gen_copy__when__a__has__is_a_POD__pert__1.pert = 1;
     MethodFinder<MethodName_copy>::last = &item_metil_gen_copy__when__a__has__is_a_POD__pert__1;
 

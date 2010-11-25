@@ -1,3 +1,4 @@
+#include "Level1/StringHelp.h"
 #include "BasicMesh.h"
 #include "String.h"
 
@@ -64,5 +65,99 @@ void BasicMesh::update_node_to_elem() {
                 node_to_elem[ elem_groups[ i ].connec[ k ][ j ] ].push_back( i, j, k );
 }
 
+
+static String str_to_next_quote( const char *&c ) {
+    const char *o = c;
+    while ( *c and *c != '\'' )
+        ++c;
+    return NewString( o, c );
+}
+
+static void go_to_next_line( const char *&c ) {
+    while ( *c and *c != '\n' )
+        ++c;
+}
+
+static bool read_int( int &res, const char *&c ) {
+    // skip spaces
+    while ( Level1::is_a_space( *c ) )
+        ++c;
+    if ( not Level1::is_a_number( *c ) )
+        return false;
+    res = *c - '0';
+    while ( Level1::is_a_number( *(++c) ) )
+        res = 10 * res + ( *c - '0' );
+    return true;
+}
+
+void BasicMesh::load_vtu( const String &filename ) {
+    typedef enum { None, PointData, CellData, Points, Cells } Mode;
+    File file( filename, "r" );
+
+    int nb_nodes, nb_elems;
+    int off_Points, off_connectivity, off_offsets;
+    String name;
+    Mode mode = None;
+    BasicVec<int> connectivity, offsets, types;
+    for( const char *c = file.c_str(); *c; ++c ) {
+        if ( Level1::strncmp( c, "NumberOfPoints='", 16 ) == 0 ) {
+            nb_nodes = Val( str_to_next_quote( c += 16 ) );
+            pos_nodes.resize( 3 );
+            for( int i = 0; i < 3; ++i )
+                pos_nodes[ i ].resize( nb_nodes );
+            continue;
+        }
+        if ( Level1::strncmp( c, "NumberOfCells='", 15 ) == 0 ) {
+            nb_elems = Val( str_to_next_quote( c += 16 ) );
+            continue;
+        }
+        if ( Level1::strncmp( c, "Name='", 6 ) == 0 ) {
+            name = str_to_next_quote( c += 6 );
+            continue;
+        }
+
+        if ( Level1::strncmp( c, "<Points>"   , 8  ) == 0 ) { mode = Points   ; continue; }
+        if ( Level1::strncmp( c, "<Cells>"    , 7  ) == 0 ) { mode = Cells    ; continue; }
+        if ( Level1::strncmp( c, "<PointData>", 11 ) == 0 ) { mode = PointData; continue; }
+        if ( Level1::strncmp( c, "<CellData>" , 10 ) == 0 ) { mode = CellData ; continue; }
+
+        if ( Level1::strncmp( c, "offset='" , 8 ) == 0 ) {
+            int off = Val( str_to_next_quote( c += 8 ) );
+            switch ( mode ) {
+            case None: break;
+            case PointData: break;
+            case CellData: break;
+            case Points: off_Points = off;
+            case Cells: break;
+            }
+        }
+
+        if ( Level1::strncmp( c, "format='ascii'" , 14 ) == 0 ) {
+            go_to_next_line( c += 14 );
+            if ( mode == Cells ) {
+                int t;
+                if ( name == "connectivity" ) {
+                    while ( read_int( t, c ) )
+                        connectivity << t;
+                    continue;
+                }
+                if ( name == "offsets" ) {
+                    while ( read_int( t, c ) )
+                        offsets << t;
+                    continue;
+                }
+                if ( name == "types" ) {
+                    while ( read_int( t, c ) )
+                        types << t;
+                    continue;
+                }
+            }
+        }
+    }
+    PRINT( off_Points );
+    PRINT( types.size() );
+}
+
 END_METIL_NAMESPACE;
+
 

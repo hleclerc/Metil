@@ -11,6 +11,24 @@ BEG_METIL_NAMESPACE;
   Create a bitmap image from a DisplayItem list
 
   The resulting image will contain r(8)g(8)b(8)a(8), z(16)dot(n,z)(8)val(8), num_elem(32)
+
+\code
+    BasicMesh mesh;
+    mesh.make_rect( elem_type_Triangle, BasicVec<float>( 0, 0, 0 ), BasicVec<float>( 1, 1, 0 ), BasicVec<int>( 2, 2 ) );
+    // PRINT( mesh.nb_nodes() );
+
+    // display
+    const MachineId *machine_id = MachineId::cpu( 0 )->gpu( 0 );
+    Ps<BasicMesh_Compacted> compacted_mesh = make_cs( &mesh, 1, machine_id );
+
+    //
+    BitmapDisplay display;
+    display.fit();
+    display.render();
+    display.copy_gpu_to_cpu();
+    display.save_png( "toto.png" );
+\endcode
+
 */
 class BitmapDisplay : public GenericDisplay {
 public:

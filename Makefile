@@ -11,7 +11,7 @@ install: ./metil_comp
 	./install.sh
 
 test: # make_metil_comp
-	${LOC_MC} -o tests/main -g3 -Isrc tests/main.cpp
+	${LOC_MC} -o tests/main -g3 -Isrc tests/visu.cpp
 
 test_gdb:
 	${LOC_MC} -o tests/main --gdb -g3 -Isrc tests/main.cpp

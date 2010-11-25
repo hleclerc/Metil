@@ -26,6 +26,12 @@ struct OwcpAncestor : public ObjectWithCptUse {
     OwcpAncestor() {
         op_id        = 0;
         first_parent = 0;
+        op_mp.type   = 0;
+    }
+
+    ~OwcpAncestor() {
+        if ( op_mp.type )
+            CM_1( del, op_mp );
     }
 
     /// operation id (every new operation on the graph begins with ++current_MO_op_id

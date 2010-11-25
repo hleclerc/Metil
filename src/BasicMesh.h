@@ -64,6 +64,7 @@ public:
     ST nb_nodes() const;
     ElemGroup *find_group( const ElemType *elem_type );
     void make_rect( const ElemType *elem_type, BasicVec<T> X0, BasicVec<T> X1, BasicVec<I> Xd );
+    void load_vtu( const String &filename );
     void update_node_to_elem();
 
     BasicVec<ElemGroup> elem_groups;

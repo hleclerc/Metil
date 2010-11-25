@@ -63,6 +63,7 @@ src/Level1/DeclMethods.h
 src/Level1/TypeConstructor_DistantObject.h
 src/Level1/DeclMethodsTernary.h
 src/Level1/MethodWriterHelper_Int.h
+src/Level1/SchedItem.h
 src/Level1/MethodFinder.h
 src/Level1/DefStr.h
 src/Level1/TypeConstructor.h
@@ -100,6 +101,7 @@ src/Level1/CompilationCppParser.h
 src/Level1/TypeSet.h
 src/Level1/DeclMethodsUnary.h
 src/Level1/TypeConstructor_TiffLoader.h
+src/Level1/SchedItemList.h
 src/Level1/InstallDir.h
 src/Level1/def_MORef.h
 src/Level1/Ad.h
@@ -185,7 +187,9 @@ src/Level1/TypeConstructor_FileWithoutClose.cpp
 src/Level1/TypeConstructor_Int.cpp
 src/Level1/TypeConstructor_String.cpp
 src/Level1/TypeConstructor_Select.cpp
+src/Level1/SchedItemList.cpp
 src/Level1/TypeConstructor_Flt.cpp
+src/Level1/SchedItem.cpp
 src/Level1/TypeConstructor_StringConcat.cpp
 src/Level1/MethodFinder.cpp
 src/Level1/TypeConstructor_MORef.cpp
@@ -254,13 +258,10 @@ doc/PartnerShip.h
 doc/customdoxygen.css
 tests/main.cpp
 tests/test.cpp
+tests/visu.cpp
 unit_tests/string.cpp
 unit_tests/number.cpp
 unit_tests/number2.cpp
 unit_tests/simplifications.cpp
 unit_tests/run_unit_test.py
 unit_tests/report.html
-src/Level1/SchedItem.h
-src/Level1/SchedItem.cpp
-src/Level1/SchedItemList.h
-src/Level1/SchedItemList.cpp

@@ -17,7 +17,7 @@ public:
     GenericDisplay( int w = 400, int h = 400 );
     ~GenericDisplay();
 
-    GenericDisplay &operator<<( DisplayItem *item ); ///< item will be owned by this
+    GenericDisplay &operator<<( DisplayItem *item ); ///< item won't be owned by this
 
     void set_O( T Ox, T Oy, T Oz );
     void set_X( T Xx, T Xy, T Xz );

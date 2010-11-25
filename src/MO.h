@@ -43,6 +43,8 @@ public:
 
 extern SI64 current_MO_op_id; /// @see Owcp::op_id...
 
+struct MetilException {};
+
 END_METIL_LEVEL1_NAMESPACE
 
 #endif // MO_H
