@@ -52,7 +52,7 @@ void MethodWriter::add_type_decl( const String &name ) {
 
 bool MethodWriter::get_os_defined() const {
     if ( parent )
-        return parent->os_defined;
+        return parent->get_os_defined();
     return os_defined;
 }
 

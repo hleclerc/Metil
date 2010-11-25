@@ -348,9 +348,9 @@ void TypeConstructor_Array::write_write_str( MethodWriter &mw ) const {
         mw.n << "if ( i_" << d << " ) os.write_separator( " << d << " );";
     }
 
-    if ( item_type_bas )
+    if ( item_type_bas ) {
         mw.call_gene( "self_append", mw.get_type( 1 ), item_type_bas, Mos( "os" ), Mos( "d", "" ) );
-    else
+    } else
         mw.n << "os << *d;";
 
     // end loop
