@@ -3,7 +3,7 @@
     #include "CudaMetil.h"
     #include "BasicMesh.h"
     namespace Metil {
-        inline Ps<BasicMesh_Compacted> make_cs( const BasicMesh &l, MachineId machine ) {
+        inline Ps<BasicMesh_Compacted> make_cs( const BasicMesh &l, const MachineId *machine ) {
             return make_cs( &l, 1, machine );
         }
     }
@@ -23,8 +23,8 @@ namespace Metil {
     };
 
     %template(Ps_BasicMesh_Compacted) Ps<BasicMesh_Compacted>;
-    Ps<BasicMesh_Compacted> make_cs( const BasicMesh &l, MachineId machine );
-    Ps<BasicMesh_Compacted> strdup( const Ps<BasicMesh_Compacted> &src, MachineId machine );
+    Ps<BasicMesh_Compacted> make_cs( const BasicMesh &l, const MachineId *machine );
+    Ps<BasicMesh_Compacted> strdup( const Ps<BasicMesh_Compacted> &src, const MachineId *machine );
     void memcpy( Ps<BasicMesh_Compacted> &dst, const Ps<BasicMesh_Compacted> &src );
 
     // #include "CudaMetil.h"

@@ -72,8 +72,8 @@ for PORT in range( 8000, 8010 ):
         
         print PORT
         #os.system( "rekonq http://localhost:" + str( PORT ) + " &" )
-        os.system( "chromium-browser --app=http://localhost:" + str( PORT ) + " &" )
-        #os.system( "firefox -jsconsole http://localhost:" + str( PORT ) + " &" )
+        #os.system( "chromium-browser --app=http://localhost:" + str( PORT ) + " &" )
+        os.system( "firefox -jsconsole http://localhost:" + str( PORT ) + " &" )
         socket_server.serve_forever()
     except SocketServer.socket.error:
         continue

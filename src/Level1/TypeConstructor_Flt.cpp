@@ -6,6 +6,15 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
+void metil_def_self_append__when__a__isa__String__and__b__is__Flt_0_23_23_8_31_1_127__pert__1000( MO &a, MO b ) {
+    String &os = static_cast<String &>( a );
+    DisplayFlt<0,23,23,8,31,1,-127>::display( os, (const PI8 *)b.data );
+}
+void metil_def_self_append__when__a__isa__String__and__b__is__Flt_0_52_52_11_63_1_1023__pert__1000( MO &a, MO b ) {
+    String &os = static_cast<String &>( a );
+    DisplayFlt<0,52,52,11,63,1,-1023>::display( os, (const PI8 *)b.data );
+}
+
 void metil_gen_reassign_inplace__when__a__isa__Flt( MethodWriter &mw ) {
     TypeConstructor_Flt *c = static_cast<TypeConstructor_Flt *>( mw.get_type( 0 )->constructor );
     if ( String cpp = c->cpp_type() ) {

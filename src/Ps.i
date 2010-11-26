@@ -13,12 +13,12 @@ namespace Metil {
         void free();
         T *ptr();
 
-        MachineId pos; ///< machine id (-1 -> cpu, 0 -> gpu board 0, ...)
+        const MachineId *pos; ///< machine id (-1 -> cpu, 0 -> gpu board 0, ...)
     };
 
     %extend Ps {
          void free() {
-             if ( self->pos.is_a_gpu() )
+             if ( self->pos->is_a_gpu() )
                  cudaFree( self->ptr() );
              else
                  FREE( self->ptr(), self->size_mem() );

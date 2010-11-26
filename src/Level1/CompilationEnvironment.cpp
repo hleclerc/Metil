@@ -461,6 +461,7 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
     Ptr<CompilationTree> res = loc_ce.make_obj_compilation_tree( loc_ce.obj_for( cpp, dyn ), make_cpp_compilation_tree( cpp ), dyn );
     for( int i = 0; i < cpp_parser.inc_files.size(); ++i )
         res->add_child( loc_ce.make_cpp_compilation_tree( cpp_parser.inc_files[ i ] ) );
+    // if ( not parsed.contains( cpp ) )
     obj.push_back_unique( res );
 
     // .h -> .cpp or .cu ?

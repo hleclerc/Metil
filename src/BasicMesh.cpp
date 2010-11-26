@@ -1,6 +1,7 @@
 #include "Level1/StringHelp.h"
 #include "BasicMesh.h"
-#include "String.h"
+#include "MathBasicVec.h"
+#include "Base64.h"
 
 BEG_METIL_NAMESPACE;
 
@@ -94,21 +95,25 @@ void BasicMesh::load_vtu( const String &filename ) {
     typedef enum { None, PointData, CellData, Points, Cells } Mode;
     File file( filename, "r" );
 
+    // basic init
+    pos_nodes.resize( 3 );
+
+    // load data
     int nb_nodes, nb_elems;
-    int off_Points, off_connectivity, off_offsets;
+    int off_Points = -1, off_connectivity = -1, off_offsets = -1;
     String name;
     Mode mode = None;
     BasicVec<int> connectivity, offsets, types;
+    String binary_data;
     for( const char *c = file.c_str(); *c; ++c ) {
         if ( Level1::strncmp( c, "NumberOfPoints='", 16 ) == 0 ) {
             nb_nodes = Val( str_to_next_quote( c += 16 ) );
-            pos_nodes.resize( 3 );
             for( int i = 0; i < 3; ++i )
                 pos_nodes[ i ].resize( nb_nodes );
             continue;
         }
         if ( Level1::strncmp( c, "NumberOfCells='", 15 ) == 0 ) {
-            nb_elems = Val( str_to_next_quote( c += 16 ) );
+            nb_elems = Val( str_to_next_quote( c += 15 ) );
             continue;
         }
         if ( Level1::strncmp( c, "Name='", 6 ) == 0 ) {
@@ -127,7 +132,7 @@ void BasicMesh::load_vtu( const String &filename ) {
             case None: break;
             case PointData: break;
             case CellData: break;
-            case Points: off_Points = off;
+            case Points: off_Points = off * 3 / 4; break;
             case Cells: break;
             }
         }
@@ -153,9 +158,36 @@ void BasicMesh::load_vtu( const String &filename ) {
                 }
             }
         }
+        if ( Level1::strncmp( c, "encoding='base64'" , 17 ) == 0 ) {
+            while( *c and *c != '_' )
+                ++c;
+            const char *b = ++c;
+            while ( not Level1::is_a_space( *c ) )
+                ++c;
+            base_64_decode( binary_data, b, c - b );
+            // File res("res","w");
+            // base_64_encode( res, binary_data.c_str(), binary_data.size() );
+            // PRINT( res );
+        }
     }
-    PRINT( off_Points );
-    PRINT( types.size() );
+    const unsigned char *bd = (unsigned char *)binary_data.c_str();
+
+    // get node pos
+    ASSERT( off_Points >= 0, "..." );
+    // PRINT( off_Points );
+    const double *d_pos_nodes = (const double *)( bd + off_Points + 4 );
+    for( int n = 0; n < nb_nodes; ++n )
+        for( int d = 0; d < 3; ++d )
+            pos_nodes[ d ][ n ] = d_pos_nodes[ 3 * n + d ];
+
+    // BasicVec<int> connectivity, offsets, types;
+    // PRINT( connectivity );
+    // PRINT( nb_elems );
+    for( int i = 0; i < nb_elems; ++i ) {
+        int b = i > 0 ? offsets[ i - 1 ] : 0;
+        if ( types[ i ] == 5 ) // triangle
+            add_elem( elem_type_Triangle, connectivity[ b + 0 ], connectivity[ b + 1 ], connectivity[ b + 2 ] );
+    }
 }
 
 END_METIL_NAMESPACE;

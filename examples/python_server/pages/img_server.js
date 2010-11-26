@@ -391,7 +391,8 @@ function append_mesh_to_imgserv( canvas_name, name ) {
     queue_python_cmd( 'b.add_triangle( 0, 1, 3 )' );
     queue_python_cmd( 'b.add_triangle( 0, 2, 3 )' );
     queue_python_cmd( 'b.add_triangle( 1, 2, 3 )' );
-    queue_python_cmd( 'c = make_cs( b, MachineId.gpu( 0 ) )' );
+    queue_python_cmd( 'c = make_cs( b, gpu( cpu( 0 ), 0 ) )' );
+    // queue_python_cmd( "request.send( 'alert(\"top\");' );" );
     queue_python_cmd( 'd = DisplayItem_BasicMesh( c )' );
     queue_python_cmd( 'cst_obj.append( c )' );
     queue_python_cmd( 'cst_obj.append( d )' );

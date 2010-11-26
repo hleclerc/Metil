@@ -226,6 +226,17 @@ src/Level1/def_LazyObj.h.py
 src/Level1/NbArgsMethods.h.py
 src/Level1/MethodGenerator.h.py
 src/Level1/MethodHelper.py
+src/BasicMesh_Compacted.i
+src/MachineId.i
+src/DisplayItem_BasicMesh.i
+src/Ps.i
+src/TypeConfig.i
+src/BasicMesh.i
+src/DisplayItem.i
+src/Socket.i
+src/GenericDisplay.i
+src/BitmapDisplay.i
+src/BasicVecRef.i
 doc/FieldManipulation.h
 doc/Reporting.h
 doc/Patches.h

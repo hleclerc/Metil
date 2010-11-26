@@ -35,11 +35,11 @@ inline void check_err( const char *file, int line, const char *msg ) {
 template<class T>
 typename T::HasOffPtr memcpy( Ps<T> &dst, const Ps<T> &src ) {
     cudaMemcpyKind mc[] = { cudaMemcpyHostToHost, cudaMemcpyHostToDevice, cudaMemcpyDeviceToHost, cudaMemcpyDeviceToDevice };
-    cudaMemcpy( dst.data, src.data, src.rese, mc[ 2 * src.pos.is_a_gpu() + dst.pos.is_a_gpu() ] );
-    if ( dst.pos.is_a_cpu() )
-        dst->update_ptr_cpu_load( (const char *)dst.data - (const char *)src.data );
-    else
+    cudaMemcpy( dst.data, src.data, src.rese, mc[ 2 * src.pos->is_a_gpu() + dst.pos->is_a_gpu() ] );
+    if ( dst.pos->is_a_gpu() )
         dst->update_ptr_gpu_load( (const char *)dst.data - (const char *)src.data );
+    else
+        dst->update_ptr_cpu_load( (const char *)dst.data - (const char *)src.data );
 }
 
 /// make a new copy of data from str

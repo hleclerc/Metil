@@ -30,6 +30,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  -dylib : create a dynamic library";
     cerrn << "  -ne : do not launch the executable";
     cerrn << "  -nc : do not compile (launch the executable if -ne is not present)";
+    cerrn << "  -exec file : execute 'file' after compilation";
     cerrn << "  -Iincludedir : append an include dir to environnement";
     cerrn << "  -DMACRO : #define MACRO";
     cerrn << "  -DMACRO=val : #define MACRO val";
@@ -68,7 +69,7 @@ bool is_a_CPPFLAG( const String &arg ) {
 int main( int argc, char **argv ) {
     Level1::CompilationEnvironment &ce = Level1::CompilationEnvironment::get_main_compilation_environment();
 
-    String cpp_file, out_file, exec_using, comp_dir, make_file;
+    String cpp_file, out_file, exec_using, comp_dir, make_file, exec_file;
     BasicVec<String> exec_args;
     bool execution   = true;
     bool compilation = true;
@@ -98,6 +99,12 @@ int main( int argc, char **argv ) {
                 return 10;
             }
             make_file = argv[ i ];
+        } else if ( arg == "-exec" ) {
+            if ( ++i >= argc ) {
+                usage( argv[ 0 ], "-exec must be followed by the name of resulting file" );
+                return 10;
+            }
+            exec_file = argv[ i ];
         } else if ( arg == "--cxx" ) {
             if ( ++i >= argc ) {
                 usage( argv[ 0 ], "--cxx must be followed by the name of the cxx compiler" );
@@ -194,11 +201,18 @@ int main( int argc, char **argv ) {
         if ( int res_make = ce.make_app( out_file, cpp_file, want_lib, want_dyn, true ) )
             return res_make;
 
+    //    if ( export_file ) {
+    //        File res( export_file, "w" );
+    //        ce.save_env_var_in_string( res );
+    //    }
+
+    // env var (including LD_LIBRARY_PATH)
+    ce.save_env_var();
+    if ( exec_file )
+        exec_cmd( exec_file );
+
     // execute
     if ( execution ) {
-        // env var (including LD_LIBRARY_PATH)
-        ce.save_env_var();
-
         // exec
         out_file = absolute_filename( out_file );
         String cmd = out_file;
@@ -208,6 +222,7 @@ int main( int argc, char **argv ) {
             cmd << ' ' << exec_args[ i ];
         return exec_cmd( cmd );
     }
+
 
     return 0;
 }
