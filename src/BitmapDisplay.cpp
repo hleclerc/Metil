@@ -53,7 +53,7 @@ void BitmapDisplay::save_png_in_sock( int socket_id, const char *name ) {
     #define DISP_IMG( N ) \
         data = Metil::make_png( (unsigned char *)N.get_cpu_ptr(), w, h ); \
         res << name << "." #N ".src = 'data:image/png;base64,"; \
-        to_base_64( res, data.data, data.size ); \
+        base_64_encode( res, data.data, data.size ); \
         res << "';\n"; \
         data.free()
 

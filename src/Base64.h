@@ -6,6 +6,7 @@
 BEG_METIL_NAMESPACE;
 
 void to_base_64( String &os, const void *data, ST size );
+void base_64_decode( String &os, const void *data, ST size );
 
 END_METIL_NAMESPACE;
 

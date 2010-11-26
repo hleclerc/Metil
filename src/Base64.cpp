@@ -26,7 +26,7 @@ static void encode_block_1( unsigned char *dst, const unsigned char *in ) {
     dst[3] = '=';
 }
 
-void to_base_64( String &os, const void *data_, ST size ) {
+void base_64_encode( String &os, const void *data_, ST size ) {
     const unsigned char *data = reinterpret_cast<const unsigned char *>( data_ );
     BasicSplittedVec<unsigned char,1024> tmp;
     ST i = 0;
@@ -38,6 +38,9 @@ void to_base_64( String &os, const void *data_, ST size ) {
         encode_block_1( tmp.get_room( 4 ), data + i );
     for( BasicSplittedVec<unsigned char,1024>::Item *item = &tmp.first; item; item = item->next )
         os.write( item->ptr(), item->size() );
+}
+
+void base_64_decode( String &os, const void *data_, ST size ) {
 }
 
 END_METIL_NAMESPACE;
