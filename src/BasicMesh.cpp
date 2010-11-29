@@ -112,6 +112,7 @@ void BasicMesh::load_vtu( const String &filename ) {
     BasicVec<int> connectivity, offsets, types;
     String binary_data;
     BasicVec<LField> l_nodal_fields;
+    BasicVec<LField> l_elementary_fields;
     for( const char *c = file.c_str(); *c; ++c ) {
         if ( Level1::strncmp( c, "NumberOfPoints='", 16 ) == 0 ) {
             nb_nodes = Val( str_to_next_quote( c += 16 ) );
@@ -148,9 +149,13 @@ void BasicMesh::load_vtu( const String &filename ) {
                 f->offset = off * 3 / 4;
                 f->nb_comp = nb_comp;
                 break;
-            } case CellData:
+            } case CellData: {
+                LField *f = l_elementary_fields.push_back();
+                f->name = name;
+                f->offset = off * 3 / 4;
+                f->nb_comp = nb_comp;
                 break;
-            case Points:
+            } case Points:
                 off_Points = off * 3 / 4;
                 break;
             case Cells:
@@ -190,19 +195,12 @@ void BasicMesh::load_vtu( const String &filename ) {
     }
     const unsigned char *bd = (unsigned char *)binary_data.c_str();
 
-    // get node pos
+    // pos_nodes
     ASSERT( off_Points >= 0, "..." );
     const double *d_pos_nodes = (const double *)( bd + off_Points + 4 );
     for( int n = 0; n < nb_nodes; ++n )
         for( int d = 0; d < 3; ++d )
             pos_nodes[ d ][ n ] = d_pos_nodes[ 3 * n + d ];
-
-    // elements
-    for( int i = 0; i < nb_elems; ++i ) {
-        int b = i > 0 ? offsets[ i - 1 ] : 0;
-        if ( types[ i ] == 5 ) // triangle
-            add_elem( elem_type_Triangle, connectivity[ b + 0 ], connectivity[ b + 1 ], connectivity[ b + 2 ] );
-    }
 
     // nodal fields
     for( int i = 0; i < l_nodal_fields.size(); ++i ) {
@@ -216,6 +214,29 @@ void BasicMesh::load_vtu( const String &filename ) {
             field->data[ d ].resize( nb_nodes );
             for( int n = 0; n < nb_nodes; ++n )
                 field->data[ d ][ n ] = d_field[ l_nodal_fields[ i ].nb_comp * n + d ];
+        }
+    }
+
+    // elements
+    for( int i = 0; i < nb_elems; ++i ) {
+        int b = i > 0 ? offsets[ i - 1 ] : 0;
+        if ( types[ i ] == 5 ) { // triangle
+            add_elem( elem_type_Triangle, connectivity[ b + 0 ], connectivity[ b + 1 ], connectivity[ b + 2 ] );
+        }
+    }
+
+    // elementary fields
+    for( int i = 0; i < l_elementary_fields.size(); ++i ) {
+        Field *field = elem_groups[ 0 ].fields.push_back();
+        for( int j = 0; j < l_elementary_fields[ i ].name.size(); ++j )
+            field->name << l_elementary_fields[ i ].name[ j ];
+        PRINT( l_elementary_fields[ i ].name );
+        field->data.resize( l_elementary_fields[ i ].nb_comp );
+        const double *d_field = (const double *)( bd + l_elementary_fields[ i ].offset + 4 );
+        for( int d = 0; d < l_elementary_fields[ i ].nb_comp; ++d ) {
+            field->data[ d ].resize( nb_elems );
+            for( int n = 0; n < nb_elems; ++n )
+                field->data[ d ][ n ] = d_field[ l_elementary_fields[ i ].nb_comp * n + d ];
         }
     }
 }

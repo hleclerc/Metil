@@ -74,8 +74,10 @@ unsigned *BitmapDisplay::Img::get_cpu_ptr() {
         free( cpu );
         cpu = 0;
     }
-    if ( not cpu )
-        cpu = (unsigned *)malloc( rese() );
+    if ( not cpu ) {
+        rese_cpu = rese();
+        cpu = (unsigned *)malloc( rese_cpu );
+    }
     return cpu;
 }
 
@@ -84,8 +86,10 @@ unsigned *BitmapDisplay::Img::get_gpu_ptr() {
         cudaFree( gpu );
         gpu = 0;
     }
-    if ( not gpu )
-        cudaMalloc( &gpu, rese() );
+    if ( not gpu ) {
+        rese_gpu = rese();
+        cudaMalloc( &gpu, rese_gpu );
+    }
     return gpu;
 }
 

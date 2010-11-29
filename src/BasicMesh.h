@@ -15,6 +15,18 @@ public:
     typedef float T;
     typedef int I;
 
+    struct Field {
+        template<class TB,class TP>
+        void apply_bs( TB &res, TP ) const {
+            res.set_type( "Field" );
+            APPLY_WN( res, name );
+            APPLY_WN( res, data );
+        }
+
+        BasicVec<char> name;
+        BasicVec<BasicVec<T> > data; /// data[ dim ][ num_elem ]
+    };
+
     struct ElemGroup {
         ElemGroup( const ElemType *elem_type ) : elem_type( elem_type ), elem_id( elem_type->elem_id() ) {
         }
@@ -23,12 +35,14 @@ public:
         void apply_bs( TB &res, TP ) const {
             res.set_type( "ElemGroup" );
             APPLY_WN( res, connec );
+            APPLY_WN( res, fields );
             APPLY_WN( res, elem_id );
         }
 
         ST nb_elements() const { return connec.size() ? connec[ 0 ].size() : 0; }
 
         BasicVec<BasicVec<I> > connec;
+        BasicVec<Field> fields;
         const ElemType *elem_type;
         I elem_id;
     };
@@ -49,18 +63,6 @@ public:
         I num_in_elem;
     };
 
-    struct Field {
-        template<class TB,class TP>
-        void apply_bs( TB &res, TP ) const {
-            res.set_type( "Field" );
-            APPLY_WN( res, name );
-            APPLY_WN( res, data );
-        }
-
-        BasicVec<char> name;
-        BasicVec<BasicVec<T> > data;
-    };
-
     template<class TB,class TP>
     void apply_bs( TB &res, TP ) const {
         res.set_type( "BasicMesh_Compacted" );
@@ -68,7 +70,6 @@ public:
         APPLY_WN( res, elem_groups );
         APPLY_WN( res, node_to_elem );
         APPLY_WN( res, nodal_fields );
-        APPLY_WN( res, elementary_fields );
     }
 
     void add_node( T x, T y );
@@ -85,7 +86,6 @@ public:
     BasicVec<BasicVec<T> > pos_nodes;
     BasicVec<BasicVec<NodeToElemItem> > node_to_elem; ///< node_to_elem[ node_number ][ elem_number ]
     BasicVec<Field> nodal_fields;
-    BasicVec<BasicVec<Field> > elementary_fields;
 };
 
 END_METIL_NAMESPACE;

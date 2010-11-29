@@ -28,9 +28,9 @@ struct ElemTypeTriangle : public ElemType {
                 connec[ 1 ] << os + Xd[ 0 ] * ( y + 0 ) + ( x + 1 );
                 connec[ 2 ] << os + Xd[ 0 ] * ( y + 1 ) + ( x + 0 );
 
-                connec[ 0 ] << os + Xd[ 0 ] * ( y + 0 ) + ( x + 1 );
-                connec[ 1 ] << os + Xd[ 0 ] * ( y + 1 ) + ( x + 1 );
+                connec[ 0 ] << os + Xd[ 0 ] * ( y + 1 ) + ( x + 1 );
                 connec[ 2 ] << os + Xd[ 0 ] * ( y + 1 ) + ( x + 0 );
+                connec[ 1 ] << os + Xd[ 0 ] * ( y + 0 ) + ( x + 1 );
             }
         }
     }

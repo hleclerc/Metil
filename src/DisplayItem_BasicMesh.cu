@@ -4,6 +4,8 @@
 #include "MathBasicVec.h"
 #include "CudaMetil.h"
 
+#include <float.h>
+
 #define NB_PIX_RASTER_BOX 32
 #define NB_BLOCKS_FOR_ELEM_COUNT 32
 #define MAX_WH ( 1600 * 1200 )
@@ -72,7 +74,8 @@ void DisplayItem_BasicMesh::update_p_min_p_max( GenericDisplay *display, T3 &p_m
     }
 }
 
-void DisplayItem_BasicMesh::set_coloring_field( int n, T mi, T ma, int dimension ) {
+void DisplayItem_BasicMesh::set_coloring_field( int t, int n, T mi, T ma, int dimension ) {
+    typ_coloring_field = t;
     num_coloring_field = n;
     dim_coloring_field = dimension;
     min_coloring_field = mi;
@@ -258,8 +261,8 @@ unsigned shader( float z_n, float c ) {
 //    res[ 1 ] = 0xFF000000 + ( s << 16 ) + ( e + 32768 );
 //}
 
-__global__
-void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, int wb, int hb, int sb, int w, int h, const unsigned *elem_offsets, const int *elem_data, const BasicMesh_Compacted *m, const T *n_x, const T *n_y, const T *n_z, float z_min, float z_mul, bool first_item,
+__device__
+void raster_gpu_kernel_elem_loop( unsigned *rgba, unsigned *zznv, unsigned *nnnn, int wb, int hb, int sb, int w, int h, const unsigned *elem_offsets, const int *elem_data, const BasicMesh_Compacted *m, const T *n_x, const T *n_y, const T *n_z, float z_min, float z_mul, bool first_item,
                        float min_coloring_field, float max_coloring_field, int num_coloring_field, int dim_coloring_field ) {
     int bx = blockIdx.x * NB_PIX_RASTER_BOX;
     int by = blockIdx.y * NB_PIX_RASTER_BOX;
@@ -432,6 +435,98 @@ void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, int wb, 
             local_z_max[ threadIdx.x ] = max( local_z_max[ threadIdx.x ], local_z_max[ threadIdx.x + m ] );
         }
     }
+
+}
+
+__device__
+void raster_gpu_kernel_pixel_loop( unsigned *rgba, unsigned *zznv, unsigned *nnnn, int wb, int hb, int sb, int w, int h, const unsigned *elem_offsets, const int *elem_data, const BasicMesh_Compacted *m, const T *n_x, const T *n_y, const T *n_z, float z_min, float z_mul, bool first_item,
+                       float min_coloring_field, float max_coloring_field, int num_coloring_field, int dim_coloring_field, int typ_coloring_field ) {
+    int bx = blockIdx.x * NB_PIX_RASTER_BOX;
+    int by = blockIdx.y * NB_PIX_RASTER_BOX;
+    int ne = wb * blockIdx.y + blockIdx.x;
+
+    for( int i = threadIdx.x; i < NB_PIX_RASTER_BOX * NB_PIX_RASTER_BOX; i += NB_THREADS_FOR_RASTER ) {
+        int x = bx + i % NB_PIX_RASTER_BOX;
+        int y = by + i / NB_PIX_RASTER_BOX;
+        if ( x >= w or y >= h )
+            continue;
+
+        unsigned res_rgba = 0;
+        T res_z = FLT_MAX;
+
+        const unsigned *eo = elem_offsets;
+        int size_for_1t = ( NB_BLOCKS_FOR_ELEM_COUNT + 1 ) * sb + 1;
+        for( int num_type = 0; num_type < m->elem_groups.size(); ++num_type, eo += size_for_1t ) {
+            const int *c_0 = m->elem_groups[ num_type ].connec[ 0 ].ptr();
+            const int *c_1 = m->elem_groups[ num_type ].connec[ 1 ].ptr();
+            const int *c_2 = m->elem_groups[ num_type ].connec[ 2 ].ptr();
+
+            // swwep elem list
+            unsigned beg_elem = eo[ ne + 0 ];
+            unsigned end_elem = eo[ ne + 1 ];
+            for( int num_elem = beg_elem; num_elem < end_elem; ++num_elem ) {
+                int ind_elem = elem_data[ num_elem ];
+
+                int n_0 = c_0[ ind_elem ];
+                int n_1 = c_1[ ind_elem ];
+                int n_2 = c_2[ ind_elem ];
+
+                T x_0 = n_x[ n_0 ], y_0 = n_y[ n_0 ];
+                T x_1 = n_x[ n_1 ], y_1 = n_y[ n_1 ];
+                T x_2 = n_x[ n_2 ], y_2 = n_y[ n_2 ];
+
+                T dx_0 = x - x_0, dx_1 = x_1 - x_0, dx_2 = x_2 - x_0;
+                T dy_0 = y - y_0, dy_1 = y_1 - y_0, dy_2 = y_2 - y_0;
+                T det = dx_1 * dy_2 - dy_1 * dx_2;
+                if ( det == 0 )
+                    continue;
+                T inv_det = 1 / det;
+
+                T vi_1 = inv_det * ( dx_0 * dy_2 - dy_0 * dx_2 );
+                T vi_2 = inv_det * ( dx_1 * dy_0 - dy_1 * dx_0 );
+                T vi_0 = 1 - vi_1 - vi_2, eps = -1e-3;
+                if ( vi_0 < eps or vi_1 < eps or vi_2 < eps )
+                    continue;
+
+                T z_0 = n_z[ n_0 ], z_1 = n_z[ n_1 ], z_2 = n_z[ n_2 ];
+                T z = vi_0 * z_0 + vi_1 * z_1 + vi_2 * z_2;
+                eps = 1e-4;
+                z = ( 1 - eps ) * z + eps / 3 * ( z_0 + z_1 + z_2 );
+                if ( res_z <= z )
+                    continue;
+                res_z = z;
+
+                T v = -1;
+                if ( num_coloring_field >= 0 and typ_coloring_field == 1 ) {
+                    v = m->elem_groups[ num_type ].fields[ num_coloring_field ].data[ dim_coloring_field ][ ind_elem ];
+                    v = ( v - min_coloring_field ) / ( max_coloring_field - min_coloring_field );
+                }
+
+                T3 normal = normalized( cross( T3( dx_1, dy_1, z_1 - z_0 ), T3( dx_2, dy_2, z_2 - z_0 ) ) );
+                res_rgba = shader( v, abs( normal[ 2 ] ) );
+            }
+        }
+
+        rgba[ w * y + x ] = res_rgba;
+        //        nnnn[ w * y + x ] = nnnn_buffer[ i ];
+        //        //
+        //        if ( zznv_buffer[ i ] != 0xFFFFFFFF ) {
+        //            local_z_min[ threadIdx.x ] = min( local_z_min[ threadIdx.x ], zznv_buffer[ i ] );
+        //            local_z_max[ threadIdx.x ] = max( local_z_max[ threadIdx.x ], zznv_buffer[ i ] );
+        //        }
+    }
+
+}
+
+__global__
+void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, int wb, int hb, int sb, int w, int h, const unsigned *elem_offsets, const int *elem_data, const BasicMesh_Compacted *m, const T *n_x, const T *n_y, const T *n_z, float z_min, float z_mul, bool first_item,
+                       float min_coloring_field, float max_coloring_field, int num_coloring_field, int dim_coloring_field, int typ_coloring_field ) {
+    raster_gpu_kernel_pixel_loop(
+                rgba, zznv, nnnn, wb, hb, sb, w, h, elem_offsets, elem_data, m, n_x, n_y, n_z, z_min, z_mul, first_item,
+                min_coloring_field, max_coloring_field, num_coloring_field, dim_coloring_field, typ_coloring_field );
+//    raster_gpu_kernel_elem_loop(
+//                rgba, zznv, nnnn, wb, hb, sb, w, h, elem_offsets, elem_data, m, n_x, n_y, n_z, z_min, z_mul, first_item,
+//                min_coloring_field, max_coloring_field, num_coloring_field, dim_coloring_field, typ_coloring_field );
 }
 
 void DisplayItem_BasicMesh::render_to( BitmapDisplay *display ) {
@@ -485,9 +580,10 @@ void DisplayItem_BasicMesh::render_to( BitmapDisplay *display ) {
              wb, hb, sb, w, h,
              elem_count + sb * NB_BLOCKS_FOR_ELEM_COUNT, elem_data,
              mesh.ptr(), proj[ 0 ], proj[ 1 ], proj[ 2 ],
-             display->p_min[ 2 ], 65534.0 / plus_one_if_eqz( display->p_max[ 2 ] - display->p_min[ 2 ] ), display->first_item(),
+             display->p_min[ 2 ], 65534.0 / plus_one_if_eqz( display->p_max[ 2 ] - display->p_min[ 2 ] ),
+             display->first_item(),
              min_coloring_field, max_coloring_field,
-             num_coloring_field, dim_coloring_field
+             num_coloring_field, dim_coloring_field, typ_coloring_field
     ) ));
 }
 
