@@ -8,10 +8,14 @@
 #define NB_BLOCKS_FOR_ELEM_COUNT 32
 #define MAX_WH ( 1600 * 1200 )
 #define NB_THREADS_FOR_RASTER 1 // 64
+#define NB_THREADS_FOR_PROJ 64
 
 BEG_METIL_NAMESPACE;
 
 DisplayItem_BasicMesh::DisplayItem_BasicMesh( Ps<BasicMesh_Compacted> mesh ) : mesh( mesh ) {
+    for( int d = 0; d < 3; ++d )
+        proj[ d ] = 0;
+
     size_elem_count = 0;
     elem_count_gpu = 0;
 
@@ -20,6 +24,13 @@ DisplayItem_BasicMesh::DisplayItem_BasicMesh( Ps<BasicMesh_Compacted> mesh ) : m
 
     num_coloring_field = -1;
     dim_coloring_field = 0;
+}
+
+DisplayItem_BasicMesh::~DisplayItem_BasicMesh() {
+    for( int d = 0; d < 3; ++d )
+        cudaFree( proj[ d ] );
+    cudaFree( elem_count_gpu );
+    cudaFree( elem_data_gpu  );
 }
 
 __inline__ ST rese_elem_count_for_one_group( int sb ) {
@@ -305,15 +316,15 @@ void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, const Di
             T3 B_2 = trans.proj( P_2 );
 
             int x_0 = int( B_0[ 0 ] ) - bx, y_0 = int( B_0[ 1 ] ) - by, z_0 = ( B_0[ 2 ] - z_min ) * 65534 / ( z_max - z_min );
-            int x_1 = int( B_1[ 0 ] ) - bx, y_1 = int( B_1[ 1 ] ) - by, z_0 = ( B_1[ 2 ] - z_min ) * 65534 / ( z_max - z_min );
-            int x_2 = int( B_2[ 0 ] ) - bx, y_2 = int( B_2[ 1 ] ) - by, z_0 = ( B_2[ 2 ] - z_min ) * 65534 / ( z_max - z_min );
+            int x_1 = int( B_1[ 0 ] ) - bx, y_1 = int( B_1[ 1 ] ) - by, z_1 = ( B_1[ 2 ] - z_min ) * 65534 / ( z_max - z_min );
+            int x_2 = int( B_2[ 0 ] ) - bx, y_2 = int( B_2[ 1 ] ) - by, z_2 = ( B_2[ 2 ] - z_min ) * 65534 / ( z_max - z_min );
 
             T v_0 = n_v ? ( n_v[ n_0 ] - min_coloring_field ) / ( max_coloring_field - min_coloring_field ) : -1;
             T v_1 = n_v ? ( n_v[ n_1 ] - min_coloring_field ) / ( max_coloring_field - min_coloring_field ) : -1;
             T v_2 = n_v ? ( n_v[ n_2 ] - min_coloring_field ) / ( max_coloring_field - min_coloring_field ) : -1;
 
 
-            // sort points and values by B[ 1 ]
+            // sort points and values by y
             if ( y_0 > y_1 ) { swap( x_0, x_1 ); swap( y_0, y_1 ); swap( z_0, z_1 ); swap( v_0, v_1 ); }
             if ( y_0 > y_2 ) { swap( x_0, x_2 ); swap( y_0, y_2 ); swap( z_0, z_2 ); swap( v_0, v_2 ); }
             if ( y_1 > y_2 ) { swap( x_1, x_2 ); swap( y_1, y_2 ); swap( z_1, z_2 ); swap( v_1, v_2 ); }
@@ -330,7 +341,7 @@ void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, const Di
                 swap( cv_0, cv_1 );
             }
 
-            for( int y_b = max( 0, y_0 ); y_b < min( NB_PIX_RASTER_BOX, y_1 ); ++y_b ) {
+            for( int y_b = max( 0, y_0 ); y_b < min( NB_PIX_RASTER_BOX, y_1 + 1 ); ++y_b ) {
                 int xl_0 = x_0 + ( y_b - y_0 ) * cx_0;
                 int xl_1 = x_0 + ( y_b - y_0 ) * cx_1;
 
@@ -344,11 +355,11 @@ void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, const Di
                 for( int x_b = max( 0, xl_0 ); x_b < min( NB_PIX_RASTER_BOX, xl_1 + 1 ); ++x_b ) {
                     float z_b = zl_0 + ( x_b - xl_0 ) * c_z;
                     unsigned z_re = atomicMin( zznv_buffer + NB_PIX_RASTER_BOX * y_b + x_b, z_b );
-                    if ( z_re >= z_bi ) {
+                    if ( z_re > z_b ) {
                         float v = vl_0 + ( x_b - xl_0 ) * c_v;
                         float n = dot( normal, trans.eye_dir( x_b + bx, y_b + by ) );
                         // if ( n < 0 ) continue;
-                        rgba_buffer[ NB_PIX_RASTER_BOX * y_b + x_b ] = shader( v, abs( n ) ) + ( ( 150 * ( x_b == xl_0 or x_b == xl_1 ) ) << 8 );
+                        rgba_buffer[ NB_PIX_RASTER_BOX * y_b + x_b ] = shader( v, abs( n ) ); // + ( ( 150 * ( x_b == xl_0 or x_b == xl_1 ) ) << 8 );
                         nnnn_buffer[ NB_PIX_RASTER_BOX * y_b + x_b ] = ind_elem;
                     }
                 }
@@ -379,11 +390,11 @@ void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, const Di
                 for( int x_b = max( 0, xl_0 ); x_b < min( NB_PIX_RASTER_BOX, xl_1 + 1 ); ++x_b ) {
                     float z_b = zl_0 + ( x_b - xl_0 ) * c_z;
                     unsigned z_re = atomicMin( zznv_buffer + NB_PIX_RASTER_BOX * y_b + x_b, z_b );
-                    if ( z_re >= z_bi ) {
+                    if ( z_re > z_b ) {
                         float v = vl_0 + ( x_b - xl_0 ) * c_v;
                         float n = dot( normal, trans.eye_dir( x_b + bx, y_b + by ) );
                         // if ( n < 0 ) continue;
-                        rgba_buffer[ NB_PIX_RASTER_BOX * y_b + x_b ] = shader( v, abs( n ) ); /// + ( ( 150 * ( x_b == xl_0 or x_b == xl_1 ) ) << 8 );
+                        rgba_buffer[ NB_PIX_RASTER_BOX * y_b + x_b ] = shader( v, abs( n ) ); // + ( ( 150 * ( x_b == xl_0 or x_b == xl_1 ) ) << 8 );
                         nnnn_buffer[ NB_PIX_RASTER_BOX * y_b + x_b ] = ind_elem;
                     }
                 }
@@ -427,22 +438,48 @@ void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, const Di
     }
 }
 
+__global__
+void make_proj_kernel( T *x, T *y, T *z, const DisplayTrans *trans_ptr, int w, int h, BasicMesh_Compacted *m ) {
+    DisplayTrans::Buf trans = trans_ptr->make_buf( w, h );
+
+    const float *n_x = m->pos_nodes[ 0 ].ptr();
+    const float *n_y = m->pos_nodes[ 1 ].ptr();
+    const float *n_z = m->pos_nodes[ 2 ].ptr();
+
+    //if (  ) {
+    //    T3 B_0 = trans.proj( P_0 );
+
+}
 
 void DisplayItem_BasicMesh::render_to( BitmapDisplay *display ) {
     ASSERT( mesh.pos->is_a_gpu(), "render works only with data on gpu" );
 
+    // get various data
     int w = display->get_w();
     int h = display->get_h();
     int wb = iDivUp( w, NB_PIX_RASTER_BOX );
     int hb = iDivUp( h, NB_PIX_RASTER_BOX );
     int sb = wb * hb;
 
+    DisplayTrans *trans = display->get_trans_gpu();
+
     ST nb_types = 0;
     CSC(( cudaMemcpy( &nb_types, &mesh->elem_groups.size_, sizeof( ST ), cudaMemcpyDeviceToHost ) ));
 
+    ST nb_nodes = 0;
+    CSC(( cudaMemcpy( &nb_nodes, &mesh->pos_nodes.data_, sizeof( ST ), cudaMemcpyDeviceToHost ) ));
+    CSC(( cudaMemcpy( &nb_nodes, &reinterpret_cast<const BasicVecRef<T> *>( nb_nodes )->size_, sizeof( ST ), cudaMemcpyDeviceToHost ) ));
+    for( int d = 0; d < 3; ++d )
+        if ( not proj[ d ] )
+            cudaMalloc( proj + d, sizeof( T ) * nb_nodes );
+
+    // make projection
+    CSC(( make_proj_kernel<<<iDivUp(nb_nodes,NB_THREADS_FOR_PROJ),NB_THREADS_FOR_PROJ>>>( proj[ 0 ], proj[ 1 ], proj[ 2 ], trans, w, h, mesh.ptr() ) ));
+
+
+
     // fill elem_count
     unsigned *elem_count = get_elem_count_gpu_ptr( nb_types, sb );
-    DisplayTrans *trans = display->get_trans_gpu();
     CSC(( make_elem_count_kernel<<<NB_BLOCKS_FOR_ELEM_COUNT,128>>>( elem_count, trans, wb, hb, w, h, mesh.ptr() ) ));
     CSC(( make_sum_elem_count_kernel<<<Metil::iDivUp(sb,64),64>>>( elem_count, wb, hb, nb_types ) ));
     CSC(( make_off_elem_count_kernel<<<1,1>>>( elem_count, wb, hb, nb_types ) ));

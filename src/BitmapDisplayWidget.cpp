@@ -16,8 +16,13 @@ QSize BitmapDisplayWidget::sizeHint() const {
 }
 
 void BitmapDisplayWidget::keyPressEvent( QKeyEvent *key_event ) {
-    if ( key_event->key() == Qt::Key_Escape )
-        emit close();
+    switch ( key_event->key() ) {
+    case Qt::Key_Escape: emit close(); break;
+    case Qt::Key_Right : display.rotate( 0.0, -0.2, 0.0 ); repaint(); break;
+    case Qt::Key_Left  : display.rotate( 0.0, +0.2, 0.0 ); repaint(); break;
+    case Qt::Key_Up    : display.rotate( -0.2, 0.0, 0.0 ); repaint(); break;
+    case Qt::Key_Down  : display.rotate( +0.2, 0.0, 0.0 ); repaint(); break;
+    }
 }
 
 void BitmapDisplayWidget::mousePressEvent( QMouseEvent *mouse_event ) {

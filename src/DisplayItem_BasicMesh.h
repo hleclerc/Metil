@@ -12,6 +12,7 @@ class DisplayItem_BasicMesh : public DisplayItem {
 public:
     typedef float T;
     DisplayItem_BasicMesh( Ps<BasicMesh_Compacted> mesh );
+    ~DisplayItem_BasicMesh();
 
     virtual void render_to( BitmapDisplay *display );
     virtual void render_to( VectorDisplay *display );
@@ -23,17 +24,21 @@ public:
     int *get_elem_data_gpu_ptr( ST needed_size );
 
 protected:
-     Ps<BasicMesh_Compacted> mesh;
+    void make_proj();
 
-     ST size_elem_data;
-     int *elem_data_gpu;
+    Ps<BasicMesh_Compacted> mesh;
 
-     ST size_elem_count;
-     unsigned *elem_count_gpu;
+    T *proj[ 3 ]; // pos_nodes in screen coordinates
 
-     T min_coloring_field;
-     T max_coloring_field;
-     int num_coloring_field, dim_coloring_field;
+    ST size_elem_data;
+    int *elem_data_gpu;
+
+    ST size_elem_count;
+    unsigned *elem_count_gpu;
+
+    T min_coloring_field;
+    T max_coloring_field;
+    int num_coloring_field, dim_coloring_field;
 };
 
 END_METIL_NAMESPACE;

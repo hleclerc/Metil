@@ -367,12 +367,12 @@ String CompilationEnvironment::lnk_cmd( const String &exe, const BasicVec<String
     // basic flags
     if ( lib )
         cmd << ( dyn ? " -shared" : " -static" );
-    // -L... -l...
-    extra_lnk_cmd( cmd, lib, dyn );
     // input / output
     cmd << " -o " << exe;
     for( int i = 0; i < obj.size(); ++i )
         cmd << ' ' << obj[ i ];
+    // -L... -l...
+    extra_lnk_cmd( cmd, lib, dyn );
     return cmd;
 }
 
