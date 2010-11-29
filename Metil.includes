@@ -2,4 +2,4 @@ src
 examples/server
 /usr/include/python2.6/
 /usr/local/cuda/include
-
+/usr/include/qt4/

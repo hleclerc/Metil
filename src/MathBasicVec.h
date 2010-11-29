@@ -54,6 +54,22 @@ __inline__ T cross( const BasicVec<T,1> &a, const BasicVec<T,1> &b ) {
     return b[ 0 ] - a[ 0 ];
 }
 
+template<class T>
+__inline__ BasicVec<T,3> rot( const BasicVec<T,3> &V, const BasicVec<T,3> &R ) {
+    T a = length( R ) + 1e-40;
+    T x = R[ 0 ] / a;
+    T y = R[ 1 ] / a;
+    T z = R[ 2 ] / a;
+    T c = Metil::cos( a );
+    T s = Metil::sin( a );
+    return BasicVec<T,3>(
+        ( x*x+(1-x*x)*c ) * V[ 0 ] + ( x*y*(1-c)-z*s ) * V[ 1 ] + ( x*z*(1-c)+y*s ) * V[ 2 ],
+        ( y*x*(1-c)+z*s ) * V[ 0 ] + ( y*y+(1-y*y)*c ) * V[ 1 ] + ( y*z*(1-c)-x*s ) * V[ 2 ],
+        ( z*x*(1-c)-y*s ) * V[ 0 ] + ( z*y*(1-c)+x*s ) * V[ 1 ] + ( z*z+(1-z*z)*c ) * V[ 2 ]
+    );
+}
+
+
 template<class T,int s> __inline__ BasicVec<T,s> operator+( const BasicVec<T,s> &a, const BasicVec<T,s> &b ) { BasicVec<T,s> res; for( int i = 0; i < a.size(); ++i ) res[ i ] = a[ i ] + b[ i ]; return res; }
 template<class T,int s> __inline__ BasicVec<T,s> operator-( const BasicVec<T,s> &a, const BasicVec<T,s> &b ) { BasicVec<T,s> res; for( int i = 0; i < a.size(); ++i ) res[ i ] = a[ i ] - b[ i ]; return res; }
 template<class T,int s> __inline__ BasicVec<T,s> operator*( const BasicVec<T,s> &a, const BasicVec<T,s> &b ) { BasicVec<T,s> res; for( int i = 0; i < a.size(); ++i ) res[ i ] = a[ i ] * b[ i ]; return res; }

@@ -11,17 +11,17 @@ install: ./metil_comp
 	./install.sh
 
 test: # make_metil_comp
-	${LOC_MC} -o tests/main -g3 -Isrc tests/visu.cpp
+	${LOC_MC} -o tests/visu -g3 -O3 -Isrc tests/visu.cpp
 # 	make -C examples/python_server
 
 test_gdb:
-	${LOC_MC} -o tests/main --gdb -g3 -Isrc tests/main.cpp
+	${LOC_MC} -o tests/visu --gdb -g3 -Isrc tests/main.cpp
 
 test_valgrind:
-	${LOC_MC} -o tests/main --exec-using "valgrind --db-attach=yes --num-callers=30" -g3 tests/visu.cpp
+	${LOC_MC} -o tests/visu --exec-using "valgrind --db-attach=yes --num-callers=30" -g3 tests/visu.cpp
 	
 test_valgrind_full:
-	${LOC_MC} -o tests/main --exec-using "valgrind --leak-check=full --show-reachable=yes" -g3 tests/main.cpp
+	${LOC_MC} -o tests/visu --exec-using "valgrind --leak-check=full --show-reachable=yes" -g3 tests/visu.cpp
 
 metil_gen:
 	${LOC_MC} -g3 src/Level1/metil_parse.cpp `find src -name "*.cpp" -o -name "*.h"`

@@ -200,6 +200,8 @@ template<class T> __inline__ T min( const T &a, const T &b ) { return ::min( a, 
 template<class T> __inline__ T max( const T &a, const T &b ) { return ::max( a, b ); }
 
 template<class T> __inline__ T abs( const T &a ) { return ::abs( a ); }
+template<class T> __inline__ T cos( const T &a ) { return ::cos( a ); }
+template<class T> __inline__ T sin( const T &a ) { return ::sin( a ); }
 template<class T> __inline__ T tan( const T &a ) { return ::tan( a ); }
 
 template<class T> __inline__ T sqrt( const T &a ) { return ::sqrt( a ); }

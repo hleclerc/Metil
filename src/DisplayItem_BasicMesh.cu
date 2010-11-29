@@ -456,9 +456,6 @@ void DisplayItem_BasicMesh::render_to( BitmapDisplay *display ) {
 
     // fill image
     dim3 grid_size_raster( wb, hb );
-    PRINT( min_coloring_field );
-    PRINT( num_coloring_field );
-    PRINT( dim_coloring_field );
     CSC(( raster_gpu_kernel<<<grid_size_raster,NB_THREADS_FOR_RASTER>>>(
              display->img_rgba.get_gpu_ptr(),
              display->img_zznv.get_gpu_ptr(),

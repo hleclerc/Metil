@@ -17,6 +17,7 @@ public:
     void add_lib_path( const String &path );
     void add_lib_name( const String &name );
     void add_CPPFLAG ( const String &flag );
+    void add_LDFLAG  ( const String &flag );
     void add_def_proc( const String &proc );
 
     void set_CXX     ( const String &path );

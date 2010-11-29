@@ -70,19 +70,31 @@ ST BitmapDisplay::Img::rese() {
 }
 
 unsigned *BitmapDisplay::Img::get_cpu_ptr() {
+    if ( rese_cpu != rese() ) {
+        free( cpu );
+        cpu = 0;
+    }
     if ( not cpu )
         cpu = (unsigned *)malloc( rese() );
     return cpu;
 }
 
 unsigned *BitmapDisplay::Img::get_gpu_ptr() {
+    if ( rese_gpu != rese() ) {
+        cudaFree( gpu );
+        gpu = 0;
+    }
     if ( not gpu )
         cudaMalloc( &gpu, rese() );
     return gpu;
 }
 
+void BitmapDisplay::Img::copy_gpu_to_cpu( unsigned char *bits ) {
+    cudaMemcpy( bits, get_gpu_ptr(), rese(), cudaMemcpyDeviceToHost );
+}
+
 void BitmapDisplay::Img::copy_gpu_to_cpu() {
-    cudaMemcpy( get_cpu_ptr(), get_gpu_ptr(), rese(), cudaMemcpyDeviceToHost );
+    copy_gpu_to_cpu( (unsigned char *)get_cpu_ptr() );
 }
 
 void BitmapDisplay::copy_gpu_to_cpu() {

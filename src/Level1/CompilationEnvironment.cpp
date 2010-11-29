@@ -100,6 +100,12 @@ void CompilationEnvironment::add_CPPFLAG( const String &flag ) {
     CPPFLAGS << flag;
 }
 
+void CompilationEnvironment::add_LDFLAG( const String &flag ) {
+    if ( LDFLAGS )
+        LDFLAGS << ' ';
+    LDFLAGS << flag;
+}
+
 void CompilationEnvironment::add_def_proc( const String &def ) {
     def_procs << def;
 }
@@ -447,6 +453,8 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
     CompilationCppParser cpp_parser( *this, cpp, dep_for( cpp ) );
 
     // global flags
+    for( int i = 0; i < cpp_parser.lnk_flags.size(); ++i )
+        add_LDFLAG( cpp_parser.lnk_flags[ i ] );
     for( int i = 0; i < cpp_parser.lib_names.size(); ++i )
         add_lib_name( cpp_parser.lib_names[ i ] );
     for( int i = 0; i < cpp_parser.lib_paths.size(); ++i )

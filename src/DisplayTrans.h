@@ -63,6 +63,22 @@ struct DisplayTrans {
         return res;
     }
 
+    __inline__ T3 s_to_w_vec( const T3 &V ) { ///< screen to world vector
+        T3 Z = cross( Y, X );
+        return T3(
+            V[ 0 ] * X[ 0 ] + V[ 1 ] * Y[ 0 ] + V[ 2 ] * Z[ 0 ],
+            V[ 0 ] * X[ 1 ] + V[ 1 ] * Y[ 1 ] + V[ 2 ] * Z[ 1 ],
+            V[ 0 ] * X[ 2 ] + V[ 1 ] * Y[ 2 ] + V[ 2 ] * Z[ 2 ]
+        );
+    }
+
+    __inline__ void rotate_s( const T3 &V, const T3 &C ) { ///< rotate, with v in screen coordinates
+        T3 R = s_to_w_vec( V );
+        X = rot( X, R );
+        Y = rot( Y, R );
+        O = C + rot( O - C, R );
+    }
+
     T3 O; ///< position of center of the screen in the real world
     T3 X; ///< normalized axis
     T3 Y; ///< normalized axis

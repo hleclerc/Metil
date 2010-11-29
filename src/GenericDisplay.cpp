@@ -9,6 +9,7 @@ BEG_METIL_NAMESPACE;
 
 GenericDisplay::GenericDisplay( int w, int h ) : w( w ), h( h ) {
     trans_gpu = 0;
+    C_has_been_defined = 0;
 }
 
 GenericDisplay::~GenericDisplay() {
@@ -29,6 +30,29 @@ void GenericDisplay::set_a( T a ) { trans_cpu.a = a; trans_has_changed = true; }
 void GenericDisplay::set_O( T3 O ) { set_O( O[ 0 ], O[ 1 ], O[ 2 ] ); }
 void GenericDisplay::set_X( T3 X ) { set_X( X[ 0 ], X[ 1 ], X[ 2 ] ); }
 void GenericDisplay::set_Y( T3 Y ) { set_Y( Y[ 0 ], Y[ 1 ], Y[ 2 ] ); }
+
+void GenericDisplay::rotate( T x, T y, T z ) {
+    rotate( T3( x, y, z ) );
+}
+
+void GenericDisplay::zoom( T c, T x, T y ) {
+    T mwh = min( w, h );
+    x = ( x - w / 2 ) * trans_cpu.d / mwh;
+    y = ( y - h / 2 ) * trans_cpu.d / mwh;
+    T3 P = trans_cpu.O + x * trans_cpu.X + y * trans_cpu.Y;
+    trans_cpu.O = P + ( trans_cpu.O - P ) / c;
+    trans_cpu.d /= c;
+    trans_has_changed = true;
+}
+
+void GenericDisplay::rotate( T3 V ) {
+    if ( not C_has_been_defined ) {
+        C_has_been_defined = true;
+        C = trans_cpu.O;
+    }
+    trans_cpu.rotate_s( V, C );
+    trans_has_changed = true;
+}
 
 GenericDisplay::T3 GenericDisplay::get_O() const { return trans_cpu.O; }
 GenericDisplay::T3 GenericDisplay::get_X() const { return trans_cpu.X; }

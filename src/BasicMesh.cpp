@@ -218,8 +218,6 @@ void BasicMesh::load_vtu( const String &filename ) {
                 field->data[ d ][ n ] = d_field[ l_nodal_fields[ i ].nb_comp * n + d ];
         }
     }
-    PRINT( min( nodal_fields[ 0 ].data[ 0 ] ) );
-    PRINT( max( nodal_fields[ 0 ].data[ 0 ] ) );
 }
 
 END_METIL_NAMESPACE;

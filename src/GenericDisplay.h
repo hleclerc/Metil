@@ -22,11 +22,16 @@ public:
     void set_O( T Ox, T Oy, T Oz );
     void set_X( T Xx, T Xy, T Xz );
     void set_Y( T Yx, T Yy, T Yz );
+    void rotate( T x, T y, T z );
+
     void set_O( T3 O );
     void set_X( T3 X );
     void set_Y( T3 Y );
-    void set_d( T d );
-    void set_a( T a );
+    void rotate( T3 V );
+    void zoom( T c, T x, T y ); ///< c is the coeff, x and y are in screen coordinates
+
+    void set_d( T d ); ///< viewable diameter
+    void set_a( T a ); ///< perspective angle (degree)
 
     T3 get_O() const;
     T3 get_X() const;
@@ -46,8 +51,10 @@ public:
 
     T3 p_min; ///< after projection
     T3 p_max; ///< after projection
+    T3 C; ///< center of rotation
 protected:
     int w, h;
+    bool C_has_been_defined;
     BasicVec<DisplayItem *> items;
 
     bool trans_has_changed;

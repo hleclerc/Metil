@@ -35,14 +35,17 @@ public:
     typedef BasicVec<float,3> T3;
 
     struct Img {
-        Img( BitmapDisplay *d ) : cpu( 0 ), gpu( 0 ), d( d ) {}
+        Img( BitmapDisplay *d ) : cpu( 0 ), gpu( 0 ), rese_cpu( 0 ), rese_gpu( 0 ), d( d ) {}
         unsigned *get_cpu_ptr();
         unsigned *get_gpu_ptr();
+        void copy_gpu_to_cpu( unsigned char *bits );
         void copy_gpu_to_cpu();
         ST rese();
 
         unsigned *cpu;
         unsigned *gpu;
+        ST rese_cpu;
+        ST rese_gpu;
         BitmapDisplay *d;
     };
 

@@ -1,6 +1,6 @@
 echo Makefile > Metil.files
 echo TODO.txt >> Metil.files
-for d in src doc tests unit_tests
+for d in src doc tests unit_tests examples
 do
     for t in '*.h'  '*.cpp' '*.cu' '*.txt' '*.py' '*.js' '*.html' '*.css' '*.files' '*.i'
     do
