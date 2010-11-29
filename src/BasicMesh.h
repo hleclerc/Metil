@@ -49,12 +49,26 @@ public:
         I num_in_elem;
     };
 
+    struct Field {
+        template<class TB,class TP>
+        void apply_bs( TB &res, TP ) const {
+            res.set_type( "Field" );
+            APPLY_WN( res, name );
+            APPLY_WN( res, data );
+        }
+
+        BasicVec<char> name;
+        BasicVec<BasicVec<T> > data;
+    };
+
     template<class TB,class TP>
     void apply_bs( TB &res, TP ) const {
         res.set_type( "BasicMesh_Compacted" );
         APPLY_WN( res, pos_nodes );
         APPLY_WN( res, elem_groups );
         APPLY_WN( res, node_to_elem );
+        APPLY_WN( res, nodal_fields );
+        APPLY_WN( res, elementary_fields );
     }
 
     void add_node( T x, T y );
@@ -70,6 +84,8 @@ public:
     BasicVec<ElemGroup> elem_groups;
     BasicVec<BasicVec<T> > pos_nodes;
     BasicVec<BasicVec<NodeToElemItem> > node_to_elem; ///< node_to_elem[ node_number ][ elem_number ]
+    BasicVec<Field> nodal_fields;
+    BasicVec<BasicVec<Field> > elementary_fields;
 };
 
 END_METIL_NAMESPACE;

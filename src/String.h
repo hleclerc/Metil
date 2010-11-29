@@ -24,6 +24,8 @@ struct String : public Level1::MO {
     template<class T>
     String( const T &val ) { type = &Level1::metil_type_cst_VoidString; operator<<( val ); }
 
+    operator char() const;
+
     // =
     String &operator=( const String &s ) {
         MO r = CM_1( copy, s );

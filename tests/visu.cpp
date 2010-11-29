@@ -18,10 +18,16 @@ int main() {
     Ps<BasicMesh_Compacted> compacted_mesh = make_cs( &mesh, 1, machine_id );
 
     //
-    BitmapDisplay display;
-    display << new DisplayItem_BasicMesh( compacted_mesh );
+    BitmapDisplay display( 800, 600 );
 
+    DisplayItem_BasicMesh disp_item( compacted_mesh );
+    // disp_item.set_coloring_field( 1, -1.4, 1.1, 0 );
+    display << &disp_item;
+
+    // display.set_X( 0.707, 0.0, -0.707 );
+    display.set_Y( 0.0, 0.707, -0.707 );
     display.fit();
+    display.set_d( 0.5 * display.get_d() );
     display.render();
     display.copy_gpu_to_cpu();
     display.save_png( "toto.png" );

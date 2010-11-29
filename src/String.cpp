@@ -19,6 +19,10 @@ StringWithSepInCppLineMaker cerrn( cerr );
 void String::Endl::write_str( String &os ) const { os << '\n'; os.flush(); }
 void String::Flsh::write_str( String &os ) const { os.flush(); }
 
+String::operator char() const {
+    return *c_str();
+}
+
 void String::write_separator( int num ) {
     if ( num ) {
         while ( num -- )

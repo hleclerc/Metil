@@ -106,6 +106,7 @@ public:
 
     #define NEW_ITEM( T ) \
         static Item *new_Item( const T &, const String &name, int par_level ) { return NEW( ItemSca, TypeInformation<T>::type(), name ); }
+    NEW_ITEM( char );
     NEW_ITEM( SI32 );
     NEW_ITEM( SI64 );
     NEW_ITEM( FP32 );

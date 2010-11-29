@@ -11,14 +11,14 @@ install: ./metil_comp
 	./install.sh
 
 test: # make_metil_comp
-	make -C examples/python_server
-# 	${LOC_MC} -o tests/main -g3 -Isrc tests/visu.cpp
+#	make -C examples/python_server
+	${LOC_MC} -o tests/main -g3 -Isrc tests/visu.cpp
 
 test_gdb:
 	${LOC_MC} -o tests/main --gdb -g3 -Isrc tests/main.cpp
 
 test_valgrind:
-	${LOC_MC} -o tests/main --exec-using "valgrind --db-attach=yes --num-callers=30" -g3 tests/main.cpp
+	${LOC_MC} -o tests/main --exec-using "valgrind --db-attach=yes --num-callers=30" -g3 tests/visu.cpp
 	
 test_valgrind_full:
 	${LOC_MC} -o tests/main --exec-using "valgrind --leak-check=full --show-reachable=yes" -g3 tests/main.cpp
