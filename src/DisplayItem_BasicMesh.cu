@@ -7,7 +7,7 @@
 #define NB_PIX_RASTER_BOX 32
 #define NB_BLOCKS_FOR_ELEM_COUNT 32
 #define MAX_WH ( 1600 * 1200 )
-#define NB_THREADS_FOR_RASTER 64
+#define NB_THREADS_FOR_RASTER 1 // 64
 
 BEG_METIL_NAMESPACE;
 
@@ -304,25 +304,26 @@ void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, const Di
             T3 B_1 = trans.proj( P_1 );
             T3 B_2 = trans.proj( P_2 );
 
+            int x_0 = int( B_0[ 0 ] ) - bx, y_0 = int( B_0[ 1 ] ) - by, z_0 = ( B_0[ 2 ] - z_min ) * 65534 / ( z_max - z_min );
+            int x_1 = int( B_1[ 0 ] ) - bx, y_1 = int( B_1[ 1 ] ) - by, z_0 = ( B_1[ 2 ] - z_min ) * 65534 / ( z_max - z_min );
+            int x_2 = int( B_2[ 0 ] ) - bx, y_2 = int( B_2[ 1 ] ) - by, z_0 = ( B_2[ 2 ] - z_min ) * 65534 / ( z_max - z_min );
+
             T v_0 = n_v ? ( n_v[ n_0 ] - min_coloring_field ) / ( max_coloring_field - min_coloring_field ) : -1;
             T v_1 = n_v ? ( n_v[ n_1 ] - min_coloring_field ) / ( max_coloring_field - min_coloring_field ) : -1;
             T v_2 = n_v ? ( n_v[ n_2 ] - min_coloring_field ) / ( max_coloring_field - min_coloring_field ) : -1;
 
 
             // sort points and values by B[ 1 ]
-            if ( B_0[ 1 ] > B_1[ 1 ] ) { swap( B_0, B_1 ); swap( v_0, v_1 ); }
-            if ( B_0[ 1 ] > B_2[ 1 ] ) { swap( B_0, B_2 ); swap( v_0, v_2 ); }
-            if ( B_1[ 1 ] > B_2[ 1 ] ) { swap( B_1, B_2 ); swap( v_1, v_2 ); }
+            if ( y_0 > y_1 ) { swap( x_0, x_1 ); swap( y_0, y_1 ); swap( z_0, z_1 ); swap( v_0, v_1 ); }
+            if ( y_0 > y_2 ) { swap( x_0, x_2 ); swap( y_0, y_2 ); swap( z_0, z_2 ); swap( v_0, v_2 ); }
+            if ( y_1 > y_2 ) { swap( x_1, x_2 ); swap( y_1, y_2 ); swap( z_1, z_2 ); swap( v_1, v_2 ); }
 
-            int x_0 = int( B_0[ 0 ] ) - bx, y_0 = int( B_0[ 1 ] ) - by;
-            int x_1 = int( B_1[ 0 ] ) - bx, y_1 = int( B_1[ 1 ] ) - by;
-            int x_2 = int( B_2[ 0 ] ) - bx, y_2 = int( B_2[ 1 ] ) - by;
-
-            int dx_01 = x_1 - x_0, dy_01 = y_1 - y_0; float dz_01 = B_1[ 2 ] - B_0[ 2 ], dv_01 = v_1 - v_0;
-            int dx_02 = x_2 - x_0, dy_02 = y_2 - y_0; float dz_02 = B_2[ 2 ] - B_0[ 2 ], dv_02 = v_2 - v_0;
+            int dx_01 = x_1 - x_0, dy_01 = y_1 - y_0; float dz_01 = z_1 - z_0, dv_01 = v_1 - v_0;
+            int dx_02 = x_2 - x_0, dy_02 = y_2 - y_0; float dz_02 = z_2 - z_0, dv_02 = v_2 - v_0;
 
             float cx_0 = dx_01 / float( dy_01 + not dy_01 ), cz_0 = dz_01 / float( dy_01 + not dy_01 ), cv_0 = dv_01 / float( dy_01 + not dy_01 );
             float cx_1 = dx_02 / float( dy_02 + not dy_02 ), cz_1 = dz_02 / float( dy_02 + not dy_02 ), cv_1 = dv_02 / float( dy_02 + not dy_02 );
+
             if ( cx_0 > cx_1 ) {
                 swap( cx_0, cx_1 );
                 swap( cz_0, cz_1 );
@@ -333,8 +334,8 @@ void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, const Di
                 int xl_0 = x_0 + ( y_b - y_0 ) * cx_0;
                 int xl_1 = x_0 + ( y_b - y_0 ) * cx_1;
 
-                float zl_0 = B_0[ 2 ] + ( y_b - y_0 ) * cz_0;
-                float zl_1 = B_0[ 2 ] + ( y_b - y_0 ) * cz_1;
+                float zl_0 = z_0 + ( y_b - y_0 ) * cz_0;
+                float zl_1 = z_0 + ( y_b - y_0 ) * cz_1;
                 float vl_0 = v_0 + ( y_b - y_0 ) * cv_0;
                 float vl_1 = v_0 + ( y_b - y_0 ) * cv_1;
                 float c_z = xl_1 - xl_0; c_z = ( zl_1 - zl_0 ) / ( c_z + not c_z );
@@ -342,19 +343,19 @@ void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, const Di
 
                 for( int x_b = max( 0, xl_0 ); x_b < min( NB_PIX_RASTER_BOX, xl_1 + 1 ); ++x_b ) {
                     float z_b = zl_0 + ( x_b - xl_0 ) * c_z;
-                    unsigned z_bi = ( z_b - z_min ) * 65534 / ( z_max - z_min );
-                    unsigned z_re = atomicMin( zznv_buffer + NB_PIX_RASTER_BOX * y_b + x_b, z_bi );
+                    unsigned z_re = atomicMin( zznv_buffer + NB_PIX_RASTER_BOX * y_b + x_b, z_b );
                     if ( z_re >= z_bi ) {
                         float v = vl_0 + ( x_b - xl_0 ) * c_v;
                         float n = dot( normal, trans.eye_dir( x_b + bx, y_b + by ) );
-                        rgba_buffer[ NB_PIX_RASTER_BOX * y_b + x_b ] = shader( v, abs( n ) );
+                        // if ( n < 0 ) continue;
+                        rgba_buffer[ NB_PIX_RASTER_BOX * y_b + x_b ] = shader( v, abs( n ) ) + ( ( 150 * ( x_b == xl_0 or x_b == xl_1 ) ) << 8 );
                         nnnn_buffer[ NB_PIX_RASTER_BOX * y_b + x_b ] = ind_elem;
                     }
                 }
             }
 
-            int dx_21 = x_1 - x_2, dy_21 = y_1 - y_2; float dz_21 = B_1[ 2 ] - B_2[ 2 ], dv_21 = v_1 - v_2;
-            int dx_22 = x_0 - x_2, dy_22 = y_0 - y_2; float dz_22 = B_0[ 2 ] - B_2[ 2 ], dv_22 = v_0 - v_2;
+            int dx_21 = x_1 - x_2, dy_21 = y_1 - y_2; float dz_21 = z_1 - z_2, dv_21 = v_1 - v_2;
+            int dx_22 = x_0 - x_2, dy_22 = y_0 - y_2; float dz_22 = z_0 - z_2, dv_22 = v_0 - v_2;
 
             float cx_2 = dx_21 / float( dy_21 + not dy_21 ), cz_2 = dz_21 / float( dy_21 + not dy_21 ), cv_2 = dv_21 / float( dy_21 + not dy_21 );
             float cx_3 = dx_22 / float( dy_22 + not dy_22 ), cz_3 = dz_22 / float( dy_22 + not dy_22 ), cv_3 = dv_22 / float( dy_22 + not dy_22 );
@@ -368,8 +369,8 @@ void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, const Di
                 int xl_0 = x_2 + ( y_b - y_2 ) * cx_2;
                 int xl_1 = x_2 + ( y_b - y_2 ) * cx_3;
 
-                float zl_0 = B_2[ 2 ] + ( y_b - y_2 ) * cz_2;
-                float zl_1 = B_2[ 2 ] + ( y_b - y_2 ) * cz_3;
+                float zl_0 = z_2 + ( y_b - y_2 ) * cz_2;
+                float zl_1 = z_2 + ( y_b - y_2 ) * cz_3;
                 float vl_0 = v_2 + ( y_b - y_2 ) * cv_2;
                 float vl_1 = v_2 + ( y_b - y_2 ) * cv_3;
                 float c_z = xl_1 - xl_0; c_z = ( zl_1 - zl_0 ) / ( c_z + not c_z );
@@ -377,12 +378,12 @@ void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, const Di
 
                 for( int x_b = max( 0, xl_0 ); x_b < min( NB_PIX_RASTER_BOX, xl_1 + 1 ); ++x_b ) {
                     float z_b = zl_0 + ( x_b - xl_0 ) * c_z;
-                    unsigned z_bi = ( z_b - z_min ) * 65534 / ( z_max - z_min );
-                    unsigned z_re = atomicMin( zznv_buffer + NB_PIX_RASTER_BOX * y_b + x_b, z_bi );
+                    unsigned z_re = atomicMin( zznv_buffer + NB_PIX_RASTER_BOX * y_b + x_b, z_b );
                     if ( z_re >= z_bi ) {
                         float v = vl_0 + ( x_b - xl_0 ) * c_v;
                         float n = dot( normal, trans.eye_dir( x_b + bx, y_b + by ) );
-                        rgba_buffer[ NB_PIX_RASTER_BOX * y_b + x_b ] = shader( v, abs( n ) );
+                        // if ( n < 0 ) continue;
+                        rgba_buffer[ NB_PIX_RASTER_BOX * y_b + x_b ] = shader( v, abs( n ) ); /// + ( ( 150 * ( x_b == xl_0 or x_b == xl_1 ) ) << 8 );
                         nnnn_buffer[ NB_PIX_RASTER_BOX * y_b + x_b ] = ind_elem;
                     }
                 }
@@ -399,11 +400,13 @@ void raster_gpu_kernel( unsigned *rgba, unsigned *zznv, unsigned *nnnn, const Di
     // save result in img
     __syncthreads();
     for( int i = threadIdx.x; i < NB_PIX_RASTER_BOX * NB_PIX_RASTER_BOX; i += NB_THREADS_FOR_RASTER ) {
-        int x = bx + i % NB_PIX_RASTER_BOX;
-        int y = by + i / NB_PIX_RASTER_BOX;
+        int ox = i % NB_PIX_RASTER_BOX;
+        int oy = i / NB_PIX_RASTER_BOX;
+        int x = bx + ox;
+        int y = by + oy;
 
         if ( x < w and y < h ) {
-            rgba[ w * y + x ] = rgba_buffer[ i ];
+            rgba[ w * y + x ] = rgba_buffer[ i ] + 50 * ( oy == 0 or ox == 0 );
             zznv[ w * y + x ] = 0xFF000000 + zznv_buffer[ i ];
             nnnn[ w * y + x ] = nnnn_buffer[ i ];
             //

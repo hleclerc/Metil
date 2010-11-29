@@ -322,14 +322,14 @@ String CompilationEnvironment::dep_for( const String &cpp ) {
 }
 
 void CompilationEnvironment::extra_lnk_cmd( String &cmd, bool lib, bool dyn ) const {
-    if ( LDFLAGS )
-        cmd << ' ' << LDFLAGS;
     for( int i = 0; i < lib_paths.size(); ++i )
         cmd << " -L" << lib_paths[ i ];
     for( int i = 0; i < lib_names.size(); ++i )
         cmd << " -l" << lib_names[ i ];
     if ( dbg_level > 0 )
         cmd << " -g" << dbg_level;
+    if ( LDFLAGS )
+        cmd << ' ' << LDFLAGS;
     if ( child )
         child->extra_lnk_cmd( cmd, lib, dyn );
 }
