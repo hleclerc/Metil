@@ -8,19 +8,19 @@
 BEG_METIL_NAMESPACE
 
 
-template<class T> bool is_positive( T a  ) { return a > 0; }
-template<class T> bool is_negative( T a  ) { return a < 0; }
+template<class T> __inline__ bool is_positive( T a  ) { return a > 0; }
+template<class T> __inline__ bool is_negative( T a  ) { return a < 0; }
 
-template<class T> bool is_equal_to_0( T a ) { return a == 0; }
-template<class T> bool is_equal_to_1( T a ) { return a == 1; }
+template<class T> __inline__ bool is_equal_to_0( T a ) { return a == 0; }
+template<class T> __inline__ bool is_equal_to_1( T a ) { return a == 1; }
 
-template<class T> bool eqz   ( T a ) { return is_equal_to_0( a ); }
-template<class T> bool supeqz( T a ) { return a >= 0; }
-template<class T> bool supz  ( T a ) { return a >  0; }
-template<class T> bool infeqz( T a ) { return a <= 0; }
-template<class T> bool infz  ( T a ) { return a <  0; }
+template<class T> __inline__ bool eqz   ( T a ) { return is_equal_to_0( a ); }
+template<class T> __inline__ bool supeqz( T a ) { return a >= 0; }
+template<class T> __inline__ bool supz  ( T a ) { return a >  0; }
+template<class T> __inline__ bool infeqz( T a ) { return a <= 0; }
+template<class T> __inline__ bool infz  ( T a ) { return a <  0; }
 
-template<class T0,class T1> bool boolean_xor( T0 a, T1 b ) { return bool( a ) ^ bool( b ); }
+template<class T0,class T1> __inline__ bool boolean_xor( T0 a, T1 b ) { return bool( a ) ^ bool( b ); }
 
 
 inline FP32 modf( FP32 a ) { return __builtin_modff( a, &a ); }
@@ -247,7 +247,7 @@ template<class T> __inline__ void swap_if( T &v_0, T &v_1, bool cond ) { if ( co
 //template<class T0,class T1> typename T0::DelayedValue operator/( const T0 &a, const T1 &b ) { return a.conv() / b; }
 //template<class T0,class T1> typename T0::DelayedValue operator%( const T0 &a, const T1 &b ) { return a.conv() % b; }
 
-
+template<class T> __inline__ T plus_one_if_eqz( const T &val ) { return val + eqz( val ); }
 
 END_METIL_NAMESPACE
 
