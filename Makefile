@@ -11,8 +11,8 @@ install: ./metil_comp
 	./install.sh
 
 test: # make_metil_comp
-	make -C examples/python_server
-# 	${LOC_MC} -o tests/main -g3 -Isrc tests/visu.cpp
+	${LOC_MC} -o tests/main -g3 -Isrc tests/visu.cpp
+# 	make -C examples/python_server
 
 test_gdb:
 	${LOC_MC} -o tests/main --gdb -g3 -Isrc tests/main.cpp

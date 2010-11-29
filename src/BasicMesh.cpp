@@ -91,6 +91,12 @@ static bool read_int( int &res, const char *&c ) {
     return true;
 }
 
+struct LField {
+    String name;
+    int offset;
+    int nb_comp;
+};
+
 void BasicMesh::load_vtu( const String &filename ) {
     typedef enum { None, PointData, CellData, Points, Cells } Mode;
     File file( filename, "r" );
@@ -99,12 +105,13 @@ void BasicMesh::load_vtu( const String &filename ) {
     pos_nodes.resize( 3 );
 
     // load data
-    int nb_nodes, nb_elems;
+    int nb_nodes, nb_elems, nb_comp;
     int off_Points = -1, off_connectivity = -1, off_offsets = -1;
     String name;
     Mode mode = None;
     BasicVec<int> connectivity, offsets, types;
     String binary_data;
+    BasicVec<LField> l_nodal_fields;
     for( const char *c = file.c_str(); *c; ++c ) {
         if ( Level1::strncmp( c, "NumberOfPoints='", 16 ) == 0 ) {
             nb_nodes = Val( str_to_next_quote( c += 16 ) );
@@ -114,6 +121,10 @@ void BasicMesh::load_vtu( const String &filename ) {
         }
         if ( Level1::strncmp( c, "NumberOfCells='", 15 ) == 0 ) {
             nb_elems = Val( str_to_next_quote( c += 15 ) );
+            continue;
+        }
+        if ( Level1::strncmp( c, "NumberOfComponents='", 20 ) == 0 ) {
+            nb_comp = Val( str_to_next_quote( c += 20 ) );
             continue;
         }
         if ( Level1::strncmp( c, "Name='", 6 ) == 0 ) {
@@ -129,11 +140,21 @@ void BasicMesh::load_vtu( const String &filename ) {
         if ( Level1::strncmp( c, "offset='" , 8 ) == 0 ) {
             int off = Val( str_to_next_quote( c += 8 ) );
             switch ( mode ) {
-            case None: break;
-            case PointData: break;
-            case CellData: break;
-            case Points: off_Points = off * 3 / 4; break;
-            case Cells: break;
+            case None:
+                break;
+            case PointData: {
+                LField *f = l_nodal_fields.push_back();
+                f->name = name;
+                f->offset = off * 3 / 4;
+                f->nb_comp = nb_comp;
+                break;
+            } case CellData:
+                break;
+            case Points:
+                off_Points = off * 3 / 4;
+                break;
+            case Cells:
+                break;
             }
         }
 
@@ -165,29 +186,40 @@ void BasicMesh::load_vtu( const String &filename ) {
             while ( not Level1::is_a_space( *c ) )
                 ++c;
             base_64_decode( binary_data, b, c - b );
-            // File res("res","w");
-            // base_64_encode( res, binary_data.c_str(), binary_data.size() );
-            // PRINT( res );
         }
     }
     const unsigned char *bd = (unsigned char *)binary_data.c_str();
 
     // get node pos
     ASSERT( off_Points >= 0, "..." );
-    // PRINT( off_Points );
     const double *d_pos_nodes = (const double *)( bd + off_Points + 4 );
     for( int n = 0; n < nb_nodes; ++n )
         for( int d = 0; d < 3; ++d )
             pos_nodes[ d ][ n ] = d_pos_nodes[ 3 * n + d ];
 
-    // BasicVec<int> connectivity, offsets, types;
-    // PRINT( connectivity );
-    // PRINT( nb_elems );
+    // elements
     for( int i = 0; i < nb_elems; ++i ) {
         int b = i > 0 ? offsets[ i - 1 ] : 0;
         if ( types[ i ] == 5 ) // triangle
             add_elem( elem_type_Triangle, connectivity[ b + 0 ], connectivity[ b + 1 ], connectivity[ b + 2 ] );
     }
+
+    // nodal fields
+    for( int i = 0; i < l_nodal_fields.size(); ++i ) {
+        Field *field = nodal_fields.push_back();
+        for( int j = 0; j < l_nodal_fields[ i ].name.size(); ++j )
+            field->name << l_nodal_fields[ i ].name[ j ];
+        PRINT( l_nodal_fields[ i ].name );
+        field->data.resize( l_nodal_fields[ i ].nb_comp );
+        const double *d_field = (const double *)( bd + l_nodal_fields[ i ].offset + 4 );
+        for( int d = 0; d < l_nodal_fields[ i ].nb_comp; ++d ) {
+            field->data[ d ].resize( nb_nodes );
+            for( int n = 0; n < nb_nodes; ++n )
+                field->data[ d ][ n ] = d_field[ l_nodal_fields[ i ].nb_comp * n + d ];
+        }
+    }
+    PRINT( min( nodal_fields[ 0 ].data[ 0 ] ) );
+    PRINT( max( nodal_fields[ 0 ].data[ 0 ] ) );
 }
 
 END_METIL_NAMESPACE;

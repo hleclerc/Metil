@@ -28,6 +28,12 @@ public:
     void set_d( T d );
     void set_a( T a );
 
+    T3 get_O() const;
+    T3 get_X() const;
+    T3 get_Y() const;
+    T get_d() const;
+    T get_a() const;
+
     int get_w() const;
     int get_h() const;
     void set_w( int w );
