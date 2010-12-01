@@ -100,6 +100,12 @@ void CompilationEnvironment::add_CPPFLAG( const String &flag ) {
     CPPFLAGS << flag;
 }
 
+void CompilationEnvironment::add_GPUFLAG( const String &flag ) {
+    if ( GPUFLAGS )
+        GPUFLAGS << ' ';
+    GPUFLAGS << flag;
+}
+
 void CompilationEnvironment::add_LDFLAG( const String &flag ) {
     if ( LDFLAGS )
         LDFLAGS << ' ';
@@ -165,8 +171,12 @@ int CompilationEnvironment::get_dbg_level() const {
     return dbg_level >= 0 ? dbg_level : child->get_dbg_level();
 }
 
-int CompilationEnvironment::get_opt_level  () const {
+int CompilationEnvironment::get_opt_level() const {
     return opt_level >= 0 ? opt_level : child->get_opt_level();
+}
+
+int CompilationEnvironment::get_device_emulation() const {
+    return device_emulation >= 0 ? device_emulation : child->get_device_emulation();
 }
 
 void CompilationEnvironment::get_inc_paths( BasicVec<String> &res ) const {
@@ -386,10 +396,11 @@ String CompilationEnvironment::obj_cmd( const String &obj, const String &cpp, bo
             cmd << " -Xcompiler -fPIC";
         if ( maxrregcount > 0 )
             cmd << " --maxrregcount=" << maxrregcount;
-        if ( device_emulation > 0 )
+
+        if ( get_device_emulation() > 0 )
             cmd << " --device-emulation -G -g";
         else
-            cmd << " -w -g -O3 --gpu-architecture=compute_13";
+            cmd << " -w -g -O3";
     } else {
         cmd << ( cpp.ends_with( ".c" ) ? get_CC() : get_CXX() );
         // basic flags
@@ -464,6 +475,8 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
     CompilationEnvironment loc_ce( this );
     for( int i = 0; i < cpp_parser.inc_paths.size(); ++i )
         loc_ce.inc_paths.push_back_unique( cpp_parser.inc_paths[ i ] );
+    for( int i = 0; i < cpp_parser.gpu_flags.size(); ++i )
+        loc_ce.add_GPUFLAG( cpp_parser.gpu_flags[ i ] );
 
     // command
     Ptr<CompilationTree> res = loc_ce.make_obj_compilation_tree( loc_ce.obj_for( cpp, dyn ), make_cpp_compilation_tree( cpp ), dyn );

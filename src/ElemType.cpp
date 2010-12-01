@@ -12,11 +12,14 @@ struct ElemTypeTriangle : public ElemType {
             pos_nodes.resize( X0.size() );
         ST os = pos_nodes[ 0 ].size();
         for( int y = 0; y < Xd[ 1 ]; ++y ) {
+            float dy = y / ( Xd[ 1 ] - 1 );
             for( int x = 0; x < Xd[ 0 ]; ++x ) {
-                pos_nodes[ 0 ] << X0[ 0 ] + ( X1[ 0 ] - X0[ 0 ] ) * x / ( Xd[ 0 ] - 1 );
-                pos_nodes[ 1 ] << X0[ 1 ] + ( X1[ 1 ] - X0[ 1 ] ) * y / ( Xd[ 1 ] - 1 );
+                float dx = x / ( Xd[ 0 ] - 1 );
+
+                pos_nodes[ 0 ] << X0[ 0 ] + ( X1[ 0 ] - X0[ 0 ] ) * dx;
+                pos_nodes[ 1 ] << X0[ 1 ] + ( X1[ 1 ] - X0[ 1 ] ) * dy;
                 if ( X0.size() >= 3 )
-                    pos_nodes[ 2 ] << X0[ 2 ] + ( X1[ 2 ] - X0[ 2 ] ) * y / ( Xd[ 2 ] - 1 );
+                    pos_nodes[ 2 ] << X0[ 2 ] + ( X1[ 2 ] - X0[ 2 ] ) * ( dx + dy ) / 2;
             }
         }
         // elems

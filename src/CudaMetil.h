@@ -19,9 +19,10 @@
 BEG_METIL_NAMESPACE;
 
 inline void check_err( const char *file, int line, const char *msg ) {
-    cudaError_t err = cudaGetLastError();                                   
-    if( cudaSuccess != err ) {                                               
-        fprintf( stderr, "Cuda error: %s in file '%s' in line %i : %s.\n",   
+    cudaThreadSynchronize();
+    cudaError_t err = cudaGetLastError();
+    if( cudaSuccess != err ) {
+        fprintf( stderr, "Cuda error: %s in file '%s' in line %i : %s.\n",
                 msg, file, line, cudaGetErrorString( err) );
         exit( EXIT_FAILURE );                                                  
     }                                                                        

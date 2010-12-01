@@ -17,6 +17,7 @@ public:
     void add_lib_path( const String &path );
     void add_lib_name( const String &name );
     void add_CPPFLAG ( const String &flag );
+    void add_GPUFLAG ( const String &flag );
     void add_LDFLAG  ( const String &flag );
     void add_def_proc( const String &proc );
 
@@ -36,6 +37,7 @@ public:
     int get_nb_threads() const;
     int get_dbg_level() const;
     int get_opt_level() const;
+    int get_device_emulation() const;
 
     void get_inc_paths( BasicVec<String> &res ) const;
     void get_def_procs( BasicVec<String> &res ) const;
