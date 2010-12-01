@@ -10,6 +10,39 @@ struct BasicMesh_Compacted {
     typedef void HasOffPtr;
     struct ElemGroup {
         typedef void HasOffPtr;
+        struct Field {
+            typedef void HasOffPtr;
+            template<class T> static Field *copy( MemoryDriver &md, const T *src, ST num = 1 ) {
+                Field *dst, *loc;
+                ST rese = num * sizeof( Field );
+                md.beg_local_data( &dst, &loc, rese, sizeof( ST ) );
+                for( ST i = 0; i < num; ++i ) {
+                    loc[ i ].name.size_ = src[ i ].name.size();
+                    loc[ i ].name.rese_ = src[ i ].name.size();
+                    md.copy( &loc[ i ].name.data_, src[ i ].name.ptr(), src[ i ].name.size() * sizeof( char ), 16 * 4 );
+                    loc[ i ].data.size_ = src[ i ].data.size();
+                    loc[ i ].data.rese_ = src[ i ].data.size();
+                    BasicVecRef<FP32 > *loc_0;
+                    ST rese_0 = src[ i ].data.size() * sizeof( BasicVecRef<FP32 > );
+                    md.beg_local_data( &loc[ i ].data.data_, &loc_0, rese_0, sizeof( ST ) );
+                    for( ST j = 0; j < src[ i ].data.size(); ++j ) {
+                        loc_0[ j ].size_ = src[ i ].data[ j ].size();
+                        loc_0[ j ].rese_ = src[ i ].data[ j ].size();
+                        md.copy( &loc_0[ j ].data_, src[ i ].data[ j ].ptr(), src[ i ].data[ j ].size() * sizeof( FP32 ), 16 * 4 );
+                    }
+                    md.end_local_data( loc[ i ].data.data_, loc_0, rese_0 );
+                }
+                md.end_local_data( dst, loc, rese );
+                return dst;
+            }
+            void update_ptr_cpu_load( ST off );
+            void update_ptr_cpu_save( ST off );
+            void update_ptr_gpu_load( ST off );
+            void update_ptr_gpu_save( ST off );
+
+            BasicVecRef<char > name;
+            BasicVecRef<BasicVecRef<FP32 > > data;
+        };
         template<class T> static ElemGroup *copy( MemoryDriver &md, const T *src, ST num = 1 ) {
             ElemGroup *dst, *loc;
             ST rese = num * sizeof( ElemGroup );
@@ -26,6 +59,9 @@ struct BasicMesh_Compacted {
                     md.copy( &loc_0[ j ].data_, src[ i ].connec[ j ].ptr(), src[ i ].connec[ j ].size() * sizeof( SI32 ), 16 * 4 );
                 }
                 md.end_local_data( loc[ i ].connec.data_, loc_0, rese_0 );
+                loc[ i ].fields.size_ = src[ i ].fields.size();
+                loc[ i ].fields.rese_ = src[ i ].fields.size();
+                loc[ i ].fields.data_ = Field::copy( md, src[ i ].fields.ptr(), src[ i ].fields.size() );
                 loc[ i ].elem_id = src[ i ].elem_id;
             }
             md.end_local_data( dst, loc, rese );
@@ -37,6 +73,7 @@ struct BasicMesh_Compacted {
         void update_ptr_gpu_save( ST off );
 
         BasicVecRef<BasicVecRef<SI32 > > connec;
+        BasicVecRef<Field > fields;
         SI32 elem_id;
     };
     struct NodeToElemItem {
@@ -128,17 +165,6 @@ struct BasicMesh_Compacted {
             loc[ i ].nodal_fields.size_ = src[ i ].nodal_fields.size();
             loc[ i ].nodal_fields.rese_ = src[ i ].nodal_fields.size();
             loc[ i ].nodal_fields.data_ = Field::copy( md, src[ i ].nodal_fields.ptr(), src[ i ].nodal_fields.size() );
-            loc[ i ].elementary_fields.size_ = src[ i ].elementary_fields.size();
-            loc[ i ].elementary_fields.rese_ = src[ i ].elementary_fields.size();
-            BasicVecRef<Field > *loc_2;
-            ST rese_2 = src[ i ].elementary_fields.size() * sizeof( BasicVecRef<Field > );
-            md.beg_local_data( &loc[ i ].elementary_fields.data_, &loc_2, rese_2, sizeof( ST ) );
-            for( ST j = 0; j < src[ i ].elementary_fields.size(); ++j ) {
-                loc_2[ j ].size_ = src[ i ].elementary_fields[ j ].size();
-                loc_2[ j ].rese_ = src[ i ].elementary_fields[ j ].size();
-                loc_2[ j ].data_ = Field::copy( md, src[ i ].elementary_fields[ j ].ptr(), src[ i ].elementary_fields[ j ].size() );
-            }
-            md.end_local_data( loc[ i ].elementary_fields.data_, loc_2, rese_2 );
         }
         md.end_local_data( dst, loc, rese );
         return dst;
@@ -152,7 +178,6 @@ struct BasicMesh_Compacted {
     BasicVecRef<ElemGroup > elem_groups;
     BasicVecRef<BasicVecRef<NodeToElemItem > > node_to_elem;
     BasicVecRef<Field > nodal_fields;
-    BasicVecRef<BasicVecRef<Field > > elementary_fields;
 };
 
 END_METIL_NAMESPACE
