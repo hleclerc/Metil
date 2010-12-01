@@ -83,18 +83,29 @@ unsigned *BitmapDisplay::Img::get_cpu_ptr() {
 
 unsigned *BitmapDisplay::Img::get_gpu_ptr() {
     if ( rese_gpu != rese() ) {
-        cudaFree( gpu );
+        if ( gpu )
+            CSC(( cudaFree( gpu ) ));
         gpu = 0;
     }
     if ( not gpu ) {
         rese_gpu = rese();
+<<<<<<< HEAD:src/BitmapDisplay.cpp
         cudaMalloc( &gpu, rese_gpu );
+=======
+        CSC(( cudaMalloc( &gpu, rese_gpu ) ));
+>>>>>>> 425c737172cae11916a779b502574027b6d6a926:src/BitmapDisplay.cpp
     }
     return gpu;
 }
 
 void BitmapDisplay::Img::copy_gpu_to_cpu( unsigned char *bits ) {
-    cudaMemcpy( bits, get_gpu_ptr(), rese(), cudaMemcpyDeviceToHost );
+    CSC(( cudaMemcpy( bits, get_gpu_ptr(), rese(), cudaMemcpyDeviceToHost ) ));
+}
+
+unsigned BitmapDisplay::Img::get_val_from_gpu( int x, int y ) {
+    ST res;
+    CSC(( cudaMemcpy( &res, get_gpu_ptr() + d->w * y + x, sizeof( unsigned ), cudaMemcpyDeviceToHost ) ));
+    return res;
 }
 
 void BitmapDisplay::Img::copy_gpu_to_cpu() {

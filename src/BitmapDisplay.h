@@ -38,6 +38,7 @@ public:
         Img( BitmapDisplay *d ) : cpu( 0 ), gpu( 0 ), rese_cpu( 0 ), rese_gpu( 0 ), d( d ) {}
         unsigned *get_cpu_ptr();
         unsigned *get_gpu_ptr();
+        unsigned get_val_from_gpu( int x, int y );
         void copy_gpu_to_cpu( unsigned char *bits );
         void copy_gpu_to_cpu();
         ST rese();

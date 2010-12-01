@@ -40,8 +40,16 @@ void GenericDisplay::zoom( T c, T x, T y ) {
     x = ( x - w / 2 ) * trans_cpu.d / mwh;
     y = ( y - h / 2 ) * trans_cpu.d / mwh;
     T3 P = trans_cpu.O + x * trans_cpu.X + y * trans_cpu.Y;
+    T3 Z = Metil::normalized( cross( trans_cpu.Y, trans_cpu.X ) );
     trans_cpu.O = P + ( trans_cpu.O - P ) / c;
+    // trans_cpu.O -= trans_cpu.d * ( 1 - 1 / c ) * Z;
     trans_cpu.d /= c;
+    trans_has_changed = true;
+}
+
+void GenericDisplay::pan( T x, T y ) {
+    // T mwh = min( w, h );
+    trans_cpu.O -= x * trans_cpu.X + y * trans_cpu.Y;
     trans_has_changed = true;
 }
 
@@ -68,6 +76,11 @@ void GenericDisplay::get_trans_data( String &res, const String &name ) {
     res << "  a : " << trans_cpu.a << ",\n";
     res << "  d : " << trans_cpu.d << "\n";
     res << "};\n";
+}
+
+void GenericDisplay::shrink( T v ) {
+    for( int n = 0; n < items.size(); ++n )
+        items[ n ]->shrink( v );
 }
 
 int GenericDisplay::get_w() const { return w; }

@@ -29,6 +29,7 @@ public:
     void set_Y( T3 Y );
     void rotate( T3 V );
     void zoom( T c, T x, T y ); ///< c is the coeff, x and y are in screen coordinates
+    void pan( T x, T y ); ///< x and y are in screen coordinates
 
     void set_d( T d ); ///< viewable diameter
     void set_a( T a ); ///< perspective angle (degree)
@@ -44,6 +45,8 @@ public:
     void set_w( int w );
     void set_h( int h );
     void get_trans_data( struct String &res, const struct String &name );
+
+    void shrink( T v ); ///< shrink polygons
 
     DisplayTrans *get_trans_gpu();
     void update_p_min_p_max( bool use_trans = true );

@@ -16,6 +16,8 @@ public:
     virtual void update_p_min_p_max( GenericDisplay *display, T3 &p_min, T3 &p_max, bool use_trans ) = 0;
     virtual void render_to( BitmapDisplay *display ) = 0;
     virtual void render_to( VectorDisplay *display ) = 0;
+
+    virtual void shrink( float v ) {} ///< add v to polygon shrink
 };
 
 END_METIL_NAMESPACE;

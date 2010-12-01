@@ -4,6 +4,8 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QWheelEvent>
 #include "BitmapDisplayWidget.h"
+#include "CudaMetil.h"
+#include "System.h"
 
 BEG_METIL_NAMESPACE;
 
@@ -16,18 +18,37 @@ QSize BitmapDisplayWidget::sizeHint() const {
 }
 
 void BitmapDisplayWidget::keyPressEvent( QKeyEvent *key_event ) {
-    switch ( key_event->key() ) {
-    case Qt::Key_Escape: emit close(); break;
-    case Qt::Key_Right : display.rotate( 0.0, -0.2, 0.0 ); repaint(); break;
-    case Qt::Key_Left  : display.rotate( 0.0, +0.2, 0.0 ); repaint(); break;
-    case Qt::Key_Up    : display.rotate( -0.2, 0.0, 0.0 ); repaint(); break;
-    case Qt::Key_Down  : display.rotate( +0.2, 0.0, 0.0 ); repaint(); break;
+    if ( key_event->modifiers() & Qt::ControlModifier ) {
+        switch ( key_event->key() ) {
+        case Qt::Key_Up    : display.zoom( 1.25, width() / 2, height() / 2 ); repaint(); break;
+        case Qt::Key_Down  : display.zoom( 0.80, width() / 2, height() / 2 ); repaint(); break;
+        }
+    } else if ( key_event->modifiers() & Qt::ShiftModifier ) {
+        switch ( key_event->key() ) {
+        case Qt::Key_Right : display.pan( -10, 0 ); repaint(); break;
+        case Qt::Key_Left  : display.pan( +10, 0 ); repaint(); break;
+        case Qt::Key_Up    : display.pan( 0, +10 ); repaint(); break;
+        case Qt::Key_Down  : display.pan( 0, -10 ); repaint(); break;
+        }
+    } else  {
+        switch ( key_event->key() ) {
+        case Qt::Key_Escape: emit close(); break;
+        case Qt::Key_Right : display.rotate( 0.0, -0.2, 0.0 ); repaint(); break;
+        case Qt::Key_Left  : display.rotate( 0.0, +0.2, 0.0 ); repaint(); break;
+        case Qt::Key_Up    : display.rotate( -0.2, 0.0, 0.0 ); repaint(); break;
+        case Qt::Key_Down  : display.rotate( +0.2, 0.0, 0.0 ); repaint(); break;
+        case Qt::Key_Home  : display.fit(); repaint(); break;
+        }
     }
 }
 
 void BitmapDisplayWidget::mousePressEvent( QMouseEvent *mouse_event ) {
     x_press = mouse_event->x();
     y_press = mouse_event->y();
+    if ( mouse_event->buttons() & Qt::RightButton  ) {
+        unsigned nnnn = display.img_nnnn.get_val_from_gpu( x_press, y_press );
+        PRINT( nnnn );
+    }
 }
 
 void BitmapDisplayWidget::mouseMoveEvent( QMouseEvent *mouse_event ) {
@@ -50,9 +71,14 @@ void BitmapDisplayWidget::mouseMoveEvent( QMouseEvent *mouse_event ) {
 }
 
 void BitmapDisplayWidget::wheelEvent( QWheelEvent *e ) {
-    double d = pow( 1.5, e->delta() / 120.0 );
-    display.zoom( d, e->x(), e->y() );
-    repaint();
+    if ( e->modifiers() & Qt::ShiftModifier ) {
+        display.shrink( e->delta() / 12000.0 );
+        repaint();
+    } else {
+        double d = pow( 1.5, e->delta() / 240.0 );
+        display.zoom( d, e->x(), e->y() );
+        repaint();
+    }
 }
 
 void BitmapDisplayWidget::resizeEvent( QResizeEvent *event ) {
@@ -62,10 +88,23 @@ void BitmapDisplayWidget::resizeEvent( QResizeEvent *event ) {
 
 void BitmapDisplayWidget::paintEvent( QPaintEvent * ) {
     QPainter painter( this );
-    painter.fillRect( 0, 0, width(), height(), QColor( 0, 0, 0 ) );
 
+    // painter.fillRect( 0, 0, width(), height(), QColor( 0, 0, 0 ) );
+    QLinearGradient grad( 0, 0, 0, height() );
+    grad.setColorAt( 0.1, QColor( 0, 0,   0 ) );
+    grad.setColorAt( 0.5, QColor( 0, 0,  25 ) );
+    grad.setColorAt( 0.9, QColor( 0, 0, 125 ) );
+    painter.fillRect( 0, 0, width(), height(), grad );
+
+    // image
     QImage img( display.get_w(), display.get_h(), QImage::Format_ARGB32 );
+    cudaThreadSynchronize();
+    double t0 = time_of_day_in_sec();
     display.render();
+    cudaThreadSynchronize();
+    double t1 = time_of_day_in_sec();
+    PRINT( t1 - t0 );
+
     display.img_rgba.copy_gpu_to_cpu( img.bits() );
     painter.drawImage( 0, 0, img );
 }

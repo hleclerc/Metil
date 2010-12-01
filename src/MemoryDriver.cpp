@@ -1,5 +1,6 @@
 #include "MemoryDriver.h"
 #include "CudaMetil.h"
+#include "String.h"
 
 BEG_METIL_NAMESPACE;
 
@@ -50,7 +51,8 @@ void MemoryDriver_Cpu::copy( void **dst, const void *src, ST size, ST alig ) {
 
 // MemoryDriver_Gpu
 void MemoryDriver_Gpu::init( ST &size ) {
-    cudaMalloc( &res, size );
+    res = 0;
+    CSC(( cudaMalloc( &res, size ) ));
     off = 0;
 }
 
@@ -62,14 +64,14 @@ void MemoryDriver_Gpu::beg_local_data( void **dst, void **loc, ST &size, ST alig
 }
 
 void MemoryDriver_Gpu::end_local_data( void *dst, void *loc, ST size ) {
-    cudaMemcpy( dst, loc, size, cudaMemcpyHostToDevice );
+    CSC(( cudaMemcpy( dst, loc, size, cudaMemcpyHostToDevice ) ));
     FREE( loc, size );
 }
 
 void MemoryDriver_Gpu::copy( void **dst, const void *src, ST size, ST alig ) {
     off = ceil( off, alig );
     *dst = res + off;
-    cudaMemcpy( *dst, src, size, cudaMemcpyHostToDevice );
+    CSC(( cudaMemcpy( *dst, src, size, cudaMemcpyHostToDevice ) ));
     off += size;
 }
 
