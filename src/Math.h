@@ -249,6 +249,9 @@ template<class T> __inline__ void swap_if( T &v_0, T &v_1, bool cond ) { if ( co
 
 template<class T> __inline__ T plus_one_if_eqz( const T &val ) { return val + eqz( val ); }
 
+template<class T> __inline__ void self_min( T &a, T b ) { a = min( a, b ); }
+template<class T> __inline__ void self_max( T &a, T b ) { a = max( a, b ); }
+
 END_METIL_NAMESPACE
 
 #endif // MATH_H

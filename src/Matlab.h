@@ -2,9 +2,10 @@
 #define MATLAB_H
 
 #ifdef METIL_COMP_DIRECTIVE
-#pragma inc_path /usr/local/matlab-7/extern/include
-#pragma inc_path /usr/local/matlab-R2008b/extern/include
+#pragma inc_path /usr/local/MATLAB_64/extern/include
 #endif
+// #pragma inc_path /usr/local/matlab-7/extern/include
+// #pragma inc_path /usr/local/matlab-R2008b/extern/include
 
 #include "BasicVec.h"
 #include "String.h"
