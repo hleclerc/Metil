@@ -15,6 +15,7 @@
 #include "TypeConstructor_LazyObject.h"
 #include "TypeConstructor_LazyOperation.h"
 #include "TypeConstructor_MORef.h"
+#include "TypeConstructor_MatlabString.h"
 #include "TypeConstructor_OwcpString.h"
 #include "TypeConstructor_Select.h"
 #include "TypeConstructor_Socket.h"
@@ -537,6 +538,9 @@ Type metil_type_bas_LazyOperation_supz( &type_constructor_LazyOperation_supz, "L
 
 static TypeConstructor_LazyOperation type_constructor_LazyOperation_tan;
 Type metil_type_bas_LazyOperation_tan( &type_constructor_LazyOperation_tan, "LazyOperation_tan", &metil_type_bas_LazyOperation_tan, 0, 0, Type::Bas );
+
+static TypeConstructor_MatlabString type_constructor_MatlabString;
+Type metil_type_ref_MatlabString( &type_constructor_MatlabString, "MatlabString", 0, &metil_type_ref_MatlabString, 0, Type::Cst );
 
 static TypeConstructor_OwcpString type_constructor_OwcpString;
 Type metil_type_bas_OwcpString( &type_constructor_OwcpString, "OwcpString", &metil_type_bas_OwcpString, 0, 0, Type::Bas );

@@ -2,6 +2,7 @@
 #define BitmapDisplay_H
 
 #include "GenericDisplay.h"
+#include "BasicVecGpu.h"
 #include "String.h"
 #include "Ps.h"
 
@@ -32,39 +33,27 @@ BEG_METIL_NAMESPACE;
 */
 class BitmapDisplay : public GenericDisplay {
 public:
-    typedef BasicVec<float,3> T3;
-
-    struct Img {
-        Img( BitmapDisplay *d ) : cpu( 0 ), gpu( 0 ), rese_cpu( 0 ), rese_gpu( 0 ), d( d ) {}
-        unsigned *get_cpu_ptr();
-        unsigned *get_gpu_ptr();
-        unsigned get_val_from_gpu( int x, int y );
-        void copy_gpu_to_cpu( unsigned char *bits );
-        void copy_gpu_to_cpu();
-        ST rese();
-
-        unsigned *cpu;
-        unsigned *gpu;
-        ST rese_cpu;
-        ST rese_gpu;
-        BitmapDisplay *d;
-    };
+    typedef unsigned U;
 
     BitmapDisplay( int w = 400, int h = 400 );
+    virtual void render();
 
-    void render();
-    void copy_gpu_to_cpu(); ///< after render()
-    Ps<char> make_png( const char *prelim = 0, ST prelim_size = 0 ); ///< after copy_gpu_to_cpu()
+    Ps<char> make_png( const char *prelim = 0, ST prelim_size = 0 ); ///< return a pointer on png data
     void save_png( const String &filename ); ///< make and save png to a file
     void save_png_in_sock( int socket_id, const char *name ); ///< make and save png to a file
-    bool first_item(); ///< return true if rendering first item in the img and set first item to 0
+    bool get_and_update_first_item(); ///< return true if rendering first item in the img and set first item to 0
+    U get_elem_number( int x, int y ) const; ///< at the position x, y
+    void get_img_rgba( U *bits ) const;
 
-    Img img_rgba; ///<
-    Img img_zznv; ///<
-    Img img_nnnn; ///<
+    U *get_img_rgba_ptr();
+    T *get_img_zznv_ptr();
+    I *get_img_nnnn_ptr();
+
 protected:
-    bool first_item_; ///<
-    float rz_min_max[ 2 ]; ///<
+    BasicVecGpu<U> img_rgba; ///<
+    BasicVecGpu<T> img_zznv; ///<
+    BasicVecGpu<I> img_nnnn; ///<
+    bool _first_item;
 };
 
 END_METIL_NAMESPACE;

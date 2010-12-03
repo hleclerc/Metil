@@ -15,11 +15,13 @@ src/CanBeDerived.h
 src/BinStructCuda.h
 src/DisplayTrans.h
 src/TypeConfig.h
+src/BasicVecGpu.h
 src/String.h
 src/MachineId_Cpu.h
 src/Number.h
 src/MachineId.h
 src/Tokenize.h
+src/Matlab.h
 src/BitmapDisplayWidget.h
 src/Img.h
 src/DynamicCppLib.h
@@ -62,6 +64,7 @@ src/Level1/DeclMethods.h
 src/Level1/TypeConstructor_DistantObject.h
 src/Level1/DeclMethodsTernary.h
 src/Level1/MethodWriterHelper_Int.h
+src/Level1/TypeConstructor_MatlabString.h
 src/Level1/SchedItem.h
 src/Level1/MethodFinder.h
 src/Level1/DefStr.h
@@ -159,6 +162,7 @@ src/Level1/TypeConstructor_Socket.cpp
 src/Level1/BasicMethods.cpp
 src/Level1/DefStr.cpp
 src/Level1/TypeConstructor.cpp
+src/Level1/TypeConstructor_MatlabString.cpp
 src/Level1/TypeConstructor_Op.cpp
 src/Level1/TypeConstructor_LazyObject.cpp
 src/Level1/TypeConstructor_DistantObject.cpp
@@ -203,6 +207,7 @@ src/TiffLoader.cpp
 src/DynamicCppLib.cpp
 src/Vec.cpp
 src/metil_comp.cpp
+src/Matlab.cpp
 src/Base64.cpp
 src/MemoryDriver.cpp
 src/Level1/MethodWriterDecl.h.py

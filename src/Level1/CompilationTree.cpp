@@ -70,8 +70,18 @@ int CompilationTree::exec_node( String *out ) {
         SI64 date_src = last_modification_time_or_zero_of_file_named( children[ i ]->dst );
         need_rebuild |= date_src > date_dst;
     }
+    if ( not need_rebuild ) {
+        File cmd_file( dst + ".cmd", "r" );
+        const char *cmd_data = cmd_file.c_str();
+        if ( cmd_data == 0 or cmd != cmd_data )
+            need_rebuild = true;
+    }
     if ( not need_rebuild )
         return false;
+
+    //
+    File cmd_file( dst + ".cmd", "w" );
+    cmd_file << cmd;
 
     // exec
     if ( out )

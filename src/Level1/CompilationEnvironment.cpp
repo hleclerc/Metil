@@ -474,7 +474,7 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
     // local flags
     CompilationEnvironment loc_ce( this );
     for( int i = 0; i < cpp_parser.inc_paths.size(); ++i )
-        loc_ce.inc_paths.push_back_unique( cpp_parser.inc_paths[ i ] );
+        loc_ce.add_inc_path( cpp_parser.inc_paths[ i ] );
     for( int i = 0; i < cpp_parser.gpu_flags.size(); ++i )
         loc_ce.add_GPUFLAG( cpp_parser.gpu_flags[ i ] );
 

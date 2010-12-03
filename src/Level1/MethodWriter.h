@@ -1,9 +1,9 @@
 #ifndef METHODWRITER_H
 #define METHODWRITER_H
 
-#include "DynamicLibrary.h"
-#include "BasicVec.h"
-#include "Mos.h"
+#include "../DynamicLibrary.h"
+#include "../BasicVec.h"
+#include "../Mos.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

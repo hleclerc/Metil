@@ -1,8 +1,8 @@
 #ifndef TYPE_H
 #define TYPE_H
 
-#include "MO.h"
-#include "Malloc.h"
+#include "../MO.h"
+#include "../Malloc.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

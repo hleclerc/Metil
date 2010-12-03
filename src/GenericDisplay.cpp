@@ -8,13 +8,10 @@
 BEG_METIL_NAMESPACE;
 
 GenericDisplay::GenericDisplay( int w, int h ) : w( w ), h( h ) {
-    trans_gpu = 0;
     C_has_been_defined = 0;
 }
 
 GenericDisplay::~GenericDisplay() {
-    //for( ST i = items.size() - 1; i >= 0; --i )
-    //    DEL( items[ i ] );
 }
 
 GenericDisplay &GenericDisplay::operator<<( DisplayItem *item ) {
@@ -22,59 +19,61 @@ GenericDisplay &GenericDisplay::operator<<( DisplayItem *item ) {
     return *this;
 }
 
-void GenericDisplay::set_O( T Ox, T Oy, T Oz ) { trans_cpu.O[ 0 ] = Ox; trans_cpu.O[ 1 ] = Oy; trans_cpu.O[ 2 ] = Oz; trans_has_changed = true; }
-void GenericDisplay::set_X( T Xx, T Xy, T Xz ) { trans_cpu.X[ 0 ] = Xx; trans_cpu.X[ 1 ] = Xy; trans_cpu.X[ 2 ] = Xz; trans_has_changed = true; }
-void GenericDisplay::set_Y( T Yx, T Yy, T Yz ) { trans_cpu.Y[ 0 ] = Yx; trans_cpu.Y[ 1 ] = Yy; trans_cpu.Y[ 2 ] = Yz; trans_has_changed = true; }
-void GenericDisplay::set_d( T d ) { trans_cpu.d = d; trans_has_changed = true; }
-void GenericDisplay::set_a( T a ) { trans_cpu.a = a; trans_has_changed = true; }
+void GenericDisplay::set_O( T Ox, T Oy, T Oz ) { trans.O[ 0 ] = Ox; trans.O[ 1 ] = Oy; trans.O[ 2 ] = Oz; trans_has_changed = true; }
+void GenericDisplay::set_X( T Xx, T Xy, T Xz ) { trans.X[ 0 ] = Xx; trans.X[ 1 ] = Xy; trans.X[ 2 ] = Xz; trans_has_changed = true; }
+void GenericDisplay::set_Y( T Yx, T Yy, T Yz ) { trans.Y[ 0 ] = Yx; trans.Y[ 1 ] = Yy; trans.Y[ 2 ] = Yz; trans_has_changed = true; }
+void GenericDisplay::set_d( T d ) { trans.d = d; trans_has_changed = true; }
+void GenericDisplay::set_a( T a ) { trans.a = a; trans_has_changed = true; }
 void GenericDisplay::set_O( T3 O ) { set_O( O[ 0 ], O[ 1 ], O[ 2 ] ); }
 void GenericDisplay::set_X( T3 X ) { set_X( X[ 0 ], X[ 1 ], X[ 2 ] ); }
 void GenericDisplay::set_Y( T3 Y ) { set_Y( Y[ 0 ], Y[ 1 ], Y[ 2 ] ); }
+void GenericDisplay::set_w( int w ) { this->w = w; }
+void GenericDisplay::set_h( int h ) { this->h = h; }
 
-void GenericDisplay::rotate( T x, T y, T z ) {
-    rotate( T3( x, y, z ) );
-}
+GenericDisplay::T3 GenericDisplay::get_O() const { return trans.O; }
+GenericDisplay::T3 GenericDisplay::get_X() const { return trans.X; }
+GenericDisplay::T3 GenericDisplay::get_Y() const { return trans.Y; }
+GenericDisplay::T  GenericDisplay::get_d() const { return trans.d; }
+GenericDisplay::T  GenericDisplay::get_a() const { return trans.a; }
+GenericDisplay::I  GenericDisplay::get_w() const { return w; }
+GenericDisplay::I  GenericDisplay::get_h() const { return h; }
 
 void GenericDisplay::zoom( T c, T x, T y ) {
     T mwh = min( w, h );
-    x = ( x - w / 2 ) * trans_cpu.d / mwh;
-    y = ( y - h / 2 ) * trans_cpu.d / mwh;
-    T3 P = trans_cpu.O + x * trans_cpu.X + y * trans_cpu.Y;
-    T3 Z = Metil::normalized( cross( trans_cpu.Y, trans_cpu.X ) );
-    trans_cpu.O = P + ( trans_cpu.O - P ) / c;
-    // trans_cpu.O -= trans_cpu.d * ( 1 - 1 / c ) * Z;
-    trans_cpu.d /= c;
+    x = ( x - w / 2 ) * trans.d / mwh;
+    y = ( y - h / 2 ) * trans.d / mwh;
+    T3 P = trans.O + x * trans.X + y * trans.Y;
+    T3 Z = Metil::normalized( cross( trans.Y, trans.X ) );
+    trans.O = P + ( trans.O - P ) / c;
+    trans.d /= c;
     trans_has_changed = true;
 }
 
 void GenericDisplay::pan( T x, T y ) {
-    // T mwh = min( w, h );
-    trans_cpu.O -= x * trans_cpu.X + y * trans_cpu.Y;
+    trans.O -= x * trans.X + y * trans.Y;
     trans_has_changed = true;
 }
 
 void GenericDisplay::rotate( T3 V ) {
     if ( not C_has_been_defined ) {
         C_has_been_defined = true;
-        C = trans_cpu.O;
+        C = trans.O;
     }
-    trans_cpu.rotate_s( V, C );
+    trans.rotate_s( V, C );
     trans_has_changed = true;
 }
 
-GenericDisplay::T3 GenericDisplay::get_O() const { return trans_cpu.O; }
-GenericDisplay::T3 GenericDisplay::get_X() const { return trans_cpu.X; }
-GenericDisplay::T3 GenericDisplay::get_Y() const { return trans_cpu.Y; }
-GenericDisplay::T GenericDisplay::get_d() const { return trans_cpu.d; }
-GenericDisplay::T GenericDisplay::get_a() const { return trans_cpu.a; }
+void GenericDisplay::rotate( T x, T y, T z ) {
+    rotate( T3( x, y, z ) );
+}
 
 void GenericDisplay::get_trans_data( String &res, const String &name ) {
     res << name << " = {\n";
-    res << "  O : [ " << trans_cpu.O[ 0 ] << ", " << trans_cpu.O[ 1 ] << ", " << trans_cpu.O[ 2 ] << " ],\n";
-    res << "  X : [ " << trans_cpu.X[ 0 ] << ", " << trans_cpu.X[ 1 ] << ", " << trans_cpu.X[ 2 ] << " ],\n";
-    res << "  Y : [ " << trans_cpu.Y[ 0 ] << ", " << trans_cpu.Y[ 1 ] << ", " << trans_cpu.Y[ 2 ] << " ],\n";
-    res << "  a : " << trans_cpu.a << ",\n";
-    res << "  d : " << trans_cpu.d << "\n";
+    res << "  O : [ " << trans.O[ 0 ] << ", " << trans.O[ 1 ] << ", " << trans.O[ 2 ] << " ],\n";
+    res << "  X : [ " << trans.X[ 0 ] << ", " << trans.X[ 1 ] << ", " << trans.X[ 2 ] << " ],\n";
+    res << "  Y : [ " << trans.Y[ 0 ] << ", " << trans.Y[ 1 ] << ", " << trans.Y[ 2 ] << " ],\n";
+    res << "  a : " << trans.a << ",\n";
+    res << "  d : " << trans.d << "\n";
     res << "};\n";
 }
 
@@ -83,35 +82,25 @@ void GenericDisplay::shrink( T v ) {
         items[ n ]->shrink( v );
 }
 
-int GenericDisplay::get_w() const { return w; }
-int GenericDisplay::get_h() const { return h; }
-void GenericDisplay::set_w( int w ) { this->w = w; }
-void GenericDisplay::set_h( int h ) { this->h = h; }
-
-void GenericDisplay::update_p_min_p_max( bool use_trans ) {
-    p_min = +std::numeric_limits<T>::max();
-    p_max = -std::numeric_limits<T>::max();
+void GenericDisplay::get_min_max_real( T3 &mi, T3 &ma ) {
+    mi = +std::numeric_limits<T>::max();
+    ma = -std::numeric_limits<T>::max();
     for( int n = 0; n < items.size(); ++n )
-        items[ n ]->update_p_min_p_max( this, p_min, p_max, use_trans );
+        items[ n ]->update_min_max( mi, ma );
+}
+
+void GenericDisplay::get_min_max_view( T3 &mi, T3 &ma ) {
+    mi = +std::numeric_limits<T>::max();
+    ma = -std::numeric_limits<T>::max();
+    DisplayTrans::Buf trans_buf = trans.make_buf( w, h );
+    for( int n = 0; n < items.size(); ++n )
+        items[ n ]->update_min_max( mi, ma, trans_buf );
 }
 
 void GenericDisplay::fit() {
-    update_p_min_p_max( false );
-    T3 C = T( 0.5 ) * ( p_min + p_max );
-    set_O( C );
-    set_d( 1.5 * max( p_max[ 0 ] - p_min[ 0 ], p_max[ 1 ] - p_min[ 1 ] ) );
-}
-
-DisplayTrans *GenericDisplay::get_trans_gpu() {
-    if ( not trans_gpu ) {
-        CSC( cudaMalloc( &trans_gpu, sizeof( DisplayTrans ) ) );
-        trans_has_changed = true;
-    }
-    if ( trans_has_changed ) {
-        trans_has_changed = false;
-        CSC( cudaMemcpy( trans_gpu, &trans_cpu, sizeof( DisplayTrans ), cudaMemcpyHostToDevice ) );
-    }
-    return trans_gpu;
+    T3 mi, ma; get_min_max_real( mi, ma );
+    set_O( T( 0.5 ) * ( mi + ma ) );
+    set_d( 1.5 * max( ma[ 0 ] - mi[ 0 ], ma[ 1 ] - mi[ 1 ] ) );
 }
 
 END_METIL_NAMESPACE;
