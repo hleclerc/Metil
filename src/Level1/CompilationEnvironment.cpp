@@ -477,6 +477,8 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         loc_ce.add_inc_path( cpp_parser.inc_paths[ i ] );
     for( int i = 0; i < cpp_parser.gpu_flags.size(); ++i )
         loc_ce.add_GPUFLAG( cpp_parser.gpu_flags[ i ] );
+    for( int i = 0; i < cpp_parser.cpp_flags.size(); ++i )
+        loc_ce.add_CPPFLAG( cpp_parser.cpp_flags[ i ] );
 
     // command
     Ptr<CompilationTree> res = loc_ce.make_obj_compilation_tree( loc_ce.obj_for( cpp, dyn ), make_cpp_compilation_tree( cpp ), dyn );

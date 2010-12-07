@@ -13,6 +13,11 @@ template<class T>
 struct BasicVecGpu {
     BasicVecGpu() : rese( 0 ) {}
 
+    BasicVecGpu( Size, ST size, const T *data_ptr ) : rese( size ), size( size ) {
+        cudaMalloc( &data, sizeof( T ) * rese );
+        cudaMemcpy( data, data_ptr, sizeof( T ) * rese, cudaMemcpyHostToDevice );
+    }
+
     ~BasicVecGpu() {
         if ( rese )
             cudaFree( data );
@@ -44,6 +49,7 @@ struct BasicVecGpu {
 
     T *data;
     ST rese;
+    ST size;
 };
 
 END_METIL_NAMESPACE;
