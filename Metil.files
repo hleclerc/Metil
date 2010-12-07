@@ -263,5 +263,3 @@ unit_tests/number2.cpp
 unit_tests/run_unit_test.py
 unit_tests/report.html
 examples/Hello_world.cpp
-examples/python_server/server_objects_wrap.cpp
-examples/python_server/server_objects.py
