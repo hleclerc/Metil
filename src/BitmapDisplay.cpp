@@ -70,10 +70,28 @@ void BitmapDisplay::get_img_rgba( U *bits ) const {
     cudaMemcpy( bits, img_rgba.ptr(), sizeof( unsigned ) * img_rgba.rese, cudaMemcpyDeviceToHost );
 }
 
-BitmapDisplay::U *BitmapDisplay::get_img_rgba_ptr() {
-    img_rgba.reserve_without_copy( w * h );
-    return img_rgba.ptr();
-}
+// <<<<<<< HEAD:src/BitmapDisplay.cpp
+// unsigned *BitmapDisplay::Img::get_gpu_ptr() {
+//     if ( rese_gpu != rese() ) {
+//         if ( gpu )
+//             CSC(( cudaFree( gpu ) ));
+//         gpu = 0;
+//     }
+//     if ( not gpu ) {
+//         rese_gpu = rese();
+// <<<<<<< HEAD:src/BitmapDisplay.cpp
+//         cudaMalloc( &gpu, rese_gpu );
+// =======
+//         CSC(( cudaMalloc( &gpu, rese_gpu ) ));
+// >>>>>>> 425c737172cae11916a779b502574027b6d6a926:src/BitmapDisplay.cpp
+//     }
+//     return gpu;
+// =======
+// BitmapDisplay::U *BitmapDisplay::get_img_rgba_ptr() {
+//     img_rgba.reserve_without_copy( w * h );
+//     return img_rgba.ptr();
+// >>>>>>> 08ba0ff894d144e4e37115e835c5e9cb219a29a6:src/BitmapDisplay.cpp
+// }
 
 BitmapDisplay::T *BitmapDisplay::get_img_zznv_ptr() {
     img_zznv.reserve_without_copy( w * h );
