@@ -46,8 +46,7 @@ void BitmapDisplayWidget::mousePressEvent( QMouseEvent *mouse_event ) {
     x_press = mouse_event->x();
     y_press = mouse_event->y();
     if ( mouse_event->buttons() & Qt::RightButton  ) {
-        unsigned nnnn = display.img_nnnn.get_val_from_gpu( x_press, y_press );
-        PRINT( nnnn );
+        PRINT( display.get_elem_number( x_press, y_press ) );
     }
 }
 
@@ -100,12 +99,13 @@ void BitmapDisplayWidget::paintEvent( QPaintEvent * ) {
     QImage img( display.get_w(), display.get_h(), QImage::Format_ARGB32 );
     cudaThreadSynchronize();
     double t0 = time_of_day_in_sec();
-    display.render();
+    for( int i = 0; i < 10; ++i )
+        display.render();
     cudaThreadSynchronize();
     double t1 = time_of_day_in_sec();
-    PRINT( t1 - t0 );
+    PRINT( ( t1 - t0 ) / 10 );
 
-    display.img_rgba.copy_gpu_to_cpu( img.bits() );
+    display.get_img_rgba( (unsigned *)img.bits() );
     painter.drawImage( 0, 0, img );
 }
 

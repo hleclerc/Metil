@@ -65,7 +65,7 @@ static void update_bin_methods_data( int nb_types ) {
         bin_methods_info.nb_types = 2 * nb_types;
         bin_methods_info.rese_mem = bin_methods_info.nb_types * bin_methods_info.nb_types * bin_methods_info.nb_items * sizeof( void * );
         bin_methods_info.data_ptr = (void **)MALLOC( bin_methods_info.rese_mem );
-        bin_methods_info.nb_types = sqrt( FP64( bin_methods_info.rese_mem / bin_methods_info.nb_items / sizeof( void * ) ) );
+        bin_methods_info.nb_types = (int)sqrt( FP64( bin_methods_info.rese_mem / bin_methods_info.nb_items / sizeof( void * ) ) );
 
         // complete and copy old data
         int num_binary_method = 0;

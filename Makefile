@@ -40,9 +40,9 @@ documentation:
 	doxygen html/Doxyfile_Level1
 	mkdir -p html/Level1/images; cp doc/images/* html/Level1/images
 
-continuous_integration:
+pull_and_push_if_valid:
 	git pull
-	make -j8 make_unit_tests
+	make make_unit_tests
 	make documentation
 	git push production
 

@@ -25,6 +25,7 @@ src/BitmapDisplayWidget.h
 src/BasicRectIter.h
 src/Mat.h
 src/Assert.h
+src/Matlab.h
 src/Img.h
 src/Base64.h
 src/EnableIf.h
@@ -56,6 +57,7 @@ src/DynamicCppLib.h
 src/CanBeDerived.h
 src/Allocator.h
 src/TypeInformation.h
+src/BasicVecGpu.h
 src/GenericDisplay.h
 src/TypeConfig.h
 src/TypeWithoutPtr.h
@@ -121,6 +123,7 @@ src/Level1/NbArgsMethods.h
 src/Level1/TypeConstructor_LazyObject.h
 src/Level1/TypeConstructor_Symbol.h
 src/Level1/TypeConstructor_Op.h
+src/Level1/TypeConstructor_MatlabString.h
 src/Level1/TypeConstructor_Socket.h
 src/Level1/MethodGenerator.h
 src/Level1/MethodWriterHelper_Int.h
@@ -153,6 +156,7 @@ src/NewString.cpp
 src/Thread.cpp
 src/MachineId_Gpu.cpp
 src/Mos.cpp
+src/Matlab.cpp
 src/MachineId_Cpu.cpp
 src/ElemType.cpp
 src/DynamicCppLib.cpp
@@ -174,6 +178,7 @@ src/Level1/TypeConstructor_Op.cpp
 src/Level1/MethodWriterHelper_Int.cpp
 src/Level1/SchedItemList.cpp
 src/Level1/TypeConstructor_String.cpp
+src/Level1/TypeConstructor_MatlabString.cpp
 src/Level1/TypeConstructor_DistantObject.cpp
 src/Level1/TypeConstructor_Array.cpp
 src/Level1/TypeConstructor_Flt.cpp

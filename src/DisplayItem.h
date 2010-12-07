@@ -1,7 +1,7 @@
 #ifndef DISPLAYITEM_H
 #define DISPLAYITEM_H
 
-#include "BasicVec.h"
+#include "DisplayTrans.h"
 
 BEG_METIL_NAMESPACE;
 
@@ -13,7 +13,8 @@ class DisplayItem {
 public:
     typedef BasicVec<float,3> T3;
 
-    virtual void update_p_min_p_max( GenericDisplay *display, T3 &p_min, T3 &p_max, bool use_trans ) = 0;
+    virtual void update_min_max( T3 &mi, T3 &ma, const DisplayTrans::Buf &trans_buf ) const = 0;
+    virtual void update_min_max( T3 &mi, T3 &ma ) const = 0;
     virtual void render_to( BitmapDisplay *display ) = 0;
     virtual void render_to( VectorDisplay *display ) = 0;
 

@@ -71,11 +71,12 @@ int main( int argc, char **argv ) {
 
     String cpp_file, out_file, exec_using, comp_dir, make_file, exec_file;
     BasicVec<String> exec_args;
-    bool execution   = true;
-    bool compilation = true;
-    bool want_dyn    = true;
-    bool want_mex    = false;
-    bool want_lib    = false;
+    bool execution     = true;
+    bool compilation   = true;
+    bool want_dyn      = true;
+    bool want_mex      = false;
+    bool want_lib      = false;
+    bool want_sep_libs = true;
 
     //
     for( int i = 1; i < argc; ++i ) {
@@ -140,6 +141,7 @@ int main( int argc, char **argv ) {
             want_lib  = true;
             want_dyn  = true;
             execution = false;
+            want_sep_libs = false;
         } else if ( arg == "-dylib" ) {
             want_lib  = true;
             want_dyn  = true;
@@ -198,7 +200,7 @@ int main( int argc, char **argv ) {
 
     // compilation
     if ( compilation )
-        if ( int res_make = ce.make_app( out_file, cpp_file, want_lib, want_dyn, true ) )
+        if ( int res_make = ce.make_app( out_file, cpp_file, want_lib, want_dyn, want_sep_libs ) )
             return res_make;
 
     //    if ( export_file ) {
