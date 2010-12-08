@@ -95,6 +95,9 @@ struct Ptr {
     const T &operator*() const { return *data; }
     T &operator*() { return *data; }
 
+    template<class Os>
+    void write_str( Os &os ) const { os << data; }
+
     T *data;
 };
 

@@ -315,6 +315,10 @@ String CompilationEnvironment::cpp_for( const String &cpp ) {
     return comp_dir() + filename_without_dir_of( cpp ) + ".cpp";
 }
 
+String CompilationEnvironment::cu_for( const String &cpp ) {
+    return comp_dir() + filename_without_dir_of( cpp ) + ".cu";
+}
+
 String CompilationEnvironment::mex_for( const String &cpp ) {
     const char *suffix = ".mexglx";
     if ( cpp.ends_with( ".cpp" ) ) return cpp.rstrip( 4 ) + suffix;

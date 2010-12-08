@@ -51,6 +51,7 @@ public:
     String dep_suffix(); ///< .dep
 
     String cpp_for( const String &bas ); ///< ex: toto -> compilation/toto.cpp
+    String cu_for ( const String &bas ); ///< ex: toto -> compilation/toto.cu
     String obj_for( const String &cpp, bool dyn ); ///< ex: toto.cpp -> compilation/toto.os
     String lib_for( const String &cpp, bool dyn ); ///< ex: toto.cpp -> compilation/toto.so
     String mex_for( const String &cpp ); ///< .mexglx

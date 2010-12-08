@@ -45,10 +45,11 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  --maxrregcount n : device emulation for cuda";
     cerrn << "  --static : do not make dynamic objects";
     cerrn << "possible pragma in .h/.cpp/.cu files:";
-    cerrn << "  src_file additionnal cpp / cu files";
     cerrn << "  inc_path additionnal include path";
     cerrn << "  lnk_flag additionnal flags explicitly passed to the linker";
+    cerrn << "  cpp_flag additionnal flags explicitly passed to the compiler";
     cerrn << "  gpu_flag additionnal flags explicitly passed to nvcc";
+    cerrn << "  src_file additionnal cpp / cu files";
     cerrn << "  lib_path additionnal library (.so/.a) path, like e.g. /usr/local/lib";
     cerrn << "  lib_name additionnal library name (.so/.a), like e.g. pthread";
 }
