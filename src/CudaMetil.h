@@ -16,6 +16,8 @@
 #include "EnableIf.h"
 #include "Ps.h"
 
+#define SIZE_SHARED_MEM_CUDA 16384
+
 BEG_METIL_NAMESPACE;
 
 inline void check_err( const char *file, int line, const char *msg ) {
