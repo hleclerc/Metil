@@ -17,6 +17,7 @@
 #define MET_1_VoO( N ) void  metil_def_##N##__when__b__isa__MORef__pert__11( MO &a, MO b ) { Ad v = CM_1( copy, b ); return CM_2( N, a, v.o ); }
 #define MET_Vopp( N )
 #define MET_IO( N ) SI32  metil_def_##N##__when__a__isa__MORef__pert__10( MO a ) { Ad v = CM_1( copy, a ); return CM_1( N, v.o ); }
+#define MET_VoS( N )
 #define MET_XOO( N ) struct MetilException * metil_def_##N##__when__a__isa__MORef__pert__10( MO a, MO b ) { Ad v = CM_1( copy, a ); return CM_2( N, v.o, b ); }
 #define MET_1_XOO( N ) struct MetilException * metil_def_##N##__when__b__isa__MORef__pert__11( MO a, MO b ) { Ad v = CM_1( copy, b ); return CM_2( N, a, v.o ); }
 #define MET_VoY( N )
@@ -27,6 +28,7 @@
 #define MET_1_VOO( N ) void  metil_def_##N##__when__b__isa__MORef__pert__11( MO a, MO b ) { Ad v = CM_1( copy, b ); return CM_2( N, a, v.o ); }
 #define MET_VoPS( N )
 #define MET_Vo( N )
+#define MET_VopS( N )
 #define MET_SO( N ) ST  metil_def_##N##__when__a__isa__MORef__pert__10( MO a ) { Ad v = CM_1( copy, a ); return CM_1( N, v.o ); }
 #define MET_OOS( N ) MO  metil_def_##N##__when__a__isa__MORef__pert__10( MO a, ST b ) { Ad v = CM_1( copy, a ); return CM_1( N, v.o, b ); }
 #define MET_MO( N ) const MachineId * metil_def_##N##__when__a__isa__MORef__pert__10( MO a ) { Ad v = CM_1( copy, a ); return CM_1( N, v.o ); }

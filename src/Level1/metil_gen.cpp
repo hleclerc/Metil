@@ -564,6 +564,8 @@ Type metil_type_cst_VoidString( &type_constructor_VoidString, "VoidString", 0, 0
 // method references
 extern MethodName_del::TM metil_def_del__when__a__isa__File;
 extern MethodName_close::TM metil_def_close__when__a__isa__File;
+extern MethodName_read::TM metil_def_read__when__a__isa__File;
+extern MethodName_seek::TM metil_def_seek__when__a__isa__File;
 extern MethodName_del::TM metil_def_del__when__a__isa__Socket__pert__1;
 extern MethodName_self_append::TM metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2;
 extern MethodName_self_append::TM metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2;
@@ -784,7 +786,6 @@ extern MethodName_new_ptr_z::TM metil_def_new_ptr_z__when__a__isa__StringConcat;
 extern MethodName_select_C::TM metil_def_select_C__when__a__isa__StringConcat__and__b__isa__Int__pert__1;
 extern MethodName_copy_ref::TM metil_def_copy_ref__when__a__isa__MORef__pert__10;
 extern MethodName_size_in_mem::TM metil_def_size_in_mem__when__a__isa__MORef__pert__10;
-extern MethodName_read::TM metil_def_read__when__a__isa__MORef__pert__10;
 extern MethodName_copy_data::TM metil_def_copy_data__when__a__isa__MORef__pert__10;
 extern MethodName_size::TM metil_def_size__when__a__isa__MORef__pert__10;
 extern MethodName_sizes::TM metil_def_sizes__when__a__isa__MORef__pert__10;
@@ -988,6 +989,7 @@ extern MethodMaker metil_gen_flush__when__a__has__has_writer_for_flush__pert__1;
 extern MethodMaker metil_gen_write__when__a__has__has_writer_for_write__pert__1;
 extern MethodMaker metil_gen_read__when__a__has__has_writer_for_read__pert__1;
 extern MethodMaker metil_gen_copy_data__when__a__has__has_writer_for_copy_data__pert__1;
+extern MethodMaker metil_gen_seek__when__a__has__has_writer_for_seek__pert__1;
 extern MethodMaker metil_gen_size__when__a__has__has_writer_for_size__pert__1;
 extern MethodMaker metil_gen_sizes__when__a__has__has_writer_for_sizes__pert__1;
 extern MethodMaker metil_gen_min_1__when__a__has__has_writer_for_min_1__pert__1;
@@ -1080,6 +1082,26 @@ void reg_def() {
     item_metil_def_close__when__a__isa__File.line = 11;
     item_metil_def_close__when__a__isa__File.pert = 0;
     MethodFinder<MethodName_close>::last = &item_metil_def_close__when__a__isa__File;
+
+    static MethodFinder<MethodName_read>::Item item_metil_def_read__when__a__isa__File;
+    item_metil_def_read__when__a__isa__File.prev = MethodFinder<MethodName_read>::last;
+    item_metil_def_read__when__a__isa__File.cond = &cond_metil_def_del__when__a__isa__File;
+    item_metil_def_read__when__a__isa__File.meth = metil_def_read__when__a__isa__File;
+    item_metil_def_read__when__a__isa__File.gene = 0;
+    item_metil_def_read__when__a__isa__File.file = string_0;
+    item_metil_def_read__when__a__isa__File.line = 17;
+    item_metil_def_read__when__a__isa__File.pert = 0;
+    MethodFinder<MethodName_read>::last = &item_metil_def_read__when__a__isa__File;
+
+    static MethodFinder<MethodName_seek>::Item item_metil_def_seek__when__a__isa__File;
+    item_metil_def_seek__when__a__isa__File.prev = MethodFinder<MethodName_seek>::last;
+    item_metil_def_seek__when__a__isa__File.cond = &cond_metil_def_del__when__a__isa__File;
+    item_metil_def_seek__when__a__isa__File.meth = metil_def_seek__when__a__isa__File;
+    item_metil_def_seek__when__a__isa__File.gene = 0;
+    item_metil_def_seek__when__a__isa__File.file = string_0;
+    item_metil_def_seek__when__a__isa__File.line = 22;
+    item_metil_def_seek__when__a__isa__File.pert = 0;
+    MethodFinder<MethodName_seek>::last = &item_metil_def_seek__when__a__isa__File;
 
     static MethodCond_0_isa<TypeConstructor_Socket> cond_metil_def_del__when__a__isa__Socket__pert__1;
 
@@ -1315,7 +1337,7 @@ void reg_def() {
     item_metil_def_size__when__a__isa__LazyObject__pert__10.meth = metil_def_size__when__a__isa__LazyObject__pert__10;
     item_metil_def_size__when__a__isa__LazyObject__pert__10.gene = 0;
     item_metil_def_size__when__a__isa__LazyObject__pert__10.file = string_5;
-    item_metil_def_size__when__a__isa__LazyObject__pert__10.line = 36;
+    item_metil_def_size__when__a__isa__LazyObject__pert__10.line = 37;
     item_metil_def_size__when__a__isa__LazyObject__pert__10.pert = 10;
     MethodFinder<MethodName_size>::last = &item_metil_def_size__when__a__isa__LazyObject__pert__10;
 
@@ -1325,7 +1347,7 @@ void reg_def() {
     item_metil_def_sizes__when__a__isa__LazyObject__pert__10.meth = metil_def_sizes__when__a__isa__LazyObject__pert__10;
     item_metil_def_sizes__when__a__isa__LazyObject__pert__10.gene = 0;
     item_metil_def_sizes__when__a__isa__LazyObject__pert__10.file = string_5;
-    item_metil_def_sizes__when__a__isa__LazyObject__pert__10.line = 37;
+    item_metil_def_sizes__when__a__isa__LazyObject__pert__10.line = 38;
     item_metil_def_sizes__when__a__isa__LazyObject__pert__10.pert = 10;
     MethodFinder<MethodName_sizes>::last = &item_metil_def_sizes__when__a__isa__LazyObject__pert__10;
 
@@ -1335,7 +1357,7 @@ void reg_def() {
     item_metil_def_min_1__when__a__isa__LazyObject__pert__10.meth = metil_def_min_1__when__a__isa__LazyObject__pert__10;
     item_metil_def_min_1__when__a__isa__LazyObject__pert__10.gene = 0;
     item_metil_def_min_1__when__a__isa__LazyObject__pert__10.file = string_5;
-    item_metil_def_min_1__when__a__isa__LazyObject__pert__10.line = 38;
+    item_metil_def_min_1__when__a__isa__LazyObject__pert__10.line = 39;
     item_metil_def_min_1__when__a__isa__LazyObject__pert__10.pert = 10;
     MethodFinder<MethodName_min_1>::last = &item_metil_def_min_1__when__a__isa__LazyObject__pert__10;
 
@@ -1345,7 +1367,7 @@ void reg_def() {
     item_metil_def_max_1__when__a__isa__LazyObject__pert__10.meth = metil_def_max_1__when__a__isa__LazyObject__pert__10;
     item_metil_def_max_1__when__a__isa__LazyObject__pert__10.gene = 0;
     item_metil_def_max_1__when__a__isa__LazyObject__pert__10.file = string_5;
-    item_metil_def_max_1__when__a__isa__LazyObject__pert__10.line = 39;
+    item_metil_def_max_1__when__a__isa__LazyObject__pert__10.line = 40;
     item_metil_def_max_1__when__a__isa__LazyObject__pert__10.pert = 10;
     MethodFinder<MethodName_max_1>::last = &item_metil_def_max_1__when__a__isa__LazyObject__pert__10;
 
@@ -3419,16 +3441,6 @@ void reg_def() {
     item_metil_def_size_in_mem__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_size_in_mem>::last = &item_metil_def_size_in_mem__when__a__isa__MORef__pert__10;
 
-    static MethodFinder<MethodName_read>::Item item_metil_def_read__when__a__isa__MORef__pert__10;
-    item_metil_def_read__when__a__isa__MORef__pert__10.prev = MethodFinder<MethodName_read>::last;
-    item_metil_def_read__when__a__isa__MORef__pert__10.cond = &cond_metil_def_copy_ref__when__a__isa__MORef__pert__10;
-    item_metil_def_read__when__a__isa__MORef__pert__10.meth = metil_def_read__when__a__isa__MORef__pert__10;
-    item_metil_def_read__when__a__isa__MORef__pert__10.gene = 0;
-    item_metil_def_read__when__a__isa__MORef__pert__10.file = string_5;
-    item_metil_def_read__when__a__isa__MORef__pert__10.line = 32;
-    item_metil_def_read__when__a__isa__MORef__pert__10.pert = 10;
-    MethodFinder<MethodName_read>::last = &item_metil_def_read__when__a__isa__MORef__pert__10;
-
     static MethodFinder<MethodName_copy_data>::Item item_metil_def_copy_data__when__a__isa__MORef__pert__10;
     item_metil_def_copy_data__when__a__isa__MORef__pert__10.prev = MethodFinder<MethodName_copy_data>::last;
     item_metil_def_copy_data__when__a__isa__MORef__pert__10.cond = &cond_metil_def_copy_ref__when__a__isa__MORef__pert__10;
@@ -3445,7 +3457,7 @@ void reg_def() {
     item_metil_def_size__when__a__isa__MORef__pert__10.meth = metil_def_size__when__a__isa__MORef__pert__10;
     item_metil_def_size__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_size__when__a__isa__MORef__pert__10.file = string_5;
-    item_metil_def_size__when__a__isa__MORef__pert__10.line = 36;
+    item_metil_def_size__when__a__isa__MORef__pert__10.line = 37;
     item_metil_def_size__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_size>::last = &item_metil_def_size__when__a__isa__MORef__pert__10;
 
@@ -3455,7 +3467,7 @@ void reg_def() {
     item_metil_def_sizes__when__a__isa__MORef__pert__10.meth = metil_def_sizes__when__a__isa__MORef__pert__10;
     item_metil_def_sizes__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_sizes__when__a__isa__MORef__pert__10.file = string_5;
-    item_metil_def_sizes__when__a__isa__MORef__pert__10.line = 37;
+    item_metil_def_sizes__when__a__isa__MORef__pert__10.line = 38;
     item_metil_def_sizes__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_sizes>::last = &item_metil_def_sizes__when__a__isa__MORef__pert__10;
 
@@ -3465,7 +3477,7 @@ void reg_def() {
     item_metil_def_min_1__when__a__isa__MORef__pert__10.meth = metil_def_min_1__when__a__isa__MORef__pert__10;
     item_metil_def_min_1__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_min_1__when__a__isa__MORef__pert__10.file = string_5;
-    item_metil_def_min_1__when__a__isa__MORef__pert__10.line = 38;
+    item_metil_def_min_1__when__a__isa__MORef__pert__10.line = 39;
     item_metil_def_min_1__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_min_1>::last = &item_metil_def_min_1__when__a__isa__MORef__pert__10;
 
@@ -3475,7 +3487,7 @@ void reg_def() {
     item_metil_def_max_1__when__a__isa__MORef__pert__10.meth = metil_def_max_1__when__a__isa__MORef__pert__10;
     item_metil_def_max_1__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_max_1__when__a__isa__MORef__pert__10.file = string_5;
-    item_metil_def_max_1__when__a__isa__MORef__pert__10.line = 39;
+    item_metil_def_max_1__when__a__isa__MORef__pert__10.line = 40;
     item_metil_def_max_1__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_max_1>::last = &item_metil_def_max_1__when__a__isa__MORef__pert__10;
 
@@ -3485,7 +3497,7 @@ void reg_def() {
     item_metil_def_new_ptr__when__a__isa__MORef__pert__10.meth = metil_def_new_ptr__when__a__isa__MORef__pert__10;
     item_metil_def_new_ptr__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_new_ptr__when__a__isa__MORef__pert__10.file = string_5;
-    item_metil_def_new_ptr__when__a__isa__MORef__pert__10.line = 44;
+    item_metil_def_new_ptr__when__a__isa__MORef__pert__10.line = 45;
     item_metil_def_new_ptr__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_new_ptr>::last = &item_metil_def_new_ptr__when__a__isa__MORef__pert__10;
 
@@ -3495,7 +3507,7 @@ void reg_def() {
     item_metil_def_new_ptr_z__when__a__isa__MORef__pert__10.meth = metil_def_new_ptr_z__when__a__isa__MORef__pert__10;
     item_metil_def_new_ptr_z__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_new_ptr_z__when__a__isa__MORef__pert__10.file = string_5;
-    item_metil_def_new_ptr_z__when__a__isa__MORef__pert__10.line = 45;
+    item_metil_def_new_ptr_z__when__a__isa__MORef__pert__10.line = 46;
     item_metil_def_new_ptr_z__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_new_ptr_z>::last = &item_metil_def_new_ptr_z__when__a__isa__MORef__pert__10;
 
@@ -3697,7 +3709,7 @@ void reg_def() {
     item_metil_def_convert_to_Bool__when__a__isa__MORef__pert__10.meth = metil_def_convert_to_Bool__when__a__isa__MORef__pert__10;
     item_metil_def_convert_to_Bool__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_convert_to_Bool__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_convert_to_Bool__when__a__isa__MORef__pert__10.line = 52;
+    item_metil_def_convert_to_Bool__when__a__isa__MORef__pert__10.line = 53;
     item_metil_def_convert_to_Bool__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_convert_to_Bool>::last = &item_metil_def_convert_to_Bool__when__a__isa__MORef__pert__10;
 
@@ -3707,7 +3719,7 @@ void reg_def() {
     item_metil_def_convert_to_SI32__when__a__isa__MORef__pert__10.meth = metil_def_convert_to_SI32__when__a__isa__MORef__pert__10;
     item_metil_def_convert_to_SI32__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_convert_to_SI32__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_convert_to_SI32__when__a__isa__MORef__pert__10.line = 53;
+    item_metil_def_convert_to_SI32__when__a__isa__MORef__pert__10.line = 54;
     item_metil_def_convert_to_SI32__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_convert_to_SI32>::last = &item_metil_def_convert_to_SI32__when__a__isa__MORef__pert__10;
 
@@ -3717,7 +3729,7 @@ void reg_def() {
     item_metil_def_convert_to_SI64__when__a__isa__MORef__pert__10.meth = metil_def_convert_to_SI64__when__a__isa__MORef__pert__10;
     item_metil_def_convert_to_SI64__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_convert_to_SI64__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_convert_to_SI64__when__a__isa__MORef__pert__10.line = 54;
+    item_metil_def_convert_to_SI64__when__a__isa__MORef__pert__10.line = 55;
     item_metil_def_convert_to_SI64__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_convert_to_SI64>::last = &item_metil_def_convert_to_SI64__when__a__isa__MORef__pert__10;
 
@@ -3727,7 +3739,7 @@ void reg_def() {
     item_metil_def_convert_to_FP32__when__a__isa__MORef__pert__10.meth = metil_def_convert_to_FP32__when__a__isa__MORef__pert__10;
     item_metil_def_convert_to_FP32__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_convert_to_FP32__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_convert_to_FP32__when__a__isa__MORef__pert__10.line = 55;
+    item_metil_def_convert_to_FP32__when__a__isa__MORef__pert__10.line = 56;
     item_metil_def_convert_to_FP32__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_convert_to_FP32>::last = &item_metil_def_convert_to_FP32__when__a__isa__MORef__pert__10;
 
@@ -3737,7 +3749,7 @@ void reg_def() {
     item_metil_def_convert_to_FP64__when__a__isa__MORef__pert__10.meth = metil_def_convert_to_FP64__when__a__isa__MORef__pert__10;
     item_metil_def_convert_to_FP64__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_convert_to_FP64__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_convert_to_FP64__when__a__isa__MORef__pert__10.line = 56;
+    item_metil_def_convert_to_FP64__when__a__isa__MORef__pert__10.line = 57;
     item_metil_def_convert_to_FP64__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_convert_to_FP64>::last = &item_metil_def_convert_to_FP64__when__a__isa__MORef__pert__10;
 
@@ -3747,7 +3759,7 @@ void reg_def() {
     item_metil_def_convert_to_FP80__when__a__isa__MORef__pert__10.meth = metil_def_convert_to_FP80__when__a__isa__MORef__pert__10;
     item_metil_def_convert_to_FP80__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_convert_to_FP80__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_convert_to_FP80__when__a__isa__MORef__pert__10.line = 57;
+    item_metil_def_convert_to_FP80__when__a__isa__MORef__pert__10.line = 58;
     item_metil_def_convert_to_FP80__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_convert_to_FP80>::last = &item_metil_def_convert_to_FP80__when__a__isa__MORef__pert__10;
 
@@ -3757,7 +3769,7 @@ void reg_def() {
     item_metil_def_ok__when__a__isa__MORef__pert__10.meth = metil_def_ok__when__a__isa__MORef__pert__10;
     item_metil_def_ok__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_ok__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_ok__when__a__isa__MORef__pert__10.line = 59;
+    item_metil_def_ok__when__a__isa__MORef__pert__10.line = 60;
     item_metil_def_ok__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_ok>::last = &item_metil_def_ok__when__a__isa__MORef__pert__10;
 
@@ -3767,7 +3779,7 @@ void reg_def() {
     item_metil_def_get_child__when__a__isa__MORef__pert__10.meth = metil_def_get_child__when__a__isa__MORef__pert__10;
     item_metil_def_get_child__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_get_child__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_get_child__when__a__isa__MORef__pert__10.line = 63;
+    item_metil_def_get_child__when__a__isa__MORef__pert__10.line = 64;
     item_metil_def_get_child__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_get_child>::last = &item_metil_def_get_child__when__a__isa__MORef__pert__10;
 
@@ -3777,7 +3789,7 @@ void reg_def() {
     item_metil_def_nb_children__when__a__isa__MORef__pert__10.meth = metil_def_nb_children__when__a__isa__MORef__pert__10;
     item_metil_def_nb_children__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_nb_children__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_nb_children__when__a__isa__MORef__pert__10.line = 66;
+    item_metil_def_nb_children__when__a__isa__MORef__pert__10.line = 67;
     item_metil_def_nb_children__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_nb_children>::last = &item_metil_def_nb_children__when__a__isa__MORef__pert__10;
 
@@ -3787,7 +3799,7 @@ void reg_def() {
     item_metil_def_get_parent__when__a__isa__MORef__pert__10.meth = metil_def_get_parent__when__a__isa__MORef__pert__10;
     item_metil_def_get_parent__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_get_parent__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_get_parent__when__a__isa__MORef__pert__10.line = 67;
+    item_metil_def_get_parent__when__a__isa__MORef__pert__10.line = 68;
     item_metil_def_get_parent__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_get_parent>::last = &item_metil_def_get_parent__when__a__isa__MORef__pert__10;
 
@@ -3797,7 +3809,7 @@ void reg_def() {
     item_metil_def_cur_op_id__when__a__isa__MORef__pert__10.meth = metil_def_cur_op_id__when__a__isa__MORef__pert__10;
     item_metil_def_cur_op_id__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_cur_op_id__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_cur_op_id__when__a__isa__MORef__pert__10.line = 68;
+    item_metil_def_cur_op_id__when__a__isa__MORef__pert__10.line = 69;
     item_metil_def_cur_op_id__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_cur_op_id>::last = &item_metil_def_cur_op_id__when__a__isa__MORef__pert__10;
 
@@ -3807,7 +3819,7 @@ void reg_def() {
     item_metil_def_priority__when__a__isa__MORef__pert__10.meth = metil_def_priority__when__a__isa__MORef__pert__10;
     item_metil_def_priority__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_priority__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_priority__when__a__isa__MORef__pert__10.line = 69;
+    item_metil_def_priority__when__a__isa__MORef__pert__10.line = 70;
     item_metil_def_priority__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_priority>::last = &item_metil_def_priority__when__a__isa__MORef__pert__10;
 
@@ -3817,7 +3829,7 @@ void reg_def() {
     item_metil_def_machine_id__when__a__isa__MORef__pert__10.meth = metil_def_machine_id__when__a__isa__MORef__pert__10;
     item_metil_def_machine_id__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_machine_id__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_machine_id__when__a__isa__MORef__pert__10.line = 70;
+    item_metil_def_machine_id__when__a__isa__MORef__pert__10.line = 71;
     item_metil_def_machine_id__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_machine_id>::last = &item_metil_def_machine_id__when__a__isa__MORef__pert__10;
 
@@ -3827,7 +3839,7 @@ void reg_def() {
     item_metil_def_get_op_mp__when__a__isa__MORef__pert__10.meth = metil_def_get_op_mp__when__a__isa__MORef__pert__10;
     item_metil_def_get_op_mp__when__a__isa__MORef__pert__10.gene = 0;
     item_metil_def_get_op_mp__when__a__isa__MORef__pert__10.file = string_17;
-    item_metil_def_get_op_mp__when__a__isa__MORef__pert__10.line = 71;
+    item_metil_def_get_op_mp__when__a__isa__MORef__pert__10.line = 72;
     item_metil_def_get_op_mp__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_get_op_mp>::last = &item_metil_def_get_op_mp__when__a__isa__MORef__pert__10;
 
@@ -5507,6 +5519,18 @@ void reg_def() {
     item_metil_gen_copy_data__when__a__has__has_writer_for_copy_data__pert__1.pert = 1;
     MethodFinder<MethodName_copy_data>::last = &item_metil_gen_copy_data__when__a__has__has_writer_for_copy_data__pert__1;
 
+    static TypeConstructor::C0_has_has_writer_for_seek cond_metil_gen_seek__when__a__has__has_writer_for_seek__pert__1;
+
+    static MethodFinder<MethodName_seek>::Item item_metil_gen_seek__when__a__has__has_writer_for_seek__pert__1;
+    item_metil_gen_seek__when__a__has__has_writer_for_seek__pert__1.prev = MethodFinder<MethodName_seek>::last;
+    item_metil_gen_seek__when__a__has__has_writer_for_seek__pert__1.cond = &cond_metil_gen_seek__when__a__has__has_writer_for_seek__pert__1;
+    item_metil_gen_seek__when__a__has__has_writer_for_seek__pert__1.meth = 0;
+    item_metil_gen_seek__when__a__has__has_writer_for_seek__pert__1.gene = metil_gen_seek__when__a__has__has_writer_for_seek__pert__1;
+    item_metil_gen_seek__when__a__has__has_writer_for_seek__pert__1.file = string_17;
+    item_metil_gen_seek__when__a__has__has_writer_for_seek__pert__1.line = 33;
+    item_metil_gen_seek__when__a__has__has_writer_for_seek__pert__1.pert = 1;
+    MethodFinder<MethodName_seek>::last = &item_metil_gen_seek__when__a__has__has_writer_for_seek__pert__1;
+
     static TypeConstructor::C0_has_has_writer_for_size cond_metil_gen_size__when__a__has__has_writer_for_size__pert__1;
 
     static MethodFinder<MethodName_size>::Item item_metil_gen_size__when__a__has__has_writer_for_size__pert__1;
@@ -5515,7 +5539,7 @@ void reg_def() {
     item_metil_gen_size__when__a__has__has_writer_for_size__pert__1.meth = 0;
     item_metil_gen_size__when__a__has__has_writer_for_size__pert__1.gene = metil_gen_size__when__a__has__has_writer_for_size__pert__1;
     item_metil_gen_size__when__a__has__has_writer_for_size__pert__1.file = string_17;
-    item_metil_gen_size__when__a__has__has_writer_for_size__pert__1.line = 35;
+    item_metil_gen_size__when__a__has__has_writer_for_size__pert__1.line = 36;
     item_metil_gen_size__when__a__has__has_writer_for_size__pert__1.pert = 1;
     MethodFinder<MethodName_size>::last = &item_metil_gen_size__when__a__has__has_writer_for_size__pert__1;
 
@@ -5527,7 +5551,7 @@ void reg_def() {
     item_metil_gen_sizes__when__a__has__has_writer_for_sizes__pert__1.meth = 0;
     item_metil_gen_sizes__when__a__has__has_writer_for_sizes__pert__1.gene = metil_gen_sizes__when__a__has__has_writer_for_sizes__pert__1;
     item_metil_gen_sizes__when__a__has__has_writer_for_sizes__pert__1.file = string_17;
-    item_metil_gen_sizes__when__a__has__has_writer_for_sizes__pert__1.line = 36;
+    item_metil_gen_sizes__when__a__has__has_writer_for_sizes__pert__1.line = 37;
     item_metil_gen_sizes__when__a__has__has_writer_for_sizes__pert__1.pert = 1;
     MethodFinder<MethodName_sizes>::last = &item_metil_gen_sizes__when__a__has__has_writer_for_sizes__pert__1;
 
@@ -5539,7 +5563,7 @@ void reg_def() {
     item_metil_gen_min_1__when__a__has__has_writer_for_min_1__pert__1.meth = 0;
     item_metil_gen_min_1__when__a__has__has_writer_for_min_1__pert__1.gene = metil_gen_min_1__when__a__has__has_writer_for_min_1__pert__1;
     item_metil_gen_min_1__when__a__has__has_writer_for_min_1__pert__1.file = string_17;
-    item_metil_gen_min_1__when__a__has__has_writer_for_min_1__pert__1.line = 37;
+    item_metil_gen_min_1__when__a__has__has_writer_for_min_1__pert__1.line = 38;
     item_metil_gen_min_1__when__a__has__has_writer_for_min_1__pert__1.pert = 1;
     MethodFinder<MethodName_min_1>::last = &item_metil_gen_min_1__when__a__has__has_writer_for_min_1__pert__1;
 
@@ -5551,7 +5575,7 @@ void reg_def() {
     item_metil_gen_max_1__when__a__has__has_writer_for_max_1__pert__1.meth = 0;
     item_metil_gen_max_1__when__a__has__has_writer_for_max_1__pert__1.gene = metil_gen_max_1__when__a__has__has_writer_for_max_1__pert__1;
     item_metil_gen_max_1__when__a__has__has_writer_for_max_1__pert__1.file = string_17;
-    item_metil_gen_max_1__when__a__has__has_writer_for_max_1__pert__1.line = 38;
+    item_metil_gen_max_1__when__a__has__has_writer_for_max_1__pert__1.line = 39;
     item_metil_gen_max_1__when__a__has__has_writer_for_max_1__pert__1.pert = 1;
     MethodFinder<MethodName_max_1>::last = &item_metil_gen_max_1__when__a__has__has_writer_for_max_1__pert__1;
 
@@ -5563,7 +5587,7 @@ void reg_def() {
     item_metil_gen_ptr__when__a__has__has_writer_for_ptr__pert__1.meth = 0;
     item_metil_gen_ptr__when__a__has__has_writer_for_ptr__pert__1.gene = metil_gen_ptr__when__a__has__has_writer_for_ptr__pert__1;
     item_metil_gen_ptr__when__a__has__has_writer_for_ptr__pert__1.file = string_17;
-    item_metil_gen_ptr__when__a__has__has_writer_for_ptr__pert__1.line = 41;
+    item_metil_gen_ptr__when__a__has__has_writer_for_ptr__pert__1.line = 42;
     item_metil_gen_ptr__when__a__has__has_writer_for_ptr__pert__1.pert = 1;
     MethodFinder<MethodName_ptr>::last = &item_metil_gen_ptr__when__a__has__has_writer_for_ptr__pert__1;
 
@@ -5575,7 +5599,7 @@ void reg_def() {
     item_metil_gen_ptr_z__when__a__has__has_writer_for_ptr_z__pert__1.meth = 0;
     item_metil_gen_ptr_z__when__a__has__has_writer_for_ptr_z__pert__1.gene = metil_gen_ptr_z__when__a__has__has_writer_for_ptr_z__pert__1;
     item_metil_gen_ptr_z__when__a__has__has_writer_for_ptr_z__pert__1.file = string_17;
-    item_metil_gen_ptr_z__when__a__has__has_writer_for_ptr_z__pert__1.line = 42;
+    item_metil_gen_ptr_z__when__a__has__has_writer_for_ptr_z__pert__1.line = 43;
     item_metil_gen_ptr_z__when__a__has__has_writer_for_ptr_z__pert__1.pert = 1;
     MethodFinder<MethodName_ptr_z>::last = &item_metil_gen_ptr_z__when__a__has__has_writer_for_ptr_z__pert__1;
 
@@ -5587,7 +5611,7 @@ void reg_def() {
     item_metil_gen_new_ptr__when__a__has__has_writer_for_new_ptr__pert__1.meth = 0;
     item_metil_gen_new_ptr__when__a__has__has_writer_for_new_ptr__pert__1.gene = metil_gen_new_ptr__when__a__has__has_writer_for_new_ptr__pert__1;
     item_metil_gen_new_ptr__when__a__has__has_writer_for_new_ptr__pert__1.file = string_17;
-    item_metil_gen_new_ptr__when__a__has__has_writer_for_new_ptr__pert__1.line = 43;
+    item_metil_gen_new_ptr__when__a__has__has_writer_for_new_ptr__pert__1.line = 44;
     item_metil_gen_new_ptr__when__a__has__has_writer_for_new_ptr__pert__1.pert = 1;
     MethodFinder<MethodName_new_ptr>::last = &item_metil_gen_new_ptr__when__a__has__has_writer_for_new_ptr__pert__1;
 
@@ -5599,7 +5623,7 @@ void reg_def() {
     item_metil_gen_new_ptr_z__when__a__has__has_writer_for_new_ptr_z__pert__1.meth = 0;
     item_metil_gen_new_ptr_z__when__a__has__has_writer_for_new_ptr_z__pert__1.gene = metil_gen_new_ptr_z__when__a__has__has_writer_for_new_ptr_z__pert__1;
     item_metil_gen_new_ptr_z__when__a__has__has_writer_for_new_ptr_z__pert__1.file = string_17;
-    item_metil_gen_new_ptr_z__when__a__has__has_writer_for_new_ptr_z__pert__1.line = 44;
+    item_metil_gen_new_ptr_z__when__a__has__has_writer_for_new_ptr_z__pert__1.line = 45;
     item_metil_gen_new_ptr_z__when__a__has__has_writer_for_new_ptr_z__pert__1.pert = 1;
     MethodFinder<MethodName_new_ptr_z>::last = &item_metil_gen_new_ptr_z__when__a__has__has_writer_for_new_ptr_z__pert__1;
 
@@ -5839,7 +5863,7 @@ void reg_def() {
     item_metil_gen_convert_to_Bool__when__a__has__has_writer_for_convert_to_Bool__pert__1.meth = 0;
     item_metil_gen_convert_to_Bool__when__a__has__has_writer_for_convert_to_Bool__pert__1.gene = metil_gen_convert_to_Bool__when__a__has__has_writer_for_convert_to_Bool__pert__1;
     item_metil_gen_convert_to_Bool__when__a__has__has_writer_for_convert_to_Bool__pert__1.file = string_17;
-    item_metil_gen_convert_to_Bool__when__a__has__has_writer_for_convert_to_Bool__pert__1.line = 52;
+    item_metil_gen_convert_to_Bool__when__a__has__has_writer_for_convert_to_Bool__pert__1.line = 53;
     item_metil_gen_convert_to_Bool__when__a__has__has_writer_for_convert_to_Bool__pert__1.pert = 1;
     MethodFinder<MethodName_convert_to_Bool>::last = &item_metil_gen_convert_to_Bool__when__a__has__has_writer_for_convert_to_Bool__pert__1;
 
@@ -5851,7 +5875,7 @@ void reg_def() {
     item_metil_gen_convert_to_SI32__when__a__has__has_writer_for_convert_to_SI32__pert__1.meth = 0;
     item_metil_gen_convert_to_SI32__when__a__has__has_writer_for_convert_to_SI32__pert__1.gene = metil_gen_convert_to_SI32__when__a__has__has_writer_for_convert_to_SI32__pert__1;
     item_metil_gen_convert_to_SI32__when__a__has__has_writer_for_convert_to_SI32__pert__1.file = string_17;
-    item_metil_gen_convert_to_SI32__when__a__has__has_writer_for_convert_to_SI32__pert__1.line = 53;
+    item_metil_gen_convert_to_SI32__when__a__has__has_writer_for_convert_to_SI32__pert__1.line = 54;
     item_metil_gen_convert_to_SI32__when__a__has__has_writer_for_convert_to_SI32__pert__1.pert = 1;
     MethodFinder<MethodName_convert_to_SI32>::last = &item_metil_gen_convert_to_SI32__when__a__has__has_writer_for_convert_to_SI32__pert__1;
 
@@ -5863,7 +5887,7 @@ void reg_def() {
     item_metil_gen_convert_to_SI64__when__a__has__has_writer_for_convert_to_SI64__pert__1.meth = 0;
     item_metil_gen_convert_to_SI64__when__a__has__has_writer_for_convert_to_SI64__pert__1.gene = metil_gen_convert_to_SI64__when__a__has__has_writer_for_convert_to_SI64__pert__1;
     item_metil_gen_convert_to_SI64__when__a__has__has_writer_for_convert_to_SI64__pert__1.file = string_17;
-    item_metil_gen_convert_to_SI64__when__a__has__has_writer_for_convert_to_SI64__pert__1.line = 54;
+    item_metil_gen_convert_to_SI64__when__a__has__has_writer_for_convert_to_SI64__pert__1.line = 55;
     item_metil_gen_convert_to_SI64__when__a__has__has_writer_for_convert_to_SI64__pert__1.pert = 1;
     MethodFinder<MethodName_convert_to_SI64>::last = &item_metil_gen_convert_to_SI64__when__a__has__has_writer_for_convert_to_SI64__pert__1;
 
@@ -5875,7 +5899,7 @@ void reg_def() {
     item_metil_gen_convert_to_FP32__when__a__has__has_writer_for_convert_to_FP32__pert__1.meth = 0;
     item_metil_gen_convert_to_FP32__when__a__has__has_writer_for_convert_to_FP32__pert__1.gene = metil_gen_convert_to_FP32__when__a__has__has_writer_for_convert_to_FP32__pert__1;
     item_metil_gen_convert_to_FP32__when__a__has__has_writer_for_convert_to_FP32__pert__1.file = string_17;
-    item_metil_gen_convert_to_FP32__when__a__has__has_writer_for_convert_to_FP32__pert__1.line = 55;
+    item_metil_gen_convert_to_FP32__when__a__has__has_writer_for_convert_to_FP32__pert__1.line = 56;
     item_metil_gen_convert_to_FP32__when__a__has__has_writer_for_convert_to_FP32__pert__1.pert = 1;
     MethodFinder<MethodName_convert_to_FP32>::last = &item_metil_gen_convert_to_FP32__when__a__has__has_writer_for_convert_to_FP32__pert__1;
 
@@ -5887,7 +5911,7 @@ void reg_def() {
     item_metil_gen_convert_to_FP64__when__a__has__has_writer_for_convert_to_FP64__pert__1.meth = 0;
     item_metil_gen_convert_to_FP64__when__a__has__has_writer_for_convert_to_FP64__pert__1.gene = metil_gen_convert_to_FP64__when__a__has__has_writer_for_convert_to_FP64__pert__1;
     item_metil_gen_convert_to_FP64__when__a__has__has_writer_for_convert_to_FP64__pert__1.file = string_17;
-    item_metil_gen_convert_to_FP64__when__a__has__has_writer_for_convert_to_FP64__pert__1.line = 56;
+    item_metil_gen_convert_to_FP64__when__a__has__has_writer_for_convert_to_FP64__pert__1.line = 57;
     item_metil_gen_convert_to_FP64__when__a__has__has_writer_for_convert_to_FP64__pert__1.pert = 1;
     MethodFinder<MethodName_convert_to_FP64>::last = &item_metil_gen_convert_to_FP64__when__a__has__has_writer_for_convert_to_FP64__pert__1;
 
@@ -5899,7 +5923,7 @@ void reg_def() {
     item_metil_gen_convert_to_FP80__when__a__has__has_writer_for_convert_to_FP80__pert__1.meth = 0;
     item_metil_gen_convert_to_FP80__when__a__has__has_writer_for_convert_to_FP80__pert__1.gene = metil_gen_convert_to_FP80__when__a__has__has_writer_for_convert_to_FP80__pert__1;
     item_metil_gen_convert_to_FP80__when__a__has__has_writer_for_convert_to_FP80__pert__1.file = string_17;
-    item_metil_gen_convert_to_FP80__when__a__has__has_writer_for_convert_to_FP80__pert__1.line = 57;
+    item_metil_gen_convert_to_FP80__when__a__has__has_writer_for_convert_to_FP80__pert__1.line = 58;
     item_metil_gen_convert_to_FP80__when__a__has__has_writer_for_convert_to_FP80__pert__1.pert = 1;
     MethodFinder<MethodName_convert_to_FP80>::last = &item_metil_gen_convert_to_FP80__when__a__has__has_writer_for_convert_to_FP80__pert__1;
 
@@ -5911,7 +5935,7 @@ void reg_def() {
     item_metil_gen_ok__when__a__has__has_writer_for_ok__pert__1.meth = 0;
     item_metil_gen_ok__when__a__has__has_writer_for_ok__pert__1.gene = metil_gen_ok__when__a__has__has_writer_for_ok__pert__1;
     item_metil_gen_ok__when__a__has__has_writer_for_ok__pert__1.file = string_17;
-    item_metil_gen_ok__when__a__has__has_writer_for_ok__pert__1.line = 59;
+    item_metil_gen_ok__when__a__has__has_writer_for_ok__pert__1.line = 60;
     item_metil_gen_ok__when__a__has__has_writer_for_ok__pert__1.pert = 1;
     MethodFinder<MethodName_ok>::last = &item_metil_gen_ok__when__a__has__has_writer_for_ok__pert__1;
 
@@ -5923,7 +5947,7 @@ void reg_def() {
     item_metil_gen_get_child__when__a__has__has_writer_for_get_child__pert__1.meth = 0;
     item_metil_gen_get_child__when__a__has__has_writer_for_get_child__pert__1.gene = metil_gen_get_child__when__a__has__has_writer_for_get_child__pert__1;
     item_metil_gen_get_child__when__a__has__has_writer_for_get_child__pert__1.file = string_17;
-    item_metil_gen_get_child__when__a__has__has_writer_for_get_child__pert__1.line = 63;
+    item_metil_gen_get_child__when__a__has__has_writer_for_get_child__pert__1.line = 64;
     item_metil_gen_get_child__when__a__has__has_writer_for_get_child__pert__1.pert = 1;
     MethodFinder<MethodName_get_child>::last = &item_metil_gen_get_child__when__a__has__has_writer_for_get_child__pert__1;
 
@@ -5935,7 +5959,7 @@ void reg_def() {
     item_metil_gen_add_parent__when__a__has__has_writer_for_add_parent__pert__1.meth = 0;
     item_metil_gen_add_parent__when__a__has__has_writer_for_add_parent__pert__1.gene = metil_gen_add_parent__when__a__has__has_writer_for_add_parent__pert__1;
     item_metil_gen_add_parent__when__a__has__has_writer_for_add_parent__pert__1.file = string_17;
-    item_metil_gen_add_parent__when__a__has__has_writer_for_add_parent__pert__1.line = 64;
+    item_metil_gen_add_parent__when__a__has__has_writer_for_add_parent__pert__1.line = 65;
     item_metil_gen_add_parent__when__a__has__has_writer_for_add_parent__pert__1.pert = 1;
     MethodFinder<MethodName_add_parent>::last = &item_metil_gen_add_parent__when__a__has__has_writer_for_add_parent__pert__1;
 
@@ -5947,7 +5971,7 @@ void reg_def() {
     item_metil_gen_rem_parent__when__a__has__has_writer_for_rem_parent__pert__1.meth = 0;
     item_metil_gen_rem_parent__when__a__has__has_writer_for_rem_parent__pert__1.gene = metil_gen_rem_parent__when__a__has__has_writer_for_rem_parent__pert__1;
     item_metil_gen_rem_parent__when__a__has__has_writer_for_rem_parent__pert__1.file = string_17;
-    item_metil_gen_rem_parent__when__a__has__has_writer_for_rem_parent__pert__1.line = 65;
+    item_metil_gen_rem_parent__when__a__has__has_writer_for_rem_parent__pert__1.line = 66;
     item_metil_gen_rem_parent__when__a__has__has_writer_for_rem_parent__pert__1.pert = 1;
     MethodFinder<MethodName_rem_parent>::last = &item_metil_gen_rem_parent__when__a__has__has_writer_for_rem_parent__pert__1;
 
@@ -5959,7 +5983,7 @@ void reg_def() {
     item_metil_gen_nb_children__when__a__has__has_writer_for_nb_children__pert__1.meth = 0;
     item_metil_gen_nb_children__when__a__has__has_writer_for_nb_children__pert__1.gene = metil_gen_nb_children__when__a__has__has_writer_for_nb_children__pert__1;
     item_metil_gen_nb_children__when__a__has__has_writer_for_nb_children__pert__1.file = string_17;
-    item_metil_gen_nb_children__when__a__has__has_writer_for_nb_children__pert__1.line = 66;
+    item_metil_gen_nb_children__when__a__has__has_writer_for_nb_children__pert__1.line = 67;
     item_metil_gen_nb_children__when__a__has__has_writer_for_nb_children__pert__1.pert = 1;
     MethodFinder<MethodName_nb_children>::last = &item_metil_gen_nb_children__when__a__has__has_writer_for_nb_children__pert__1;
 
@@ -5971,7 +5995,7 @@ void reg_def() {
     item_metil_gen_get_parent__when__a__has__has_writer_for_get_parent__pert__1.meth = 0;
     item_metil_gen_get_parent__when__a__has__has_writer_for_get_parent__pert__1.gene = metil_gen_get_parent__when__a__has__has_writer_for_get_parent__pert__1;
     item_metil_gen_get_parent__when__a__has__has_writer_for_get_parent__pert__1.file = string_17;
-    item_metil_gen_get_parent__when__a__has__has_writer_for_get_parent__pert__1.line = 67;
+    item_metil_gen_get_parent__when__a__has__has_writer_for_get_parent__pert__1.line = 68;
     item_metil_gen_get_parent__when__a__has__has_writer_for_get_parent__pert__1.pert = 1;
     MethodFinder<MethodName_get_parent>::last = &item_metil_gen_get_parent__when__a__has__has_writer_for_get_parent__pert__1;
 
@@ -5983,7 +6007,7 @@ void reg_def() {
     item_metil_gen_cur_op_id__when__a__has__has_writer_for_cur_op_id__pert__1.meth = 0;
     item_metil_gen_cur_op_id__when__a__has__has_writer_for_cur_op_id__pert__1.gene = metil_gen_cur_op_id__when__a__has__has_writer_for_cur_op_id__pert__1;
     item_metil_gen_cur_op_id__when__a__has__has_writer_for_cur_op_id__pert__1.file = string_17;
-    item_metil_gen_cur_op_id__when__a__has__has_writer_for_cur_op_id__pert__1.line = 68;
+    item_metil_gen_cur_op_id__when__a__has__has_writer_for_cur_op_id__pert__1.line = 69;
     item_metil_gen_cur_op_id__when__a__has__has_writer_for_cur_op_id__pert__1.pert = 1;
     MethodFinder<MethodName_cur_op_id>::last = &item_metil_gen_cur_op_id__when__a__has__has_writer_for_cur_op_id__pert__1;
 
@@ -5995,7 +6019,7 @@ void reg_def() {
     item_metil_gen_priority__when__a__has__has_writer_for_priority__pert__1.meth = 0;
     item_metil_gen_priority__when__a__has__has_writer_for_priority__pert__1.gene = metil_gen_priority__when__a__has__has_writer_for_priority__pert__1;
     item_metil_gen_priority__when__a__has__has_writer_for_priority__pert__1.file = string_17;
-    item_metil_gen_priority__when__a__has__has_writer_for_priority__pert__1.line = 69;
+    item_metil_gen_priority__when__a__has__has_writer_for_priority__pert__1.line = 70;
     item_metil_gen_priority__when__a__has__has_writer_for_priority__pert__1.pert = 1;
     MethodFinder<MethodName_priority>::last = &item_metil_gen_priority__when__a__has__has_writer_for_priority__pert__1;
 
@@ -6007,7 +6031,7 @@ void reg_def() {
     item_metil_gen_machine_id__when__a__has__has_writer_for_machine_id__pert__1.meth = 0;
     item_metil_gen_machine_id__when__a__has__has_writer_for_machine_id__pert__1.gene = metil_gen_machine_id__when__a__has__has_writer_for_machine_id__pert__1;
     item_metil_gen_machine_id__when__a__has__has_writer_for_machine_id__pert__1.file = string_17;
-    item_metil_gen_machine_id__when__a__has__has_writer_for_machine_id__pert__1.line = 70;
+    item_metil_gen_machine_id__when__a__has__has_writer_for_machine_id__pert__1.line = 71;
     item_metil_gen_machine_id__when__a__has__has_writer_for_machine_id__pert__1.pert = 1;
     MethodFinder<MethodName_machine_id>::last = &item_metil_gen_machine_id__when__a__has__has_writer_for_machine_id__pert__1;
 
@@ -6019,7 +6043,7 @@ void reg_def() {
     item_metil_gen_get_op_mp__when__a__has__has_writer_for_get_op_mp__pert__1.meth = 0;
     item_metil_gen_get_op_mp__when__a__has__has_writer_for_get_op_mp__pert__1.gene = metil_gen_get_op_mp__when__a__has__has_writer_for_get_op_mp__pert__1;
     item_metil_gen_get_op_mp__when__a__has__has_writer_for_get_op_mp__pert__1.file = string_17;
-    item_metil_gen_get_op_mp__when__a__has__has_writer_for_get_op_mp__pert__1.line = 71;
+    item_metil_gen_get_op_mp__when__a__has__has_writer_for_get_op_mp__pert__1.line = 72;
     item_metil_gen_get_op_mp__when__a__has__has_writer_for_get_op_mp__pert__1.pert = 1;
     MethodFinder<MethodName_get_op_mp>::last = &item_metil_gen_get_op_mp__when__a__has__has_writer_for_get_op_mp__pert__1;
 
@@ -6031,7 +6055,7 @@ void reg_def() {
     item_metil_gen_set_op_mp__when__a__has__has_writer_for_set_op_mp__pert__1.meth = 0;
     item_metil_gen_set_op_mp__when__a__has__has_writer_for_set_op_mp__pert__1.gene = metil_gen_set_op_mp__when__a__has__has_writer_for_set_op_mp__pert__1;
     item_metil_gen_set_op_mp__when__a__has__has_writer_for_set_op_mp__pert__1.file = string_17;
-    item_metil_gen_set_op_mp__when__a__has__has_writer_for_set_op_mp__pert__1.line = 72;
+    item_metil_gen_set_op_mp__when__a__has__has_writer_for_set_op_mp__pert__1.line = 73;
     item_metil_gen_set_op_mp__when__a__has__has_writer_for_set_op_mp__pert__1.pert = 1;
     MethodFinder<MethodName_set_op_mp>::last = &item_metil_gen_set_op_mp__when__a__has__has_writer_for_set_op_mp__pert__1;
 

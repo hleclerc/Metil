@@ -128,4 +128,10 @@ Ps<char> make_png( unsigned char *img, int w, int h, bool gray_only, const char 
     return res;
 }
 
+void save_png( const String &filename, unsigned char *img, int w, int h, bool gray_only ) {
+    Ps<char> res = make_png( img, w, h, gray_only );
+    File f( filename, "w" );
+    f.write( res.ptr(), res.size_mem() );
+}
+
 END_METIL_NAMESPACE;

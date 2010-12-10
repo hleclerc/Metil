@@ -149,6 +149,15 @@ struct MethodGenerator<Type::Method_IO,N> {
 };
 
 template<class N>
+struct MethodGenerator<Type::Method_VoS,N> {
+    static void generator( MO &a, ST b ) {
+        a.type->init_if_necessary();
+        N::access( a.type ) = MethodFinder<N>::find( a.type );
+        return N::access( a.type )( a, b );
+    }
+};
+
+template<class N>
 struct MethodGenerator<Type::Method_XOO,N> {
     static struct MetilException *generator( MO a, MO b ) {
         a.type->init_if_necessary();
@@ -211,6 +220,15 @@ struct MethodGenerator<Type::Method_Vo,N> {
         a.type->init_if_necessary();
         N::access( a.type ) = MethodFinder<N>::find( a.type );
         return N::access( a.type )( a );
+    }
+};
+
+template<class N>
+struct MethodGenerator<Type::Method_VopS,N> {
+    static void generator( MO &a, void *b, ST c ) {
+        a.type->init_if_necessary();
+        N::access( a.type ) = MethodFinder<N>::find( a.type );
+        return N::access( a.type )( a, b, c );
     }
 };
 

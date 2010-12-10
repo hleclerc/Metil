@@ -356,22 +356,27 @@ void CompilationEnvironment::extra_obj_cmd( String &cmd, bool dyn, bool cu ) con
         if ( CPPFLAGS )
             cmd << ' ' << CPPFLAGS;
     }
+
     for( int i = 0; i < inc_paths.size(); ++i )
         cmd << " -I" << inc_paths[ i ];
+
     for( int i = 0; i < def_procs.size(); ++i )
         cmd << " -D" << def_procs[ i ];
+
     if ( dbg_level > 0 ) {
         if ( cu )
             cmd << " -g";
         else
             cmd << " -g" << dbg_level;
     }
+
     if ( opt_level > 0 ) {
         if ( cu )
             cmd << " -O";
         else
             cmd << " -O" << opt_level;
     }
+
     if ( child )
         child->extra_obj_cmd( cmd, dyn, cu );
 }
@@ -400,11 +405,8 @@ String CompilationEnvironment::obj_cmd( const String &obj, const String &cpp, bo
             cmd << " -Xcompiler -fPIC";
         if ( maxrregcount > 0 )
             cmd << " --maxrregcount=" << maxrregcount;
-
         if ( get_device_emulation() > 0 )
-            cmd << " --device-emulation -G -g";
-        else
-            cmd << " -w -g -O3";
+            cmd << " --device-emulation -G";
     } else {
         cmd << ( cpp.ends_with( ".c" ) ? get_CC() : get_CXX() );
         // basic flags

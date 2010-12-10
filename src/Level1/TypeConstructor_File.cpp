@@ -14,6 +14,16 @@ void metil_def_close__when__a__isa__File( MO &a ) {
     a.data = 0;
 }
 
+void metil_def_read__when__a__isa__File( MO &a, void *b, ST c ) {
+    if ( a.data )
+        fread( b, 1, c, reinterpret_cast<FILE *>( a.data ) );
+}
+
+void metil_def_seek__when__a__isa__File( MO &a, ST b ) {
+    if ( a.data )
+        fseek( reinterpret_cast<FILE *>( a.data ), b, SEEK_SET );
+}
+
 //MO metil_copy_del__when__a__isa__File( MO a ) {
 //    if ( not a.data )
 //        return a;
