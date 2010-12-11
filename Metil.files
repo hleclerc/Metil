@@ -270,3 +270,5 @@ unit_tests/report.html
 examples/Hello_world.cpp
 src/CudaAccumulation.h
 src/PrevNextPow2.h
+src/BasicTexGpu.h
+src/BasicImgGpu.h

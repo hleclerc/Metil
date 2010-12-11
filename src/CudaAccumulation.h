@@ -18,6 +18,7 @@ void cuda_accumulation_kernel_0( T *data, ST size, Number<size_per_block> ) {
     // reduction of loc
     for( int d = 2; d < size_per_block; d *= 2 ) {
         syncthreads();
+        for( int ; )
         loc[ threadIdx.x ].reduction( loc[ threadIdx.x + m ] );
     }
 

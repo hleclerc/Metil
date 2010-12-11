@@ -8,8 +8,8 @@ Img::Img() {
     type = &Level1::metil_type_ref_Array_4NULL_2_0_0_0_0;
 }
 
-Img::Img( ST w, ST h, Level1::Type *base_type ) {
-    type = base_type;
+Img::Img( ST w, ST h, Level1::Type *item_type ) {
+    type = item_type;
     ST size[ 2 ] = { w, h };
     CM_2( allocate_array, *this, Level1::REF_Vec( Number<2>(), size ) );
 }
@@ -26,6 +26,14 @@ void Img::load( const String &filename ) {
     else
         load_qimg( filename );
 }
+
+void Img::load( const String &filename, Level1::Type *item_type, const BasicVec<ST> &XS ) {
+    type = item_type;
+    CM_2( allocate_array, *this, Level1::REF_Vec( XS.size(), XS.ptr() ) );
+    File f( filename, "r" );
+    f.read(  );
+}
+
 
 void Img::load_tiff( const String &filename ) {
     CM_1( del, *this );
@@ -44,5 +52,6 @@ void Img::load_qimg( const String &filename ) {
 
 Val Img::w() const { return size( 0 ); }
 Val Img::h() const { return size( 1 ); }
+Val Img::d() const { return size( 1 ); }
 
 END_METIL_NAMESPACE;

@@ -38,6 +38,16 @@ DECL_REF_AND_NEW( FP80, Flt_0_64_64_15_79_1_16383, 25 );
 
 inline MO NEW_Number( bool v ) { return v ? &metil_type_cst_Cst_1 : &metil_type_cst_Cst_0; }
 
+template<class T>
+MO REF_Vec( ST s, T *v ) {
+    if ( s == 1 ) return REF_Vec( Number<1>(), v );
+    if ( s == 2 ) return REF_Vec( Number<2>(), v );
+    if ( s == 3 ) return REF_Vec( Number<3>(), v );
+    if ( s == 4 ) return REF_Vec( Number<4>(), v );
+    ERROR( "... s=%i", s );
+    return 0;
+}
+
 END_METIL_LEVEL1_NAMESPACE;
 
 BEG_METIL_NAMESPACE;

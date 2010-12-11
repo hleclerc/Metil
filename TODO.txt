@@ -1,10 +1,9 @@
-+ select_C Array
-+ select Array
-+ tests sur les matrices (i,j)
-+ tableaux typés
-+ nb_rows, ...
-+ symbols
-+ opérations symboliques courantes
+Prop pour les structures :
+  -> création en METIL avec machine virtuelle
+  -> ou struct Struct_Int {
+    void write_str( String &os ) { ... }
+  };
+
 
 * simplifications courantes
    a + 1 - a -> ...
