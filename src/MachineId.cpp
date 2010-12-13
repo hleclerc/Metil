@@ -2,7 +2,6 @@
 #include "DynamicCppLib.h"
 #include "BasicVec.h"
 #include "System.h"
-#include "String.h"
 
 BEG_METIL_NAMESPACE;
 
@@ -41,6 +40,7 @@ MachineId_Cpu::Type MachineId::type( const String &name ) {
     if ( name == "Cpu" ) return Cpu;
     if ( name == "Gpu" ) return Gpu;
     ERROR( "type %s not known", name.c_str() );
+    return Cpu;
 }
 
 END_METIL_NAMESPACE;

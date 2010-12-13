@@ -1,3 +1,4 @@
+#include "Level1/SymbolHeader.h"
 #include "ValReader.h"
 #include "Val.h"
 
@@ -15,6 +16,23 @@ Val::Val( const char *str ) {
     new( this ) Val( String( str ) );
 }
 
+Val Val::read_from_type_name( const char *&name ) {
+    String op = String::read_sized( name );
+    if ( op == "equal" ) {
+        Val a = read_from_type_name( ++name );
+        Val b = read_from_type_name( ++name );
+        return a == b;
+    } else if ( op == "_0" ) {
+        return _0;
+    } else if ( op == "_1" ) {
+        return _1;
+    } else if ( op == "_2" ) {
+        return _2;
+    } else {
+        ERROR( "unknown op %s", op.c_str() );
+    }
+    return zero;
+}
 
 //static SI32 data_one_half   [] = { 1, 2 };
 //static SI32 data_one_quarter[] = { 1, 4 };
@@ -41,5 +59,13 @@ Val minus_one_quarter( Level1::MO( &Level1::metil_type_cst_Cst_m_1_4 ) );
 //Val zero_as_PI32     ( Level1::MO( &zero_PI32       , &Level1::type_PI32_Ref ) );
 //Val one_as_PI32      ( Level1::MO( &one_PI32        , &Level1::type_PI32_Ref ) );
 //Val minus_one_as_NI32( Level1::MO( &one_PI32        , &Level1::type_NI32_Ref ) );
+
+static Level1::SymbolHeader s_0( "_0", "f_0" );
+static Level1::SymbolHeader s_1( "_1", "f_1" );
+static Level1::SymbolHeader s_2( "_2", "f_2" );
+
+Val _0( Level1::MO( &s_0, &Level1::metil_type_cst_Symbol ) );
+Val _1( Level1::MO( &s_1, &Level1::metil_type_cst_Symbol ) );
+Val _2( Level1::MO( &s_2, &Level1::metil_type_cst_Symbol ) );
 
 END_METIL_NAMESPACE

@@ -21,10 +21,10 @@ public:
     Vec( const Val &v_0, const Val &v_1, const Val &v_2, const Val &v_3 );
     Vec( const Val &v_0, const Val &v_1, const Val &v_2, const Val &v_3, const Val &v_4 );
 
+    Vec( SI32 v_0 ) { init( S<SI32>(), v_0 ); }
+
     template<class T,class T0> Vec( S<T> s, const T0 &v_0 ) {
-        type = Level1::type_ptr( s );
-        T *v = reinterpret_cast<T *>( CM_2( allocate_array, *this, one ) );
-        new( v + 0 ) T( v_0 );
+        init( s, v_0 );
     }
 
     template<class T,class T0,class T1> Vec( S<T> s, const T0 &v_0, const T1 &v_1 ) {
@@ -68,9 +68,20 @@ public:
     Vec &operator=( const Vec &a ) { CM_2( reassign, *this, a ); return *this; }
 
     Vec( Level1::MO mo ) : Array<Val>( mo ) {}
+
+    operator bool() const { return type->convert_to_Bool( *this ); }
+
 protected:
+    template<class T,class T0> void init( S<T> s, const T0 &v_0 ) {
+        type = Level1::type_ptr( s );
+        T *v = reinterpret_cast<T *>( CM_2( allocate_array, *this, one ) );
+        new( v + 0 ) T( v_0 );
+    }
+
     friend class Array<Val>;
 };
+
+inline Vec operator==( const Vec &a, const Vec &b ) { return CM_2( equal, a, b ); }
 
 END_METIL_NAMESPACE;
 

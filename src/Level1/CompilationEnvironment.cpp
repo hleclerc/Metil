@@ -116,6 +116,13 @@ void CompilationEnvironment::add_def_proc( const String &def ) {
     def_procs << def;
 }
 
+void CompilationEnvironment::add_CPPFLAG( const String &flag, const String &cpp ) {
+    String &res = loc_CPPFLAGS[ absolute_filename( cpp ) ];
+    if ( res )
+        res << ' ';
+    res << flag;
+}
+
 void CompilationEnvironment::set_CXX( const String &path ) {
     CXX = path;
 }
@@ -342,38 +349,48 @@ void CompilationEnvironment::extra_lnk_cmd( String &cmd, bool lib, bool dyn ) co
         cmd << " -l" << lib_names[ i ];
     if ( dbg_level > 0 )
         cmd << " -g" << dbg_level;
-    if ( LDFLAGS )
+    if ( LDFLAGS.size() )
         cmd << ' ' << LDFLAGS;
     if ( child )
         child->extra_lnk_cmd( cmd, lib, dyn );
 }
 
-void CompilationEnvironment::extra_obj_cmd( String &cmd, bool dyn, bool cu ) const {
+void CompilationEnvironment::extra_obj_cmd( String &cmd, bool dyn, bool cu, const String &cpp ) const {
     if ( cu ) {
-        if ( GPUFLAGS )
+        if ( GPUFLAGS.size() )
             cmd << ' ' << GPUFLAGS;
     } else {
-        if ( CPPFLAGS )
+        if ( CPPFLAGS.size() )
             cmd << ' ' << CPPFLAGS;
     }
+
     for( int i = 0; i < inc_paths.size(); ++i )
         cmd << " -I" << inc_paths[ i ];
+
     for( int i = 0; i < def_procs.size(); ++i )
         cmd << " -D" << def_procs[ i ];
+
     if ( dbg_level > 0 ) {
         if ( cu )
             cmd << " -g";
         else
             cmd << " -g" << dbg_level;
     }
+
     if ( opt_level > 0 ) {
         if ( cu )
             cmd << " -O";
         else
             cmd << " -O" << opt_level;
     }
+
+    // loc flag
+    if ( loc_CPPFLAGS.count( cpp ) )
+        cmd << ' ' << loc_CPPFLAGS.find( cpp )->second;
+
+    // rec
     if ( child )
-        child->extra_obj_cmd( cmd, dyn, cu );
+        child->extra_obj_cmd( cmd, dyn, cu, cpp );
 }
 
 String CompilationEnvironment::lnk_cmd( const String &exe, const BasicVec<String> &obj, bool lib, bool dyn ) const {
@@ -381,12 +398,12 @@ String CompilationEnvironment::lnk_cmd( const String &exe, const BasicVec<String
     // basic flags
     if ( lib )
         cmd << ( dyn ? " -shared" : " -static" );
+    // -L... -l...
+    extra_lnk_cmd( cmd, lib, dyn );
     // input / output
     cmd << " -o " << exe;
     for( int i = 0; i < obj.size(); ++i )
         cmd << ' ' << obj[ i ];
-    // -L... -l...
-    extra_lnk_cmd( cmd, lib, dyn );
     return cmd;
 }
 
@@ -400,11 +417,8 @@ String CompilationEnvironment::obj_cmd( const String &obj, const String &cpp, bo
             cmd << " -Xcompiler -fPIC";
         if ( maxrregcount > 0 )
             cmd << " --maxrregcount=" << maxrregcount;
-
         if ( get_device_emulation() > 0 )
-            cmd << " --device-emulation -G -g";
-        else
-            cmd << " -w -g -O3";
+            cmd << " --device-emulation -G";
     } else {
         cmd << ( cpp.ends_with( ".c" ) ? get_CC() : get_CXX() );
         // basic flags
@@ -412,7 +426,7 @@ String CompilationEnvironment::obj_cmd( const String &obj, const String &cpp, bo
             cmd << " -fpic";
     }
     // -L... -l... -g...
-    extra_obj_cmd( cmd, dyn, cu );
+    extra_obj_cmd( cmd, dyn, cu, cpp );
     // input / output
     cmd << " -c -o " << obj << ' ' << cpp;
     return cmd;

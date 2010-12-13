@@ -6,7 +6,17 @@
 BEG_METIL_LEVEL1_NAMESPACE;
 
 // default behavior
-void metil_def_self_append__pert__0( MO &a, MO b ) { Ad c = a; a = CM_2( append, a, b ); }
+#define SELF_OP( N ) void metil_def_self_##N##__pert__0( MO &a, MO b ) { Ad c = a; a = CM_2( N, a, b ); }
+SELF_OP( append );
+SELF_OP( add );
+SELF_OP( sub );
+SELF_OP( mul );
+SELF_OP( div );
+SELF_OP( quo );
+SELF_OP( mod );
+SELF_OP( pow );
+#undef SELF_OP
+
 void metil_def_reassign__pert__0( MO &a, MO b ) { Ad c = a; a = CM_1( copy, b ); }
 void metil_def_add_parent__pert__0( MO &a, struct OwcpChild *b ) {}
 void metil_def_rem_parent__pert__0( MO &a, struct OwcpChild *b ) {}
@@ -92,7 +102,11 @@ bool TypeConstructor::tensor_order_1() const { return tensor_order() == 1; }
 bool TypeConstructor::is_void() const { return static_size_in_bits() == 0; }
 bool TypeConstructor::staticsize() const { return static_size_in_bits() >= 0; }
 
-void TypeConstructor::default_mw( MethodWriter &mw ) const {}
+void TypeConstructor::default_mw( MethodWriter &mw ) const {
+    if ( Owcp_size() >= 0 )
+        mw.add_include( "Level1/Owcp.h" );
+}
+
 String TypeConstructor::Owcp_data() const { return "AdditionalDataVoid"; }
 int TypeConstructor::Owcp_size() const { return -1; }
 int TypeConstructor::static_size_in_bits() const { return -1; }

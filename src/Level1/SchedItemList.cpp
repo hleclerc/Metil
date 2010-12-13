@@ -9,6 +9,7 @@ SchedItem *SchedItemList::new_item( MO obj, int nb_children ) {
     res->nb_parents = 0;
     res->children = sub_item_lists.get_room( nb_children );
     res->parents = 0;
+    return res;
 }
 
 void SchedItemList::write_dot( String &os, bool want_parents ) {

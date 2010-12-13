@@ -29,6 +29,7 @@
 #define MET_1_VoO( N )
 #define MET_Vopp( N )
 #define MET_IO( N )
+#define MET_VoS( N )
 #define MET_XOO( N )
 #define MET_1_XOO( N )
 #define MET_VoY( N )
@@ -57,6 +58,7 @@
 #define MET_1_VOO( N )
 #define MET_VoPS( N )
 #define MET_Vo( N )
+#define MET_VopS( N )
 #define MET_SO( N )
 #define MET_OOS( N ) \
     MO  metil_def_##N##__when__a__isa__LazyObject__pert__10( MO a, ST b ) { \

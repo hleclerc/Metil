@@ -131,6 +131,7 @@ struct Owcp : public OwcpAncestor {
         }
     }
 
+    const MO &ch( int n ) const { return children[ n ].obj; }
     MO &ch( int n ) { return children[ n ].obj; }
 
     void init_ch( int num, const MO &val ) {

@@ -10,7 +10,7 @@ static TypeConstructor_Array *sc( Type *type ) {
     return static_cast<TypeConstructor_Array *>( type->constructor );
 }
 
-void metil_gen_allocate_array__when__a__has__staticsize__b__isa__Cst( MethodWriter &mw ) {
+void metil_gen_allocate_array__when__a__has__staticsize__and__b__isa__Cst( MethodWriter &mw ) {
     mw.add_include( "Level1/TypeConstructor_Array.h" );
 
     // type
@@ -35,6 +35,44 @@ void metil_gen_allocate_array__when__b__isa__Int( MethodWriter &mw ) {
     mw.add_type_decl( type_vec );
 
     mw.n << mw.arg[ 0 ].type << " = &metil_type_bas_" << type_vec << ";";
+    mw.ret() << "CM_2( allocate_2, " << mw.arg[ 0 ] << ", " << mw.arg[ 1 ] << " );";
+}
+
+void metil_gen_allocate_array__when__b__isa__Array( MethodWriter &mw ) {
+    mw.add_include( "Level1/Ad.h" );
+    TypeConstructor_Array *c = sc( mw.get_type( 1 ) );
+    String item_type = mw.get_type( 0 )->name;
+    int d = c->size.size() ? c->size[ 0 ] : -1;
+    if ( d >= 0 ) {
+        // type vec
+        String type_vec;
+        type_vec << "Array_" << item_type.size() << item_type << "_" << d;
+        for( int i = 0; i < d; ++i )
+            type_vec << "_m_m";
+        type_vec << "_CptUse";
+        mw.add_type_decl( type_vec );
+        // call allocate_2
+        mw.n << mw.arg[ 0 ].type << " = &metil_type_bas_" << type_vec << ";";
+        mw.ret() << "CM_2( allocate_2, " << mw.arg[ 0 ] << ", " << mw.arg[ 1 ] << " );";
+        return;
+    }
+
+    // potential types
+    String type_vec[ 5 ];
+    for( int d = 1; d <= 4; ++d ) {
+        type_vec[ d ] << "Array_" << item_type.size() << item_type << "_" << d;
+        for( int i = 0; i < d; ++i )
+            type_vec[ d ] << "_m_m";
+        type_vec[ d ] << "_CptUse";
+        mw.add_type_decl( type_vec[ d ] );
+    }
+
+    // get type
+    mw.n << "Ad size_mo = CM_1( size, " << mw.arg[ 1 ] << " );";
+    mw.n << "SI64 size = CM_1( convert_to_SI64, size_mo.o );";
+    mw.n << "ASSERT( size <= 4, \"limit exceed\" );";
+    for( int d = 1; d <= 4; ++d )
+        mw.n << "if ( size == " << d << " ) " << mw.arg[ 0 ].type << " = &metil_type_bas_" << type_vec[ d ] << ";";
     mw.ret() << "CM_2( allocate_2, " << mw.arg[ 0 ] << ", " << mw.arg[ 1 ] << " );";
 }
 
@@ -99,11 +137,13 @@ void metil_gen_allocate_2__when__a__isa__Array__and__b__isa__Array__pert__1( Met
         mw.n << "header->rese_mem = rese_mem;";
         for( int d = 0; d < c->dim(); ++d )
             mw.n << "header->size[ " << d << " ] = size_" << d << ";";
-        for( int d = 0; d < c->dim() - 1; ++d )
-            mw.n << "header->rese[ " << d << " ] = rese_" << d << ";";
+        if( c->dim() > 1 )
+            mw.n << "header->rese[ 0 ] = rese_0;";
+        for( int d = 1; d < c->dim() - 1; ++d )
+            mw.n << "header->rese[ " << d << " ] = size_" << d << ";";
         mw << "header->rese[ " << c->dim() - 1 << " ] = ( rese_mem - sizeof( AH ) ) / ( ss";
         for( int d = 0; d < c->dim() - 1; ++d )
-            mw << " * rese_" << d;
+            mw << " * header->rese[ " << d << "]";
         mw.n << " );";
 
         mw.n << mw.arg[ 0 ].data << " = header;";
@@ -191,6 +231,18 @@ void metil_gen_set_values__when__a__isa__Array__and__b__has__tensor_order_0__per
         c->write_end_loop( cw, "h", d, "d" );
 }
 
+void metil_gen_equal__when__a__isa__Array__and__b__isa__Array__pert__1( MethodWriter &mw ) {
+    String type;
+    type << "SymbolicArray_2_";
+    type << strlen( mw.type[ 0 ]->name ) << mw.type[ 0 ]->name << '_';
+    type << strlen( mw.type[ 1 ]->name ) << mw.type[ 1 ]->name << '_';
+    type << "5equal_2_0_2_1";
+    mw.add_type_decl( type );
+    mw.add_include( "Level1/Owcp.h" );
+    mw.n << "Type *type = &metil_type_bas_" << type << ";";
+    mw.ret() << "MO( NEW( Owcp<2>, type, " << mw.arg[ 0 ] << ", " << mw.arg[ 1 ] << " ), type );";
+}
+
 
 void TypeConstructor_Array::write_del( MethodWriter &cw ) const {
     if ( len() == 0 ) // nothing to del
@@ -263,13 +315,22 @@ void TypeConstructor_Array::write_copy( MethodWriter &mw ) const {
             mw.ret() << "MO( data, " << mw.arg[ 0 ].type << "->bas_type );";
         } else {
             int s = static_size_in_bytes();
-            ASSERT( s >= 0, "..." );
+            ASSERT( s >= 0, "TODO" );
             mw.n << "Number<" << s << "> sn;";
-            mw.n << "void *data = MALLOC( sn );";
-            if ( item_type_bas and item_type_bas->constructor->is_a_POD() )
-                mw.n << "memcpy( data, " << mw.arg[ 0 ].data << ", sn );";
-            else
-                mw.n << "TODO;";
+            if ( item_type_bas ) {
+                mw.n << "void *data = MALLOC( sn );";
+                if ( item_type_bas->constructor->is_a_POD() )
+                    mw.n << "memcpy( data, " << mw.arg[ 0 ].data << ", sn );";
+                else
+                    mw.n << "TODO;";
+            } else {
+                if ( len() >= 0 ) {
+                    mw.n << "MO *data = (MO *)MALLOC( sn ), *o = (MO *)" << mw.arg[ 0 ].data << ";";
+                    mw.n << "for( int i = 0; i < " << len() << "; ++i )";
+                    mw.n << "data[ i ] = CM_1( copy, o[ i ] );";
+                } else
+                    mw.n << "TODO;";
+            }
             mw.ret() << "MO( data, " << mw.arg[ 0 ].type << "->bas_type );";
         }
     }
@@ -331,6 +392,36 @@ void TypeConstructor_Array::write_size_in_mem( MethodWriter &mw ) const {
         write_get_header( mw, "h", mw.arg[ 0 ].data, "AH" );
         mw.ret() << "h->rese_mem;";
     }
+}
+
+void TypeConstructor_Array::write_mul_1( MethodWriter &mw ) const {
+    if ( item_type_bas ) {
+        // mw.call_gene( "self_append", mw.get_type( 1 ), item_type_bas, Mos( "os" ), Mos( "d", "" ) );
+        mw.n << "TODO;";
+    } else
+        mw.n << "MO res = 0;";
+
+    // header
+    write_get_t_header( mw, "AH" );
+    write_get_header( mw, "h", mw.arg[ 0 ].data, "AH" );
+    write_get_data_ptr( mw, true, "d", "h", mw.arg[ 0 ].data );
+
+    // loop
+    for(int d = dim() - 1; d >= 0; --d )
+        write_beg_loop( mw, "h", d );
+
+    if ( item_type_bas ) {
+        mw.n << "TODO;";
+    } else
+        mw.n << "if ( res.type ) CM_2( self_mul, res, *d ); else res = CM_1( copy, *d );";
+
+    for(int d = 0; d < dim(); ++d )
+        write_end_loop( mw, "h", d, "d" );
+
+    if ( item_type_bas ) {
+        mw.n << "TODO; return 0;";
+    } else
+        mw.n << "return res;";
 }
 
 void TypeConstructor_Array::write_write_str( MethodWriter &mw ) const {
@@ -417,6 +508,7 @@ void TypeConstructor_Array::write_select_op( MethodWriter &mw, TypeConstructor *
     }
 }
 
+
 int TypeConstructor_Array::len() const {
     int res = 1;
     for( int d = 0; d < size.size(); ++d ) {
@@ -461,7 +553,7 @@ int TypeConstructor_Array::static_size_in_bits() const {
         int sb = item_type_bas->constructor->static_size_in_bits();
         return sb >= 0 ? sb * len() : -1;
     }
-    return sizeof( MO ) * len();
+    return 8 * sizeof( MO ) * len();
 }
 
 bool TypeConstructor_Array::need_header() const {

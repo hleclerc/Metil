@@ -30,10 +30,11 @@ struct Array : public Level1::MO {
 
     ~Array() { CM_1( del, *this ); }
 
+    Level1::Type *base_type() const { MO res = CM_1( base_type, *this ); return res.type; }
 
-
-    Val size() const { return type->size( *this ); }
-    Val size( int i ) const { return sizes()[ i ]; }
+    Val dim() const { return CM_1( dim, *this ); }
+    Val size() const { return CM_1( size, *this ); }
+    // Val size( int i ) const { return sizes()[ i ]; }
     Vec sizes() const;
 
     // 1 arg
@@ -58,13 +59,16 @@ struct Array : public Level1::MO {
     /// obj[ ... ] = val
     void set_values( const Val &val ) { CM_2( set_values, *this, val ); }
 
-    T min() const { return CM_1( min_1, *this ); }
-    T max() const { return CM_1( max_1, *this ); }
-
 protected:
     Array() {}
     Array( Level1::MO mo ) : MO( mo ) {}
 };
+
+template<class T> T min( const Array<T> &a ) { return CM_1( min_1, a ); }
+template<class T> T max( const Array<T> &a ) { return CM_1( max_1, a ); }
+template<class T> T sum( const Array<T> &a ) { return CM_1( add_1, a ); }
+
+template<class T> T product( const Array<T> &a ) { return CM_1( mul_1, a ); }
 
 END_METIL_NAMESPACE;
 

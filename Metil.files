@@ -272,3 +272,14 @@ src/CudaAccumulation.h
 src/PrevNextPow2.h
 src/BasicTexGpu.h
 src/BasicImgGpu.h
+src/Level1/TypeConstructor_SymbolicArray.h
+src/Level1/TypeConstructor_SymbolicArray.cpp
+src/Level1/TypeConstructor_ConvertToGpuTex.h
+src/Level1/TypeConstructor_ConvertToGpuTex.cpp
+src/Level1/TypeConstructor_GpuTex.h
+src/Level1/TypeConstructor_GpuTex.cpp
+src/Level1/GpuTexData.h
+src/Level1/Fake.h
+src/Level1/TypeConstructor_GpuImg.h
+src/Level1/TypeConstructor_GpuImg.cpp
+src/Level1/GpuImgData.h

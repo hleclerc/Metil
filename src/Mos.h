@@ -15,6 +15,7 @@ public:
         this->base = base;
         this->data = base + ".data";
         this->type = base + ".type";
+        return *this;
     }
 
     void write_str( String &os ) const { os << base; }

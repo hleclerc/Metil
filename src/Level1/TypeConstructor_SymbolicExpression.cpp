@@ -14,13 +14,14 @@ static bool make_expr_add( MethodWriter &mw ) {
     // a + 0,  0 + b
     if ( int e = t_1->constructor->equ_code( mw, mw.arg[ 1 ], "0" ) ) { mw.ret() << "CM_1( copy, " << mw.arg[ 0 ] << " );"; if ( e > 1 ) return true; }
     if ( int e = t_0->constructor->equ_code( mw, mw.arg[ 0 ], "0" ) ) { mw.ret() << "CM_1( copy, " << mw.arg[ 1 ] << " );"; if ( e > 1 ) return true; }
+    return false;
 }
 
-static Val make_op( const Val &a, const Val &b, const String &op ) {
-    if ( op == "mul" ) return a * b;
-    ERROR( "unmanaged op %s", op.c_str() );
-    return 0;
-}
+//static Val make_op( const Val &a, const Val &b, const String &op ) {
+//    if ( op == "mul" ) return a * b;
+//    ERROR( "unmanaged op %s", op.c_str() );
+//    return 0;
+//}
 
 static bool make_expr_mul( MethodWriter &mw ) {
     Type *t_0 = mw.get_type( 0 ), *t_1 = mw.get_type( 1 );

@@ -28,14 +28,19 @@ DECL_MET( SO  , size_in_mem             ); // size in bytes of the object
 DECL_MET( Vo  , close                   ); //
 DECL_MET( Vo  , flush                   ); //
 DECL_MET( VoPS, write                   ); // a.write( ptr, size )
-DECL_MET( VOpS, read                    ); // a.read ( ptr, size )
+DECL_MET( VopS, read                    ); // a.read ( ptr, size )
 DECL_MET( VOpS, copy_data               ); // a.copy_data( ptr, size )
+DECL_MET( VoS , seek                    ); //
 
 // arrays
+DECL_MET( OO  , base_type               ); //
+DECL_MET( OO  , dim                     ); // tensorial order
 DECL_MET( OO  , size                    ); // size of data (nb items). Returns a scalar
 DECL_MET( OO  , sizes                   ); // size of data (nb items / axes). Returns a vector
 DECL_MET( OO  , min_1                   ); // min of the values
 DECL_MET( OO  , max_1                   ); // max of the values
+DECL_MET( OO  , mul_1                   ); // mul of the values
+DECL_MET( OO  , add_1                   ); // mul of the values
 
 // string
 DECL_MET( po  , ptr                     ); // return a ptr on data

@@ -19,7 +19,7 @@ void TypeConstructor_Op::init( Type *type ) {
 
     ST p = name.find( "_" );
     if ( p >= 0 ) {
-        for( ST o = p + 1; o < name.size(); ++o ) {
+        for( ST o = p + 1; o < name.size(); o += 2 ) {
             if ( name[ o ] == "V" ) { child_types << V_child; continue; }
             if ( name[ o ] == "P" ) { child_types << P_child; continue; }
             if ( name[ o ] == "N" ) { child_types << N_child; continue; }

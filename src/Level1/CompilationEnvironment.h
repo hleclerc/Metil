@@ -21,6 +21,8 @@ public:
     void add_LDFLAG  ( const String &flag );
     void add_def_proc( const String &proc );
 
+    void add_CPPFLAG ( const String &flag, const String &cpp ); ///< add flag only for cpp
+
     void set_CXX     ( const String &path );
     void set_device_emulation( bool flag );
     void set_maxrregcount( int nb_registers );
@@ -62,7 +64,7 @@ public:
     String lnk_cmd( const String &exe, const BasicVec<String> &obj, bool lib, bool dyn ) const;
 
     Ptr<CompilationTree> make_compilation_tree( const String &app, const String &cpp, bool lib, bool dyn, bool make_libs = true );
-    int make_app( const String &app, const String &cpp, bool lib, bool dyn, bool want_libs = true );
+    int make_app( const String &app, const String &cpp, bool lib, bool dyn, bool make_libs = true );
     int make_lib( const String &lib, const String &cpp, bool dyn );
     int make_exe( const String &exe, const String &cpp );
 
@@ -74,7 +76,7 @@ protected:
     Ptr<CompilationTree> make_lnk_compilation_tree( const String &app, const BasicVec<Ptr<CompilationTree> > &obj, bool lib, bool dyn );
 
     void parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, const String &cpp, bool dyn );
-    void extra_obj_cmd( String &cmd, bool dyn, bool cu ) const;
+    void extra_obj_cmd( String &cmd, bool dyn, bool cu, const String &cpp ) const;
     void extra_lnk_cmd( String &cmd, bool lib, bool dyn ) const;
     CompilationEnvironment *deepest_child();
 
@@ -95,6 +97,8 @@ protected:
     int nb_threads;
     int dbg_level;
     int opt_level;
+
+    std::map<String,String> loc_CPPFLAGS; ///< per cpp
 
     CompilationEnvironment *child;
     BasicVec<String> parsed;

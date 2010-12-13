@@ -69,6 +69,13 @@ String String::read_sized( const char *&str ) {
     return ns;
 }
 
+int String::read_int( const char *&str ) {
+    int res = 0;
+    while ( Level1::is_a_number( *str ) )
+        res = 10 * res + ( *( str++ ) - '0' );
+    return res;
+}
+
 /// for i in range( 256 ): print str( i ) + "," + 0 + ","
 char String::char_ptr[] = {
     0  ,0, 1  ,0, 2  ,0, 3  ,0, 4  ,0, 5  ,0, 6  ,0, 7  ,0,

@@ -16,6 +16,7 @@ MetilException *metil_def_exec_node__when__a__is__LazyOperation_sizes__pert__1( 
     TR *d = reinterpret_cast<TR *>( a.data );
     MO op = CM_1( get_op_mp, d->ch( 0 ) );
     d->op_mp = CM_1( sizes, op );
+    return 0;
 }
 
 MetilException *metil_def_exec_node__when__a__is__LazyOperation_append__pert__1( MO a, MO ) {
@@ -24,6 +25,7 @@ MetilException *metil_def_exec_node__when__a__is__LazyOperation_append__pert__1(
     MO op_0 = CM_1( get_op_mp, d->ch( 0 ) );
     MO op_1 = CM_1( get_op_mp, d->ch( 1 ) );
     d->op_mp = CM_2( append, op_0, op_1 );
+    return 0;
 }
 
 int TypeConstructor_LazyOperation::Owcp_size() const {

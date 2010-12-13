@@ -5,9 +5,9 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-static TypeConstructor_LazyObject *sc( Type *type ) {
-    return static_cast<TypeConstructor_LazyObject *>( type->constructor );
-}
+//static TypeConstructor_LazyObject *sc( Type *type ) {
+//    return static_cast<TypeConstructor_LazyObject *>( type->constructor );
+//}
 
 /// necessary because the generator will PRINT(cmd), which ma
 void metil_def_flush__when__a__isa__LazyObject( MO &a ) {

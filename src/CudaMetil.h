@@ -10,6 +10,7 @@
 #endif
 
 #include <cuda_runtime.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 

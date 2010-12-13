@@ -14,9 +14,9 @@ bool metil_def_convert_to_Bool__when__a__is__Cst_1__pert__1000( MO a ) { return 
 
 
 // writers
-static TypeConstructor_Cst *sc( Type *type ) {
-    return static_cast<TypeConstructor_Cst *>( type->constructor );
-}
+//static TypeConstructor_Cst *sc( Type *type ) {
+//    return static_cast<TypeConstructor_Cst *>( type->constructor );
+//}
 
 #define CONV_TO( N ) \
     void TypeConstructor_Cst::write_convert_to_##N( MethodWriter &mw ) const { \

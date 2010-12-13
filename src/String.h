@@ -105,10 +105,12 @@ struct String : public Level1::MO {
     String end_from( const Val &s ) const { return CM_2( end_from, *this, s ); } ///< "abcd".beg_upto( 1 ) -> "a"
     String replace( const String &a, const String &b ) const;
     String &write( const void *ptr, ST len ) { CM_1( write, *this, ptr, len ); return *this; }
+    String &read( void *ptr, ST len ) { CM_1( read, *this, ptr, len ); return *this; }
     Val begins_by( const String &str ) const;
     Val ends_with( const String &str ) const;
     String rstrip( const Val &s ) const { return beg_upto( size() - s ); } ///< "abcdefg".rstrip( 2 ) -> "abcde"
     void close() { CM_1( close, *this ); }
+    void seek( ST pos ) { CM_1( seek, *this, pos ); }
 
     operator bool() const { return CM_1( convert_to_Bool, *this ); }
     operator SI32() const { return CM_1( convert_to_SI32, *this ); }
@@ -119,6 +121,7 @@ struct String : public Level1::MO {
 
     // static helpers
     static String read_sized( const char *&str ); /// ex: 3abcdef will give "abc"
+    static int    read_int  ( const char *&str ); /// ex: 34abcdef will give 34
 
     // static attributes
     static Endl endl; ///< file << String::endl; will diplay a carriage return and flush the file

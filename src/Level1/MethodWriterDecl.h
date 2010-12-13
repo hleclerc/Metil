@@ -13,6 +13,7 @@
     if ( type == "VoO" ) return "void " + def_name + "( MO &a, MO b )";
     if ( type == "Vopp" ) return "void " + def_name + "( MO &a, void *b, void *c )";
     if ( type == "IO" ) return "SI32 " + def_name + "( MO a )";
+    if ( type == "VoS" ) return "void " + def_name + "( MO &a, ST b )";
     if ( type == "XOO" ) return "struct MetilException *" + def_name + "( MO a, MO b )";
     if ( type == "VoY" ) return "void " + def_name + "( MO &a, struct OwcpChild *b )";
     if ( type == "OO" ) return "MO " + def_name + "( MO a )";
@@ -20,6 +21,7 @@
     if ( type == "VOO" ) return "void " + def_name + "( MO a, MO b )";
     if ( type == "VoPS" ) return "void " + def_name + "( MO &a, const void *b, ST c )";
     if ( type == "Vo" ) return "void " + def_name + "( MO &a )";
+    if ( type == "VopS" ) return "void " + def_name + "( MO &a, void *b, ST c )";
     if ( type == "SO" ) return "ST " + def_name + "( MO a )";
     if ( type == "OOS" ) return "MO " + def_name + "( MO a, ST b )";
     if ( type == "MO" ) return "const MachineId *" + def_name + "( MO a )";

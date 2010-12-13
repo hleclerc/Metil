@@ -430,6 +430,10 @@ public:
         __free( _data, _rese );
     }
 
+    void set( T val ) {
+        for(ST i = 0; i < _size; ++i )
+            _data[ i ] = val;
+    }
 
     __inline__ const T &operator[]( ST i ) const { ASSERT_IF_DEBUG( i < _size ); return _data[ i ]; }
     __inline__ T &operator[]( ST i ) { ASSERT_IF_DEBUG( i < _size ); return _data[ i ]; }

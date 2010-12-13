@@ -63,6 +63,7 @@ public:
     Val operator> ( const Val &b ) const { return CM_2( sup  , *this, b ); }
     Val operator>=( const Val &b ) const { return CM_2( supeq, *this, b ); }
     Val operator==( const Val &b ) const { return CM_2( equal, *this, b ); }
+    Val operator!=( const Val &b ) const { return CM_2( noteq, *this, b ); }
 
     operator bool() const { return type->convert_to_Bool( *this ); }
     operator SI32() const { return type->convert_to_SI32( *this ); }
@@ -70,6 +71,8 @@ public:
     operator FP32() const { return type->convert_to_FP32( *this ); }
     operator FP64() const { return type->convert_to_FP64( *this ); }
     operator FP80() const { return type->convert_to_FP80( *this ); }
+
+    static Val read_from_type_name( const char *&name );
 };
 
 // function( Val, Val )
@@ -164,6 +167,12 @@ extern Val minus_one;         // -1
 //extern Val one_as_PI32;       // 1
 //extern Val minus_one_as_NI32; // -1
 //
+
+extern Val _0; // first arg
+extern Val _1; // first arg
+extern Val _2; // first arg
+
+
 END_METIL_NAMESPACE;
 
 #endif // VAL_H

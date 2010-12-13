@@ -38,6 +38,8 @@ public:
     DECL_WRITER( write_str );
     DECL_WRITER( machine_id );
     DECL_WRITER( size_in_mem );
+    DECL_WRITER( mul_1 );
+
 
     int  dim() const;
     bool dyn() const; ///< true if dynamic
