@@ -1,87 +1,94 @@
 #ifndef CUDAACCUMULATION_H
 #define CUDAACCUMULATION_H
 
+#include "PrevNextPow2.h"
 #include "CudaMetil.h"
 #include "Math.h"
 
-#define NB_THREADS_FOR_ACCUMULATION 64
-#define NB_DIV_____FOR_ACCUMULATION 8
-
 BEG_METIL_NAMESPACE;
 
-// make NB_BLOCKS_FOR_REDUCTION R
-<<<<<<< HEAD:src/CudaAccumulation.h
-template<class T,int size_per_block> __global__
-void cuda_accumulation_kernel_0( T *data, ST size, Number<size_per_block> ) {
-    int index = blockIdx.x * size_per_block + threadIdx.x;
-
-    __shared__ T loc[ size_per_block ];
-    loc[ threadIdx.x ] = offset < size ? data[ index ] : 0;
-
-    // reduction of loc
-    for( int d = 2; d < size_per_block; d *= 2 ) {
-        syncthreads();
-        for( int ; )
-        loc[ threadIdx.x ].reduction( loc[ threadIdx.x + m ] );
-    }
-=======
-template<class T> __global__
-void cuda_accumulation_kernel_0( const T *data, ST size, T *room ) {
-    int index_room = blockDim.x * blockIdx.x + threadIdx.x;
-    int index_data = NB_DIV_____FOR_ACCUMULATION * index_room;
->>>>>>> 8f6d2b134b59d3bb7f6ab4128e2b98119cf13e4b:src/CudaAccumulation.h
-
-    T res = 0;
-    for( int i = index_data; i < min( index_data + NB_DIV_____FOR_ACCUMULATION, size ); ++i )
-        res += data[ i ];
-    room[ index_room ] = res;
-}
-
-// reduction of NB_BLOCKS_FOR_REDUCTION R
-template<class R> __global__
-void cuda_accumulation_kernel_1( R *res ) {
-    // copy in loc
-    __shared__ R loc[ NB_BLOCKS_FOR_REDUCTION ];
-    loc[ threadIdx.x ] = res[ threadIdx.x ];
-
-    // reduction of loc
-    for( int m = NB_BLOCKS_FOR_REDUCTION / 2; m; m /= 2 ) {
-        syncthreads();
-        if ( threadIdx.x < m )
-            loc[ threadIdx.x ].reduction( loc[ threadIdx.x + m ] );
-    }
-
-    // save in res
+/// n -> nb T in loc to accumulate
+template<class T,int n> __device__
+void _cuda_accumulation_kernel_loc_rec( T *loc, Number<n> ) {
     syncthreads();
-    if ( threadIdx.x == 0 )
-        res[ 0 ] = loc[ 0 ];
-}
+    int t2 = 2 * threadIdx.x;
+    if ( t2 >= n )
+        return;
 
-inline ST room_size_for_cuda_accumulation( ST size ) {
-    ST res = 0, mul = size;
-    while ( mul ) {
-        mul = iDivUp( size, NB_DIV_____FOR_ACCUMULATION );
-        res += mul;
+    int a = t2 + 0, b = t2 + 1, s = n + threadIdx.x;
+    loc[ b ] += loc[ a ];
+    loc[ s ]  = loc[ b ];
+    _cuda_accumulation_kernel_loc_rec( loc + n, Number<n/2>() );
+    if ( threadIdx.x ) {
+        loc[ a ] += loc[ s - 1 ];
+        loc[ b ] += loc[ s - 1 ];
     }
-    return res;
+    syncthreads();
 }
 
-/// a_{-1} = size; a_n = iDivUp( a_n - 1 ). room must contain sum a_n. Can be computed using room_size_for_cuda_accumulation
-template<class T>
-void cuda_accumulation( const T *data, ST size, T *room ) {
-    ST tot_nb_threads = iDivUp( size, NB_DIV_____FOR_ACCUMULATION );
-    int nb_blocks = iDivUp( tot_nb_threads, NB_THREADS_FOR_ACCUMULATION );
-    cuda_accumulation_kernel_0<<<nb_blocks,NB_THREADS_FOR_ACCUMULATION>>>( data, size, room );
-    // cuda_accumulation_kernel_1<<<     1,         nb_blocks>>>( data, size );
+template<class T> __device__
+void _cuda_accumulation_kernel_loc_rec( T *loc, Number<1> ) {
 }
 
-/// convenience function
+template<class T,int n> __global__
+void _cuda_accumulation_kernel_loc( T *data, int size, T *room, Number<n> ) {
+    int o = n * blockIdx.x + threadIdx.x;
+
+    __shared__ T loc[ 2 * n ];
+    loc[ threadIdx.x ] = threadIdx.x < size ? data[ o ] : 0;
+
+    _cuda_accumulation_kernel_loc_rec( loc, Number<n>() );
+
+    if ( threadIdx.x < size )
+        data[ o ] = loc[ threadIdx.x ];
+    if ( threadIdx.x == n - 1 )
+        room[ blockIdx.x ] = loc[ n - 1 ];
+}
+
+template<class T,int n> __global__
+void _cuda_accumulation_kernel_add( T *data, int size, T *room, Number<n> ) {
+    int o = n * ( blockIdx.x + 1 ) + threadIdx.x;
+    if ( o < size ) {
+        T a = room[ blockIdx.x ];
+        data[ o ] += a;
+    }
+}
+
 template<class T>
-void cuda_accumulation( const T *data, ST size ) {
-    T *room;
-    cudaMalloc( &room, sizeof( T ) * room_size_for_cuda_accumulation( size ) );
-    cuda_accumulation( data, size, room );
-    cudeFree( room );
+struct CudaAccumulationParm {
+    static const int t = ( SIZE_SHARED_MEM_CUDA - 32 ) / sizeof( T );
+    static const int u = PrevPow2<t>::res;
+    static const int n = u < 512 ? u : 512;
+
+    static ST room_size( ST size ) {
+        if ( size <= 1 )
+            return 0;
+        ST l = iDivUp( size, n );
+        return l + room_size( l );
+    }
+
+    static void acc_rec( T *data, ST size, T *room ) {
+        int nb_bl = iDivUp( size, n );
+        CSC(( _cuda_accumulation_kernel_loc<<<nb_bl,n>>>( data, size, room, Number<n>() ) ));
+        if ( nb_bl > 1 ) {
+            acc_rec( room, nb_bl, room + nb_bl );
+            CSC(( _cuda_accumulation_kernel_add<<<nb_bl-1,n>>>( data, size, room, Number<n>() ) ));
+        }
+    }
+
+    static void acc( T *data, ST size, T *room, bool need_alloc ) {
+        if ( need_alloc )
+            cudaMalloc( &room, sizeof( T ) * room_size( size ) );
+        acc_rec( data, size, room );
+        if ( need_alloc )
+            cudaFree( room );
+    }
+};
+
+/// room must be free room for $size items
+template<class T>
+void cuda_accumulation( T *data, ST size, T *room = 0 ) {
+    CudaAccumulationParm<T>::acc( data, size, room, not room );
 }
 
 END_METIL_NAMESPACE;

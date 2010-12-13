@@ -1,4 +1,5 @@
-LOC_MC = ./metil_comp --comp-dir compilations
+LOC_MC = ./metil_comp --comp-dir compilations -Isrc
+PRG = tests/main.cu
 INSTALL = `pwd`
 
 all: make_metil_comp
@@ -10,12 +11,11 @@ make_metil_comp:
 install: ./metil_comp
 	./install.sh
 
-test: # make_metil_comp
-	${LOC_MC} -o tests/main -g3 -O3 -Isrc tests/main.cpp
-# 	make -C examples/python_server
+test:
+	${LOC_MC} -o tests/main -g3 -O3 ${PRG}
 
 test_gdb:
-	${LOC_MC} -o tests/main --gdb -g3 -Isrc tests/main.cpp
+	${LOC_MC} -o tests/main --gdb -g3 tests/main.cpp
 
 test_valgrind:
 	${LOC_MC} -o tests/main --exec-using "valgrind --db-attach=yes --num-callers=30" -g3 tests/main.cpp
