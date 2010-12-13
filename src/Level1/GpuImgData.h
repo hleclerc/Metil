@@ -1,7 +1,7 @@
 #ifndef GPUIMGDATA_H
 #define GPUIMGDATA_H
 
-#include "CudaMetil.h"
+#include "Owcp.h"
 #include "BasicVec.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
@@ -11,6 +11,7 @@ struct GpuImgData {
     void *data;
     BasicVec<ST,dim> size;
 };
+
 
 END_METIL_LEVEL1_NAMESPACE;
 

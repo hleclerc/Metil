@@ -7,11 +7,11 @@ BEG_METIL_NAMESPACE;
 
 class Img : public Array<Val> {
 public:
-    struct AllocOnGpu {};
-
     Img();
     Img( ST w, ST h, Level1::Type *bas_type ); ///< typed 2D image
     Img( const String &filename ); ///< load( filename )
+
+    Img( Level1::MO mo ) : Array<Val>( mo ) {}
 
     template<class T>
     Img( const String &filename, S<T> t, const Vec &XS ) { ///< raw data

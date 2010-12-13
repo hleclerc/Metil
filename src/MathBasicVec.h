@@ -109,7 +109,7 @@ template<class T,int dim>
 __inline__ T max( const BasicVec<T,dim> &a ) { T res = a[ 0 ]; for( int i = 1; i < a.size(); ++i ) res = max( res, a[ i ] ); return res; }
 
 template<class T,int dim>
-T product( const BasicVec<T,dim> &a ) { T res = 1; for( int i = 0; i < a.size(); ++i ) res *= a[ i ]; return res; }
+__inline__ T product( const BasicVec<T,dim> &a ) { T res = 1; for( int i = 0; i < a.size(); ++i ) res *= a[ i ]; return res; }
 
 /// [ a b c d ] -> [ 1 a a*b a*b*c ]
 template<class T,int dim>

@@ -1,8 +1,10 @@
 #ifndef GPUTEXDATA_H
 #define GPUTEXDATA_H
 
-#include "CudaMetil.h"
+// #include "CudaMetil.h"
 #include "BasicVec.h"
+
+struct cudaArray;
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
