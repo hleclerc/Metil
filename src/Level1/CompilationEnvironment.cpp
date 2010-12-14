@@ -378,10 +378,10 @@ void CompilationEnvironment::extra_obj_cmd( String &cmd, bool dyn, bool cu, cons
     }
 
     if ( opt_level > 0 ) {
-        if ( cu )
-            cmd << " -O";
-        else
-            cmd << " -O" << opt_level;
+        cmd << " -O" << opt_level;
+        //        if ( cu )
+        //            cmd << " -O";
+        //        else
     }
 
     // loc flag

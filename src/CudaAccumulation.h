@@ -3,6 +3,7 @@
 
 #include "PrevNextPow2.h"
 #include "CudaMetil.h"
+#include "String.h"
 #include "Math.h"
 
 BEG_METIL_NAMESPACE;
@@ -10,20 +11,21 @@ BEG_METIL_NAMESPACE;
 /// n -> nb T in loc to accumulate
 template<class T,int n> __device__
 void _cuda_accumulation_kernel_loc_rec( T *loc, Number<n> ) {
-    syncthreads();
-    int t2 = 2 * threadIdx.x;
-    if ( t2 >= n )
-        return;
+    int t2 = 2 * threadIdx.x, a = t2 + 0, b = t2 + 1, s = n + threadIdx.x;
 
-    int a = t2 + 0, b = t2 + 1, s = n + threadIdx.x;
-    loc[ b ] += loc[ a ];
-    loc[ s ]  = loc[ b ];
+    syncthreads();
+    if ( t2 < n ) {
+        loc[ b ] += loc[ a ];
+        loc[ s ]  = loc[ b ];
+    }
+
     _cuda_accumulation_kernel_loc_rec( loc + n, Number<n/2>() );
-    if ( threadIdx.x ) {
+
+    syncthreads();
+    if ( t2 < n and threadIdx.x ) {
         loc[ a ] += loc[ s - 1 ];
         loc[ b ] += loc[ s - 1 ];
     }
-    syncthreads();
 }
 
 template<class T> __device__
@@ -37,11 +39,13 @@ void _cuda_accumulation_kernel_loc( T *data, int size, T *room, Number<n> ) {
     __shared__ T loc[ 2 * n ];
     loc[ threadIdx.x ] = threadIdx.x < size ? data[ o ] : 0;
 
+    syncthreads();
     _cuda_accumulation_kernel_loc_rec( loc, Number<n>() );
 
+    syncthreads();
     if ( threadIdx.x < size )
         data[ o ] = loc[ threadIdx.x ];
-    if ( threadIdx.x == n - 1 )
+    if ( room and threadIdx.x == n - 1 )
         room[ blockIdx.x ] = loc[ n - 1 ];
 }
 
