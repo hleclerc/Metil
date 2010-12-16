@@ -248,19 +248,23 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                     }
                 }
                 if ( c[ 2 ] == 'n' and c[ 3 ] == 'c' and c[ 4 ] == 'l' and c[ 5 ] == 'u' and c[ 6 ] == 'd' and c[ 7 ] == 'e' and c[ 8 ] == ' ' ) {
-                    String inc_file = ce.find_src( get_include_filename( c += 9 ), current_dir );
-                    if ( inc_file ) {
-                        inc_files << inc_file;
+                    String bas_name = get_include_filename( c += 9 );
+                    String inc_file = ce.find_src( bas_name, current_dir );
 
-                        // .h.py ?
-                        if ( inc_file.ends_with( ".h" ) ) {
-                            String h_py = inc_file + ".py";
-                            if ( file_exists( h_py ) ) {
-                                if ( last_modification_time_or_zero_of_file_named( h_py ) >
-                                     last_modification_time_or_zero_of_file_named( inc_file ) )
+                    // .h.py ?
+                    if ( bas_name.ends_with( ".h" ) ) {
+                        if ( String h_py = ce.find_src( bas_name + ".py", current_dir ) ) {
+                            inc_file = h_py.beg_upto( h_py.size() - 3 );
+                            if ( last_modification_time_or_zero_of_file_named( h_py ) >
+                                 last_modification_time_or_zero_of_file_named( inc_file ) ) {
                                 exec_cmd( "python " + h_py + " > " + inc_file, true );
                             }
                         }
+                    }
+
+                    // parse rec
+                    if ( inc_file ) {
+                        inc_files << inc_file;
 
                         //
                         if ( not already_parsed.contains( inc_file ) ) {
