@@ -185,7 +185,7 @@ public:
             index -= s;
         }
         ASSERT( 0, "index > size" );
-        return *reinterpret_cast<T *>( 0 );
+        return *reinterpret_cast<T *>( first.beg );
     }
 
     T *get_room( ST nb_elements = 1 ) {
