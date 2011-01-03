@@ -249,7 +249,11 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                 }
                 if ( c[ 2 ] == 'n' and c[ 3 ] == 'c' and c[ 4 ] == 'l' and c[ 5 ] == 'u' and c[ 6 ] == 'd' and c[ 7 ] == 'e' and c[ 8 ] == ' ' ) {
                     String bas_name = get_include_filename( c += 9 );
-                    String inc_file = ce.find_src( bas_name, current_dir );
+                    String inc_file = ce.find_src( bas_name, current_dir, inc_paths );
+                    // if ( not inc_file ) {
+                    //  PRINT( bas_name );
+                    //  PRINT( inc_paths );
+                    // }
 
                     // .h.py ?
                     if ( bas_name.ends_with( ".h" ) ) {
@@ -290,7 +294,10 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                     continue;
                 }
                 if ( strncmp( c, "inc_path ", 9 ) == 0 ) {
-                    inc_paths << ce.find_src( get_pragma_arg( c += 9 ), current_dir );
+                    String path = ce.find_src( get_pragma_arg( c += 9 ), current_dir );
+                    if ( not ( path.ends_with( '/' ) or path.ends_with( '\\' ) ) )
+                        path += '/';
+                    inc_paths << path;
                     continue;
                 }
                 if ( strncmp( c, "cpp_flag ", 9 ) == 0 ) {

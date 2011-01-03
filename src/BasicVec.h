@@ -50,7 +50,7 @@ public:
     typedef ST S;
     static const int static_prer = static_rese;
 
-    __inline__ BasicVec() {}
+    BasicVec() {}
 
     template<class T0>
     __inline__ void _init_using_1_arg( const T0 &v0, Number<0> ) {
