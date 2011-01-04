@@ -26,6 +26,11 @@ struct Number {
     operator int() const { return n; }
 };
 
+template<int n>
+struct N {
+    operator int() const { return n; }
+};
+
 END_METIL_NAMESPACE
 
 
