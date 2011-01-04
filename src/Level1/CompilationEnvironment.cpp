@@ -33,7 +33,7 @@ CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch ) : c
     }
 }
 
-String CompilationEnvironment::find_src( const String &filename, const String &current_dir ) const {
+String CompilationEnvironment::find_src( const String &filename, const String &current_dir, const BasicVec<String> &add_paths ) const {
     // absolute path ?
     if ( filename[ 0 ] == '/' or filename[ 0 ] == '\\' )
         return ( file_exists( filename ) ? filename : String() );
@@ -42,6 +42,13 @@ String CompilationEnvironment::find_src( const String &filename, const String &c
     String trial = current_dir + filename;
     if ( file_exists( trial ) )
         return trial;
+
+    // try with add_paths
+    for( int i = 0; i < add_paths.size(); ++i ) {
+        trial = add_paths[ i ] + filename;
+        if ( file_exists( trial ) )
+            return trial;
+    }
 
     // try with inc_paths
     for( int i = 0; i < inc_paths.size(); ++i ) {
@@ -398,12 +405,12 @@ String CompilationEnvironment::lnk_cmd( const String &exe, const BasicVec<String
     // basic flags
     if ( lib )
         cmd << ( dyn ? " -shared" : " -static" );
-    // -L... -l...
-    extra_lnk_cmd( cmd, lib, dyn );
     // input / output
     cmd << " -o " << exe;
     for( int i = 0; i < obj.size(); ++i )
         cmd << ' ' << obj[ i ];
+    // -L... -l...
+    extra_lnk_cmd( cmd, lib, dyn );
     return cmd;
 }
 
