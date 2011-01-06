@@ -30,7 +30,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  -dylib : create a dynamic library";
     cerrn << "  -ne : do not launch the executable";
     cerrn << "  -nc : do not compile (launch the executable if -ne is not present)";
-    cerrn << "  -exec file : execute 'file' after compilation";
+    cerrn << "  -exec toto : execute 'toto' after compilation";
     cerrn << "  -Iincludedir : append an include dir to environnement";
     cerrn << "  -DMACRO : #define MACRO";
     cerrn << "  -DMACRO=val : #define MACRO val";
