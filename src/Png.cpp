@@ -132,6 +132,7 @@ void save_png( const String &filename, unsigned char *img, int w, int h, bool gr
     Ps<char> res = make_png( img, w, h, gray_only );
     File f( filename, "w" );
     f.write( res.ptr(), res.size_mem() );
+    res.free();
 }
 
 END_METIL_NAMESPACE;

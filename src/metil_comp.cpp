@@ -37,6 +37,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  -gn : set debug level to n";
     cerrn << "  -On : set optimisation level to n";
     cerrn << "  --cxx cxx : specify compiler";
+    cerrn << "  --no-sep-libs : avoid use of .so intermediate files (use .a instead), to obtain an independant executable";
     cerrn << "  --comp-dir dir : specify path of directory used to store tmp files (.o, ...)";
     cerrn << "  --exec-using prg : execute using prg. Example : --exec-using time to use time";
     cerrn << "  --valgrind : execute using valgrind";
@@ -101,6 +102,8 @@ int main( int argc, char **argv ) {
                 return 10;
             }
             make_file = argv[ i ];
+        } else if ( arg == "--no-sep-libs" ) {
+            want_sep_libs = false;
         } else if ( arg == "-exec" ) {
             if ( ++i >= argc ) {
                 usage( argv[ 0 ], "-exec must be followed by the name of resulting file" );
