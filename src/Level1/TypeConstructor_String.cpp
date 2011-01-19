@@ -10,6 +10,12 @@ MO metil_def_append__when__a__isa__String__and__b__isa__String__pert_0( MO a, MO
     return MO( res, &metil_type_bas_StringConcat );
 }
 
+// write
+void metil_def_write__when__a__isa__String__pert__1( MO &a, const void *ptr, ST len ) {
+    String tmp( NewString( (const char *)ptr, (const char *)ptr + len ) );
+    CM_2( self_append, a, tmp );
+}
+
 // String == String
 MO metil_def_equal__when__a__isa__String__and__b__isa__String( MO a, MO b ) { // TODO: optimize !
     char *sa = (char *)CM_1( new_ptr_z, a );
