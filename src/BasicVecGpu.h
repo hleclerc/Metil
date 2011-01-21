@@ -66,7 +66,8 @@ struct BasicVecGpu {
             if ( _rese )
                 cudaFree( _data );
             _rese = want;
-            CSC(( cudaMalloc( &_data, sizeof( T ) * want ) ));
+            if ( want )
+                CSC(( cudaMalloc( &_data, sizeof( T ) * want ) ));
         }
         return _data;
     }

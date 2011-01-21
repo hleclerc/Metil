@@ -74,7 +74,7 @@ bool CompilationCppParser::init_using_dep( CompilationEnvironment &ce, const Str
             if ( file_exists( h_py ) ) {
                 if ( last_modification_time_or_zero_of_file_named( h_py ) >
                      last_modification_time_or_zero_of_file_named( inc_file ) )
-                exec_cmd( "python " + h_py + " > " + inc_file, true );
+                    exec_cmd( "export PYTHONPATH=\".:$PYTHONPATH\"; python " + h_py + " > " + inc_file, true );
             }
         }
     }
@@ -261,7 +261,7 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                             inc_file = h_py.beg_upto( h_py.size() - 3 );
                             if ( last_modification_time_or_zero_of_file_named( h_py ) >
                                  last_modification_time_or_zero_of_file_named( inc_file ) ) {
-                                exec_cmd( "python " + h_py + " > " + inc_file, true );
+                                exec_cmd( "export PYTHONPATH=\".:$PYTHONPATH\"; python " + h_py + " > " + inc_file, true );
                             }
                         }
                     }

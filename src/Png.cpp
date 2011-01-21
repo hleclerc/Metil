@@ -128,6 +128,10 @@ Ps<char> make_png( unsigned char *img, int w, int h, bool gray_only, const char 
     return res;
 }
 
+Ps<char> make_png( unsigned *img, int w, int h, bool gray_only, const char *prelim, ST prelim_size ) {
+    return make_png( (unsigned char *)img, w, h, gray_only, prelim, prelim_size );
+}
+
 void save_png( const String &filename, unsigned char *img, int w, int h, bool gray_only ) {
     Ps<char> res = make_png( img, w, h, gray_only );
     File f( filename, "w" );
