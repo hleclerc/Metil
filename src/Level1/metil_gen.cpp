@@ -605,6 +605,7 @@ extern MethodName_flush::TM metil_def_flush__when__a__isa__MatlabString;
 extern MethodName_self_append::TM metil_def_self_append__when__a__isa__String__and__b__is__Flt_0_23_23_8_31_1_127__pert__1000;
 extern MethodName_self_append::TM metil_def_self_append__when__a__isa__String__and__b__is__Flt_0_52_52_11_63_1_1023__pert__1000;
 extern MethodName_append::TM metil_def_append__when__a__isa__String__and__b__isa__String__pert_0;
+extern MethodName_write::TM metil_def_write__when__a__isa__String__pert__1;
 extern MethodName_equal::TM metil_def_equal__when__a__isa__String__and__b__isa__String;
 extern MethodName_inf::TM metil_def_inf__when__a__isa__String__and__b__isa__String;
 extern MethodName_convert_to_Bool::TM metil_def_convert_to_Bool__when__a__isa__String;
@@ -1423,13 +1424,25 @@ void reg_def() {
     item_metil_def_append__when__a__isa__String__and__b__isa__String__pert_0.pert = 0;
     MethodFinder<MethodName_append>::last = &item_metil_def_append__when__a__isa__String__and__b__isa__String__pert_0;
 
+    static MethodCond_0_isa<TypeConstructor_String> cond_metil_def_write__when__a__isa__String__pert__1;
+
+    static MethodFinder<MethodName_write>::Item item_metil_def_write__when__a__isa__String__pert__1;
+    item_metil_def_write__when__a__isa__String__pert__1.prev = MethodFinder<MethodName_write>::last;
+    item_metil_def_write__when__a__isa__String__pert__1.cond = &cond_metil_def_write__when__a__isa__String__pert__1;
+    item_metil_def_write__when__a__isa__String__pert__1.meth = metil_def_write__when__a__isa__String__pert__1;
+    item_metil_def_write__when__a__isa__String__pert__1.gene = 0;
+    item_metil_def_write__when__a__isa__String__pert__1.file = string_4;
+    item_metil_def_write__when__a__isa__String__pert__1.line = 14;
+    item_metil_def_write__when__a__isa__String__pert__1.pert = 1;
+    MethodFinder<MethodName_write>::last = &item_metil_def_write__when__a__isa__String__pert__1;
+
     static MethodFinder<MethodName_equal>::Item item_metil_def_equal__when__a__isa__String__and__b__isa__String;
     item_metil_def_equal__when__a__isa__String__and__b__isa__String.prev = MethodFinder<MethodName_equal>::last;
     item_metil_def_equal__when__a__isa__String__and__b__isa__String.cond = &cond_metil_def_append__when__a__isa__String__and__b__isa__String__pert_0;
     item_metil_def_equal__when__a__isa__String__and__b__isa__String.meth = metil_def_equal__when__a__isa__String__and__b__isa__String;
     item_metil_def_equal__when__a__isa__String__and__b__isa__String.gene = 0;
     item_metil_def_equal__when__a__isa__String__and__b__isa__String.file = string_4;
-    item_metil_def_equal__when__a__isa__String__and__b__isa__String.line = 14;
+    item_metil_def_equal__when__a__isa__String__and__b__isa__String.line = 20;
     item_metil_def_equal__when__a__isa__String__and__b__isa__String.pert = 0;
     MethodFinder<MethodName_equal>::last = &item_metil_def_equal__when__a__isa__String__and__b__isa__String;
 
@@ -1439,19 +1452,17 @@ void reg_def() {
     item_metil_def_inf__when__a__isa__String__and__b__isa__String.meth = metil_def_inf__when__a__isa__String__and__b__isa__String;
     item_metil_def_inf__when__a__isa__String__and__b__isa__String.gene = 0;
     item_metil_def_inf__when__a__isa__String__and__b__isa__String.file = string_4;
-    item_metil_def_inf__when__a__isa__String__and__b__isa__String.line = 24;
+    item_metil_def_inf__when__a__isa__String__and__b__isa__String.line = 30;
     item_metil_def_inf__when__a__isa__String__and__b__isa__String.pert = 0;
     MethodFinder<MethodName_inf>::last = &item_metil_def_inf__when__a__isa__String__and__b__isa__String;
 
-    static MethodCond_0_isa<TypeConstructor_String> cond_metil_def_convert_to_Bool__when__a__isa__String;
-
     static MethodFinder<MethodName_convert_to_Bool>::Item item_metil_def_convert_to_Bool__when__a__isa__String;
     item_metil_def_convert_to_Bool__when__a__isa__String.prev = MethodFinder<MethodName_convert_to_Bool>::last;
-    item_metil_def_convert_to_Bool__when__a__isa__String.cond = &cond_metil_def_convert_to_Bool__when__a__isa__String;
+    item_metil_def_convert_to_Bool__when__a__isa__String.cond = &cond_metil_def_write__when__a__isa__String__pert__1;
     item_metil_def_convert_to_Bool__when__a__isa__String.meth = metil_def_convert_to_Bool__when__a__isa__String;
     item_metil_def_convert_to_Bool__when__a__isa__String.gene = 0;
     item_metil_def_convert_to_Bool__when__a__isa__String.file = string_4;
-    item_metil_def_convert_to_Bool__when__a__isa__String.line = 34;
+    item_metil_def_convert_to_Bool__when__a__isa__String.line = 40;
     item_metil_def_convert_to_Bool__when__a__isa__String.pert = 0;
     MethodFinder<MethodName_convert_to_Bool>::last = &item_metil_def_convert_to_Bool__when__a__isa__String;
 
@@ -1461,7 +1472,7 @@ void reg_def() {
     item_metil_def_rfind__when__a__isa__String__and__b__isa__String.meth = metil_def_rfind__when__a__isa__String__and__b__isa__String;
     item_metil_def_rfind__when__a__isa__String__and__b__isa__String.gene = 0;
     item_metil_def_rfind__when__a__isa__String__and__b__isa__String.file = string_4;
-    item_metil_def_rfind__when__a__isa__String__and__b__isa__String.line = 39;
+    item_metil_def_rfind__when__a__isa__String__and__b__isa__String.line = 45;
     item_metil_def_rfind__when__a__isa__String__and__b__isa__String.pert = 0;
     MethodFinder<MethodName_rfind>::last = &item_metil_def_rfind__when__a__isa__String__and__b__isa__String;
 
@@ -1471,7 +1482,7 @@ void reg_def() {
     item_metil_def_find__when__a__isa__String__and__b__isa__String.meth = metil_def_find__when__a__isa__String__and__b__isa__String;
     item_metil_def_find__when__a__isa__String__and__b__isa__String.gene = 0;
     item_metil_def_find__when__a__isa__String__and__b__isa__String.file = string_4;
-    item_metil_def_find__when__a__isa__String__and__b__isa__String.line = 49;
+    item_metil_def_find__when__a__isa__String__and__b__isa__String.line = 55;
     item_metil_def_find__when__a__isa__String__and__b__isa__String.pert = 0;
     MethodFinder<MethodName_find>::last = &item_metil_def_find__when__a__isa__String__and__b__isa__String;
 
@@ -1483,7 +1494,7 @@ void reg_def() {
     item_metil_def_end_from__when__a__isa__String__and__b__isa__Int.meth = metil_def_end_from__when__a__isa__String__and__b__isa__Int;
     item_metil_def_end_from__when__a__isa__String__and__b__isa__Int.gene = 0;
     item_metil_def_end_from__when__a__isa__String__and__b__isa__Int.file = string_4;
-    item_metil_def_end_from__when__a__isa__String__and__b__isa__Int.line = 59;
+    item_metil_def_end_from__when__a__isa__String__and__b__isa__Int.line = 65;
     item_metil_def_end_from__when__a__isa__String__and__b__isa__Int.pert = 0;
     MethodFinder<MethodName_end_from>::last = &item_metil_def_end_from__when__a__isa__String__and__b__isa__Int;
 
@@ -1493,7 +1504,7 @@ void reg_def() {
     item_metil_def_beg_upto__when__a__isa__String__and__b__isa__Int.meth = metil_def_beg_upto__when__a__isa__String__and__b__isa__Int;
     item_metil_def_beg_upto__when__a__isa__String__and__b__isa__Int.gene = 0;
     item_metil_def_beg_upto__when__a__isa__String__and__b__isa__Int.file = string_4;
-    item_metil_def_beg_upto__when__a__isa__String__and__b__isa__Int.line = 68;
+    item_metil_def_beg_upto__when__a__isa__String__and__b__isa__Int.line = 74;
     item_metil_def_beg_upto__when__a__isa__String__and__b__isa__Int.pert = 0;
     MethodFinder<MethodName_beg_upto>::last = &item_metil_def_beg_upto__when__a__isa__String__and__b__isa__Int;
 
