@@ -286,3 +286,6 @@ src/Level1/GpuImgData.h
 tests/main.cu
 src/CudaScalarOp.h
 src/HeterogeneousList.h
+src/Pow.h
+src/Hdf.h
+src/Hdf.cpp

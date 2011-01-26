@@ -7,6 +7,7 @@
 
 BEG_METIL_NAMESPACE
 
+#define CEIL( a, b ) ( ( a + b - 1 ) / b * b )
 
 template<class T> __inline__ bool is_positive( T a  ) { return a > 0; }
 template<class T> __inline__ bool is_negative( T a  ) { return a < 0; }
@@ -192,6 +193,7 @@ template<class T> __inline__ T min( const T &a, const T &b ) { return MIN( a, b 
 template<class T> __inline__ T max( const T &a, const T &b ) { return MAX( a, b ); }
 
 #else // __CUDACC__
+__inline__ ST min( const ST &a, const ST &b ) { return ::min( (long long)a, (long long)b ); } // hum
 
 template<class T> __inline__ T pow( const T &a, const T &b ) { return ::pow( a, b ); }
 template<class T> __inline__ T pow( const T &a, int b ) { return ::pow( a, b ); }

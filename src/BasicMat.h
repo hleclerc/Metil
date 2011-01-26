@@ -27,6 +27,8 @@ struct BasicMat<T_,dim,true> {
         data += m.data;
     }
 
+    void set( T val ) { data.set( val ); }
+
     __inline__ void chol( int d = dim ) {
         for( int r = 0; r < d; ++r ) {
             for( int c = 0; c < r; ++c ) {
