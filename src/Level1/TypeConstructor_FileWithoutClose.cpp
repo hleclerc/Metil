@@ -12,7 +12,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 void metil_def_flush__when__a__isa__FileWithoutClose__pert__1( MO &a ) { fflush( reinterpret_cast<FILE *>( a.data ) ); }
 
 // write
-void metil_def_write__when__a__isa__FileWithoutClose__pert__1( MO &a, const void *ptr, ST len ) {
+void metil_def_write__when__a__isa__FileWithoutClose__pert__2( MO &a, const void *ptr, ST len ) {
     if ( a.data )
         std::fwrite( ptr, 1, len, reinterpret_cast<FILE *>( a.data ) );
 }
@@ -55,7 +55,7 @@ const void *metil_def_ptr_z__when__a__isa__FileWithoutClose__pert__1( MO &a ) {
 
     NewString res( end - old );
     ST act = fread( res.ptr(), 1, end - old, f );
-    ASSERT( act == end - old, "..." );
+    // ASSERT( act == end - old, "..." );
     static_cast<String &>( a ) = res;
     return res.ptr();
 }

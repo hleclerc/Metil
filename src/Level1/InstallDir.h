@@ -1,1 +1,1 @@
-#define INSTALL_DIR "/home/leclerc/code/Metil"
+#define INSTALL_DIR "/home/leclerc/Metil"
