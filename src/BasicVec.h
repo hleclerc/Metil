@@ -591,6 +591,12 @@ public:
         pop_back();
     }
 
+    template<class Hdf,class TS>
+    void write_to( Hdf &hdf, const TS &name ) {
+        BasicVec<int,1> s( size() );
+        hdf.write( name, ptr(), s );
+    }
+
     T *begin() { return _data;              }
     T *end  () { return _data + _size;      }
     T *ptr  () { return _data;              }
