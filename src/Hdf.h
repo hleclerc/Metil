@@ -5,6 +5,7 @@
 #include "String.h"
 
 #include <hdf5.h>
+#include <map>
 
 BEG_METIL_NAMESPACE;
 
@@ -35,14 +36,17 @@ public:
     void open( const String &filename );
     void close();
 
+    // write tensorial data
     template<class T,class TV>
     void write( const String &name, T *data, TV size, TV rese ) {
+        check_grp( name );
+
         int _dim = size.size();
         BasicVec<hsize_t,TV::static_size> _size( Size(), _dim );
         BasicVec<hsize_t,TV::static_size> _rese( Size(), _dim );
         for( int d = 0; d < _dim; ++d ) {
-            _size[ d ] = size[ d ];
-            _rese[ d ] = rese[ d ];
+            _size[ _dim - 1 - d ] = size[ d ];
+            _rese[ _dim - 1 - d ] = rese[ d ];
         }
 
         hid_t dataspace = H5Screate_simple( _dim, _size.ptr(), _rese.ptr() );
@@ -62,6 +66,20 @@ public:
     }
 
 private:
+    void check_grp( const String &name ) {
+        // find grp
+        int off = name.rfind( '/' );
+        if ( off <= 0 )
+            return;
+        const String &grp = name.beg_upto( off );
+        check_grp( grp );
+        //
+        PRINT( grp );
+        if ( not groups.count( grp ) )
+            groups[ grp ] = H5Gcreate( h5_file, grp.c_str(), 0 );
+    }
+
+    std::map<String,hid_t> groups;
     hid_t h5_file;
 };
 
