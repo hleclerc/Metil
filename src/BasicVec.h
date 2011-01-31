@@ -597,6 +597,16 @@ public:
         hdf.write( name, ptr(), s );
     }
 
+    template<class Hdf,class TS>
+    void read_from( const Hdf &hdf, const TS &name ) {
+        // size
+        BasicVec<int,1> s;
+        hdf.read_size( name, s );
+        resize( s[ 0 ] );
+        // data
+        hdf.read_data( name, ptr(), s, s );
+    }
+
     T *begin() { return _data;              }
     T *end  () { return _data + _size;      }
     T *ptr  () { return _data;              }

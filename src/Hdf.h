@@ -30,10 +30,10 @@ template<> struct H5_type<   long double> { static hid_t res() { return H5T_NATI
 class Hdf {
 public:
     Hdf();
-    Hdf( const String &filename );
+    Hdf( const String &filename, bool clear_old = false );
     ~Hdf();
 
-    void open( const String &filename );
+    void open( const String &filename, bool clear_old = false );
     void close();
 
     // write tensorial data
@@ -60,9 +60,50 @@ public:
         H5Dclose( dataset   );
     }
 
+    // write tensorial data
     template<class T,class TV>
     void write( const String &name, T *data, TV size ) {
         write( name, data, size, size );
+    }
+
+    template<class TV>
+    void read_size( const String &name, TV &size ) const {
+        hid_t dataset = H5Dopen( h5_file, name.c_str() );
+        hid_t dataspace = H5Dget_space( dataset );
+        //
+        BasicVec<hsize_t> tmp( Size(), H5Sget_simple_extent_ndims( dataspace ) );
+        H5Sget_simple_extent_dims( dataspace, tmp.ptr(), NULL );
+        size.resize( tmp.size() );
+        for( int d = 0; d < tmp.size(); ++d )
+            size[ tmp.size() - 1 - d ] = tmp[ d ];
+        //
+        H5Dclose(dataset);
+        H5Sclose(dataspace);
+    }
+
+    template<class T,class TV>
+    void read_data( const String &name, T *data, const TV &size, const TV &rese ) const {
+        // filespace
+        hid_t dataset = H5Dopen( h5_file, name.c_str() );
+        hid_t filespace = H5Dget_space( dataset );
+
+        // memspace
+        int _dim = size.size();
+        BasicVec<hsize_t,TV::static_size> _size( Size(), _dim );
+        BasicVec<hsize_t,TV::static_size> _rese( Size(), _dim );
+        for( int d = 0; d < _dim; ++d ) {
+            _size[ _dim - 1 - d ] = size[ d ];
+            _rese[ _dim - 1 - d ] = rese[ d ];
+        }
+        hid_t memspace = H5Screate_simple( _dim, _size.ptr(), _rese.ptr() );
+
+        // read
+        H5Dread( dataset, H5_type<T>::res(), memspace, filespace, H5P_DEFAULT, data );
+
+        // close
+        H5Sclose( memspace );
+        H5Sclose( filespace );
+        H5Dclose( dataset );
     }
 
 private:
