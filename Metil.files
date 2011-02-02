@@ -220,7 +220,6 @@ src/Level1/parser_if.h.py
 src/Level1/MethodWriterDecl.h.py
 src/Level1/NbArgsMethods.h.py
 src/Level1/def_LazyObj.h.py
-src/*.py
 src/TypeConfig.i
 src/BasicVecRef.i
 src/MachineId.i
@@ -289,3 +288,4 @@ src/HeterogeneousList.h
 src/Pow.h
 src/Hdf.h
 src/Hdf.cpp
+src/CudaArray.h
