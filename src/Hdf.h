@@ -40,6 +40,8 @@ public:
     template<class T,class TV>
     void write( const String &name, T *data, TV size, TV rese ) {
         check_grp( name );
+        if ( H5Lexists( h5_file, name.c_str(), H5P_DEFAULT ) )
+            H5Gunlink( h5_file, name.c_str() );
 
         int _dim = size.size();
         BasicVec<hsize_t,TV::static_size> _size( Size(), _dim );
@@ -50,7 +52,7 @@ public:
         }
 
         hid_t dataspace = H5Screate_simple( _dim, _size.ptr(), _rese.ptr() );
-        hid_t datatype  = H5Tcopy( H5_type<T>::res() ); // H5Tset_order( datatype, H5T_ORDER_LE );
+        hid_t datatype  = H5Tcopy( H5_type<T>::res() );
         hid_t dataset   = H5Dcreate( h5_file, name.c_str(), datatype, dataspace, H5P_DEFAULT );
 
         H5Dwrite( dataset, H5_type<T>::res(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data );
@@ -115,12 +117,10 @@ private:
         const String &grp = name.beg_upto( off );
         check_grp( grp );
         //
-        PRINT( grp );
-        if ( not groups.count( grp ) )
-            groups[ grp ] = H5Gcreate( h5_file, grp.c_str(), 0 );
+        if ( not H5Lexists( h5_file, grp.c_str(), H5P_DEFAULT ) )
+            H5Gclose( H5Gcreate( h5_file, grp.c_str(), 0 ) );
     }
 
-    std::map<String,hid_t> groups;
     hid_t h5_file;
 };
 

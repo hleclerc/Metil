@@ -14,11 +14,14 @@ Hdf::Hdf( const String &filename, bool clear_old ) : h5_file( 0 ) {
 }
 
 Hdf::~Hdf() {
+    if ( h5_file )
+        H5Fclose( h5_file );
 }
 
 void Hdf::open( const String &filename, bool clear_old ) {
     if ( h5_file )
         H5Fclose( h5_file );
+    // create or read a previously created file
     if ( clear_old )
         h5_file = H5Fcreate( filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
     else
