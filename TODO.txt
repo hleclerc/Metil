@@ -14,8 +14,6 @@ Démarrage de METIL :
 
 
 
-* simplifications courantes
-   a + 1 - a -> ...
 * indices muets
 
 
