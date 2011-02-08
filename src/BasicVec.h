@@ -214,6 +214,11 @@ public:
         _init_using_1_arg( v0, Number<TensorOrder<T0>::res>() );
     }
 
+    __inline__ void set( T val ) {
+        for( ST i = 0; i < static_size; ++i )
+            _data[ i ] = val;
+    }
+
     __inline__ void operator+=( const BasicVec &v ) {
         for( int i = 0; i < static_size; ++i )
             _data[ i ] += v[ i ];
@@ -431,8 +436,8 @@ public:
         __free( _data, _rese );
     }
 
-    void set( T val ) {
-        for(ST i = 0; i < _size; ++i )
+    __inline__ void set( T val ) {
+        for( ST i = 0; i < _size; ++i )
             _data[ i ] = val;
     }
 

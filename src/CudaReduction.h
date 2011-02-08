@@ -11,8 +11,8 @@ BEG_METIL_NAMESPACE;
 #define NB_THREADS_FOR_REDUCTION 64
 
 //
-template<class T,int nb_threads> __global__
-__inline__ void cuda_reduction_kernel_loc( T *loc, N<nb_threads> ) {
+template<class T,int nb_threads>
+__device__ void cuda_reduction_kernel_loc( T *loc, N<nb_threads> ) {
     for( int m = nb_threads / 2; m; m /= 2 ) {
         syncthreads();
         if ( threadIdx.x < m )
