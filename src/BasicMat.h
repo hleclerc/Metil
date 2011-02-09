@@ -17,30 +17,30 @@ struct BasicMat<T_,dim,true> {
     __inline__ BasicMat() {}
     __inline__ BasicMat( T val ) : data( val ) {}
 
-    __inline__ const T &sel_sec( int r, int c ) const { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c < r
-    __inline__ T &sel_sec( int r, int c ) { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c < r
+    __inline__ const T &sec_sel( int r, int c ) const { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c <= r
+    __inline__ T &sec_sel( int r, int c ) { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c <= r
 
-    __inline__ const T &operator()( int r, int c ) const { if ( r < c ) return sel_sec( c, r ); return sel_sec( r, c ); }
-    __inline__ T &operator()( int r, int c ) { if ( r < c ) return sel_sec( c, r ); return sel_sec( r, c ); }
+    __inline__ const T &operator()( int r, int c ) const { return r < c ? sec_sel( c, r ) : sec_sel( r, c ); }
+    __inline__ T &operator()( int r, int c ) { return r < c ? sec_sel( c, r ) : sec_sel( r, c ); }
 
     __inline__ void operator+=( const BasicMat &m ) {
         data += m.data;
     }
 
-    void set( T val ) { data.set( val ); }
+    __inline__ void set( T val ) { data.set( val ); }
 
     __inline__ void chol( int d = dim ) {
         for( int r = 0; r < d; ++r ) {
             for( int c = 0; c < r; ++c ) {
-                T val = sel_sec( r, c );
+                T val = sec_sel( r, c );
                 for( int i = 0; i < c; ++i )
-                    val -= sel_sec( r, i ) * sel_sec( c, i );
-                sel_sec( r, c ) = val * sel_sec( c, c );
+                    val -= sec_sel( r, i ) * sec_sel( c, i );
+                sec_sel( r, c ) = val * sec_sel( c, c );
             }
-            T val = sel_sec( r, r );
+            T val = sec_sel( r, r );
             for( int i = 0; i < r; ++i )
-                val -= pow( sel_sec( r, i ), 2 );
-            sel_sec( r, r ) = 1 / sqrt( val );
+                val -= pow( sec_sel( r, i ), 2 );
+            sec_sel( r, r ) = 1 / sqrt( val );
         }
 
     }
@@ -50,15 +50,15 @@ struct BasicMat<T_,dim,true> {
         for( int r = 0; r < d; ++r ) {
             T v = sol[ r ];
             for( int c = 0; c < r; ++c )
-                v -= sel_sec( r, c ) * res[ c ];
-            res[ r ] = v * sel_sec( r, r );
+                v -= sec_sel( r, c ) * res[ c ];
+            res[ r ] = v * sec_sel( r, r );
         }
 
         for( int r = d- 1; r >= 0; --r ) {
             T v = res[ r ];
             for( int c = r + 1; c < d; ++c )
-                v -= sel_sec( c, r ) * res[ c ];
-            res[ r ] = v * sel_sec( r, r );
+                v -= sec_sel( c, r ) * res[ c ];
+            res[ r ] = v * sec_sel( r, r );
         }
 
         return res;
@@ -66,7 +66,7 @@ struct BasicMat<T_,dim,true> {
 
     __inline__ void add_l_Id( T l ) {
         for( int c = 0; c < dim; ++c )
-            sel_sec( c, c ) += l;
+            sec_sel( c, c ) += l;
     }
 
     __inline__ BasicVec<T,dim> operator*( const BasicVec<T,dim> &vec ) const {

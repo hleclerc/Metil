@@ -30,6 +30,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  -dylib : create a dynamic library";
     cerrn << "  -ne : do not launch the executable";
     cerrn << "  -nc : do not compile (launch the executable if -ne is not present)";
+    cerrn << "  -pg : instrumentation of the code for gprof (http://www.cs.utah.edu/dept/old/texinfo/as/gprof_toc.html)";
     cerrn << "  -exec toto : execute 'toto' after compilation";
     cerrn << "  -Iincludedir : append an include dir to environnement";
     cerrn << "  -DMACRO : #define MACRO";
@@ -79,6 +80,7 @@ int main( int argc, char **argv ) {
     bool want_mex      = false;
     bool want_lib      = false;
     bool want_sep_libs = true;
+    bool want_gprof    = false;
 
     //
     for( int i = 1; i < argc; ++i ) {
@@ -104,6 +106,10 @@ int main( int argc, char **argv ) {
             make_file = argv[ i ];
         } else if ( arg == "--no-sep-libs" ) {
             want_sep_libs = false;
+        } else if ( arg == "-pg" ) {
+            // want_gprof = false;
+            ce.add_CPPFLAG( "-pg" );
+            ce.add_LDFLAG ( "-pg" );
         } else if ( arg == "-exec" ) {
             if ( ++i >= argc ) {
                 usage( argv[ 0 ], "-exec must be followed by the name of resulting file" );

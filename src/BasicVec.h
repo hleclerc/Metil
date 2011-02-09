@@ -214,6 +214,11 @@ public:
         _init_using_1_arg( v0, Number<TensorOrder<T0>::res>() );
     }
 
+    __inline__ void set( T val ) {
+        for( ST i = 0; i < static_size; ++i )
+            _data[ i ] = val;
+    }
+
     __inline__ void operator+=( const BasicVec &v ) {
         for( int i = 0; i < static_size; ++i )
             _data[ i ] += v[ i ];
@@ -431,8 +436,8 @@ public:
         __free( _data, _rese );
     }
 
-    void set( T val ) {
-        for(ST i = 0; i < _size; ++i )
+    __inline__ void set( T val ) {
+        for( ST i = 0; i < _size; ++i )
             _data[ i ] = val;
     }
 
@@ -595,6 +600,16 @@ public:
     void write_to( Hdf &hdf, const TS &name ) {
         BasicVec<int,1> s( size() );
         hdf.write( name, ptr(), s );
+    }
+
+    template<class Hdf,class TS>
+    void read_from( const Hdf &hdf, const TS &name ) {
+        // size
+        BasicVec<int,1> s;
+        hdf.read_size( name, s );
+        resize( s[ 0 ] );
+        // data
+        hdf.read_data( name, ptr(), s, s );
     }
 
     T *begin() { return _data;              }

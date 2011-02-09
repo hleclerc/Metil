@@ -10,6 +10,16 @@ BEG_METIL_NAMESPACE;
 #define NB_BLOCKS__FOR_REDUCTION 64
 #define NB_THREADS_FOR_REDUCTION 64
 
+//
+template<class T,int nb_threads>
+__device__ void cuda_reduction_kernel_loc( T *loc, N<nb_threads> ) {
+    for( int m = nb_threads / 2; m; m /= 2 ) {
+        syncthreads();
+        if ( threadIdx.x < m )
+            loc[ threadIdx.x ].reduction( loc[ threadIdx.x + m ] );
+    }
+}
+
 // make NB_BLOCKS__FOR_REDUCTION R. 1 arg
 template<class R,class T0> __global__
 void cuda_reduction_kernel_0( R *res, const T0 *data_0, ST size ) {
@@ -21,11 +31,7 @@ void cuda_reduction_kernel_0( R *res, const T0 *data_0, ST size ) {
         loc[ threadIdx.x ].reduction( data_0[ index ] );
 
     // reduction of loc
-    for( int m = NB_THREADS_FOR_REDUCTION / 2; m; m /= 2 ) {
-        syncthreads();
-        if ( threadIdx.x < m )
-            loc[ threadIdx.x ].reduction( loc[ threadIdx.x + m ] );
-    }
+    cuda_reduction_kernel_loc( loc, N<NB_THREADS_FOR_REDUCTION>() );
 
     // save
     syncthreads();
