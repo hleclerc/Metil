@@ -17,8 +17,8 @@ struct BasicMat<T_,dim,true> {
     __inline__ BasicMat() {}
     __inline__ BasicMat( T val ) : data( val ) {}
 
-    __inline__ const T &sec_sel( int r, int c ) const { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c < r
-    __inline__ T &sec_sel( int r, int c ) { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c < r
+    __inline__ const T &sec_sel( int r, int c ) const { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c <= r
+    __inline__ T &sec_sel( int r, int c ) { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c <= r
 
     __inline__ const T &operator()( int r, int c ) const { return r < c ? sec_sel( c, r ) : sec_sel( r, c ); }
     __inline__ T &operator()( int r, int c ) { return r < c ? sec_sel( c, r ) : sec_sel( r, c ); }
