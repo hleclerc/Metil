@@ -425,7 +425,7 @@ void *new_room_large_size( ST &size_in_mem ) {
     #ifdef WIN32
     return std::malloc( size_in_mem );
     #else
-    return mmap( 0, size_in_mem, PROT_EXEC | PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0 );
+    return mmap( 0, size_in_mem, PROT_EXEC | PROT_READ | PROT_WRITE, MAP_PRIVATE, -1, 0 ); ///< MAP_ANONYMOUS |
     #endif
 }
 
