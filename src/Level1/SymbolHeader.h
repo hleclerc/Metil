@@ -18,12 +18,16 @@ struct SymbolHeaderData {
 */
 struct SymbolHeader : public OwcpWithoutChild<SymbolHeaderData> {
     SymbolHeader( const String &cpp ) {
-        data.cpp = cpp;
-        data.tex = cpp;
+        new( &data.cpp ) String( cpp );
+        new( &data.tex ) String( cpp );
+        //data.cpp = cpp;
+        //data.tex = cpp;
     }
     SymbolHeader( const String &cpp, const String &tex ) {
-        data.cpp = cpp;
-        data.tex = tex;
+        new( &data.cpp ) String( cpp );
+        new( &data.tex ) String( tex );
+        //data.cpp = cpp;
+        //data.tex = tex;
     }
 };
 
