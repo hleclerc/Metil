@@ -1,5 +1,5 @@
 LOC_MC = ./metil_comp --comp-dir compilations -Isrc
-PRG = tests/main.cu
+PRG = tests/test.cpp
 INSTALL = `pwd`
 
 all: make_metil_comp
