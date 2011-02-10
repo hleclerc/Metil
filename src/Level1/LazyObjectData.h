@@ -1,7 +1,7 @@
 #ifndef LAZYOBJECTDATA_H
 #define LAZYOBJECTDATA_H
 
-#include "MachineId.h"
+#include "../MachineId.h"
 #include "Owcp.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;

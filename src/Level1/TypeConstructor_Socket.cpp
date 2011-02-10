@@ -2,7 +2,7 @@
 #include "TypeConstructor_Socket.h"
 #include "OwcpStringData.h"
 #include "StringHelp.h"
-#include "String.h"
+#include "../String.h"
 #include <sys/socket.h>
 
 BEG_METIL_LEVEL1_NAMESPACE;

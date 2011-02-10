@@ -1,7 +1,7 @@
 #include "CompilationTree.h"
-#include "System.h"
-#include "Thread.h"
-#include "WaitCondition.h"
+#include "../WaitCondition.h"
+#include "../System.h"
+#include "../Thread.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

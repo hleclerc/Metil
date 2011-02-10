@@ -1,6 +1,6 @@
 #include "CompilationCppParser.h"
-#include "Level1/StringHelp.h"
-#include "System.h"
+#include "StringHelp.h"
+#include "../System.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

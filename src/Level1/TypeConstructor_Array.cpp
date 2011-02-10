@@ -2,7 +2,7 @@
 #include "TypeConstructor_Array.h"
 #include "TypeConstructor_Cst.h"
 #include "MethodFinder.h"
-#include "Tokenize.h"
+#include "../Tokenize.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

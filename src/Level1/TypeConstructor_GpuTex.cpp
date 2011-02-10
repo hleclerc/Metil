@@ -1,8 +1,8 @@
 #include "TypeConstructor_GpuTex.h"
 #include "NewAndRefNumber.h"
 #include "GpuImgData.h"
+#include "../Vec.h"
 #include "Owcp.h"
-#include "Vec.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

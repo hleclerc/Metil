@@ -2,7 +2,7 @@
 #include "TypeConstructor_ConstCharPtr.h"
 #include "NewAndRefNumber.h"
 #include "StringHelp.h"
-#include "Val.h"
+#include "../Val.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

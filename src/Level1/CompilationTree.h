@@ -1,9 +1,9 @@
 #ifndef COMPILATIONTREE_H
 #define COMPILATIONTREE_H
 
-#include "BasicVec.h"
-#include "String.h"
-#include "Ptr.h"
+#include "../BasicVec.h"
+#include "../String.h"
+#include "../Ptr.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

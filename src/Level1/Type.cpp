@@ -2,10 +2,10 @@
 #include "MethodGenerator.h"
 #include "NbArgsMethods.h"
 #include "BasicMethods.h"
+#include "../BasicVec.h"
 #include "MethodName.h"
 #include "StringHelp.h"
-#include "BasicVec.h"
-#include "Math.h"
+#include "../Math.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

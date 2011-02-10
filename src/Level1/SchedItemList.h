@@ -1,9 +1,9 @@
 #ifndef SCHEDITEMLIST_H
 #define SCHEDITEMLIST_H
 
-#include "BasicSplittedVec.h"
+#include "../BasicSplittedVec.h"
+#include "../String.h"
 #include "SchedItem.h"
-#include "String.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

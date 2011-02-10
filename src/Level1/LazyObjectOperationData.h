@@ -2,7 +2,7 @@
 #ifndef LAZYOBJECTOPERATIONDATA_H
 #define LAZYOBJECTOPERATIONDATA_H
 
-#include <Config.h>
+#include "../Config.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

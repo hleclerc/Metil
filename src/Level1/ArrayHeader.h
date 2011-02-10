@@ -1,11 +1,11 @@
 #ifndef ARRAYDATA_H
 #define ARRAYDATA_H
 
-#include "ClassOrVoid.h"
-#include "MachineId.h"
-#include "Number.h"
-#include "Math.h"
-#include "MO.h"
+#include "../ClassOrVoid.h"
+#include "../MachineId.h"
+#include "../Number.h"
+#include "../Math.h"
+#include "../MO.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

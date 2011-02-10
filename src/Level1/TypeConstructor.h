@@ -1,9 +1,9 @@
 #ifndef TYPECONSTRUCTOR_H
 #define TYPECONSTRUCTOR_H
 
+#include "../MachineId.h"
 #include "MethodWriter.h"
 #include "MethodCond.h"
-#include "MachineId.h"
 #include "TypeSet.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;

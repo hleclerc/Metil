@@ -1,5 +1,5 @@
 #include "TypeConstructor.h"
-#include "String.h"
+#include "../String.h"
 #include "Owcp.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;

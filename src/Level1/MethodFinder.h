@@ -5,7 +5,7 @@
 #include "MethodWriter.h"
 #include "MethodCond.h"
 #include "MethodName.h"
-#include "Dout.h"
+#include "../Dout.h"
 
 #include <cstdio>
 

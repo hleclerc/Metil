@@ -1,7 +1,7 @@
 #ifndef SCHEDITEM_H
 #define SCHEDITEM_H
 
-#include "MO.h"
+#include "../MO.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

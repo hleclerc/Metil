@@ -1,9 +1,9 @@
 #include "TypeConstructor_OwcpString.h"
 #include "NewAndRefNumber.h"
 #include "OwcpStringData.h"
+#include "../NewString.h"
 #include "StringHelp.h"
-#include "NewString.h"
-#include "Val.h"
+#include "../Val.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

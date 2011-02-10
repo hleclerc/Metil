@@ -1,7 +1,7 @@
 #include "CompilationCppParser.h"
 #include "InstallDir.h"
-#include "Tokenize.h"
-#include "System.h"
+#include "../Tokenize.h"
+#include "../System.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

@@ -1,8 +1,8 @@
 #include "TypeConstructor_Flt.h"
 #include "MethodFinder.h"
+#include "../Tokenize.h"
 #include "DisplayFlt.h"
-#include "Tokenize.h"
-#include "Math.h"
+#include "../Math.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

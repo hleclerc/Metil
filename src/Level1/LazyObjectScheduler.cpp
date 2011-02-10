@@ -1,6 +1,6 @@
 #include "LazyObjectScheduler.h"
 #include "SchedItemList.h"
-#include "String.h"
+#include "../String.h"
 #include "Owcp.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;

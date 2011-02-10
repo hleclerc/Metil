@@ -1,7 +1,7 @@
 #ifndef BASICBASENFLTNUMBER_H
 #define BASICBASENFLTNUMBER_H
 
-#include "String.h"
+#include "../String.h"
 
 #ifdef DOXYGEN
 namespace Level1 {

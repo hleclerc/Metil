@@ -1,7 +1,7 @@
 #ifndef METHODWRITERHELPER_INT_H
 #define METHODWRITERHELPER_INT_H
 
-#include "Config.h"
+#include "../Config.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

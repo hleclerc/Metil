@@ -1,7 +1,7 @@
 #ifndef METHODNAME_H
 #define METHODNAME_H
 
-#include "TypeWithoutPtr.h"
+#include "../TypeWithoutPtr.h"
 #include "Type.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;

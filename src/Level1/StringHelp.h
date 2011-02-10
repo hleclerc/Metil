@@ -1,8 +1,8 @@
 #ifndef STRINGHELP_H
 #define STRINGHELP_H
 
-#include "TypeConfig.h"
-#include "Number.h"
+#include "../TypeConfig.h"
+#include "../Number.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

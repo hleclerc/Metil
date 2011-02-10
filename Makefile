@@ -55,6 +55,7 @@ clean:
 metil_comp_mk:
 	${LOC_MC} --static -make metil_comp.mk -o ./metil_comp -g3 -O3 src/metil_comp.cpp
 	sed -i -e s@`pwd`/@@g metil_comp.mk
+	sed -i -e s@-Isrc/@@g metil_comp.mk
 
 c: 
 	make metil_comp_mk

@@ -1,6 +1,6 @@
 #include "TypeConstructor_ConstCharPtrWithSize.h"
-#include "String.h"
 #include "StringHelp.h"
+#include "../String.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

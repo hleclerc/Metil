@@ -1,7 +1,7 @@
 #include "CompilationEnvironment.h"
 #include "MethodFinder.h"
 #include "StringHelp.h"
-#include "System.h"
+#include "../System.h"
 
 #include <map>
 

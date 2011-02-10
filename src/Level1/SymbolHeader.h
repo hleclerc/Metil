@@ -1,7 +1,7 @@
 #ifndef SYMBOLHEADER_H
 #define SYMBOLHEADER_H
 
-#include "String.h"
+#include "../String.h"
 #include "Owcp.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;

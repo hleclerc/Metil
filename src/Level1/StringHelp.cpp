@@ -1,5 +1,5 @@
 #include "StringHelp.h"
-#include "String.h"
+#include "../String.h"
 
 #include <cstdlib>
 

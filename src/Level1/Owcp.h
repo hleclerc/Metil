@@ -1,7 +1,7 @@
 #ifndef OWCP_H
 #define OWCP_H
 
-#include "Ptr.h"
+#include "../Ptr.h"
 #include "Type.h"
 #include "AdditionalDataVoid.h"
 

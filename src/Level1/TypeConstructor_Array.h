@@ -2,7 +2,7 @@
 #define TYPECONSTRUCTOR_ARRAY_H
 
 #include "TypeConstructor.h"
-#include "BasicVec.h"
+#include "../BasicVec.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

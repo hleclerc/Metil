@@ -1,8 +1,8 @@
 #ifndef LAZYOBJECTSCHEDULER_H
 #define LAZYOBJECTSCHEDULER_H
 
-#include "BasicVec.h"
-#include "MO.h"
+#include "../BasicVec.h"
+#include "../MO.h"
 
 BEG_METIL_LEVEL1_NAMESPACE
 
