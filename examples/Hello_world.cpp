@@ -4,7 +4,7 @@
   Writes the string "Hello World" on standard output
 */
 
-#include <MetilString.h>
+#include <String.h>
 
 using namespace Metil;
 

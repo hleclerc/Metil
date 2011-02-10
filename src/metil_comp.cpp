@@ -13,8 +13,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include "Level1/CompilationEnvironment.h"
-#include "MetilSystem.h"
+#include "Metil/Level1/CompilationEnvironment.h"
+#include "Metil/System.h"
 
 using namespace Metil;
 
