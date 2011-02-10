@@ -1,6 +1,6 @@
 // #pragma cpp_flag -fprofile-arcs
 #include <BasicVec.h>
-#include <String.h>
+#include <MetilString.h>
 
 //void f() {
 //    for(int i = 0; i < 100000; ++i)

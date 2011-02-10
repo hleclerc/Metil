@@ -1,5 +1,5 @@
 #include "StringHelp.h"
-#include "../String.h"
+#include "../MetilString.h"
 
 #include <cstdlib>
 

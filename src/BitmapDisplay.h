@@ -3,7 +3,7 @@
 
 #include "GenericDisplay.h"
 #include "BasicVecGpu.h"
-#include "String.h"
+#include "MetilString.h"
 #include "Ps.h"
 
 BEG_METIL_NAMESPACE;

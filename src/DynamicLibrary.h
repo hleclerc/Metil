@@ -1,7 +1,7 @@
 #ifndef DYNAMICLIBRARY_H
 #define DYNAMICLIBRARY_H
 
-#include "String.h"
+#include "MetilString.h"
 
 BEG_METIL_NAMESPACE;
 

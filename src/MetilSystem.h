@@ -1,7 +1,7 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include "String.h"
+#include "MetilString.h"
 
 BEG_METIL_NAMESPACE
 

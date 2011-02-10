@@ -3,7 +3,7 @@
 
 #include "PrevNextPow2.h"
 #include "CudaMetil.h"
-#include "String.h"
+#include "MetilString.h"
 #include "Math.h"
 
 BEG_METIL_NAMESPACE;

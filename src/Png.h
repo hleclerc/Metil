@@ -1,7 +1,7 @@
 #ifndef PNG_H
 #define PNG_H
 
-#include "String.h"
+#include "MetilString.h"
 #include "Ps.h"
 
 BEG_METIL_NAMESPACE;

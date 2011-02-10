@@ -2,7 +2,7 @@
 #define COMPILATIONTREE_H
 
 #include "../BasicVec.h"
-#include "../String.h"
+#include "../MetilString.h"
 #include "../Ptr.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;

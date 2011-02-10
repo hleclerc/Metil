@@ -2,7 +2,7 @@
 #define TOKENIZE_H
 
 #include "BasicVec.h"
-#include "String.h"
+#include "MetilString.h"
 
 BEG_METIL_NAMESPACE;
 

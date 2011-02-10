@@ -18,7 +18,6 @@ src/BinStructCuda.h
 src/TypeConfig.h
 src/BasicVecGpu.h
 src/PrevNextPow2.h
-src/String.h
 src/HeterogeneousList.h
 src/MachineId_Cpu.h
 src/Number.h
@@ -46,7 +45,6 @@ src/Hdf.h
 src/IsSigned.h
 src/BitmapDisplay.h
 src/TypeWithoutPtr.h
-src/System.h
 src/Mos.h
 src/MethodWriterSymb.h
 src/Level1/TypeConstructor_LazyObject.h
@@ -130,7 +128,9 @@ src/MathBasicVec.h
 src/IsAScalar.h
 src/Lst.h
 src/TensorOrder.h
+src/MetilString.h
 src/MetilMalloc.h
+src/MetilSystem.h
 src/BasicMat.h
 src/Allocator.h
 src/Val.h
@@ -157,13 +157,14 @@ src/Assert.cpp
 src/Allocator.cpp
 src/Thread.cpp
 src/NewString.cpp
+src/MetilSystem.cpp
 src/MachineId_Cpu.cpp
 src/MachineId.cpp
 src/Val.cpp
 src/WaitCondition.cpp
 src/GenericDisplay.cpp
-src/String.cpp
 src/Mat.cpp
+src/MetilString.cpp
 src/Mutex.cpp
 src/DynamicLibrary.cpp
 src/Png.cpp
@@ -217,7 +218,6 @@ src/Level1/TypeConstructor_ConstCharPtrWithSize.cpp
 src/Level1/TypeConstructor_TiffLoader.cpp
 src/Level1/Owcp.cpp
 src/Level1/TypeConstructor_VoidString.cpp
-src/System.cpp
 src/Img.cpp
 src/MO.cpp
 src/ValReader.cpp
@@ -232,7 +232,6 @@ src/metil_comp.cpp
 src/Matlab.cpp
 src/Base64.cpp
 src/MemoryDriver.cpp
-src/*.py
 src/Level1/MethodWriterDecl.h.py
 src/Level1/MethodTypes.h.py
 src/Level1/def_MORef.h.py

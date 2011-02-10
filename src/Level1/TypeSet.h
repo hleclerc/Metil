@@ -1,7 +1,7 @@
 #ifndef TYPESET_H
 #define TYPESET_H
 
-#include "../String.h"
+#include "../MetilString.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

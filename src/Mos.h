@@ -1,7 +1,7 @@
 #ifndef MOS_H
 #define MOS_H
 
-#include "String.h"
+#include "MetilString.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

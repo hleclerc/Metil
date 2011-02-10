@@ -1,6 +1,6 @@
 #include "TypeConstructor_StringConcat.h"
 #include "StringHelp.h"
-#include "../String.h"
+#include "../MetilString.h"
 #include "Ad.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;

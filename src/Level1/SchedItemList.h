@@ -2,7 +2,7 @@
 #define SCHEDITEMLIST_H
 
 #include "../BasicSplittedVec.h"
-#include "../String.h"
+#include "../MetilString.h"
 #include "SchedItem.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;

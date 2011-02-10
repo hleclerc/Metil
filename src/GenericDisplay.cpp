@@ -1,7 +1,7 @@
 #include "GenericDisplay.h"
 #include "MathBasicVec.h"
 #include "CudaMetil.h"
-#include "String.h"
+#include "MetilString.h"
 
 #include <limits>
 

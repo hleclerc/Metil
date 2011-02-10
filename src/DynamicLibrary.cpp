@@ -1,5 +1,5 @@
 #include "DynamicLibrary.h"
-#include "String.h"
+#include "MetilString.h"
 
 #ifndef WIN32
     #include <dlfcn.h>

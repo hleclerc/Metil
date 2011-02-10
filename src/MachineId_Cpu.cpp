@@ -1,5 +1,5 @@
 #include "MachineId_Gpu.h"
-#include "String.h"
+#include "MetilString.h"
 
 BEG_METIL_NAMESPACE;
 

@@ -17,7 +17,7 @@
 #ifndef METIL_StringWithSepInCppLine_H
 #define METIL_StringWithSepInCppLine_H
 
-#include "String.h"
+#include "MetilString.h"
 
 BEG_METIL_NAMESPACE;
 

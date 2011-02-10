@@ -8,7 +8,7 @@
 #endif
 
 #include "BasicVec.h"
-#include "String.h"
+#include "MetilString.h"
 #include <mex.h>
 
 BEG_METIL_NAMESPACE

@@ -1,7 +1,7 @@
 #include "TypeConstructor_ConstCharPtrWithSize.h"
 #include "TypeConstructor_FileWithoutClose.h"
 #include "OwcpStringData.h"
-#include "../String.h"
+#include "../MetilString.h"
 
 #include <cstdio>
 #include <cstring>

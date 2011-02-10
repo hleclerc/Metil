@@ -2,7 +2,7 @@
 #define HDF_H
 
 #include "BasicVec.h"
-#include "String.h"
+#include "MetilString.h"
 
 #include <hdf5.h>
 #include <map>

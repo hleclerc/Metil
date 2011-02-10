@@ -1,7 +1,7 @@
 #ifndef BASE64_H
 #define BASE64_H
 
-#include "String.h"
+#include "MetilString.h"
 
 BEG_METIL_NAMESPACE;
 
