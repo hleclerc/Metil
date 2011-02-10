@@ -1,8 +1,8 @@
 #ifndef CUDAREDUCTION_H
 #define CUDAREDUCTION_H
 
+#include "MetilLimits.h"
 #include "CudaMetil.h"
-#include "Limits.h"
 #include "Math.h"
 
 BEG_METIL_NAMESPACE;
