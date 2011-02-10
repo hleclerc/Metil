@@ -1,7 +1,7 @@
 #ifndef PTR_H
 #define PTR_H
 
-#include "Malloc.h"
+#include "MetilMalloc.h"
 
 BEG_METIL_NAMESPACE;
 

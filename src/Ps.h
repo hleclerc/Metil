@@ -2,7 +2,7 @@
 #define PS_H
 
 #include "MachineId.h"
-#include "Malloc.h"
+#include "MetilMalloc.h"
 
 BEG_METIL_NAMESPACE;
 
