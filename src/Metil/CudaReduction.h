@@ -1,7 +1,7 @@
 #ifndef CUDAREDUCTION_H
 #define CUDAREDUCTION_H
 
-#include "MetilLimits.h"
+#include "Limits.h"
 #include "CudaMetil.h"
 #include "Math.h"
 
