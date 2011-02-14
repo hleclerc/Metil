@@ -29,6 +29,14 @@ struct SymbolHeader : public OwcpWithoutChild<SymbolHeaderData> {
         //data.cpp = cpp;
         //data.tex = tex;
     }
+    SymbolHeader( const String &cpp ) {
+        data.cpp = cpp;
+        data.tex = cpp;
+    }
+    SymbolHeader( const String &cpp, const String &tex ) {
+        data.cpp = cpp;
+        data.tex = tex;
+    }
 };
 
 END_METIL_LEVEL1_NAMESPACE;
