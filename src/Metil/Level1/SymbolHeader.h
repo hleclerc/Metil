@@ -17,13 +17,13 @@ struct SymbolHeaderData {
   Data for symbols
 */
 struct SymbolHeader : public OwcpWithoutChild<SymbolHeaderData> {
-    SymbolHeader( const String &cpp ) {
+    SymbolHeader( const char *cpp ) {
         new( &data.cpp ) String( cpp );
         new( &data.tex ) String( cpp );
         //data.cpp = cpp;
         //data.tex = cpp;
     }
-    SymbolHeader( const String &cpp, const String &tex ) {
+    SymbolHeader( const char *cpp, const char *tex ) {
         new( &data.cpp ) String( cpp );
         new( &data.tex ) String( tex );
         //data.cpp = cpp;
