@@ -90,6 +90,10 @@ CompilationCppParser::CompilationCppParser( CompilationEnvironment &ce, const St
 
     //
     defines[ "METIL_COMP_DIRECTIVE" ];
+    for( int i = 0; i < ce_def_procs.size(); ++i )
+        defines[ ce_def_procs[ i ] ];
+
+    //
     parse_src_file_rec( ce, cpp_file );
 }
 
@@ -250,10 +254,6 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                 if ( c[ 2 ] == 'n' and c[ 3 ] == 'c' and c[ 4 ] == 'l' and c[ 5 ] == 'u' and c[ 6 ] == 'd' and c[ 7 ] == 'e' and c[ 8 ] == ' ' ) {
                     String bas_name = get_include_filename( c += 9 );
                     String inc_file = ce.find_src( bas_name, current_dir, inc_paths );
-                    // if ( not inc_file ) {
-                    //  PRINT( bas_name );
-                    //  PRINT( inc_paths );
-                    // }
 
                     // .h.py ?
                     if ( bas_name.ends_with( ".h" ) ) {
