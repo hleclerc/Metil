@@ -16,6 +16,7 @@ public:
     void add_inc_path( const String &path );
     void add_lib_path( const String &path );
     void add_lib_name( const String &name );
+    void add_fra_name( const String &name );
     void add_CPPFLAG ( const String &flag );
     void add_GPUFLAG ( const String &flag );
     void add_LDFLAG  ( const String &flag );
@@ -83,6 +84,7 @@ protected:
     BasicVec<String> inc_paths;
     BasicVec<String> lib_paths;
     BasicVec<String> lib_names;
+    BasicVec<String> fra_names;
     BasicVec<String> def_procs;
     String _comp_dir;
     String CXX;
@@ -97,6 +99,7 @@ protected:
     int nb_threads;
     int dbg_level;
     int opt_level;
+    int system_uses_frameworks;
 
     std::map<String,String> loc_CPPFLAGS; ///< per cpp
 

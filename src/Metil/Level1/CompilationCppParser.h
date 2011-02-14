@@ -18,6 +18,7 @@ public:
 
     BasicVec<String> lib_paths; ///< -L...
     BasicVec<String> lib_names; ///< -l... i.e. recquired .so / .dll / .dylib files
+    BasicVec<String> fra_names; ///< -l... i.e. recquired .so / .dll / .dylib files
     BasicVec<String> inc_paths; ///< -I...
     BasicVec<String> cpp_flags; ///<
     BasicVec<String> lnk_flags; ///<

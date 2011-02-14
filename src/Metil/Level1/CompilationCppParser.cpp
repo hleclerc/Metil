@@ -293,6 +293,10 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                     lib_names << get_pragma_arg( c += 9 );
                     continue;
                 }
+                if ( strncmp( c, "fra_name ", 9 ) == 0 ) {
+                    fra_names << get_pragma_arg( c += 9 );
+                    continue;
+                }
                 if ( strncmp( c, "inc_path ", 9 ) == 0 ) {
                     String path = ce.find_src( get_pragma_arg( c += 9 ), current_dir );
                     if ( not ( path.ends_with( '/' ) or path.ends_with( '\\' ) ) )

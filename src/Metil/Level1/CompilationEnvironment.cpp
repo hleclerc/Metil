@@ -32,6 +32,12 @@ CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch ) : c
         dbg_level        = -1;
         opt_level        = -1;
     }
+
+    #ifdef __APPLE__
+    system_uses_frameworks = 1;
+    #else // __APPLE__
+    system_uses_frameworks = 0;
+    #endif // __APPLE__
 }
 
 String CompilationEnvironment::find_src( const String &filename, const String &current_dir, const BasicVec<String> &add_paths ) const {
@@ -100,6 +106,13 @@ void CompilationEnvironment::add_lib_name( const String &name ) {
         child->add_lib_name( name );
     else
         lib_names.push_back_unique( name );
+}
+
+void CompilationEnvironment::add_fra_name( const String &name ) {
+    if ( child )
+        child->add_fra_name( name );
+    else
+        fra_names.push_back_unique( name );
 }
 
 void CompilationEnvironment::add_CPPFLAG( const String &flag ) {
@@ -353,8 +366,13 @@ String CompilationEnvironment::dep_for( const String &cpp ) {
 void CompilationEnvironment::extra_lnk_cmd( String &cmd, bool lib, bool dyn ) const {
     for( int i = 0; i < lib_paths.size(); ++i )
         cmd << " -L" << lib_paths[ i ];
+    if ( system_uses_frameworks )
+        for( int i = 0; i < lib_paths.size(); ++i )
+            cmd << " -F" << lib_paths[ i ];
     for( int i = 0; i < lib_names.size(); ++i )
         cmd << " -l" << lib_names[ i ];
+    for( int i = 0; i < fra_names.size(); ++i )
+        cmd << ( system_uses_frameworks ? " -framework " : " -l" ) << fra_names[ i ];
     if ( dbg_level > 0 )
         cmd << " -g" << dbg_level;
     if ( LDFLAGS.size() )
@@ -494,6 +512,8 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         add_LDFLAG( cpp_parser.lnk_flags[ i ] );
     for( int i = 0; i < cpp_parser.lib_names.size(); ++i )
         add_lib_name( cpp_parser.lib_names[ i ] );
+    for( int i = 0; i < cpp_parser.fra_names.size(); ++i )
+        add_fra_name( cpp_parser.fra_names[ i ] );
     for( int i = 0; i < cpp_parser.lib_paths.size(); ++i )
         add_lib_path( cpp_parser.lib_paths[ i ] );
 
