@@ -13,8 +13,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include <Level1/CompilationEnvironment.h>
-#include <System.h>
+#include "Metil/Level1/CompilationEnvironment.h"
+#include "Metil/System.h"
 
 using namespace Metil;
 
@@ -54,6 +54,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  src_file additionnal cpp / cu files";
     cerrn << "  lib_path additionnal library (.so/.a) path, like e.g. /usr/local/lib";
     cerrn << "  lib_name additionnal library name (.so/.a), like e.g. pthread";
+    cerrn << "  fra_name additionnal framework name. Means -l on most of the systems, except for Mac Os.";
 }
 
 
