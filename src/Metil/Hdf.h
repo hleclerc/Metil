@@ -38,7 +38,7 @@ public:
 
     // write tensorial data
     template<class T,class TV>
-    void write( const String &name, T *data, TV size, TV rese ) {
+    void write( const String &name, const T *data, TV size, TV rese ) {
         check_grp( name );
         if ( H5Lexists( h5_file, name.c_str(), H5P_DEFAULT ) )
             H5Gunlink( h5_file, name.c_str() );

@@ -22,6 +22,9 @@ Boston, MA 02110-1301, USA.
 #include "TensorOrder.h"
 #include "EnableIf.h"
 
+#include <initializer_list>
+#pragma cpp_flag -std=c++0x
+
 BEG_METIL_NAMESPACE;
 
 template<class T,int s=-1,int p=0>
@@ -325,6 +328,13 @@ public:
 
     BasicVec( const T &v0 ) : _size( 1 ), _rese( 1 * sizeof( T ) ), _data( _alloc() ) {
         new( _data + 0 ) T_( v0 );
+    }
+
+    template<class T0>
+    BasicVec( const std::initializer_list<T0> &lst ) : _size( lst.size() ), _rese( lst.size() * sizeof( T ) ), _data( _alloc() ) {
+        ST cpt = 0;
+        for( const T0 *i = lst.begin(); i != lst.end(); ++i, ++cpt )
+            new( _data + cpt ) T_( *i );
     }
 
     template<class T0>
