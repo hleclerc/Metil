@@ -324,7 +324,7 @@ String CompilationEnvironment::lib_suffix( bool dyn ) {
 }
 
 String CompilationEnvironment::exe_suffix() {
-    return String();
+    return ".exe";
 }
 
 String CompilationEnvironment::dep_suffix() {
