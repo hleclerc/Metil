@@ -615,6 +615,13 @@ public:
         BasicVec<int,1> s( size() );
         hdf.write( name, ptr(), s );
     }
+    
+    template<class Hdf,class TS>
+    void write_to( Hdf &hdf, const TS &name , BasicVec<TS> &tags, BasicVec<TS> &tags_value) {
+        BasicVec<int,1> s( size() );
+        hdf.write( name, ptr(), s , tags, tags_value);
+    }
+    
 
     template<class Hdf,class TS>
     void read_from( const Hdf &hdf, const TS &name ) {
@@ -624,6 +631,16 @@ public:
         resize( s[ 0 ] );
         // data
         hdf.read_data( name, ptr(), s, s );
+    }
+    
+    template<class Hdf,class TS>
+    void read_from( const Hdf &hdf, const TS &name , BasicVec<TS> &tags, BasicVec<TS> &tags_value) {
+        // size
+        BasicVec<int,1> s;
+        hdf.read_size( name, s );
+        resize( s[ 0 ] );
+        // data
+        hdf.read_data( name, ptr(), s, s, tags, tags_value );
     }
 
     T *begin() { return _data;              }
