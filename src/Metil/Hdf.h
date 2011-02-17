@@ -104,6 +104,33 @@ public:
         H5Dclose( dataset   );
     }
 
+    template<class TS, class TTV>
+    void add_tag( const String &name , TS &tag, TTV tag_value) {
+        hid_t dataset = H5Gopen( h5_file, name.c_str() );
+
+        //Add tags and corresponding values to a dataset
+        herr_t ret;
+        hid_t aid, atype, attr;
+        
+        aid  = H5Screate(H5S_SCALAR);
+        attr = H5Acreate(dataset, tag, H5_type<TTV>::res(), aid,H5P_DEFAULT);
+        ret = H5Awrite(attr, H5_type<TTV>::res(), &tag_value);
+        ret = H5Sclose(aid);
+        ret = H5Aclose(attr);
+        H5Gclose( dataset   );
+    }
+
+    template<class TS, class TTV>
+    void read_tag( const String &name , TS &tag, TTV &tag_value) {
+        hid_t dataset = H5Gopen( h5_file, name.c_str() );
+        hid_t  attr;
+        herr_t ret;
+        attr = H5Aopen_name(dataset,tag);
+        ret  = H5Aread(attr, H5_type<TTV>::res(), &tag_value);
+        ret = H5Aclose(attr);
+        H5Gclose( dataset   );
+    }
+
 
     template<class TS>
     void add_tags( const String &name , TS &tags, TS &tags_value) {
@@ -126,6 +153,7 @@ public:
         } 
         H5Gclose( dataset   );
     }
+    
 
     template<class TS>
     void read_tags( const String &name , TS &tags, TS &tags_value) {
