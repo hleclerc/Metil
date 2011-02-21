@@ -56,6 +56,7 @@ bool CompilationCppParser::init_using_dep( CompilationEnvironment &ce, const Str
 
     load_dep_vec( c, lib_paths );
     load_dep_vec( c, lib_names );
+    load_dep_vec( c, fra_names );
     load_dep_vec( c, inc_paths );
     load_dep_vec( c, cpp_flags );
     load_dep_vec( c, lnk_flags );
@@ -109,6 +110,7 @@ CompilationCppParser::~CompilationCppParser() {
 
     save_dep_vec( fd, lib_paths );
     save_dep_vec( fd, lib_names );
+    save_dep_vec( fd, fra_names );
     save_dep_vec( fd, inc_paths );
     save_dep_vec( fd, cpp_flags );
     save_dep_vec( fd, lnk_flags );

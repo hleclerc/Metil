@@ -22,6 +22,11 @@ Boston, MA 02110-1301, USA.
 #include "TensorOrder.h"
 #include "EnableIf.h"
 
+#ifdef ALLOW_Cpp0X
+#include <initializer_list>
+#pragma cpp_flag -std=c++0x
+#endif // ALLOW_Cpp0X
+
 BEG_METIL_NAMESPACE;
 
 template<class T,int s=-1,int p=0>
@@ -327,6 +332,15 @@ public:
         new( _data + 0 ) T_( v0 );
     }
 
+    #ifdef ALLOW_Cpp0X
+    template<class T0>
+    BasicVec( const std::initializer_list<T0> &lst ) : _size( lst.size() ), _rese( lst.size() * sizeof( T ) ), _data( _alloc() ) {
+        ST cpt = 0;
+        for( const T0 *i = lst.begin(); i != lst.end(); ++i, ++cpt )
+            new( _data + cpt ) T_( *i );
+    }
+    #endif // ALLOW_Cpp0X
+
     template<class T0>
     BasicVec( const T0 &v0, typename EnableIf<TensorOrder<T0>::res==0,Nawak>::T = Nawak() ) : _size( 1 ), _rese( 1 * sizeof( T ) ), _data( _alloc() ) {
         new( _data + 0 ) T_( v0 );
@@ -601,6 +615,13 @@ public:
         BasicVec<int,1> s( size() );
         hdf.write( name, ptr(), s );
     }
+    
+    template<class Hdf,class TS>
+    void write_to( Hdf &hdf, const TS &name , BasicVec<TS> &tags, BasicVec<TS> &tags_value) {
+        BasicVec<int,1> s( size() );
+        hdf.write( name, ptr(), s , tags, tags_value);
+    }
+    
 
     template<class Hdf,class TS>
     void read_from( const Hdf &hdf, const TS &name ) {
@@ -610,6 +631,16 @@ public:
         resize( s[ 0 ] );
         // data
         hdf.read_data( name, ptr(), s, s );
+    }
+    
+    template<class Hdf,class TS>
+    void read_from( const Hdf &hdf, const TS &name , BasicVec<TS> &tags, BasicVec<TS> &tags_value) {
+        // size
+        BasicVec<int,1> s;
+        hdf.read_size( name, s );
+        resize( s[ 0 ] );
+        // data
+        hdf.read_data( name, ptr(), s, s, tags, tags_value );
     }
 
     T *begin() { return _data;              }

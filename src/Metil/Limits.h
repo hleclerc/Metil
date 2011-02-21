@@ -20,6 +20,8 @@ BEG_METIL_NAMESPACE;
 
 template<class T>
 struct Limits {
+    static __inline__ T min() { return std::numeric_limits<T>::min(); }
+    static __inline__ T max() { return std::numeric_limits<T>::max(); }
 };
 
 template<>
