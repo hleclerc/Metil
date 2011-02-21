@@ -27,6 +27,10 @@ struct BasicMat<T_,dim,true> {
         data += m.data;
     }
 
+    __inline__ void operator=( const T &v ) {
+        data = v;
+    }
+
     __inline__ void set( T val ) { data.set( val ); }
 
     __inline__ void chol( int d = dim ) {
