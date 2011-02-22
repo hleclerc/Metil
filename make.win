@@ -1,7 +1,18 @@
-alias make=/C/Qt/2010.05/mingw/bin/mingw32-make
-alias g++=/C/Qt/2010.05/mingw/bin/g++
-alias gcc=/C/Qt/2010.05/mingw/bin/gcc
-alias python=/C/python27/python
+for i in /C/Qt/20*/mingw/bin
+do
+    MINGW=$i
+done
+
+alias make=$MINGW/mingw32-make
+alias g++=$MINGW/g++
+alias gcc=$MINGW/gcc
+
+for i in /C/python*/python
+do
+    PYTHON=$i
+done
+
+alias python=$PYTHON
 
 make inst_dir
 make -j8 metil_comp_win
