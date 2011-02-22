@@ -2,16 +2,16 @@ LOC_MC = ./metil_comp --comp-dir compilations -Isrc
 PRG = tests/test.cpp
 INSTALL = `pwd`
 
-all: make_metil_comp
-
-my:
-	echo ${CC}
+all: metil_comp
 
 inst_dir:
 	export D="#define INSTALL_DIR \"${INSTALL}\""; grep "$$D" src/Metil/Level1/InstallDir.h || echo "$$D" > src/Metil/Level1/InstallDir.h
 
-make_metil_comp: inst_dir
-	${MAKE} -j8 metil_comp
+metil_comp: inst_dir
+	${MAKE} -j8 -f metil_comp.mk
+	
+metil_comp_win: inst_dir
+	${MAKE} -j8 -f metil_comp_win.mk
 
 install: ./metil_comp
 	./install.sh
@@ -59,10 +59,10 @@ clean:
 
 metil_comp_mk:
 	${LOC_MC} --static -make metil_comp.mk -o ./metil_comp -g3 -O3 src/metil_comp.cpp
+	${LOC_MC} -DWIN32 --static -make metil_comp_win.mk -o ./metil_comp.exe -O3 src/metil_comp.cpp
 	sed -i -e s@`pwd`/@@g metil_comp.mk
+	sed -i -e s@`pwd`/@@g metil_comp_win.mk
 
 c: 
 	make metil_comp_mk
 	make clean
-
-include metil_comp.mk

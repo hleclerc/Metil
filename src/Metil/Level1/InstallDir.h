@@ -1,1 +1,1 @@
-#define INSTALL_DIR "c:/Documents and Settings/LeGlaude/Metil-test"
+#define INSTALL_DIR "/home/leclerc/Metil"
