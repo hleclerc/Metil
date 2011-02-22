@@ -1,0 +1,7 @@
+alias make=/C/Qt/2010.05/mingw/bin/mingw32-make
+alias g++=/C/Qt/2010.05/mingw/bin/g++
+alias gcc=/C/Qt/2010.05/mingw/bin/gcc
+alias python=/C/python27/python
+
+
+include Makefile
