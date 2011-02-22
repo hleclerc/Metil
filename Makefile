@@ -59,7 +59,7 @@ clean:
 
 metil_comp_mk:
 	${LOC_MC} --static -make metil_comp.mk -o ./metil_comp -g3 -O3 src/metil_comp.cpp
-	${LOC_MC} -DWIN32 --static -make metil_comp_win.mk -o ./metil_comp_win.exe -O3 src/metil_comp.cpp
+	${LOC_MC} -DWIN32 --static -make metil_comp_win.mk -o ./metil_comp.exe -O3 src/metil_comp.cpp
 	sed -i -e s@`pwd`/@@g metil_comp.mk
 	sed -i -e s@`pwd`/@@g metil_comp_win.mk
 
