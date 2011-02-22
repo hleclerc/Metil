@@ -162,6 +162,11 @@ static void skip_lines_until_endif_or_else( const char *&c ) {
                 continue;
             }
         }
+        // #if...
+        if ( c[ 0 ] == '#' and c[ 1 ] == 'i' and c[ 2 ] == 'f' ) {
+            skip_lines_until_endif_or_else( c += 3 );
+            continue;
+        }
         // #endif, #else, #elif
         if ( c[ 0 ] == '#' and c[ 1 ] == 'e' ) {
             if ( c[ 2 ] == 'n' and c[ 3 ] == 'd' and c[ 4 ] == 'i' and c[ 5 ] == 'f' ) {
