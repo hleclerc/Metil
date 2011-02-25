@@ -8,6 +8,8 @@
 BEG_METIL_NAMESPACE
 
 #define CEIL( a, b ) ( ( a + b - 1 ) / b * b )
+#define MAX( a, b ) ( (a) < (b) ? (b) : (a) )
+#define MIN( a, b ) ( (a) > (b) ? (b) : (a) )
 
 template<class T> __inline__ bool is_positive( T a  ) { return a > 0; }
 template<class T> __inline__ bool is_negative( T a  ) { return a < 0; }
@@ -185,9 +187,6 @@ inline FP80 pow( FP64 a, FP80 b ) { return __builtin_powl( a, b ); }
 inline FP32 pow( FP80 a, FP32 b ) { return __builtin_powf( a, b ); }
 inline FP64 pow( FP80 a, FP64 b ) { return __builtin_pow ( a, b ); }
 inline FP80 pow( FP80 a, FP80 b ) { return __builtin_powl( a, b ); }
-
-#define MAX( a, b ) ( (a) < (b) ? (b) : (a) )
-#define MIN( a, b ) ( (a) > (b) ? (b) : (a) )
 
 template<class T> __inline__ T min( const T &a, const T &b ) { return MIN( a, b ); }
 template<class T> __inline__ T max( const T &a, const T &b ) { return MAX( a, b ); }
