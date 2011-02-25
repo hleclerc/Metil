@@ -292,7 +292,6 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                                     if ( ce_inc_paths[ i ].find( "LMT" ) >= 0 )
                                         f << ",'" << ce_inc_paths[ i ].beg_upto( ce_inc_paths[ i ].find( "/include" ) ) << "/formulations'";
                                 f << "],\n";
-                                // = ['.',os.getcwd()+'/LMT/formulations'],
                                 f << ")\n";
                                 // f << "    options = { 'behavior_simplification' : 'plane stress', 'behavior_law' : s },
                                 // f << "    # name_der_vars = [ "frac_E2", "frac_G12", "nu12" ] #
