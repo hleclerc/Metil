@@ -162,6 +162,23 @@ struct CudaReductionSumSquare {
     T res;
 };
 
+/**
+  Example to sum a vector of TF:
+@code
+CudaReductionSum<TF> sum;
+cuda_reduction( sum, data, size );
+PRINT( sum.res );
+@endcode
+
+*/
+template<class T>
+struct CudaReductionSum {
+    __inline__ CudaReductionSum() { res = 0; }
+    __inline__ void reduction( T v0 ) { res += v0; }
+    __inline__ void reduction( const CudaReductionSum &val ) { res += val.res; }
+    T res;
+};
+
 END_METIL_NAMESPACE;
 
 #endif // CUDAREDUCTION_H
