@@ -4,12 +4,27 @@
 
 BEG_METIL_NAMESPACE;
 
-DynamicCppLib::DynamicCppLib( const String &cpp_file ) {
+DynamicCppLib::DynamicCppLib( const String &_cpp_name, const CppMaker &cpp_maker ) {
+    Level1::CompilationEnvironment &ce = Level1::CompilationEnvironment::get_main_compilation_environment();
+    String cpp_name = ce.comp_dir() + _cpp_name;
+    if ( not file_exists( cpp_name ) ) {
+        File cpp_file( cpp_name, "w" );
+        StringWithSepInCppLineMaker cnn_file( cpp_file );
+        cpp_maker( cpp_file, cnn_file );
+    }
+    make_and_open( cpp_name );
+}
+
+DynamicCppLib::DynamicCppLib( const String &cpp_name ) {
+    make_and_open( cpp_name );
+}
+
+void DynamicCppLib::make_and_open( const String &cpp_name ) {
     Level1::CompilationEnvironment &ce = Level1::CompilationEnvironment::get_main_compilation_environment();
     // ce.add_macro( "METIL_GENE_DYLIB" );
 
-    String lib_file = ce.lib_for( cpp_file, true );
-    ce.make_lib( lib_file, cpp_file, true );
+    String lib_file = ce.lib_for( cpp_name, true );
+    ce.make_lib( lib_file, cpp_name, true );
 
     // open the .so
     lib.open( lib_file );

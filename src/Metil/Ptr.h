@@ -50,21 +50,21 @@ void foo() {
 template<class T>
 struct Ptr {
     Ptr() : data( 0 ) {}
-    Ptr( T *obj ) : data( obj ) {}
+    Ptr( T *obj ) : data( obj ) { if ( data ) ++data->cpt_use; }
     Ptr( const Ptr &obj ) : data( obj.data ) { if ( data ) ++data->cpt_use; }
 
     template<class U>
     Ptr( const Ptr<U> &obj ) : data( obj.data ) { if ( data ) ++data->cpt_use; }
 
     ~Ptr() {
-        if ( data and --data->cpt_use < 0 )
+        if ( data and --data->cpt_use <= 0 )
             DEL( data );
     }
 
     Ptr &operator=( const Ptr &obj ) {
         if ( obj.data )
             ++obj.data->cpt_use;
-        if ( data and --data->cpt_use < 0 )
+        if ( data and --data->cpt_use <= 0 )
             DEL( data );
         data = obj.data;
         return *this;
@@ -74,7 +74,7 @@ struct Ptr {
     Ptr &operator=( const Ptr<U> &obj ) {
         if ( obj.data )
             ++obj.data->cpt_use;
-        if ( data and --data->cpt_use < 0 )
+        if ( data and --data->cpt_use <= 0 )
             DEL( data );
         data = obj.data;
         return *this;
@@ -104,19 +104,19 @@ struct Ptr {
 template<class T>
 struct ConstPtr {
     ConstPtr() : data( 0 ) {}
-    ConstPtr( const T *obj ) : data( obj ) {}
+    ConstPtr( const T *obj ) : data( obj ) { if ( data ) ++data->cpt_use; }
     ConstPtr( const Ptr<T> &obj ) : data( obj.data ) { if ( data ) ++data->cpt_use; }
     ConstPtr( const ConstPtr<T> &obj ) : data( obj.data ) { if ( data ) ++data->cpt_use; }
 
     ~ConstPtr() {
-        if ( data and --data->cpt_use < 0 )
+        if ( data and --data->cpt_use <= 0 )
             DEL( data );
     }
 
     ConstPtr &operator=( const ConstPtr<T> &obj ) {
         if ( obj.data )
             ++obj.data->cpt_use;
-        if ( data and --data->cpt_use < 0 )
+        if ( data and --data->cpt_use <= 0 )
             DEL( data );
         data = obj.data;
         return *this;
@@ -125,7 +125,7 @@ struct ConstPtr {
     ConstPtr &operator=( const Ptr<T> &obj ) {
         if ( obj.data )
             ++obj.data->cpt_use;
-        if ( data and --data->cpt_use < 0 )
+        if ( data and --data->cpt_use <= 0 )
             DEL( data );
         data = obj.data;
         return *this;

@@ -365,7 +365,7 @@ String CompilationEnvironment::dep_for( const String &cpp ) {
 
 void CompilationEnvironment::extra_lnk_cmd( String &cmd, bool lib, bool dyn ) const {
     for( int i = 0; i < lib_paths.size(); ++i )
-        cmd << " -L" << lib_paths[ i ];
+        cmd << " -L'" << lib_paths[ i ] << "'";
     if ( system_uses_frameworks )
         for( int i = 0; i < lib_paths.size(); ++i )
             cmd << " -F" << lib_paths[ i ];
@@ -391,7 +391,7 @@ void CompilationEnvironment::extra_obj_cmd( String &cmd, bool dyn, bool cu, cons
     }
 
     for( int i = 0; i < inc_paths.size(); ++i )
-        cmd << " -I" << inc_paths[ i ];
+        cmd << " -I'" << inc_paths[ i ] << "'";
 
     for( int i = 0; i < def_procs.size(); ++i )
         cmd << " -D" << def_procs[ i ];
@@ -425,9 +425,9 @@ String CompilationEnvironment::lnk_cmd( const String &exe, const BasicVec<String
     if ( lib )
         cmd << ( dyn ? " -shared" : " -static" );
     // input / output
-    cmd << " -o " << exe;
+    cmd << " -o '" << exe << "'";
     for( int i = 0; i < obj.size(); ++i )
-        cmd << ' ' << obj[ i ];
+        cmd << " '" << obj[ i ] << "'";
     // -L... -l...
     extra_lnk_cmd( cmd, lib, dyn );
     return cmd;
@@ -454,7 +454,7 @@ String CompilationEnvironment::obj_cmd( const String &obj, const String &cpp, bo
     // -L... -l... -g...
     extra_obj_cmd( cmd, dyn, cu, cpp );
     // input / output
-    cmd << " -c -o " << obj << ' ' << cpp;
+    cmd << " -c -o '" << obj << "' '" << cpp << "'";
     return cmd;
 }
 
