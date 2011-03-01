@@ -295,4 +295,6 @@ examples/server/server_objects_wrap.cpp
 examples/server/BasicMesh.py
 examples/server/test.py
 examples/server/server_objects.py
-src/Metil/StaticBasicVec.h
+src/Metil/HttpServer.h
+src/Metil/HttpServer.cpp
+tests/test_HttpServer.cpp
