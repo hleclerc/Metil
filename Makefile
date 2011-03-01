@@ -6,7 +6,7 @@ all: make_metil_comp
 
 make_metil_comp:
 	export D="#define INSTALL_DIR \"${INSTALL}\""; grep "$$D" src/Metil/Level1/InstallDir.h || echo "$$D" > src/Metil/Level1/InstallDir.h
-	make -j8 metil_comp
+	make -j2 metil_comp
 
 install: ./metil_comp
 	./install.sh
