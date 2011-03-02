@@ -28,21 +28,64 @@ HttpServer::HttpServer() {
 HttpServer::~HttpServer() {
 }
 
+static int find_n( const char *data, int size ) {
+    for( int i = 0; i < size; ++i )
+        if ( data[ i ] == '\n' )
+            return i;
+    return -1;
+}
+
+static int find_s( const char *data ) {
+    for( int i = 0; data[ i ]; ++i )
+        if ( data[ i ] == ' ' )
+            return i;
+    return -1;
+}
+
 static void read_requ( String &inp, String &dat, int sd_current ) {
-    char data[ 1024 ];
-    String line;
+    // read first line
+    String line, extr;
     while ( true ) {
-        int len = read( sd_current, data, sizeof data );
+        char data[ 1024 ];
+        int size = read( sd_current, data, 1024 );
+        int posn = find_n( data, size );
+        if ( posn >= 0 ) {
+            line << String( NewString( data, data + posn ) );
+            extr << String( NewString( data + posn + 1, data + size ) );
+            break;
+        }
+        line << String( NewString( data, data + size ) );
     }
 
-    if (  ) {
+    // analyze first line
+    if ( line.begins_by( "GET " ) ) {
+        const char *l = line.c_str();
+        int poss = find_s( l + 4 );
+        if ( poss >= 0 )
+            inp = NewString( l + 4, l + 4 + poss );
     }
+    // PRINT( extr );
 
-//    while ( true ) {
-//        for( int i = 0; i < len + 1; ++i )
-//            PRINT( int( data[ i ] ) );
-//        inp << String( NewString( data, data + len ) );
-//        break;
+    //
+
+//    String extr;
+//    for( bool cont = true; cont; ) {
+//        char data[ 1024 ];
+//        int len = read( sd_current, data, sizeof data );
+//        for( int i = 0; i < len; ++i ) {
+//            if ( data[ i ] == '\n' ) {
+//                line << String( NewString( data, data + i ) );
+//                extr << String( NewString( data + i + 1, data + len ) );
+//                if ( line.begins_by( "GET" ) ) {
+
+//                    cont = false;
+//                } else {
+//                    PRINT( line );
+//                    PRINT( extr );
+//                }
+//                break;
+//            }
+//        }
 //    }
 }
 
@@ -66,10 +109,8 @@ bool HttpServer::run( int port ) {
 
     // bind the socket to the port number
     int rb = bind( sd, (struct sockaddr *)&sin, sizeof sin );
-    PRINT( rb );
     if ( rb == -1 )
         return false;
-    PRINT( port );
 
     // show that we are willing to listen
     SC( listen( sd, 5 ) );
@@ -82,7 +123,6 @@ bool HttpServer::run( int port ) {
         // read input data. We assume that the message is ended by a void STDIN
         String inp, dat;
         read_requ( inp, dat, sd_current );
-        PRINT( inp );
 
         // request
         Socket out( sd_current );
