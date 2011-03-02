@@ -120,6 +120,12 @@ __inline__ T max( const BasicVec<T,dim> &a ) { T res = a[ 0 ]; for( int i = 1; i
 template<class T,int dim>
 __inline__ T product( const BasicVec<T,dim> &a ) { T res = 1; for( int i = 0; i < a.size(); ++i ) res *= a[ i ]; return res; }
 
+template<class T,int dim>
+__inline__ T sum( const BasicVec<T,dim> &a ) { T res = 0; for( int i = 0; i < a.size(); ++i ) res += a[ i ]; return res; }
+
+template<class T,int dim>
+__inline__ T mean( const BasicVec<T,dim> &a ) { return sum( a ) / a.size(); }
+
 /// [ a b c d ] -> [ 1 a a*b a*b*c ]
 template<class T,int dim>
 __inline__ BasicVec<T,dim> cum( const BasicVec<T,dim> &S ) {

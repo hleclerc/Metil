@@ -1,5 +1,6 @@
 #include "CompilationCppParser.h"
 #include "StringHelp.h"
+#include "../Tokenize.h"
 #include "../System.h"
 
 BEG_METIL_LEVEL1_NAMESPACE;
@@ -162,6 +163,11 @@ static void skip_lines_until_endif_or_else( const char *&c ) {
                 continue;
             }
         }
+        // #if...
+        if ( c[ 0 ] == '#' and c[ 1 ] == 'i' and c[ 2 ] == 'f' ) {
+            skip_lines_until_endif_or_else( c += 3 );
+            continue;
+        }
         // #endif, #else, #elif
         if ( c[ 0 ] == '#' and c[ 1 ] == 'e' ) {
             if ( c[ 2 ] == 'n' and c[ 3 ] == 'd' and c[ 4 ] == 'i' and c[ 5 ] == 'f' ) {
@@ -257,13 +263,55 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                     String bas_name = get_include_filename( c += 9 );
                     String inc_file = ce.find_src( bas_name, current_dir, inc_paths );
 
+                    // formulation.
+                    if ( not inc_file ) {
+                        int form_ind = bas_name.find( "formulation." );
+                        if ( form_ind >= 0 and bas_name != "formulation.h" ) {
+                            String h_py = bas_name + ".py";
+                            if ( not file_exists( h_py ) ) {
+                                int beg_form = form_ind + 12;
+                                int end_form = bas_name.find( ".", beg_form );
+                                String form = bas_name.beg_upto( end_form ).end_from( beg_form );
+
+                                int beg_elem = end_form + 1;
+                                int end_elem = bas_name.find( ".", beg_elem );
+                                String elem = bas_name.beg_upto( end_elem ).end_from( beg_elem );
+                                BasicVec<String> elem_list = tokenize( elem, ',' );
+
+                                File f( h_py, "w" );
+                                f << "from formal_lf import *\n";
+                                f << "write_pb(\n";
+                                f << "    name = '" << form << "',\n";
+                                f << "    formulations = ['" << form << "'],\n";
+                                f << "    elements = [";
+                                for( int i = 0; i < elem_list.size(); ++i )
+                                    f << ( i ? ",'" : "'" ) << elem_list[ i ] << "'";
+                                f << "],\n";
+                                f << "    incpaths = ['.'";
+                                for( int i = 0; i < ce_inc_paths.size(); ++i )
+                                    if ( ce_inc_paths[ i ].find( "LMT" ) >= 0 )
+                                        f << ",'" << ce_inc_paths[ i ].beg_upto( ce_inc_paths[ i ].find( "/include" ) ) << "/formulations'";
+                                f << "],\n";
+                                f << ")\n";
+                                // f << "    options = { 'behavior_simplification' : 'plane stress', 'behavior_law' : s },
+                                // f << "    # name_der_vars = [ "frac_E2", "frac_G12", "nu12" ] #
+                            }
+                        }
+                    }
+
                     // .h.py ?
                     if ( bas_name.ends_with( ".h" ) ) {
                         if ( String h_py = ce.find_src( bas_name + ".py", current_dir ) ) {
                             inc_file = h_py.beg_upto( h_py.size() - 3 );
                             if ( last_modification_time_or_zero_of_file_named( h_py ) >
                                  last_modification_time_or_zero_of_file_named( inc_file ) ) {
-                                exec_cmd( "export PYTHONPATH=\".:$PYTHONPATH\"; python " + h_py + " > " + inc_file, true );
+                                String cmd;
+                                cmd << "export PYTHONPATH=\".";
+                                for( int i = 0; i < ce_inc_paths.size(); ++i )
+                                    if ( ce_inc_paths[ i ].find( "LMT" ) >= 0 )
+                                        cmd << ":" << ce_inc_paths[ i ].beg_upto( ce_inc_paths[ i ].find( "/include" ) );
+                                cmd << ":$PYTHONPATH\"; python " << h_py << " > " << inc_file;
+                                exec_cmd( cmd, true );
                             }
                         }
                     }

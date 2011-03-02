@@ -1,0 +1,20 @@
+for i in /C/Qt/20*/mingw/bin
+do
+    MINGW=$i
+done
+
+alias make=$MINGW/mingw32-make
+alias g++=$MINGW/g++
+alias gcc=$MINGW/gcc
+
+for i in /C/python*/python
+do
+    PYTHON=$i
+done
+
+alias python=$PYTHON
+
+make inst_dir
+make -j8 metil_comp_win
+mkdir -p ~/bin
+cp metil_comp.exe ~/bin
