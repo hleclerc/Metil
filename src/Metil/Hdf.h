@@ -71,71 +71,33 @@ public:
     }
     
     template<class TS>
-    void add_tag( const String &name , TS &tag, const char * tag_value) {
+    void add_tag( const String &name, TS &tag, const char * tag_value) {
         hid_t dataset = H5Gopen( h5_file, name.c_str() );
+        hid_t aid     = H5Screate( H5S_SCALAR );
+        hid_t atype   = H5Tcopy( H5T_C_S1 );
 
-        //Add tags and corresponding values to a dataset
-        herr_t ret;
-        hid_t aid, atype, attr;
-        aid  = H5Screate(H5S_SCALAR);
-        atype = H5Tcopy(H5T_C_S1);
-        ret = H5Tset_size (atype, H5T_VARIABLE);
-        attr = H5Acreate(dataset, tag, atype, aid, H5P_DEFAULT);
-        ret = H5Awrite(attr, atype, &tag_value);       
-        ret = H5Sclose(aid);
-        ret = H5Aclose(attr);
-        H5Gclose( dataset   );
+        H5Tset_size( atype, H5T_VARIABLE );
+        hid_t attr = H5Acreate( dataset, tag, atype, aid, H5P_DEFAULT );
+        H5Awrite( attr, atype, &tag_value );
+
+        H5Sclose( aid     );
+        H5Aclose( attr    );
+        H5Gclose( dataset );
     }
 
     template<class TS, class TTV>
-    void add_tag( const String &name , TS &tag, TTV tag_value) {
+    void add_tag( const String &name, TS &tag, TTV tag_value) {
         hid_t dataset = H5Gopen( h5_file, name.c_str() );
+        hid_t aid     = H5Screate( H5S_SCALAR );
+        hid_t attr    = H5Acreate( dataset, tag, H5_type<TTV>::res(), aid, H5P_DEFAULT );
 
-        //Add tags and corresponding values to a dataset
-        herr_t ret;
-        hid_t aid, atype, attr;
-        aid  = H5Screate(H5S_SCALAR);
-        attr = H5Acreate(dataset, tag, H5_type<TTV>::res(), aid, H5P_DEFAULT);
-        ret = H5Awrite(attr, H5_type<TTV>::res(), &tag_value);       
-        ret = H5Sclose(aid);
-        ret = H5Aclose(attr);
-        H5Gclose( dataset   );
+        H5Awrite( attr, H5_type<TTV>::res(), &tag_value );
+
+        H5Sclose( aid     );
+        H5Aclose( attr    );
+        H5Gclose( dataset );
     }
 
-
-
-
-    template<class TS, class TTV>
-    void read_tag( const String &name , TS &tag, TTV &tag_value) {
-        hid_t dataset = H5Gopen( h5_file, name.c_str() );
-        /* hid_t dataset = H5Dopen( h5_file, name.c_str() ); */
-        hid_t  attr;
-        herr_t ret;
-        attr = H5Aopen_name(dataset,tag);
-        ret  = H5Aread(attr, H5_type<TTV>::res(), &tag_value);
-        ret = H5Aclose(attr);
-        H5Gclose( dataset   );
-    }
-
-    template<class TS>
-    void read_tag( const String &name , TS &tag, String &tag_value){
-        hid_t  attr, ftype, atype;
-        herr_t ret;
-        size_t size_string;
-        char *string_attr[1];
-        hid_t dataset = H5Gopen( h5_file, name.c_str() );
-        attr = H5Aopen_name(dataset, tag);
-        ftype = H5Aget_type(attr);
-        size_string = H5Tget_size(ftype);
-        atype = H5Tget_native_type(ftype, H5T_DIR_ASCEND);
-        ret = H5Aread(attr, atype, &string_attr);
-        tag_value << string_attr[0];
-        free(string_attr[0]);
-        ret = H5Aclose(attr);
-        ret = H5Tclose(atype);
-        H5Gclose( dataset   );
-    }
-    
     template<class TS, class TTV>
     void write_tag( const String &name, TS &tag, TTV tag_value ) {
         hid_t dat = H5Gopen  ( h5_file, name.c_str() );
@@ -143,18 +105,37 @@ public:
         hid_t att = H5Acreate( dat, tag, H5_type<TTV>::res(), aid, H5P_DEFAULT );
 
         H5Awrite( att, H5_type<TTV>::res(), &tag_value );
+
         H5Sclose( aid );
         H5Aclose( att );
         H5Gclose( dat );
     }
 
 
-    template<class TS>
-    void read_group_size( TS &name, int &size ) const {
+
+    template<class TTV>
+    void read_tag( const String &name, const String &tag, TTV &tag_value, bool group = true ) {
+        hid_t dataset = group ? H5Gopen( h5_file, name.c_str() ) : H5Dopen( h5_file, name.c_str() );
+        hid_t attr    = H5Aopen_name( dataset, tag );
+
+        H5Aread( attr, H5_type<TTV>::res(), &tag_value );
+
+        H5Aclose( attr    );
+        if ( group )
+            H5Gclose( dataset );
+        else
+            H5Dclose( dataset );
+    }
+
+    void read_tag( const String &name, const String &tag, String &tag_value, bool group = true );
+
+    void read_group_size( const String &name, int &size ) const {
         hid_t dataset = H5Gopen( h5_file, name.c_str() );
+
         H5G_info_t group_info;
-        herr_t err=H5Gget_info( dataset, &group_info );
-        size=group_info.nlinks;
+        H5Gget_info( dataset, &group_info );
+        size = group_info.nlinks;
+
         H5Gclose(dataset);
     }
 

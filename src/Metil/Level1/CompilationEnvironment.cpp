@@ -385,10 +385,10 @@ void CompilationEnvironment::extra_obj_cmd( String &cmd, bool dyn, bool cu, cons
     if ( cu ) {
         if ( GPUFLAGS.size() )
             cmd << ' ' << GPUFLAGS;
+    } else {
+        if ( CPPFLAGS.size() )
+            cmd << ' ' << CPPFLAGS;
     }
-
-    if ( CPPFLAGS.size() )
-        cmd << ' ' << CPPFLAGS;
 
     for( int i = 0; i < inc_paths.size(); ++i )
         cmd << " -I'" << inc_paths[ i ] << "'";
