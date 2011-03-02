@@ -59,5 +59,20 @@ void Hdf::read_tag( const String &name, const String &tag, String &tag_value, bo
         H5Dclose( dataset );
 }
 
+void Hdf::read_group_size( const String &name, int &size ) const {
+    hid_t dataset = H5Gopen( h5_file, name.c_str() );
+
+    H5G_info_t group_info;
+    H5Gget_info( dataset, &group_info );
+    size = group_info.nlinks;
+
+    H5Gclose(dataset);
+}
+
+void Hdf::read_size( const String &name, int &size ) const {
+    BasicVec<int> size_vec;
+    read_size( name, size_vec );
+    size = size_vec[ 0 ];
+}
 
 END_METIL_NAMESPACE;

@@ -120,7 +120,7 @@ public:
 
         H5Aread( attr, H5_type<TTV>::res(), &tag_value );
 
-        H5Aclose( attr    );
+        H5Aclose( attr );
         if ( group )
             H5Gclose( dataset );
         else
@@ -128,33 +128,8 @@ public:
     }
 
     void read_tag( const String &name, const String &tag, String &tag_value, bool group = true );
-
-    void read_group_size( const String &name, int &size ) const {
-        hid_t dataset = H5Gopen( h5_file, name.c_str() );
-
-        H5G_info_t group_info;
-        H5Gget_info( dataset, &group_info );
-        size = group_info.nlinks;
-
-        H5Gclose(dataset);
-    }
-
-    template<class TS>
-    void read_data_size( TS &name, int &size_dataset ) const {
-        hid_t dataset = H5Dopen( h5_file, name.c_str() );
-        hid_t dataspace = H5Dget_space( dataset );
-        //
-        BasicVec<int> size;
-        BasicVec<hsize_t> tmp( Size(), H5Sget_simple_extent_ndims( dataspace ) );
-        H5Sget_simple_extent_dims( dataspace, tmp.ptr(), NULL );
-        size.resize( tmp.size() );
-        for( int d = 0; d < tmp.size(); ++d )
-            size[ tmp.size() - 1 - d ] = tmp[ d ];
-        //
-        size_dataset=size[0];
-        H5Dclose(dataset);
-        H5Sclose(dataspace);
-    }
+    void read_group_size( const String &name, int &size ) const;
+    void read_size( const String &name, int &size ) const;
 
     template<class TV>
     void read_size( const String &name, TV &size ) const {
@@ -167,8 +142,8 @@ public:
         for( int d = 0; d < tmp.size(); ++d )
             size[ tmp.size() - 1 - d ] = tmp[ d ];
         //
-        H5Dclose(dataset);
-        H5Sclose(dataspace);
+        H5Dclose( dataset   );
+        H5Sclose( dataspace );
     }
 
     template<class T,class TV>
