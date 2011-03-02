@@ -127,6 +127,7 @@ static String get_include_filename( const char *b, bool &syst ) {
     // skip spaces
     skip_spaces_but_not_cr( b );
     //
+    syst = ( *b == '<' );
     const char *e = NULL;
     if ( *b == '<' )
         for( e = ++b; *e and *e != '>'; ++e );

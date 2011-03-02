@@ -108,7 +108,7 @@ public:
     template<class TS, class TTV>
     void read_tag( const String &name , TS &tag, TTV &tag_value) {
         hid_t dataset = H5Gopen( h5_file, name.c_str() );
-/*        hid_t dataset = H5Dopen( h5_file, name.c_str() );*/
+        /* hid_t dataset = H5Dopen( h5_file, name.c_str() ); */
         hid_t  attr;
         herr_t ret;
         attr = H5Aopen_name(dataset,tag);
