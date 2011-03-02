@@ -3,11 +3,18 @@ using namespace Metil;
 
 struct MyHttpServer : public HttpServer {
     virtual void request( String &out, const String &addr, const String &post ) {
-        out << "HTTP/1.0 200 OK\n";
         if ( addr == "/" ) {
-            out << "Content-Type : text/HTML";
+            out << "HTTP/1.0 200 OK\n";
+            out << "Content-Type : text/HTML\n";
+            out << "\n";
+
+            File f( "tests/test_HttpServer.html" );
+            out << f.c_str();
+        } else if ( addr == "/test" ) {
+
         }
         PRINT( addr );
+        PRINT( post );
     }
 };
 

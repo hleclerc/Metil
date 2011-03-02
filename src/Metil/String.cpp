@@ -70,10 +70,26 @@ String String::read_sized( const char *&str ) {
 }
 
 int String::read_int( const char *&str ) {
+    while ( Level1::is_a_space( *str ) )
+        ++str;
     int res = 0;
     while ( Level1::is_a_number( *str ) )
         res = 10 * res + ( *( str++ ) - '0' );
     return res;
+}
+
+// hum -> optimize
+String String::read_line() {
+    int p = find( '\n' );
+    if ( p < 0 ) {
+        String res = *this;
+        *this = String();
+        return res;
+    }
+    String res = beg_upto( p );
+    *this = this->end_from( p + 1 );
+    return res;
+
 }
 
 /// for i in range( 256 ): print str( i ) + "," + 0 + ","

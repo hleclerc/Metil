@@ -3,8 +3,8 @@
 BEG_METIL_LEVEL1_NAMESPACE;
 
 void metil_gen_exec_node__when__a__isa__TiffLoader__pert__1( MethodWriter &mw ) {
-    mw.add_include( "String.h" );
-    mw.add_include( "Level1/StringHelp.h" );
+    mw.add_include( "Metil/String.h" );
+    mw.add_include( "Metil/Level1/StringHelp.h" );
     mw.add_include( "tiffio.h" );
 
     mw.add_preliminary( "#ifdef METIL_COMP_DIRECTIVE\n" );

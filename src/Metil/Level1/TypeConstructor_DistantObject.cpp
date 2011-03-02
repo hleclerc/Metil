@@ -5,7 +5,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 
 
 void TypeConstructor_DistantObject::default_mw( MethodWriter &mw ) const {
-    // mw.add_include( "Level1/DistantObjectData.h" );
+    // mw.add_include( "Metil/Level1/DistantObjectData.h" );
     if ( base_type )
         base_type->constructor->default_mw( mw );
 }

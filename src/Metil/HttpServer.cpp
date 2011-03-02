@@ -1,4 +1,5 @@
 #include "HttpServer.h"
+#include "System.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -42,12 +43,29 @@ static int find_s( const char *data ) {
     return -1;
 }
 
-static void read_requ( String &inp, String &dat, int sd_current ) {
+static bool find_beg_post( const char *&extr_c ) {
+    for( ; *extr_c; ++extr_c ) {
+        if ( extr_c[ 0 ] == '\n' ) {
+            if ( extr_c[ 1 ] == '\r' and extr_c[ 2 ] == '\n' ) {
+                extr_c += 3;
+                return true;
+            } else if ( extr_c[ 1 ] == '\n' ) {
+                extr_c += 2;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+static bool read_requ( String &inp, String &dat, int sd_current ) {
     // read first line
     String line, extr;
     while ( true ) {
         char data[ 1024 ];
         int size = read( sd_current, data, 1024 );
+        if ( size == 0 ) return false;
         int posn = find_n( data, size );
         if ( posn >= 0 ) {
             line << String( NewString( data, data + posn ) );
@@ -58,35 +76,53 @@ static void read_requ( String &inp, String &dat, int sd_current ) {
     }
 
     // analyze first line
+    const char *l = line.c_str();
     if ( line.begins_by( "GET " ) ) {
-        const char *l = line.c_str();
         int poss = find_s( l + 4 );
         if ( poss >= 0 )
             inp = NewString( l + 4, l + 4 + poss );
+    } else if ( line.begins_by( "POST " ) ) {
+        int poss = find_s( l + 5 );
+        if ( poss >= 0 )
+            inp = NewString( l + 5, l + 5 + poss );
+
+        // read length of post data
+        int posc;
+        while ( ( posc = extr.find( "Content-Length: " ) ) < 0 ) {
+            char data[ 1024 ];
+            int size = read( sd_current, data, 1024 );
+            if ( size == 0 ) return false;
+            extr << String( NewString( data, data + size ) );
+        }
+        const char *extr_c = extr.c_str() + posc + 16;
+        ST length = String::read_int( extr_c );
+
+        // find start of post data
+        while ( not find_beg_post( extr_c ) ) {
+            char data[ 1024 ];
+            int size = read( sd_current, data, 1024 );
+            if ( size == 0 ) return false;
+            extr << String( NewString( data, data + size ) );
+            extr_c = extr.c_str();
+        }
+
+        // read post data
+        dat = NewString( extr_c );
+        length -= dat.size();
+        while ( length > 0 ) {
+            char data[ 1024 ];
+            int size = read( sd_current, data, 1024 );
+            if ( size == 0 ) return false;
+            dat << String( NewString( data, data + size ) );
+            length -= size;
+        }
+    } else {
+        PRINT( line );
+        PRINT( extr );
+        return false;
     }
-    // PRINT( extr );
 
-    //
-
-//    String extr;
-//    for( bool cont = true; cont; ) {
-//        char data[ 1024 ];
-//        int len = read( sd_current, data, sizeof data );
-//        for( int i = 0; i < len; ++i ) {
-//            if ( data[ i ] == '\n' ) {
-//                line << String( NewString( data, data + i ) );
-//                extr << String( NewString( data + i + 1, data + len ) );
-//                if ( line.begins_by( "GET" ) ) {
-
-//                    cont = false;
-//                } else {
-//                    PRINT( line );
-//                    PRINT( extr );
-//                }
-//                break;
-//            }
-//        }
-//    }
+    return true;
 }
 
 bool HttpServer::run( int port ) {
@@ -134,6 +170,27 @@ bool HttpServer::run( int port ) {
 
     close( sd );
     return true;
+}
+
+void HttpServer::send_http_ok( String &out, const String &mime_type ) {
+    out << "HTTP/1.0 200 OK\n";
+    out << "Content-Type : " << mime_type << "\n";
+    out << "\n";
+}
+
+bool HttpServer::send_page( String &out, const String &addr, const String &dir ) {
+    if ( addr == "/" )
+        return send_page( out, "index.html", dir );
+
+    String file = dir + '/' + addr;
+    if ( file_exists( file ) ) {
+        send_http_ok( out, "text/HTML" );
+
+        File fout( file );
+        out << fout.c_str();
+        return true;
+    }
+    return false;
 }
 
 END_METIL_NAMESPACE;

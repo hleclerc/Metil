@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <html>
     <head>
-        <script type="text/javascript">
+<!--        <script type="text/javascript">
             function init_all() {
                 my_xml_http_request = function() {
                     if (window.XMLHttpRequest) {
@@ -19,11 +19,51 @@
                     };
                     xhr_object.send( data );
                 };
-                send_async_xml_http_request( "localhost:12346/toto", "pouet", function(rep) {} );
+                send_async_xml_http_request( "/test", "pouet", function(rep) {} );
             }
-        </script>
+        </script>-->
     </head>
-    <body onload="init_all();">
-    Yop
+    <body> <!-- onload="init_all();"-->
+
+        <FORM method=post action="/test">
+            Enregistrement d'un utilisateur
+            <TABLE BORDER=0>
+                <TR>
+                    <TD>Nom</TD>
+                    <TD> <INPUT type=text name="nom"> </TD>
+                </TR>
+                <TR>
+                    <TD>Prénom</TD>
+                    <TD> <INPUT type=text name="prenom"> </TD>
+                </TR>
+
+                <TR>
+                    <TD> Sexe </TD>
+                    <TD> Homme : <INPUT type=radio name="sexe" value="M"> <br>Femme : <INPUT type=radio name="sexe" value="F"> </TD>
+                </TR>
+
+                <TR>
+                    <TD>Fonction</TD>
+                    <TD>
+                        <SELECT name="fonction">
+                            <OPTION VALUE="enseignant">Enseignant</OPTION>
+                            <OPTION VALUE="etudiant">Etudiant</OPTION>
+                            <OPTION VALUE="ingenieur">Ingénieur</OPTION>
+                            <OPTION VALUE="retraite">Retraité</OPTION>
+                            <OPTION VALUE="autre">Autre</OPTION>
+                        </SELECT>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD>Commentaires</TD>
+                    <TD> <TEXTAREA rows="3" name="commentaires"> Tapez ici vos commentaires</TEXTAREA> </TD>
+                </TR>
+
+                <TR>
+                    <TD COLSPAN=2> <INPUT type="submit" value="Envoyer"> </TD>
+                </TR>
+            </TABLE>
+        </FORM>
+
     </body>
 </html>

@@ -41,7 +41,7 @@ void metil_gen_copy__when__a__has__is_void( MethodWriter &mw ) { mw.ret() << mw.
 
 // string << ...
 void metil_gen_self_append__when__a__isa__String__and__b__has__has_writer_for_write_str__pert__1( MethodWriter &mw ) {
-    mw.add_include( "String.h" );
+    mw.add_include( "Metil/String.h" );
     if ( mw.get_os_defined() == false ) {
         mw.set_os_defined( true );
         mw.n << "String &os = static_cast<String &>( " << mw.arg[ 0 ] << " );";
@@ -63,7 +63,7 @@ void metil_gen_del__when__a__has__is_a_POD__pert__1( MethodWriter &mw ) {
 void metil_gen_copy__when__a__has__is_a_POD__pert__1( MethodWriter &mw ) {
     int size = mw.get_type( 0 )->constructor->static_size_in_bytes();
     if ( size > 0 ) {
-        mw.add_include( "Level1/StringHelp.h" );
+        mw.add_include( "Metil/Level1/StringHelp.h" );
         String s; s << "Number<" << size << ">()";
         mw.n << "void *res = MALLOC( " << s << " );";
         mw.n << "memcpy( res, " << mw.arg[ 0 ].data << ", " << s << " );";
@@ -104,7 +104,7 @@ bool TypeConstructor::staticsize() const { return static_size_in_bits() >= 0; }
 
 void TypeConstructor::default_mw( MethodWriter &mw ) const {
     if ( Owcp_size() >= 0 )
-        mw.add_include( "Level1/Owcp.h" );
+        mw.add_include( "Metil/Level1/Owcp.h" );
 }
 
 String TypeConstructor::Owcp_data() const { return "AdditionalDataVoid"; }

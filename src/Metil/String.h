@@ -111,6 +111,7 @@ struct String : public Level1::MO {
     String rstrip( const Val &s ) const { return beg_upto( size() - s ); } ///< "abcdefg".rstrip( 2 ) -> "abcde"
     void close() { CM_1( close, *this ); }
     void seek( ST pos ) { CM_1( seek, *this, pos ); }
+    String read_line();
 
     operator bool() const { return CM_1( convert_to_Bool, *this ); }
     operator SI32() const { return CM_1( convert_to_SI32, *this ); }
