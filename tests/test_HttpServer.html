@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<html>
+    <head>
+        <script type="text/javascript">
+            function init_all() {
+                my_xml_http_request = function() {
+                    if (window.XMLHttpRequest) {
+                        return new XMLHttpRequest();
+                    }
+                    return alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
+                };
+                send_async_xml_http_request = function( url, data, func ) {
+                    xhr_object = my_xml_http_request();
+                    xhr_object.open( "POST", url, true );
+                    xhr_object.onreadystatechange = function() {
+                        if (this.readyState === 4 && this.status === 200) {
+                            return func( this.responseText );
+                        }
+                    };
+                    xhr_object.send( data );
+                };
+                send_async_xml_http_request( "localhost:12346/toto", "pouet", function(rep) {} );
+            }
+        </script>
+    </head>
+    <body onload="init_all();">
+    Yop
+    </body>
+</html>

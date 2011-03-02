@@ -28,6 +28,24 @@ HttpServer::HttpServer() {
 HttpServer::~HttpServer() {
 }
 
+static void read_requ( String &inp, String &dat, int sd_current ) {
+    char data[ 1024 ];
+    String line;
+    while ( true ) {
+        int len = read( sd_current, data, sizeof data );
+    }
+
+    if (  ) {
+    }
+
+//    while ( true ) {
+//        for( int i = 0; i < len + 1; ++i )
+//            PRINT( int( data[ i ] ) );
+//        inp << String( NewString( data, data + len ) );
+//        break;
+//    }
+}
+
 bool HttpServer::run( int port ) {
     // get an internet domain socket
     int sd = SC( socket( PF_INET, SOCK_STREAM, 0 ) );
@@ -41,13 +59,14 @@ bool HttpServer::run( int port ) {
 
     int yes = 1;
     // lose the pesky "Address already in use" error message
-    if ( setsockopt( sd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int) ) == -1 ) {
+    if ( setsockopt( sd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof( int ) ) == -1 ) {
         perror( "setsockopt" );
         exit( 1 );
     }
 
     // bind the socket to the port number
     int rb = bind( sd, (struct sockaddr *)&sin, sizeof sin );
+    PRINT( rb );
     if ( rb == -1 )
         return false;
     PRINT( port );
@@ -61,11 +80,13 @@ bool HttpServer::run( int port ) {
         int sd_current = SC( accept( sd, (struct sockaddr *)&pin, &addrlen ) );
 
         // read input data. We assume that the message is ended by a void STDIN
-        char data[ 512 ];
-        int len = read( sd_current, data, 512 );
+        String inp, dat;
+        read_requ( inp, dat, sd_current );
+        PRINT( inp );
 
+        // request
         Socket out( sd_current );
-        request( out, NewString( data, data + len ), "" );
+        request( out, inp, dat );
 
         // close socket
         close( sd_current );

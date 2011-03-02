@@ -9,6 +9,6 @@ struct MyHttpServer : public HttpServer {
 
 int main() {
     MyHttpServer server;
-    server.run( 12345 );
+    server.run( 12346 );
 }
 

@@ -10,7 +10,7 @@ class CompilationEnvironment {
 public:
     CompilationEnvironment( CompilationEnvironment *ch = 0 );
 
-    String find_src( const String &filename, const String &current_dir, const BasicVec<String> &add_paths = BasicVec<String>() ) const; // use current_dir and include_dirs to find filename
+    String find_src( const String &filename, const String &current_dir, const BasicVec<String> &add_paths = BasicVec<String>(), bool allow_cur_dir = true ) const; // use current_dir and include_dirs to find filename
     String comp_dir() const;
 
     void add_inc_path( const String &path );

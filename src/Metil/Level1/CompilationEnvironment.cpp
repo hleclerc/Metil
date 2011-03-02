@@ -40,14 +40,14 @@ CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch ) : c
     #endif // __APPLE__
 }
 
-String CompilationEnvironment::find_src( const String &filename, const String &current_dir, const BasicVec<String> &add_paths ) const {
+String CompilationEnvironment::find_src( const String &filename, const String &current_dir, const BasicVec<String> &add_paths, bool allow_cur_dir ) const {
     // absolute path ?
     if ( filename[ 0 ] == '/' or filename[ 0 ] == '\\' )
         return ( file_exists( filename ) ? filename : String() );
 
     // try with current_dir
-    String trial = current_dir + filename;
-    if ( file_exists( trial ) )
+    String trial = current_dir + filename;    
+    if ( allow_cur_dir and file_exists( trial ) )
         return trial;
 
     // try with add_paths
@@ -385,10 +385,10 @@ void CompilationEnvironment::extra_obj_cmd( String &cmd, bool dyn, bool cu, cons
     if ( cu ) {
         if ( GPUFLAGS.size() )
             cmd << ' ' << GPUFLAGS;
-    } else {
-        if ( CPPFLAGS.size() )
-            cmd << ' ' << CPPFLAGS;
     }
+
+    if ( CPPFLAGS.size() )
+        cmd << ' ' << CPPFLAGS;
 
     for( int i = 0; i < inc_paths.size(); ++i )
         cmd << " -I'" << inc_paths[ i ] << "'";
