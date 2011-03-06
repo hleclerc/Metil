@@ -43,13 +43,21 @@ void Hdf::read_tag( const String &name, const String &tag, String &tag_value, bo
     hid_t dataset = group ? H5Gopen( h5_file, name.c_str() ) : H5Dopen( h5_file, name.c_str() );
     hid_t attr    = H5Aopen_name( dataset, tag.c_str() );
     hid_t ftype   = H5Aget_type( attr );
-    size_t size   = H5Tget_size( ftype );
     hid_t atype   = H5Tget_native_type( ftype, H5T_DIR_ASCEND );
 
-    char *string_attr = (char *)MALLOC( size );
-    H5Aread( attr, atype, string_attr );
-    tag_value << string_attr;
-    FREE( string_attr, size );
+    if ( H5Tget_strpad( ftype ) == H5T_STR_NULLTERM ) {
+        char *string_attr;
+        H5Aread( attr, atype, &string_attr );
+        tag_value = string_attr;
+        ::free( string_attr );
+    } else {
+        size_t size   = H5Tget_size( ftype );
+
+        char *string_attr = (char *)MALLOC( size );
+        H5Aread( attr, atype, string_attr );
+        tag_value = string_attr;
+        FREE( string_attr, size );
+    }
 
     H5Aclose( attr    );
     H5Tclose( atype   );

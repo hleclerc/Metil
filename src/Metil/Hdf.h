@@ -69,15 +69,16 @@ public:
     void write( const String &name, T *data, TV size ) {
         write( name, data, size, size );
     }
-    
-    template<class TS>
-    void add_tag( const String &name, TS &tag, const char * tag_value) {
+
+
+    void add_tag( const String &name, const String &tag, const char *tag_value ) {
         hid_t dataset = H5Gopen( h5_file, name.c_str() );
         hid_t aid     = H5Screate( H5S_SCALAR );
         hid_t atype   = H5Tcopy( H5T_C_S1 );
 
+        // variables size
         H5Tset_size( atype, H5T_VARIABLE );
-        hid_t attr = H5Acreate( dataset, tag, atype, aid, H5P_DEFAULT );
+        hid_t attr = H5Acreate( dataset, tag.c_str(), atype, aid, H5P_DEFAULT );
         H5Awrite( attr, atype, &tag_value );
 
         H5Sclose( aid     );
@@ -85,11 +86,15 @@ public:
         H5Gclose( dataset );
     }
 
+    void add_tag( const String &name, const String &tag, const String &tag_value ) {
+        add_tag( name, tag, tag_value.c_str() );
+    }
+
     template<class TS, class TTV>
-    void add_tag( const String &name, TS &tag, TTV tag_value) {
+    void add_tag( const String &name, const String &tag, TTV tag_value ) {
         hid_t dataset = H5Gopen( h5_file, name.c_str() );
         hid_t aid     = H5Screate( H5S_SCALAR );
-        hid_t attr    = H5Acreate( dataset, tag, H5_type<TTV>::res(), aid, H5P_DEFAULT );
+        hid_t attr    = H5Acreate( dataset, tag.c_str(), H5_type<TTV>::res(), aid, H5P_DEFAULT );
 
         H5Awrite( attr, H5_type<TTV>::res(), &tag_value );
 
@@ -97,6 +102,7 @@ public:
         H5Aclose( attr    );
         H5Gclose( dataset );
     }
+
 
     template<class TS, class TTV>
     void write_tag( const String &name, TS &tag, TTV tag_value ) {
