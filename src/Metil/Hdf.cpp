@@ -47,7 +47,7 @@ void Hdf::read_tag( const String &name, const String &tag, String &tag_value, bo
     hid_t atype   = H5Tget_native_type( ftype, H5T_DIR_ASCEND );
 
     char *string_attr = (char *)MALLOC( size );
-    H5Aread( attr, atype, string_attr );
+    H5Aread( attr, atype, &string_attr );
     tag_value << string_attr;
     FREE( string_attr, size );
 
