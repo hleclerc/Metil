@@ -445,6 +445,9 @@ String CompilationEnvironment::obj_cmd( const String &obj, const String &cpp, bo
             cmd << " --maxrregcount=" << maxrregcount;
         if ( get_device_emulation() > 0 )
             cmd << " --device-emulation -G";
+        //
+        if ( sizeof( void * ) == 8 )
+            cmd << " --machine 64";
     } else {
         cmd << ( cpp.ends_with( ".c" ) ? get_CC() : get_CXX() );
         // basic flags
