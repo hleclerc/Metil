@@ -264,8 +264,13 @@ void CompilationEnvironment::save_env_var( bool update_LD_LIBRARY_PATH ) const {
         String LD_LIB = l ? l : "";
         for( int i = 0; i < lib_paths.size(); ++i ) {
             if ( LD_LIB.size() )
-                LD_LIB += ";";
+                LD_LIB += ":";
             LD_LIB += lib_paths[ i ];
+        }
+        for( int i = 0; i < fra_names.size(); ++i ) {
+            if ( LD_LIB.size() )
+                LD_LIB += ":";
+            LD_LIB += fra_names[ i ];
         }
         set_env( "LD_LIBRARY_PATH", LD_LIB );
     }
