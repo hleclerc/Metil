@@ -299,3 +299,4 @@ src/Metil/HttpServer.h
 src/Metil/HttpServer.cpp
 tests/test_HttpServer.cpp
 tests/test_HttpServer.html
+tests/test_Hdf.cpp
