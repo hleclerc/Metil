@@ -176,15 +176,15 @@ public:
     }
 
     template<class TV>
-    void read_size( const String &name, TV &size ) const {
+    void read_size( const String &name, TV &size_ ) const {
         hid_t dataset = H5Dopen( h5_file, name.c_str() );
         hid_t dataspace = H5Dget_space( dataset );
         //
         BasicVec<hsize_t> tmp( Size(), H5Sget_simple_extent_ndims( dataspace ) );
         H5Sget_simple_extent_dims( dataspace, tmp.ptr(), NULL );
-        size.resize( tmp.size() );
+        size_.resize( tmp.size() );
         for( int d = 0; d < tmp.size(); ++d )
-            size[ tmp.size() - 1 - d ] = tmp[ d ];
+            size_[ tmp.size() - 1 - d ] = tmp[ d ];
         //
         H5Dclose(dataset);
         H5Sclose(dataspace);
