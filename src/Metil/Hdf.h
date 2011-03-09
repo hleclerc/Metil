@@ -134,7 +134,7 @@ public:
     template<class TTV>
     void read_tag( const String &name, const String &tag, TTV &tag_value, bool group = true ) {
         hid_t dataset = group ? H5Gopen( h5_file, name.c_str() ) : H5Dopen( h5_file, name.c_str() );
-        hid_t attr    = H5Aopen_name( dataset, tag );
+        hid_t attr    = H5Aopen_name( dataset, tag.c_str() );
 
         H5Aread( attr, H5_type<TTV>::res(), &tag_value );
 
