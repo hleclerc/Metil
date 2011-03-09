@@ -125,7 +125,7 @@ static bool read_requ( String &inp, String &dat, int sd_current ) {
     return true;
 }
 
-bool HttpServer::run( int port ) {
+int HttpServer::run( int port ) {
     // get an internet domain socket
     int sd = SC( socket( PF_INET, SOCK_STREAM, 0 ) );
 
@@ -140,13 +140,13 @@ bool HttpServer::run( int port ) {
     // lose the pesky "Address already in use" error message
     if ( setsockopt( sd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof( int ) ) == -1 ) {
         perror( "setsockopt" );
-        exit( 1 );
+        return 1;
     }
 
     // bind the socket to the port number
     int rb = bind( sd, (struct sockaddr *)&sin, sizeof sin );
     if ( rb == -1 )
-        return false;
+        return 2;
 
     // show that we are willing to listen
     SC( listen( sd, 5 ) );
@@ -169,7 +169,7 @@ bool HttpServer::run( int port ) {
     }
 
     close( sd );
-    return true;
+    return 0;
 }
 
 void HttpServer::send_http_ok( String &out, const String &mime_type ) {
@@ -184,7 +184,7 @@ bool HttpServer::send_page( String &out, const String &addr, const String &dir )
 
     String file = dir + '/' + addr;
     if ( file_exists( file ) ) {
-        send_http_ok( out, "text/HTML" );
+        send_http_ok( out, "text/html" );
 
         File fout( file );
         out << fout.c_str();

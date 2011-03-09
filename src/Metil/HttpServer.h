@@ -9,7 +9,7 @@ class HttpServer {
 public:
     HttpServer();
     virtual ~HttpServer();
-    bool run( int port );
+    int run( int port );
 
     virtual void request( String &out, const String &addr, const String &post ) = 0;
 

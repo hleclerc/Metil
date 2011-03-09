@@ -19,7 +19,10 @@ struct MyHttpServer : public HttpServer {
 };
 
 int main() {
-    MyHttpServer server;
-    server.run( 12345 );
+//    MyHttpServer server;
+//    server.run( 12345 );
+    File f( "tests/test_HttpServer.html" );
+    while ( f )
+        PRINT( f.read_line() );
 }
 
