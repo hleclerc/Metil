@@ -1,6 +1,18 @@
 #ifndef HDF_H
 #define HDF_H
 
+#pragma cpp_flag -DH5Acreate_vers=1
+#pragma cpp_flag -DH5Gcreate_vers=1
+#pragma cpp_flag -DH5Dcreate_vers=1
+#pragma cpp_flag -DH5Dopen_vers=1
+#pragma cpp_flag -DH5Gopen_vers=1
+
+#pragma gpu_flag -DH5Acreate_vers=1
+#pragma gpu_flag -DH5Gcreate_vers=1
+#pragma gpu_flag -DH5Dcreate_vers=1
+#pragma gpu_flag -DH5Dopen_vers=1
+#pragma gpu_flag -DH5Gopen_vers=1
+
 #include "BasicVec.h"
 #include "String.h"
 
