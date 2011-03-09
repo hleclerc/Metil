@@ -47,7 +47,7 @@ void TypeConstructor_Flt::write_convert_to_( MethodWriter &mw ) const {
 }
 
 void TypeConstructor_Flt::write_write_str( MethodWriter &mw ) const {
-    mw.add_include( "Level1/DisplayFlt.h" );
+    mw.add_include( "Metil/Level1/DisplayFlt.h" );
     if ( mant.len == 64 )
         mw.n << "ERROR(\"TODO: correction bug disp FP80\");";
     mw.n << "DisplayFlt<"

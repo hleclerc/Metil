@@ -11,7 +11,7 @@ static TypeConstructor_Array *sc( Type *type ) {
 }
 
 void metil_gen_allocate_array__when__a__has__staticsize__and__b__isa__Cst( MethodWriter &mw ) {
-    mw.add_include( "Level1/TypeConstructor_Array.h" );
+    mw.add_include( "Metil/Level1/TypeConstructor_Array.h" );
 
     // type
     TypeConstructor_Cst *c = static_cast<TypeConstructor_Cst *>( mw.get_type( 1 )->constructor );
@@ -39,7 +39,7 @@ void metil_gen_allocate_array__when__b__isa__Int( MethodWriter &mw ) {
 }
 
 void metil_gen_allocate_array__when__b__isa__Array( MethodWriter &mw ) {
-    mw.add_include( "Level1/Ad.h" );
+    mw.add_include( "Metil/Level1/Ad.h" );
     TypeConstructor_Array *c = sc( mw.get_type( 1 ) );
     String item_type = mw.get_type( 0 )->name;
     int d = c->size.size() ? c->size[ 0 ] : -1;
@@ -189,7 +189,7 @@ void metil_gen_select_C__when__a__isa__Array__pert__1( MethodWriter &cw ) {
 
 void metil_gen_select__when__a__isa__Array__pert__1( MethodWriter &cw ) {
     cw.add_include( "Pair.h" );
-    cw.add_include( "Level1/TypeConstructor_Select.h" );
+    cw.add_include( "Metil/Level1/TypeConstructor_Select.h" );
     TypeConstructor_Array *c_0 = static_cast<TypeConstructor_Array *>( cw.get_type( 0 )->constructor );
     TypeConstructor *c_1 = cw.get_type( 1 )->constructor;
 
@@ -238,7 +238,7 @@ void metil_gen_equal__when__a__isa__Array__and__b__isa__Array__pert__1( MethodWr
     type << strlen( mw.type[ 1 ]->name ) << mw.type[ 1 ]->name << '_';
     type << "5equal_2_0_2_1";
     mw.add_type_decl( type );
-    mw.add_include( "Level1/Owcp.h" );
+    mw.add_include( "Metil/Level1/Owcp.h" );
     mw.n << "Type *type = &metil_type_bas_" << type << ";";
     mw.ret() << "MO( NEW( Owcp<2>, type, " << mw.arg[ 0 ] << ", " << mw.arg[ 1 ] << " ), type );";
 }
@@ -302,7 +302,7 @@ void TypeConstructor_Array::write_copy( MethodWriter &mw ) const {
         mw.n << "++h->cpt_use;";
         mw.ret() << mw.arg[ 0 ] << ";";
     } else {
-        mw.add_include( "Level1/StringHelp.h" );
+        mw.add_include( "Metil/Level1/StringHelp.h" );
         if ( need_header() ) {
             write_get_t_header( mw, "AH" );
             write_get_header( mw, "h", mw.arg[ 0 ].data, "AH" );
@@ -466,8 +466,8 @@ void TypeConstructor_Array::write_get_index( MethodWriter &cw, const String &nam
 
 void TypeConstructor_Array::default_mw( MethodWriter &mw ) const {
     TypeConstructor::default_mw( mw );
-    mw.add_include( "String.h" );
-    mw.add_include( "Level1/ArrayHeader.h" );
+    mw.add_include( "Metil/String.h" );
+    mw.add_include( "Metil/Level1/ArrayHeader.h" );
 }
 
 int TypeConstructor_Array::dim() const {
@@ -479,9 +479,9 @@ int TypeConstructor_Array::tensor_order() const {
 }
 
 void TypeConstructor_Array::write_select_op( MethodWriter &mw, TypeConstructor *index_type, const String &op ) const {
-    mw.add_include("Level1/ArrayHeader.h");
-    mw.add_include("String.h");
-    mw.add_include("Pair.h");
+    mw.add_include("Metil/Level1/ArrayHeader.h");
+    mw.add_include("Metil/String.h");
+    mw.add_include("Metil/Pair.h");
     if ( index_type->tensor_order() == 0 ) {
         mw.n << "typedef Pair<void *,ST> P;";
         mw.n << "P *select_data = reinterpret_cast<P *>( " << mw.arg[ 0 ].data << " );";

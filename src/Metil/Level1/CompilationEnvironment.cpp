@@ -40,14 +40,14 @@ CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch ) : c
     #endif // __APPLE__
 }
 
-String CompilationEnvironment::find_src( const String &filename, const String &current_dir, const BasicVec<String> &add_paths ) const {
+String CompilationEnvironment::find_src( const String &filename, const String &current_dir, const BasicVec<String> &add_paths, bool allow_cur_dir ) const {
     // absolute path ?
     if ( filename[ 0 ] == '/' or filename[ 0 ] == '\\' )
         return ( file_exists( filename ) ? filename : String() );
 
     // try with current_dir
-    String trial = current_dir + filename;
-    if ( file_exists( trial ) )
+    String trial = current_dir + filename;    
+    if ( allow_cur_dir and file_exists( trial ) )
         return trial;
 
     // try with add_paths
@@ -264,8 +264,13 @@ void CompilationEnvironment::save_env_var( bool update_LD_LIBRARY_PATH ) const {
         String LD_LIB = l ? l : "";
         for( int i = 0; i < lib_paths.size(); ++i ) {
             if ( LD_LIB.size() )
-                LD_LIB += ";";
+                LD_LIB += ":";
             LD_LIB += lib_paths[ i ];
+        }
+        for( int i = 0; i < fra_names.size(); ++i ) {
+            if ( LD_LIB.size() )
+                LD_LIB += ":";
+            LD_LIB += fra_names[ i ];
         }
         set_env( "LD_LIBRARY_PATH", LD_LIB );
     }
@@ -445,6 +450,9 @@ String CompilationEnvironment::obj_cmd( const String &obj, const String &cpp, bo
             cmd << " --maxrregcount=" << maxrregcount;
         if ( get_device_emulation() > 0 )
             cmd << " --device-emulation -G";
+        //
+        if ( sizeof( void * ) == 8 )
+            cmd << " --machine 64";
     } else {
         cmd << ( cpp.ends_with( ".c" ) ? get_CC() : get_CXX() );
         // basic flags

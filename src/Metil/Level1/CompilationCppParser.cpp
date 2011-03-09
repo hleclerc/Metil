@@ -123,10 +123,11 @@ static void skip_spaces_but_not_cr( const char *&c ) {
         ++c;
 }
 
-static String get_include_filename( const char *b ) {
+static String get_include_filename( const char *b, bool &syst ) {
     // skip spaces
     skip_spaces_but_not_cr( b );
     //
+    syst = ( *b == '<' );
     const char *e = NULL;
     if ( *b == '<' )
         for( e = ++b; *e and *e != '>'; ++e );
@@ -260,8 +261,9 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                     }
                 }
                 if ( c[ 2 ] == 'n' and c[ 3 ] == 'c' and c[ 4 ] == 'l' and c[ 5 ] == 'u' and c[ 6 ] == 'd' and c[ 7 ] == 'e' and c[ 8 ] == ' ' ) {
-                    String bas_name = get_include_filename( c += 9 );
-                    String inc_file = ce.find_src( bas_name, current_dir, inc_paths );
+                    bool syst;
+                    String bas_name = get_include_filename( c += 9, syst );
+                    String inc_file = ce.find_src( bas_name, current_dir, inc_paths, not syst );
 
                     // formulation.
                     if ( not inc_file ) {

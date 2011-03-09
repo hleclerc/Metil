@@ -42,7 +42,7 @@ String TypeConstructor_GpuImg::Owcp_data() const { return "GpuImgData<" + String
 
 void TypeConstructor_GpuImg::default_mw( MethodWriter &mw ) const {
     TypeConstructor::default_mw( mw );
-    mw.add_include( "Level1/GpuImgData.h" );
+    mw.add_include( "Metil/Level1/GpuImgData.h" );
 }
 
 void TypeConstructor_GpuImg::init( Type *type ) {

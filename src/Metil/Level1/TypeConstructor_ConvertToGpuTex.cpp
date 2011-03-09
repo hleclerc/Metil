@@ -7,8 +7,8 @@ BEG_METIL_LEVEL1_NAMESPACE;
 
 void metil_gen_select_C__when__a__isa__ConvertToGpuTex__and__b__isa__Array__pert__1( MethodWriter &mw ) {
     mw.add_include( "CudaMetil.h" );
-    mw.add_include( "Level1/Owcp.h" );
-    mw.add_include( "Level1/GpuTexData.h" );
+    mw.add_include( "Metil/Level1/Owcp.h" );
+    mw.add_include( "Metil/Level1/GpuTexData.h" );
     TypeConstructor_Array *b = static_cast<TypeConstructor_Array *>( mw.type[ 1 ]->constructor );
     ASSERT( b->item_type_bas, "TODO : conv untyped array -> gpu tex" );
     String type; type << "GpuTex_" << b->dim() << "_" << b->item_type_bas->name;

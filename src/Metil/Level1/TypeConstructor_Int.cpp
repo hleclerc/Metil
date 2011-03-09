@@ -63,7 +63,7 @@ WCONV( ST   );
 
 // gene
 void TypeConstructor_Int::write_write_str( MethodWriter &mw ) const {
-    mw.add_include( "Level1/DisplayInt.h" );
+    mw.add_include( "Metil/Level1/DisplayInt.h" );
     if ( sign == -1 )
         mw.n << "os << '-';";
     bool lesi = sign == 0;

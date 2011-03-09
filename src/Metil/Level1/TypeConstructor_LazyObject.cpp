@@ -37,7 +37,7 @@ void TypeConstructor_LazyObject::write_header( MethodWriter &mw, const String &n
 }
 
 void TypeConstructor_LazyObject::default_mw( MethodWriter &mw ) const {
-    mw.add_include( "Level1/LazyObjectData.h" );
+    mw.add_include( "Metil/Level1/LazyObjectData.h" );
 }
 
 String TypeConstructor_LazyObject::Owcp_data() const {

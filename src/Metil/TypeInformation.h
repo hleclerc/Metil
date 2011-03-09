@@ -10,7 +10,8 @@ struct TypeInformation {
 };
 
 #define DECL_TYPEINFORMATION( T ) template<> struct TypeInformation<T> { static const char *type() { return #T; } }
-DECL_TYPEINFORMATION( char  );
+
+DECL_TYPEINFORMATION( char );
 DECL_TYPEINFORMATION( SI8  );
 DECL_TYPEINFORMATION( PI8  );
 DECL_TYPEINFORMATION( SI16 );

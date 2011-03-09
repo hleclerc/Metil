@@ -12,7 +12,7 @@ MethodWriter::MethodWriter( MethodWriter *parent ) : n( parent ? parent->n.strin
         type[ i ] = 0;
     ret_ins = "return ";
     machine_type = MachineId::Cpu;
-    add_include( "Level1/Type.h" );
+    add_include( "Metil/Level1/Type.h" );
 }
 
 MethodWriter &MethodWriter::operator<<( const String &str ) {
@@ -45,7 +45,7 @@ void MethodWriter::add_type_decl( const String &name ) {
         ST p = name.find( '_' );
         String cons = p >= 0 ? name.beg_upto( p ) : name;
         ext_types << name;
-        add_include( "Level1/TypeConstructor_" + cons + ".h" );
+        add_include( "Metil/Level1/TypeConstructor_" + cons + ".h" );
         add_preliminary( "DECL_AND_DEFI_TYPE( " + cons + ", " + name + " );\n" );
     }
 }
