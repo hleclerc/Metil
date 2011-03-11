@@ -300,3 +300,6 @@ src/Metil/HttpServer.cpp
 tests/test_HttpServer.cpp
 tests/test_HttpServer.html
 tests/test_Hdf.cpp
+src/Metil/HashTable.h
+src/Metil/HashSet.h
+tests/test_HashSet.cpp
