@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <html>
     <head>
-<!--        <script type="text/javascript">
+        <script type="text/javascript">
             function init_all() {
                 my_xml_http_request = function() {
                     if (window.XMLHttpRequest) {
@@ -19,13 +19,15 @@
                     };
                     xhr_object.send( data );
                 };
-                send_async_xml_http_request( "/test", "pouet", function(rep) {} );
+                send_async_xml_http_request( "/img_server_00/test", "pouet pouet", function(rep) {} );
             }
-        </script>-->
+        </script>
     </head>
     <body> <!-- onload="init_all();"-->
 
-        <FORM method=post action="/test">
+        <div onClick="init_all()">pouet </div>
+
+<!--        <FORM method="post" action="/img_server_00/test">
             Enregistrement d'un utilisateur
             <TABLE BORDER=0>
                 <TR>
@@ -63,7 +65,7 @@
                     <TD COLSPAN=2> <INPUT type="submit" value="Envoyer"> </TD>
                 </TR>
             </TABLE>
-        </FORM>
+        </FORM>-->
 
     </body>
 </html>

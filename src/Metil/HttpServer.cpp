@@ -1,5 +1,8 @@
+#include "Level1/StringHelp.h"
 #include "HttpServer.h"
+#include "BasicVec.h"
 #include "System.h"
+#include "Math.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -7,7 +10,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <map>
 
+#include <fastcgi.h>
 
 BEG_METIL_NAMESPACE;
 
@@ -36,6 +41,13 @@ static int find_n( const char *data, int size ) {
     return -1;
 }
 
+static int find_s( const char *data, int size ) {
+    for( int i = 0; i < size; ++i )
+        if ( data[ i ] == ' ' )
+            return i;
+    return -1;
+}
+
 static int find_s( const char *data ) {
     for( int i = 0; data[ i ]; ++i )
         if ( data[ i ] == ' ' )
@@ -58,70 +70,262 @@ static bool find_beg_post( const char *&extr_c ) {
     return false;
 }
 
-
-static bool read_requ( String &inp, String &dat, int sd_current ) {
-    // read first line
-    String line, extr;
+static bool read_get__requ( String &inp, int sd_current, String *extr = 0 ) {
     while ( true ) {
         char data[ 1024 ];
         int size = read( sd_current, data, 1024 );
-        if ( size == 0 ) return false;
-        int posn = find_n( data, size );
-        if ( posn >= 0 ) {
-            line << String( NewString( data, data + posn ) );
-            extr << String( NewString( data + posn + 1, data + size ) );
+        if ( size <= 0 )
+            return false;
+        int poss = find_s( data, size );
+        if ( poss >= 0 ) {
+            inp  << String( NewString( data, data + poss ) );
+            if ( extr )
+                *extr << String( NewString( data + poss + 1, data + size ) );
             break;
         }
-        line << String( NewString( data, data + size ) );
+        inp << String( NewString( data, data + size ) );
     }
+    return true;
+}
 
-    // analyze first line
-    const char *l = line.c_str();
-    if ( line.begins_by( "GET " ) ) {
-        int poss = find_s( l + 4 );
-        if ( poss >= 0 )
-            inp = NewString( l + 4, l + 4 + poss );
-    } else if ( line.begins_by( "POST " ) ) {
-        int poss = find_s( l + 5 );
-        if ( poss >= 0 )
-            inp = NewString( l + 5, l + 5 + poss );
-
-        // read length of post data
-        int posc;
-        while ( ( posc = extr.find( "Content-Length: " ) ) < 0 ) {
-            char data[ 1024 ];
-            int size = read( sd_current, data, 1024 );
-            if ( size == 0 ) return false;
-            extr << String( NewString( data, data + size ) );
-        }
-        const char *extr_c = extr.c_str() + posc + 16;
-        ST length = String::read_int( extr_c );
-
-        // find start of post data
-        while ( not find_beg_post( extr_c ) ) {
-            char data[ 1024 ];
-            int size = read( sd_current, data, 1024 );
-            if ( size == 0 ) return false;
-            extr << String( NewString( data, data + size ) );
-            extr_c = extr.c_str();
-        }
-
-        // read post data
-        dat = NewString( extr_c );
-        length -= dat.size();
-        while ( length > 0 ) {
-            char data[ 1024 ];
-            int size = read( sd_current, data, 1024 );
-            if ( size == 0 ) return false;
-            dat << String( NewString( data, data + size ) );
-            length -= size;
-        }
-    } else {
-        PRINT( line );
-        PRINT( extr );
+static bool read_post_requ( String &inp, String &dat, int sd_current ) {
+    // skip first space
+    char data;
+    if ( read( sd_current, &data, 1 ) <= 0 )
         return false;
+
+    // read address
+    String extr;
+    if ( not read_get__requ( inp, sd_current, &extr ) )
+        return false;
+
+    // read length of post data
+    int posc;
+    while ( ( posc = extr.find( "Content-Length: " ) ) < 0 ) {
+        char data[ 1024 ];
+        int size = read( sd_current, data, 1024 );
+        if ( size <= 0 )
+            return false;
+        extr << String( NewString( data, data + size ) );
+    }
+    const char *extr_c = extr.c_str() + posc + 16;
+    ST length = String::read_int( extr_c );
+
+    // find start of post data
+    while ( not find_beg_post( extr_c ) ) {
+        char data[ 1024 ];
+        int size = read( sd_current, data, 1024 );
+        if ( size <= 0 )
+            return false;
+        extr << String( NewString( data, data + size ) );
+        extr_c = extr.c_str();
     }
 
+    // read post data
+    dat = NewString( extr_c );
+    length -= dat.size();
+    while ( length > 0 ) {
+        char data[ 1024 ];
+        int size = read( sd_current, data, 1024 );
+        if ( size <= 0 )
+            return false;
+        dat << String( NewString( data, data + size ) );
+        length -= size;
+    }
+    return true;
+}
+
+static bool read_from_socket( int sd, char *ptr, int len ) {
+    while ( len ) {
+        ssize_t res = read( sd, ptr, len );
+        if ( res < 0 )
+            return false;
+        len -= res;
+        if ( len == 0 )
+            return true;
+        ptr += res;
+    }
+}
+
+static int get_fcgi_len( char *content_data, int &i ) {
+    if ( content_data[ i ] >> 7 )
+        return ((unsigned)( content_data[ i++ ] & 0x7F ) << 24 ) +
+               ((unsigned)  content_data[ i++ ]          << 16 ) +
+               ((unsigned)  content_data[ i++ ]          <<  8 ) +
+               ((unsigned)  content_data[ i++ ]                );
+    return content_data[ i++ ];
+}
+
+static void get_fcgi_param( String &inp, char *content_data, int content_size, const String &name ) {
+    for( int i = 0; i < content_size; ++i ) {
+        int name_len = get_fcgi_len( content_data, i );
+        if ( name_len == 0 )
+            break;
+        int data_len = get_fcgi_len( content_data, i );
+        if ( data_len == 0 )
+            break;
+        const char *p = content_data + i;
+        //PRINT( String( NewString( p, p + name_len ) ) );
+        //PRINT( String( NewString( p + name_len, p + name_len + data_len ) ) );
+        if ( name == String( NewString( p, p + name_len ) ) ) {
+            inp = NewString( p + name_len, p + name_len + data_len );
+            return;
+        }
+        i += name_len + data_len;
+    }
+}
+
+static bool write_to_socket( int socket_id, const char *ptr, int len ) {
+    while ( len > 0 ) {
+        int res = write( socket_id, ptr, len );
+        if ( res < 0 )
+            return false;
+        len -= res;
+        ptr += res;
+    }
+    return true;
+}
+
+static bool write_to_socket( int socket_id, const void *ptr, int len ) {
+    return write_to_socket( socket_id, (const char *)ptr, len );
+}
+
+static void send_end_record( int socket_id, int request_id ) {
+    FCGI_EndRequestRecord rec;
+    rec.header.version         = 1;
+    rec.header.type            = FCGI_END_REQUEST;
+    rec.header.requestIdB1     = request_id >> 8;
+    rec.header.requestIdB0     = request_id & 0x0F;
+    rec.header.contentLengthB1 = 0;
+    rec.header.contentLengthB0 = 8;
+    rec.header.paddingLength   = 0;
+    rec.header.reserved        = 0;
+
+    rec.body.appStatusB3    = 0;
+    rec.body.appStatusB2    = 0;
+    rec.body.appStatusB1    = 0;
+    rec.body.appStatusB0    = 0;
+    rec.body.protocolStatus = FCGI_REQUEST_COMPLETE;
+
+    write_to_socket( socket_id, &rec, sizeof rec );
+}
+
+static void send_out_record( int socket_id, int request_id, const char *ptr, int len ) {
+    FCGI_Header rec;
+    rec.version         = 1;
+    rec.type            = FCGI_STDOUT;
+    rec.requestIdB1     = request_id >> 8;
+    rec.requestIdB0     = request_id & 0xFF;
+    rec.reserved        = 0;
+
+    while( true ) {
+        int yop;
+        if ( len > FCGI_MAX_LENGTH ) {
+            rec.contentLengthB1 = 0xFF;
+            rec.contentLengthB0 = 0xFF;
+            rec.paddingLength   = 0;
+            yop = 0xFFFF;
+        } else {
+            rec.contentLengthB1 = len >> 8;
+            rec.contentLengthB0 = len & 0xFF;
+            rec.paddingLength   = ceil( len, 8 ) - len;
+            yop = len;
+        }
+
+        write_to_socket( socket_id,         &rec,        sizeof rec );
+        write_to_socket( socket_id,          ptr,               len );
+        write_to_socket( socket_id,   "        ", rec.paddingLength );
+
+        if ( len == 0 )
+            break;
+        len -= yop;
+        ptr += yop;
+    }
+}
+
+static void send_out_record( int sd_current, int request_id, const char *ptr ) {
+    send_out_record( sd_current, request_id, ptr, strlen( ptr ) );
+}
+
+
+struct FcgiRequest {
+    String inp;
+    String dat;
+};
+
+bool HttpServer::handle_incoming_request( int sd_current ) {
+    // read first 4 characters
+    char data[ 4 ];
+    if ( not read_from_socket( sd_current, data, 4 ) )
+        return false;
+
+    // GET
+    if ( data[ 0 ] == 'G' and data[ 1 ] == 'E' and data[ 2 ] == 'T' and data[ 3 ] == ' ' ) { // GET
+        String inp, dat;
+        if ( read_get__requ( inp, sd_current ) ) {
+            Socket out( sd_current );
+            out << "HTTP/1.0 200 OK\n";
+            request( out, inp, dat );
+        }
+        return true;
+    }
+
+    // POST
+    if ( data[ 0 ] == 'P' and data[ 1 ] == 'O' and data[ 2 ] == 'S' and data[ 3 ] == 'T' ) {
+        String inp, dat;
+        if ( read_post_requ( inp, dat, sd_current ) ) {
+            Socket out( sd_current );
+            out << "HTTP/1.0 200 OK\n";
+            request( out, inp, dat );
+        }
+        return true;
+    }
+
+    // FCGI
+    std::map<int,FcgiRequest> fcgi_requests;
+
+    FCGI_Header header;
+    Level1::memcpy( &header, data, Number<4>() );
+    if ( not read_from_socket( sd_current, (char *)&header + 4, sizeof( FCGI_Header ) - 4 ) )
+        return false;
+
+    while ( true ) {
+        PRINT( header.type );
+
+        int request_id = ( header.requestIdB1 << 8 ) + header.requestIdB0;
+        int content_length = ( header.contentLengthB1 << 8 ) + header.contentLengthB0;
+        if ( content_length == 0 ) {
+            String out;
+            request( out, fcgi_requests[ request_id ].inp, fcgi_requests[ request_id ].dat );
+            send_out_record( sd_current, request_id, out.c_str(), out.size() );
+            send_end_record( sd_current, request_id );
+
+            fcgi_requests.erase( request_id );
+            if ( not fcgi_requests.size() )
+                return true;
+        }
+
+        // content
+        BasicVec<char> content_data( Size(), content_length + header.paddingLength );
+        if( not read_from_socket( sd_current, content_data.ptr(), content_data.size() ) )
+            return false;
+        //
+
+        // record
+        if ( header.type == FCGI_PARAMS ) {
+            get_fcgi_param( fcgi_requests[ request_id ].inp, content_data.ptr(), content_data.size(), "REQUEST_URI" );
+        } else if ( header.type == FCGI_STDIN ) {
+            PRINT( content_data.ptr() );
+            //            record.append_content_data( request.post_data );
+            //            if ( record.get_content_length() == 0 )
+            //                break;
+            //TODO;
+        }
+
+        // read next header
+        if ( not read_from_socket( sd_current, (char *)&header, sizeof( FCGI_Header ) ) )
+            return false;
+    }
     return true;
 }
 
@@ -157,12 +361,7 @@ int HttpServer::run( int port ) {
         int sd_current = SC( accept( sd, (struct sockaddr *)&pin, &addrlen ) );
 
         // read input data. We assume that the message is ended by a void STDIN
-        String inp, dat;
-        read_requ( inp, dat, sd_current );
-
-        // request
-        Socket out( sd_current );
-        request( out, inp, dat );
+        handle_incoming_request( sd_current );
 
         // close socket
         close( sd_current );
