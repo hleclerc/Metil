@@ -34,6 +34,18 @@ HttpServer::HttpServer() {
 HttpServer::~HttpServer() {
 }
 
+static bool read_from_socket( int sd, char *ptr, int len ) {
+    while ( len ) {
+        ssize_t res = read( sd, ptr, len );
+        if ( res < 0 )
+            return false;
+        len -= res;
+        ptr += res;
+    }
+    return true;
+}
+
+
 static int find_n( const char *data, int size ) {
     for( int i = 0; i < size; ++i )
         if ( data[ i ] == '\n' )
@@ -133,18 +145,6 @@ static bool read_post_requ( String &inp, String &dat, int sd_current ) {
         length -= size;
     }
     return true;
-}
-
-static bool read_from_socket( int sd, char *ptr, int len ) {
-    while ( len ) {
-        ssize_t res = read( sd, ptr, len );
-        if ( res < 0 )
-            return false;
-        len -= res;
-        if ( len == 0 )
-            return true;
-        ptr += res;
-    }
 }
 
 static int get_fcgi_len( char *content_data, int &i ) {
@@ -249,6 +249,9 @@ static void send_out_record( int sd_current, int request_id, const char *ptr ) {
 
 
 struct FcgiRequest {
+    FcgiRequest() : inp_ok( false ), dat_ok( false ) {}
+    bool inp_ok;
+    bool dat_ok;
     String inp;
     String dat;
 };
@@ -290,36 +293,35 @@ bool HttpServer::handle_incoming_request( int sd_current ) {
         return false;
 
     while ( true ) {
-        PRINT( header.type );
-
         int request_id = ( header.requestIdB1 << 8 ) + header.requestIdB0;
         int content_length = ( header.contentLengthB1 << 8 ) + header.contentLengthB0;
-        if ( content_length == 0 ) {
-            String out;
-            request( out, fcgi_requests[ request_id ].inp, fcgi_requests[ request_id ].dat );
-            send_out_record( sd_current, request_id, out.c_str(), out.size() );
-            send_end_record( sd_current, request_id );
+        FcgiRequest &r = fcgi_requests[ request_id ];
 
-            fcgi_requests.erase( request_id );
-            if ( not fcgi_requests.size() )
-                return true;
+        if ( not content_length ) {
+            r.inp_ok |= header.type == FCGI_PARAMS;
+            r.dat_ok |= header.type == FCGI_STDIN;
+            if ( r.inp_ok and r.dat_ok ) {
+                String out;
+                request( out, r.inp, r.dat );
+                send_out_record( sd_current, request_id, out.c_str(), out.size() );
+                send_end_record( sd_current, request_id );
+
+                fcgi_requests.erase( request_id );
+                if ( not fcgi_requests.size() )
+                    return true;
+            }
         }
 
         // content
         BasicVec<char> content_data( Size(), content_length + header.paddingLength );
         if( not read_from_socket( sd_current, content_data.ptr(), content_data.size() ) )
             return false;
-        //
 
         // record
         if ( header.type == FCGI_PARAMS ) {
             get_fcgi_param( fcgi_requests[ request_id ].inp, content_data.ptr(), content_data.size(), "REQUEST_URI" );
         } else if ( header.type == FCGI_STDIN ) {
-            PRINT( content_data.ptr() );
-            //            record.append_content_data( request.post_data );
-            //            if ( record.get_content_length() == 0 )
-            //                break;
-            //TODO;
+            fcgi_requests[ request_id ].dat << String( NewString( content_data.ptr(), content_data.ptr() + content_data.size() ) );
         }
 
         // read next header
