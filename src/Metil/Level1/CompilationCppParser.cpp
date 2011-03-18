@@ -281,8 +281,11 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                                 BasicVec<String> elem_list = tokenize( elem, ',' );
 
                                 File f( h_py, "w" );
-                                f << "from formal_lf import *\n";
-                                f << "write_pb(\n";
+                                f << "import sys, os\n";
+                                f << "sys.path.append( os.getcwd() + '/LMT' )\n";
+                                f << "sys.path.append( os.getcwd() + '/LMTpp' )\n";
+                                f << "import formal_lf\n";
+                                f << "formal_lf.write_pb(\n";
                                 f << "    name = '" << form << "',\n";
                                 f << "    formulations = ['" << form << "'],\n";
                                 f << "    elements = [";
