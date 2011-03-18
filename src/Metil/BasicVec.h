@@ -90,6 +90,16 @@ public:
         new( _data + 3 ) T_( v3 );
         new( _data + 4 ) T_( v4 );
     }
+    
+    template<class T0,class T1,class T2,class T3,class T4, class T5>
+    BasicVec( const T0 &v0, const T1 &v1, const T2 &v2, const T3 &v3, const T4 &v4, const T5 &v5 ) : _size( 6 ), _rese( 6 * sizeof( T ) ), _data( _alloc() ) {
+        new( _data + 0 ) T_( v0 );
+        new( _data + 1 ) T_( v1 );
+        new( _data + 2 ) T_( v2 );
+        new( _data + 3 ) T_( v3 );
+        new( _data + 4 ) T_( v4 );
+        new( _data + 5 ) T_( v5 );
+    }
 
     template<class S>
     BasicVec( Size, S s ) : _size( s ), _rese( s * sizeof( T ) ), _data( _alloc() ) {
