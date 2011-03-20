@@ -32,6 +32,7 @@ private:
 
     bool init_using_dep( CompilationEnvironment &ce, const String &cpp_file, const String &dep_file );
     void parse_src_file_rec( CompilationEnvironment &ce, const String &filename );
+    void make_h_py( const String &h_py, const String &inc_file );
 
     BasicVec<String> ce_inc_paths; ///< -I... which come from CompilationEnvironment
     BasicVec<String> ce_def_procs; ///< -D... which come from CompilationEnvironmentd

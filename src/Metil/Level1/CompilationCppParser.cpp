@@ -76,7 +76,7 @@ bool CompilationCppParser::init_using_dep( CompilationEnvironment &ce, const Str
             if ( file_exists( h_py ) ) {
                 if ( last_modification_time_or_zero_of_file_named( h_py ) >
                      last_modification_time_or_zero_of_file_named( inc_file ) )
-                    exec_cmd( "export PYTHONPATH=\".:$PYTHONPATH\"; python " + h_py + " > " + inc_file, true );
+                    make_h_py( h_py, inc_file );
             }
         }
     }
@@ -221,6 +221,23 @@ static void go_after_next_double_quote( const char *&c ) {
     }
 }
 
+void CompilationCppParser::make_h_py( const String &h_py, const String &inc_file ) {
+    String cmd;
+    cmd << "export PYTHONPATH=\".";
+    for( int i = 0; i < ce_inc_paths.size(); ++i ) {
+        int pl = ce_inc_paths[ i ].find( "LMT" );
+        if ( pl >= 0 ) {
+            cmd << ":" << ce_inc_paths[ i ].beg_upto( pl );
+            //
+            int pi = ce_inc_paths[ i ].find( "/include" );
+            if ( pi >= 0 )
+                cmd << ":" << ce_inc_paths[ i ].beg_upto( pi );
+        }
+    }
+    cmd << ":$PYTHONPATH\"; python " << h_py << " > " << inc_file;
+    exec_cmd( cmd, true );
+}
+
 void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const String &filename ) {
     String current_dir = directory_of( filename ) + "/";
     File file( filename, "r" );
@@ -280,10 +297,20 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                                 String elem = bas_name.beg_upto( end_elem ).end_from( beg_elem );
                                 BasicVec<String> elem_list = tokenize( elem, ',' );
 
+                                int beg_parm = end_elem + 1;
+                                int end_parm = bas_name.find( ".", beg_parm );
+                                String parm = bas_name.beg_upto( end_parm ).end_from( beg_parm );
+                                BasicVec<String> parm_list = tokenize( parm, ',' );
+                                BasicVec<String> der_vars;
+                                for( int np = 0; np < parm_list.size(); ++np ) {
+                                    if ( parm_list[ np ].begins_by( "name_der_vars=" ) )
+                                        der_vars << parm_list[ np ].end_from( 14 );
+                                }
+
                                 File f( h_py, "w" );
-                                f << "import sys, os\n";
-                                f << "sys.path.append( os.getcwd() + '/LMT' )\n";
-                                f << "sys.path.append( os.getcwd() + '/LMTpp' )\n";
+                                // f << "import sys, os\n";
+                                // f << "sys.path.append( os.getcwd() + '/LMT' )\n";
+                                // f << "sys.path.append( os.getcwd() + '/LMTpp' )\n";
                                 f << "import formal_lf\n";
                                 f << "formal_lf.write_pb(\n";
                                 f << "    name = '" << form << "',\n";
@@ -297,6 +324,10 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                                     if ( ce_inc_paths[ i ].find( "LMT" ) >= 0 )
                                         f << ",'" << ce_inc_paths[ i ].beg_upto( ce_inc_paths[ i ].find( "/include" ) ) << "/formulations'";
                                 f << "],\n";
+                                f << "    name_der_vars=[";
+                                for( int nd = 0; nd < der_vars.size(); ++nd )
+                                    f << ( nd ? "," : "" ) << '"' << der_vars[ nd ] << '"';
+                                f << "],\n";
                                 f << ")\n";
                                 // f << "    options = { 'behavior_simplification' : 'plane stress', 'behavior_law' : s },
                                 // f << "    # name_der_vars = [ "frac_E2", "frac_G12", "nu12" ] #
@@ -309,15 +340,8 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                         if ( String h_py = ce.find_src( bas_name + ".py", current_dir ) ) {
                             inc_file = h_py.beg_upto( h_py.size() - 3 );
                             if ( last_modification_time_or_zero_of_file_named( h_py ) >
-                                 last_modification_time_or_zero_of_file_named( inc_file ) ) {
-                                String cmd;
-                                cmd << "export PYTHONPATH=\".";
-                                for( int i = 0; i < ce_inc_paths.size(); ++i )
-                                    if ( ce_inc_paths[ i ].find( "LMT" ) >= 0 )
-                                        cmd << ":" << ce_inc_paths[ i ].beg_upto( ce_inc_paths[ i ].find( "/include" ) );
-                                cmd << ":$PYTHONPATH\"; python " << h_py << " > " << inc_file;
-                                exec_cmd( cmd, true );
-                            }
+                                 last_modification_time_or_zero_of_file_named( inc_file ) )
+                                make_h_py( h_py, inc_file );
                         }
                     }
 
