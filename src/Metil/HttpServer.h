@@ -3,21 +3,25 @@
 
 #include "String.h"
 
-BEG_METIL_NAMESPACE
+BEG_METIL_NAMESPACE;
 
+/**
+  each time a Http or a Fcgi request is received, the function request is called
+*/
 class HttpServer {
 public:
     HttpServer();
     virtual ~HttpServer();
+
     int run( int port );
 
     virtual void request( String &out, const String &addr, const String &post ) = 0;
 
-    /// out << "HTTP/1.0 200 OK\n"...
-    static void send_http_ok( String &out, const String &mime_type );
+    static void send_http_ok( String &out, const String &mime_type ); ///< out << "HTTP/1.0 200 OK\n"...
+    static bool send_page( String &out, const String &addr, const String &dir ); ///< try to send page defined in adress addr from directory dir.
 
-    /// try to send page defined in adress addr from directory dir.
-    static bool send_page( String &out, const String &addr, const String &dir );
+protected:
+    bool handle_incoming_request( int sd_current );
 };
 
 END_METIL_NAMESPACE;

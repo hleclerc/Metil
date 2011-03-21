@@ -1,5 +1,5 @@
 LOC_MC = ./metil_comp --comp-dir compilations -Isrc
-PRG = tests/test_Hdf.cpp
+PRG = tests/test_HttpServer.cpp
 INSTALL = `pwd`
 
 all: metil_comp
