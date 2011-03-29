@@ -365,17 +365,17 @@ inline char alpha( unsigned char v ) {
 BEG_METIL_NAMESPACE;
 
 String md5_digest_to_string( unsigned char *digest ) {
-    NewStringPtr res( 16 * 2 );
+    NewString res( 16 * 2 );
     for(unsigned i=0;i<16;++i) {
-        res.ptr( 2 * i     ) = alpha( digest[ i ] / 16 );
-        res.ptr( 2 * i + 1 ) = alpha( digest[ i ] % 16 );
+        res.ptr()[ 2 * i     ] = alpha( digest[ i ] / 16 );
+        res.ptr()[ 2 * i + 1 ] = alpha( digest[ i ] % 16 );
     }
     return res;
 }
 
 String md5_str( const String &str ) {
     unsigned char digest[16];
-    md5_cs( str.ptr(), str.size(), digest );
+    md5_cs( str.c_str(), str.size(), digest );
     return md5_digest_to_string( digest );
 }
 

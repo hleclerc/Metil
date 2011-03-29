@@ -39,7 +39,7 @@ BasicVec<String> Hdf::list_dir( const String &dir ) const {
     return res;
 }
 
-void Hdf::read_tag( const String &name, const String &tag, String &tag_value, bool group ) {
+void Hdf::read_tag( const String &name, const String &tag, String &tag_value, bool group ) const {
     hid_t dataset = group ? H5Gopen( h5_file, name.c_str() ) : H5Dopen( h5_file, name.c_str() );
     hid_t attr    = H5Aopen_name( dataset, tag.c_str() );
     hid_t ftype   = H5Aget_type( attr );
@@ -48,7 +48,10 @@ void Hdf::read_tag( const String &name, const String &tag, String &tag_value, bo
     if ( H5Tget_strpad( ftype ) == H5T_STR_NULLTERM ) {
         char *string_attr;
         H5Aread( attr, atype, &string_attr );
-        tag_value = string_attr;
+        if ( string_attr )
+            tag_value = string_attr;
+        else
+            tag_value = String();
         ::free( string_attr );
     } else {
         size_t size   = H5Tget_size( ftype );
