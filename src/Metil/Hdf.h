@@ -130,7 +130,7 @@ public:
 
 
     template<class TTV>
-    void read_tag( const String &name, const String &tag, TTV &tag_value, bool group = true ) {
+    void read_tag( const String &name, const String &tag, TTV &tag_value, bool group = true ) const {
         hid_t dataset = group ? H5Gopen( h5_file, name.c_str() ) : H5Dopen( h5_file, name.c_str() );
         hid_t attr    = H5Aopen_name( dataset, tag.c_str() );
 
@@ -142,7 +142,7 @@ public:
             H5Dclose( dataset );
     }
 
-    void read_tag( const String &name, const String &tag, String &tag_value, bool group = true );
+    void read_tag( const String &name, const String &tag, String &tag_value, bool group = true ) const;
     void read_group_size( const String &name, int &size ) const;
     void read_size( const String &name, int &size ) const;
 
