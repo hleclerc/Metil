@@ -116,7 +116,7 @@ static bool read_post_requ( String &inp, String &dat, int sd_current ) {
     while ( ( posc = extr.find( "Content-Length: " ) ) < 0 ) {
         char data[ 1024 ];
         int size = read( sd_current, data, 1024 );
-        if ( size <= 0 )
+        if ( size < 0 )
             return false;
         extr << String( NewString( data, data + size ) );
     }
@@ -375,7 +375,8 @@ int HttpServer::run( int port ) {
 
 void HttpServer::send_http_ok( String &out, const String &mime_type ) {
     out << "HTTP/1.0 200 OK\n";
-    out << "Content-Type : " << mime_type << "\n";
+    if ( mime_type.size() )
+        out << "Content-Type: " << mime_type << "\n";
     out << "\n";
 }
 
