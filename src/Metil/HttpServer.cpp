@@ -386,7 +386,12 @@ bool HttpServer::send_page( String &out, const String &addr, const String &dir )
 
     String file = dir + '/' + addr;
     if ( file_exists( file ) ) {
-        send_http_ok( out, "text/html" );
+        if ( file.ends_with( ".js" ) )
+            send_http_ok( out, "text/javascript" );
+        else if ( file.ends_with( ".html" ) )
+            send_http_ok( out, "text/html" );
+        else
+            send_http_ok( out, "text/plain" );
 
         File fout( file );
         out << fout.c_str();

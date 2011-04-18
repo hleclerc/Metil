@@ -214,24 +214,24 @@ String get_cpu_type() {
 //    return String( c_term ) != "dumb";
 //}
 
-//DirectoryIterator::DirectoryIterator( const String &directory ) {
-//    dir = (void *)opendir( directory.c_str() );
-//    dir_ent = dir ? (void *)readdir( (DIR *)dir ) : 0;
-//}
-//DirectoryIterator::~DirectoryIterator() {
-//    if ( dir )
-//        closedir( (DIR *)dir );
-//}
-//DirectoryIterator::operator bool() const {
-//    return dir_ent;
-//}
-//DirectoryIterator &DirectoryIterator::operator++() {
-//    dir_ent = dir ? (void *)readdir( (DIR *)dir ) : 0;
-//    return *this;
-//}
-//String DirectoryIterator::operator*() const {
-//    return NewStringPtr( ((dirent *)dir_ent)->d_name );
-//}
+DirectoryIterator::DirectoryIterator( const String &directory ) {
+    dir = (void *)opendir( directory.c_str() );
+    dir_ent = dir ? (void *)readdir( (DIR *)dir ) : 0;
+}
+DirectoryIterator::~DirectoryIterator() {
+    if ( dir )
+        closedir( (DIR *)dir );
+}
+DirectoryIterator::operator bool() const {
+    return dir_ent;
+}
+DirectoryIterator &DirectoryIterator::operator++() {
+    dir_ent = dir ? (void *)readdir( (DIR *)dir ) : 0;
+    return *this;
+}
+String DirectoryIterator::operator*() const {
+    return NewString( ((dirent *)dir_ent)->d_name );
+}
 
 int exec_cmd( String f, bool display ) {
     if ( not f )

@@ -24,25 +24,25 @@ String get_os_type();
 String get_cpu_type();
 //bool term_supports_color(); ///< return true if terminal supports escape color sequences
 
-///**
-//  @brief Can be used to sweep a directory
+/**
+  @brief Can be used to sweep a directory
 
-//  Example :
-//\code
-//for(DirectoryIterator f("/home"); f; ++f )
-//    PRINT( *f );
-//\endcode
-//*/
-//struct DirectoryIterator {
-//    DirectoryIterator( const String &directory );
-//    ~DirectoryIterator();
-//    operator bool() const;
-//    DirectoryIterator &operator++();
-//    String operator*() const;
+  Example :
+\code
+for(DirectoryIterator f("/home"); f; ++f )
+    PRINT( *f );
+\endcode
+*/
+struct DirectoryIterator {
+    DirectoryIterator( const String &directory );
+    ~DirectoryIterator();
+    operator bool() const;
+    DirectoryIterator &operator++();
+    String operator*() const;
 
-//    void *dir;
-//    void *dir_ent;
-//};
+    void *dir;
+    void *dir_ent;
+};
 
 // time
 double time_of_day_in_sec();
