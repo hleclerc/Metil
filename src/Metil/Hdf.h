@@ -204,7 +204,15 @@ public:
 //         H5Aclose( att );
 //         H5Gclose( dat );
 //     }
-
+    bool dataset_exist(String &name){
+        bool exist = false;
+        if ( H5Lexists( h5_file , name.c_str(), H5P_DEFAULT ) ){
+           exist = true;
+        }
+        return exist;
+    }
+    
+    
 private:
     void check_grp( const String &name ) {
         // find grp
@@ -219,6 +227,7 @@ private:
     }
 
     hid_t h5_file;
+    
 };
 
 END_METIL_NAMESPACE;

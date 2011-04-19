@@ -53,6 +53,7 @@ public:
     String exe_suffix(); ///< .exe, ... depending on the system
     String dep_suffix(); ///< .dep
 
+    String h_for( const String &bas ); ///< ex: toto -> compilation/toto.h
     String cpp_for( const String &bas ); ///< ex: toto -> compilation/toto.cpp
     String cu_for ( const String &bas ); ///< ex: toto -> compilation/toto.cu
     String obj_for( const String &cpp, bool dyn ); ///< ex: toto.cpp -> compilation/toto.os

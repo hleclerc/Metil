@@ -344,6 +344,10 @@ String CompilationEnvironment::lib_for( const String &cpp, bool dyn ) {
     return comp_dir() + filename_without_dir_of( cpp ) + lib_suffix( dyn );
 }
 
+String CompilationEnvironment::h_for( const String &cpp ) {
+    return comp_dir() + filename_without_dir_of( cpp ) + ".h";
+}
+
 String CompilationEnvironment::cpp_for( const String &cpp ) {
     return comp_dir() + filename_without_dir_of( cpp ) + ".cpp";
 }
