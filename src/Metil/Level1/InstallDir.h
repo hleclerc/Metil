@@ -1,1 +1,3 @@
-#define INSTALL_DIR "/home/leclerc/Metil"
+
+#define INSTALL_DIR "/home/jbellec/code_dev/Metil-test"
+

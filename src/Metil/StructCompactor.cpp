@@ -175,8 +175,8 @@ void StructCompactor::make_files( const String &dir ) {
     fh << "#ifndef " << item->type << "_H\n";
     fh << "#define " << item->type << "_H\n";
     fh << "\n";
-    fh << "#include <MemoryDriver.h>\n";
-    fh << "#include <BasicVecRef.h>\n";
+    fh << "#include <Metil/MemoryDriver.h>\n";
+    fh << "#include <Metil/BasicVecRef.h>\n";
     fh << "\n";
     fh << "BEG_METIL_NAMESPACE\n";
     fh << "\n";
