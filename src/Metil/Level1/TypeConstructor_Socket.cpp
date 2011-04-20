@@ -44,8 +44,9 @@ void metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithS
 #endif
 }
 
+
 // write
-void metil_def_write__when__a__isa__Socket__pert__1( MO &a, const void *data, ST size ) {
+void metil_def_write__when__a__isa__Socket__pert__2( MO &a, const void *data, ST size ) {
 #ifndef WIN32
     send( ST( a.data ), data, size, 0 );
 #else

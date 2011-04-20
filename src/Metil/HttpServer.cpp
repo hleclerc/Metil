@@ -390,11 +390,18 @@ bool HttpServer::send_page( String &out, const String &addr, const String &dir )
             send_http_ok( out, "text/javascript" );
         else if ( file.ends_with( ".html" ) )
             send_http_ok( out, "text/html" );
+        else if ( file.ends_with( ".css" ) )
+            send_http_ok( out, "text/css" );
+        else if ( file.ends_with( ".png" ) )
+            send_http_ok( out, "image/png" );
+        else if ( file.ends_with( ".jpg" ) )
+            send_http_ok( out, "image/jpg" );
         else
             send_http_ok( out, "text/plain" );
 
         File fout( file );
-        out << fout.c_str();
+        ST size = fout.size();
+        out.write( fout.c_str(), size );
         return true;
     }
     return false;

@@ -2,7 +2,7 @@
 #ifndef CPPPARSER_H
 #define CPPPARSER_H
 
-#include "BasicVec.h"
+#include "../BasicVec.h"
 #include "DefStr.h"
 
 #include <map>

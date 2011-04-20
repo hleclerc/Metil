@@ -116,7 +116,6 @@ extern Type metil_type_ref_Flt_0_64_64_15_79_1_16383;
 extern Type metil_type_ref_FileWithoutClose;
 extern Type metil_type_ref_Array_4NULL_2_0_0_0_0;
 extern Type metil_type_ref_Array_m_1_0;
-extern Type metil_type_ref_MatlabString;
 extern Type metil_type_cst_Array_7Int_s_8_1_1_1;
 extern Type metil_type_cst_Array_7Int_s_8_1_2_2;
 extern Type metil_type_cst_Array_7Int_s_8_1_3_3;
