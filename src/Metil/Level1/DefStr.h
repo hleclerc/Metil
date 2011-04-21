@@ -1,8 +1,8 @@
 #ifndef DEFSTR_H
 #define DEFSTR_H
 
-#include "BasicSplittedVec.h"
-#include "BasicVec.h"
+#include "../BasicSplittedVec.h"
+#include "../BasicVec.h"
 
 #include <string>
 

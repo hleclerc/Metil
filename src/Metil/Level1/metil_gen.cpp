@@ -558,9 +558,6 @@ Type metil_type_bas_LazyOperation_supz( &type_constructor_LazyOperation_supz, "L
 static TypeConstructor_LazyOperation type_constructor_LazyOperation_tan;
 Type metil_type_bas_LazyOperation_tan( &type_constructor_LazyOperation_tan, "LazyOperation_tan", &metil_type_bas_LazyOperation_tan, 0, 0, Type::Bas );
 
-static TypeConstructor_MatlabString type_constructor_MatlabString;
-Type metil_type_ref_MatlabString( &type_constructor_MatlabString, "MatlabString", 0, &metil_type_ref_MatlabString, 0, Type::Cst );
-
 static TypeConstructor_Op type_constructor_Op_equal_P_P;
 Type metil_type_bas_Op_equal_P_P( &type_constructor_Op_equal_P_P, "Op_equal_P_P", &metil_type_bas_Op_equal_P_P, 0, 0, Type::Bas );
 
@@ -593,7 +590,7 @@ extern MethodName_del::TM metil_def_del__when__a__isa__Socket__pert__1;
 extern MethodName_self_append::TM metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2;
 extern MethodName_self_append::TM metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2;
 extern MethodName_self_append::TM metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2;
-extern MethodName_write::TM metil_def_write__when__a__isa__Socket__pert__1;
+extern MethodName_write::TM metil_def_write__when__a__isa__Socket__pert__2;
 extern MethodName_self_append::TM metil_def_self_append__pert__0;
 extern MethodName_self_add::TM metil_def_self_add__pert__0;
 extern MethodName_self_sub::TM metil_def_self_sub__pert__0;
@@ -1113,7 +1110,7 @@ extern MethodMaker metil_gen_del__when__a__has__Owcp_type__pert__0;
 void reg_def() {
     static MethodCond_0_isa<TypeConstructor_File> cond_metil_def_del__when__a__isa__File;
 
-    static const char *string_0 = "src/Level1/TypeConstructor_File.cpp";
+    static const char *string_0 = "src/Metil/Level1/TypeConstructor_File.cpp";
 
     static MethodFinder<MethodName_del>::Item item_metil_def_del__when__a__isa__File;
     item_metil_def_del__when__a__isa__File.prev = MethodFinder<MethodName_del>::last;
@@ -1157,7 +1154,7 @@ void reg_def() {
 
     static MethodCond_0_isa<TypeConstructor_Socket> cond_metil_def_del__when__a__isa__Socket__pert__1;
 
-    static const char *string_1 = "src/Level1/TypeConstructor_Socket.cpp";
+    static const char *string_1 = "src/Metil/Level1/TypeConstructor_Socket.cpp";
 
     static MethodFinder<MethodName_del>::Item item_metil_def_del__when__a__isa__Socket__pert__1;
     item_metil_def_del__when__a__isa__Socket__pert__1.prev = MethodFinder<MethodName_del>::last;
@@ -1165,7 +1162,7 @@ void reg_def() {
     item_metil_def_del__when__a__isa__Socket__pert__1.meth = metil_def_del__when__a__isa__Socket__pert__1;
     item_metil_def_del__when__a__isa__Socket__pert__1.gene = 0;
     item_metil_def_del__when__a__isa__Socket__pert__1.file = string_1;
-    item_metil_def_del__when__a__isa__Socket__pert__1.line = 11;
+    item_metil_def_del__when__a__isa__Socket__pert__1.line = 13;
     item_metil_def_del__when__a__isa__Socket__pert__1.pert = 1;
     MethodFinder<MethodName_del>::last = &item_metil_def_del__when__a__isa__Socket__pert__1;
 
@@ -1177,7 +1174,7 @@ void reg_def() {
     item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2.meth = metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2;
     item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2.gene = 0;
     item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2.file = string_1;
-    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2.line = 15;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2.line = 17;
     item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2.pert = 2;
     MethodFinder<MethodName_self_append>::last = &item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtr__pert__2;
 
@@ -1189,7 +1186,7 @@ void reg_def() {
     item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2.meth = metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2;
     item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2.gene = 0;
     item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2.file = string_1;
-    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2.line = 22;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2.line = 28;
     item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2.pert = 2;
     MethodFinder<MethodName_self_append>::last = &item_metil_def_self_append__when__a__isa__Socket__and__b__isa__OwcpString__pert__2;
 
@@ -1201,23 +1198,23 @@ void reg_def() {
     item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2.meth = metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2;
     item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2.gene = 0;
     item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2.file = string_1;
-    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2.line = 28;
+    item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2.line = 38;
     item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2.pert = 2;
     MethodFinder<MethodName_self_append>::last = &item_metil_def_self_append__when__a__isa__Socket__and__b__isa__ConstCharPtrWithSize__pert__2;
 
-    static MethodFinder<MethodName_write>::Item item_metil_def_write__when__a__isa__Socket__pert__1;
-    item_metil_def_write__when__a__isa__Socket__pert__1.prev = MethodFinder<MethodName_write>::last;
-    item_metil_def_write__when__a__isa__Socket__pert__1.cond = &cond_metil_def_del__when__a__isa__Socket__pert__1;
-    item_metil_def_write__when__a__isa__Socket__pert__1.meth = metil_def_write__when__a__isa__Socket__pert__1;
-    item_metil_def_write__when__a__isa__Socket__pert__1.gene = 0;
-    item_metil_def_write__when__a__isa__Socket__pert__1.file = string_1;
-    item_metil_def_write__when__a__isa__Socket__pert__1.line = 34;
-    item_metil_def_write__when__a__isa__Socket__pert__1.pert = 1;
-    MethodFinder<MethodName_write>::last = &item_metil_def_write__when__a__isa__Socket__pert__1;
+    static MethodFinder<MethodName_write>::Item item_metil_def_write__when__a__isa__Socket__pert__2;
+    item_metil_def_write__when__a__isa__Socket__pert__2.prev = MethodFinder<MethodName_write>::last;
+    item_metil_def_write__when__a__isa__Socket__pert__2.cond = &cond_metil_def_del__when__a__isa__Socket__pert__1;
+    item_metil_def_write__when__a__isa__Socket__pert__2.meth = metil_def_write__when__a__isa__Socket__pert__2;
+    item_metil_def_write__when__a__isa__Socket__pert__2.gene = 0;
+    item_metil_def_write__when__a__isa__Socket__pert__2.file = string_1;
+    item_metil_def_write__when__a__isa__Socket__pert__2.line = 49;
+    item_metil_def_write__when__a__isa__Socket__pert__2.pert = 2;
+    MethodFinder<MethodName_write>::last = &item_metil_def_write__when__a__isa__Socket__pert__2;
 
     static MethodCond_True cond_metil_def_self_append__pert__0;
 
-    static const char *string_2 = "src/Level1/TypeConstructor.cpp";
+    static const char *string_2 = "src/Metil/Level1/TypeConstructor.cpp";
 
     static MethodFinder<MethodName_self_append>::Item item_metil_def_self_append__pert__0;
     item_metil_def_self_append__pert__0.prev = MethodFinder<MethodName_self_append>::last;
@@ -1415,7 +1412,7 @@ void reg_def() {
 
     static MethodCond_0_isa<TypeConstructor_MatlabString> cond_metil_def_flush__when__a__isa__MatlabString;
 
-    static const char *string_3 = "src/Level1/TypeConstructor_MatlabString.cpp";
+    static const char *string_3 = "src/Metil/Level1/TypeConstructor_MatlabString.cpp";
 
     static MethodFinder<MethodName_flush>::Item item_metil_def_flush__when__a__isa__MatlabString;
     item_metil_def_flush__when__a__isa__MatlabString.prev = MethodFinder<MethodName_flush>::last;
@@ -1429,7 +1426,7 @@ void reg_def() {
 
     static MethodCond_0_isa<TypeConstructor_LazyObject> cond_metil_def_flush__when__a__isa__LazyObject;
 
-    static const char *string_4 = "src/Level1/TypeConstructor_LazyObject.cpp";
+    static const char *string_4 = "src/Metil/Level1/TypeConstructor_LazyObject.cpp";
 
     static MethodFinder<MethodName_flush>::Item item_metil_def_flush__when__a__isa__LazyObject;
     item_metil_def_flush__when__a__isa__LazyObject.prev = MethodFinder<MethodName_flush>::last;
@@ -1441,7 +1438,7 @@ void reg_def() {
     item_metil_def_flush__when__a__isa__LazyObject.pert = 0;
     MethodFinder<MethodName_flush>::last = &item_metil_def_flush__when__a__isa__LazyObject;
 
-    static const char *string_5 = "src/Level1/DeclMethods.h";
+    static const char *string_5 = "src/Metil/Level1/DeclMethods.h";
 
     static MethodFinder<MethodName_copy_ref>::Item item_metil_def_copy_ref__when__a__isa__LazyObject__pert__10;
     item_metil_def_copy_ref__when__a__isa__LazyObject__pert__10.prev = MethodFinder<MethodName_copy_ref>::last;
@@ -1533,7 +1530,7 @@ void reg_def() {
     item_metil_def_add_1__when__a__isa__LazyObject__pert__10.pert = 10;
     MethodFinder<MethodName_add_1>::last = &item_metil_def_add_1__when__a__isa__LazyObject__pert__10;
 
-    static const char *string_6 = "src/Level1/DeclMethodsUnaryArithmetic.h";
+    static const char *string_6 = "src/Metil/Level1/DeclMethodsUnaryArithmetic.h";
 
     static MethodFinder<MethodName_neg>::Item item_metil_def_neg__when__a__isa__LazyObject__pert__10;
     item_metil_def_neg__when__a__isa__LazyObject__pert__10.prev = MethodFinder<MethodName_neg>::last;
@@ -1725,7 +1722,7 @@ void reg_def() {
     item_metil_def_infz__when__a__isa__LazyObject__pert__10.pert = 10;
     MethodFinder<MethodName_infz>::last = &item_metil_def_infz__when__a__isa__LazyObject__pert__10;
 
-    static const char *string_7 = "src/Level1/DeclMethodsBinaryArithmetic.h";
+    static const char *string_7 = "src/Metil/Level1/DeclMethodsBinaryArithmetic.h";
 
     static MethodFinder<MethodName_add>::Item item_metil_def_add__when__a__isa__LazyObject__pert__10;
     item_metil_def_add__when__a__isa__LazyObject__pert__10.prev = MethodFinder<MethodName_add>::last;
@@ -1927,7 +1924,7 @@ void reg_def() {
     item_metil_def_boolean_xor__when__a__isa__LazyObject__pert__10.pert = 10;
     MethodFinder<MethodName_boolean_xor>::last = &item_metil_def_boolean_xor__when__a__isa__LazyObject__pert__10;
 
-    static const char *string_8 = "src/Level1/DeclMethodsBinary.h";
+    static const char *string_8 = "src/Metil/Level1/DeclMethodsBinary.h";
 
     static MethodFinder<MethodName_select>::Item item_metil_def_select__when__a__isa__LazyObject__pert__10;
     item_metil_def_select__when__a__isa__LazyObject__pert__10.prev = MethodFinder<MethodName_select>::last;
@@ -2334,7 +2331,7 @@ void reg_def() {
     static MethodCond_0_is cond_metil_def_convert_to_SI32__when__a__is__Cst_0__pert__1000;
     cond_metil_def_convert_to_SI32__when__a__is__Cst_0__pert__1000.type = "Cst_0";
 
-    static const char *string_9 = "src/Level1/TypeConstructor_Cst.cpp";
+    static const char *string_9 = "src/Metil/Level1/TypeConstructor_Cst.cpp";
 
     static MethodFinder<MethodName_convert_to_SI32>::Item item_metil_def_convert_to_SI32__when__a__is__Cst_0__pert__1000;
     item_metil_def_convert_to_SI32__when__a__is__Cst_0__pert__1000.prev = MethodFinder<MethodName_convert_to_SI32>::last;
@@ -2401,7 +2398,7 @@ void reg_def() {
 
     static MethodCond_0_isa<TypeConstructor_ConstCharPtr> cond_metil_def_copy__when__a__isa__ConstCharPtr;
 
-    static const char *string_10 = "src/Val.h";
+    static const char *string_10 = "src/Metil/Level1/../Val.h";
 
     static MethodFinder<MethodName_copy>::Item item_metil_def_copy__when__a__isa__ConstCharPtr;
     item_metil_def_copy__when__a__isa__ConstCharPtr.prev = MethodFinder<MethodName_copy>::last;
@@ -2409,7 +2406,7 @@ void reg_def() {
     item_metil_def_copy__when__a__isa__ConstCharPtr.meth = metil_def_copy__when__a__isa__ConstCharPtr;
     item_metil_def_copy__when__a__isa__ConstCharPtr.gene = 0;
     item_metil_def_copy__when__a__isa__ConstCharPtr.file = string_10;
-    item_metil_def_copy__when__a__isa__ConstCharPtr.line = 6;
+    item_metil_def_copy__when__a__isa__ConstCharPtr.line = 5;
     item_metil_def_copy__when__a__isa__ConstCharPtr.pert = 0;
     MethodFinder<MethodName_copy>::last = &item_metil_def_copy__when__a__isa__ConstCharPtr;
 
@@ -2419,7 +2416,7 @@ void reg_def() {
     item_metil_def_size__when__a__isa__ConstCharPtr.meth = metil_def_size__when__a__isa__ConstCharPtr;
     item_metil_def_size__when__a__isa__ConstCharPtr.gene = 0;
     item_metil_def_size__when__a__isa__ConstCharPtr.file = string_10;
-    item_metil_def_size__when__a__isa__ConstCharPtr.line = 8;
+    item_metil_def_size__when__a__isa__ConstCharPtr.line = 7;
     item_metil_def_size__when__a__isa__ConstCharPtr.pert = 0;
     MethodFinder<MethodName_size>::last = &item_metil_def_size__when__a__isa__ConstCharPtr;
 
@@ -2429,7 +2426,7 @@ void reg_def() {
     item_metil_def_ptr_z__when__a__isa__ConstCharPtr.meth = metil_def_ptr_z__when__a__isa__ConstCharPtr;
     item_metil_def_ptr_z__when__a__isa__ConstCharPtr.gene = 0;
     item_metil_def_ptr_z__when__a__isa__ConstCharPtr.file = string_10;
-    item_metil_def_ptr_z__when__a__isa__ConstCharPtr.line = 10;
+    item_metil_def_ptr_z__when__a__isa__ConstCharPtr.line = 9;
     item_metil_def_ptr_z__when__a__isa__ConstCharPtr.pert = 0;
     MethodFinder<MethodName_ptr_z>::last = &item_metil_def_ptr_z__when__a__isa__ConstCharPtr;
 
@@ -2439,7 +2436,7 @@ void reg_def() {
     item_metil_def_new_ptr_z__when__a__isa__ConstCharPtr.meth = metil_def_new_ptr_z__when__a__isa__ConstCharPtr;
     item_metil_def_new_ptr_z__when__a__isa__ConstCharPtr.gene = 0;
     item_metil_def_new_ptr_z__when__a__isa__ConstCharPtr.file = string_10;
-    item_metil_def_new_ptr_z__when__a__isa__ConstCharPtr.line = 12;
+    item_metil_def_new_ptr_z__when__a__isa__ConstCharPtr.line = 11;
     item_metil_def_new_ptr_z__when__a__isa__ConstCharPtr.pert = 0;
     MethodFinder<MethodName_new_ptr_z>::last = &item_metil_def_new_ptr_z__when__a__isa__ConstCharPtr;
 
@@ -2449,7 +2446,7 @@ void reg_def() {
     item_metil_def_copy_data__when__a__isa__ConstCharPtr.meth = metil_def_copy_data__when__a__isa__ConstCharPtr;
     item_metil_def_copy_data__when__a__isa__ConstCharPtr.gene = 0;
     item_metil_def_copy_data__when__a__isa__ConstCharPtr.file = string_10;
-    item_metil_def_copy_data__when__a__isa__ConstCharPtr.line = 14;
+    item_metil_def_copy_data__when__a__isa__ConstCharPtr.line = 13;
     item_metil_def_copy_data__when__a__isa__ConstCharPtr.pert = 0;
     MethodFinder<MethodName_copy_data>::last = &item_metil_def_copy_data__when__a__isa__ConstCharPtr;
 
@@ -2459,7 +2456,7 @@ void reg_def() {
     item_metil_def_convert_to_Bool__when__a__isa__ConstCharPtr__pert__1.meth = metil_def_convert_to_Bool__when__a__isa__ConstCharPtr__pert__1;
     item_metil_def_convert_to_Bool__when__a__isa__ConstCharPtr__pert__1.gene = 0;
     item_metil_def_convert_to_Bool__when__a__isa__ConstCharPtr__pert__1.file = string_10;
-    item_metil_def_convert_to_Bool__when__a__isa__ConstCharPtr__pert__1.line = 16;
+    item_metil_def_convert_to_Bool__when__a__isa__ConstCharPtr__pert__1.line = 15;
     item_metil_def_convert_to_Bool__when__a__isa__ConstCharPtr__pert__1.pert = 1;
     MethodFinder<MethodName_convert_to_Bool>::last = &item_metil_def_convert_to_Bool__when__a__isa__ConstCharPtr__pert__1;
 
@@ -2471,7 +2468,7 @@ void reg_def() {
     item_metil_def_equal__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.meth = metil_def_equal__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1;
     item_metil_def_equal__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.gene = 0;
     item_metil_def_equal__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.file = string_10;
-    item_metil_def_equal__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.line = 18;
+    item_metil_def_equal__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.line = 17;
     item_metil_def_equal__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.pert = 1;
     MethodFinder<MethodName_equal>::last = &item_metil_def_equal__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1;
 
@@ -2481,7 +2478,7 @@ void reg_def() {
     item_metil_def_find__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.meth = metil_def_find__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1;
     item_metil_def_find__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.gene = 0;
     item_metil_def_find__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.file = string_10;
-    item_metil_def_find__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.line = 20;
+    item_metil_def_find__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.line = 19;
     item_metil_def_find__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.pert = 1;
     MethodFinder<MethodName_find>::last = &item_metil_def_find__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1;
 
@@ -2491,7 +2488,7 @@ void reg_def() {
     item_metil_def_rfind__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.meth = metil_def_rfind__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1;
     item_metil_def_rfind__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.gene = 0;
     item_metil_def_rfind__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.file = string_10;
-    item_metil_def_rfind__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.line = 24;
+    item_metil_def_rfind__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.line = 23;
     item_metil_def_rfind__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1.pert = 1;
     MethodFinder<MethodName_rfind>::last = &item_metil_def_rfind__when__a__isa__ConstCharPtr__and__b__isa__ConstCharPtr__pert__1;
 
@@ -2503,7 +2500,7 @@ void reg_def() {
     item_metil_def_end_from__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.meth = metil_def_end_from__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1;
     item_metil_def_end_from__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.gene = 0;
     item_metil_def_end_from__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.file = string_10;
-    item_metil_def_end_from__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.line = 28;
+    item_metil_def_end_from__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.line = 27;
     item_metil_def_end_from__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.pert = 1;
     MethodFinder<MethodName_end_from>::last = &item_metil_def_end_from__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1;
 
@@ -2513,7 +2510,7 @@ void reg_def() {
     item_metil_def_beg_upto__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.meth = metil_def_beg_upto__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1;
     item_metil_def_beg_upto__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.gene = 0;
     item_metil_def_beg_upto__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.file = string_10;
-    item_metil_def_beg_upto__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.line = 32;
+    item_metil_def_beg_upto__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.line = 31;
     item_metil_def_beg_upto__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.pert = 1;
     MethodFinder<MethodName_beg_upto>::last = &item_metil_def_beg_upto__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1;
 
@@ -2523,7 +2520,7 @@ void reg_def() {
     item_metil_def_select_C__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.meth = metil_def_select_C__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1;
     item_metil_def_select_C__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.gene = 0;
     item_metil_def_select_C__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.file = string_10;
-    item_metil_def_select_C__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.line = 38;
+    item_metil_def_select_C__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.line = 37;
     item_metil_def_select_C__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1.pert = 1;
     MethodFinder<MethodName_select_C>::last = &item_metil_def_select_C__when__a__isa__ConstCharPtr__and__b__isa__Int__pert__1;
 
@@ -2535,7 +2532,7 @@ void reg_def() {
     item_metil_def_del__when__a__isa__OwcpString__pert__100.meth = metil_def_del__when__a__isa__OwcpString__pert__100;
     item_metil_def_del__when__a__isa__OwcpString__pert__100.gene = 0;
     item_metil_def_del__when__a__isa__OwcpString__pert__100.file = string_10;
-    item_metil_def_del__when__a__isa__OwcpString__pert__100.line = 6;
+    item_metil_def_del__when__a__isa__OwcpString__pert__100.line = 5;
     item_metil_def_del__when__a__isa__OwcpString__pert__100.pert = 100;
     MethodFinder<MethodName_del>::last = &item_metil_def_del__when__a__isa__OwcpString__pert__100;
 
@@ -2545,7 +2542,7 @@ void reg_def() {
     item_metil_def_copy__when__a__isa__OwcpString.meth = metil_def_copy__when__a__isa__OwcpString;
     item_metil_def_copy__when__a__isa__OwcpString.gene = 0;
     item_metil_def_copy__when__a__isa__OwcpString.file = string_10;
-    item_metil_def_copy__when__a__isa__OwcpString.line = 12;
+    item_metil_def_copy__when__a__isa__OwcpString.line = 11;
     item_metil_def_copy__when__a__isa__OwcpString.pert = 0;
     MethodFinder<MethodName_copy>::last = &item_metil_def_copy__when__a__isa__OwcpString;
 
@@ -2555,7 +2552,7 @@ void reg_def() {
     item_metil_def_size__when__a__isa__OwcpString.meth = metil_def_size__when__a__isa__OwcpString;
     item_metil_def_size__when__a__isa__OwcpString.gene = 0;
     item_metil_def_size__when__a__isa__OwcpString.file = string_10;
-    item_metil_def_size__when__a__isa__OwcpString.line = 17;
+    item_metil_def_size__when__a__isa__OwcpString.line = 16;
     item_metil_def_size__when__a__isa__OwcpString.pert = 0;
     MethodFinder<MethodName_size>::last = &item_metil_def_size__when__a__isa__OwcpString;
 
@@ -2565,7 +2562,7 @@ void reg_def() {
     item_metil_def_ptr_z__when__a__isa__OwcpString.meth = metil_def_ptr_z__when__a__isa__OwcpString;
     item_metil_def_ptr_z__when__a__isa__OwcpString.gene = 0;
     item_metil_def_ptr_z__when__a__isa__OwcpString.file = string_10;
-    item_metil_def_ptr_z__when__a__isa__OwcpString.line = 22;
+    item_metil_def_ptr_z__when__a__isa__OwcpString.line = 21;
     item_metil_def_ptr_z__when__a__isa__OwcpString.pert = 0;
     MethodFinder<MethodName_ptr_z>::last = &item_metil_def_ptr_z__when__a__isa__OwcpString;
 
@@ -2575,7 +2572,7 @@ void reg_def() {
     item_metil_def_new_ptr_z__when__a__isa__OwcpString.meth = metil_def_new_ptr_z__when__a__isa__OwcpString;
     item_metil_def_new_ptr_z__when__a__isa__OwcpString.gene = 0;
     item_metil_def_new_ptr_z__when__a__isa__OwcpString.file = string_10;
-    item_metil_def_new_ptr_z__when__a__isa__OwcpString.line = 27;
+    item_metil_def_new_ptr_z__when__a__isa__OwcpString.line = 26;
     item_metil_def_new_ptr_z__when__a__isa__OwcpString.pert = 0;
     MethodFinder<MethodName_new_ptr_z>::last = &item_metil_def_new_ptr_z__when__a__isa__OwcpString;
 
@@ -2585,7 +2582,7 @@ void reg_def() {
     item_metil_def_copy_data__when__a__isa__OwcpString.meth = metil_def_copy_data__when__a__isa__OwcpString;
     item_metil_def_copy_data__when__a__isa__OwcpString.gene = 0;
     item_metil_def_copy_data__when__a__isa__OwcpString.file = string_10;
-    item_metil_def_copy_data__when__a__isa__OwcpString.line = 32;
+    item_metil_def_copy_data__when__a__isa__OwcpString.line = 31;
     item_metil_def_copy_data__when__a__isa__OwcpString.pert = 0;
     MethodFinder<MethodName_copy_data>::last = &item_metil_def_copy_data__when__a__isa__OwcpString;
 
@@ -2597,7 +2594,7 @@ void reg_def() {
     item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1.meth = metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1;
     item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1.gene = 0;
     item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1.file = string_10;
-    item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1.line = 37;
+    item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1.line = 36;
     item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1.pert = 1;
     MethodFinder<MethodName_find>::last = &item_metil_def_find__when__a__isa__OwcpString__and__b__isa__ConstCharPtr__pert__1;
 
@@ -2609,7 +2606,7 @@ void reg_def() {
     item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1.meth = metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
     item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1.gene = 0;
     item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1.file = string_10;
-    item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1.line = 42;
+    item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1.line = 41;
     item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1.pert = 1;
     MethodFinder<MethodName_beg_upto>::last = &item_metil_def_beg_upto__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
 
@@ -2619,7 +2616,7 @@ void reg_def() {
     item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1.meth = metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
     item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1.gene = 0;
     item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1.file = string_10;
-    item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1.line = 49;
+    item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1.line = 48;
     item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1.pert = 1;
     MethodFinder<MethodName_end_from>::last = &item_metil_def_end_from__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
 
@@ -2629,13 +2626,13 @@ void reg_def() {
     item_metil_def_select_C__when__a__isa__OwcpString__and__b__isa__Int__pert__1.meth = metil_def_select_C__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
     item_metil_def_select_C__when__a__isa__OwcpString__and__b__isa__Int__pert__1.gene = 0;
     item_metil_def_select_C__when__a__isa__OwcpString__and__b__isa__Int__pert__1.file = string_10;
-    item_metil_def_select_C__when__a__isa__OwcpString__and__b__isa__Int__pert__1.line = 56;
+    item_metil_def_select_C__when__a__isa__OwcpString__and__b__isa__Int__pert__1.line = 55;
     item_metil_def_select_C__when__a__isa__OwcpString__and__b__isa__Int__pert__1.pert = 1;
     MethodFinder<MethodName_select_C>::last = &item_metil_def_select_C__when__a__isa__OwcpString__and__b__isa__Int__pert__1;
 
     static MethodCond_0_isa<TypeConstructor_GpuTex> cond_metil_def_dim__when__a__isa__GpuTex__pert__1;
 
-    static const char *string_11 = "src/Vec.h";
+    static const char *string_11 = "src/Metil/Level1/../Vec.h";
 
     static MethodFinder<MethodName_dim>::Item item_metil_def_dim__when__a__isa__GpuTex__pert__1;
     item_metil_def_dim__when__a__isa__GpuTex__pert__1.prev = MethodFinder<MethodName_dim>::last;
@@ -2643,7 +2640,7 @@ void reg_def() {
     item_metil_def_dim__when__a__isa__GpuTex__pert__1.meth = metil_def_dim__when__a__isa__GpuTex__pert__1;
     item_metil_def_dim__when__a__isa__GpuTex__pert__1.gene = 0;
     item_metil_def_dim__when__a__isa__GpuTex__pert__1.file = string_11;
-    item_metil_def_dim__when__a__isa__GpuTex__pert__1.line = 6;
+    item_metil_def_dim__when__a__isa__GpuTex__pert__1.line = 7;
     item_metil_def_dim__when__a__isa__GpuTex__pert__1.pert = 1;
     MethodFinder<MethodName_dim>::last = &item_metil_def_dim__when__a__isa__GpuTex__pert__1;
 
@@ -2653,7 +2650,7 @@ void reg_def() {
     item_metil_def_base_type__when__a__isa__GpuTex__pert__1.meth = metil_def_base_type__when__a__isa__GpuTex__pert__1;
     item_metil_def_base_type__when__a__isa__GpuTex__pert__1.gene = 0;
     item_metil_def_base_type__when__a__isa__GpuTex__pert__1.file = string_11;
-    item_metil_def_base_type__when__a__isa__GpuTex__pert__1.line = 10;
+    item_metil_def_base_type__when__a__isa__GpuTex__pert__1.line = 11;
     item_metil_def_base_type__when__a__isa__GpuTex__pert__1.pert = 1;
     MethodFinder<MethodName_base_type>::last = &item_metil_def_base_type__when__a__isa__GpuTex__pert__1;
 
@@ -2663,14 +2660,14 @@ void reg_def() {
     item_metil_def_sizes__when__a__isa__GpuTex__pert__1.meth = metil_def_sizes__when__a__isa__GpuTex__pert__1;
     item_metil_def_sizes__when__a__isa__GpuTex__pert__1.gene = 0;
     item_metil_def_sizes__when__a__isa__GpuTex__pert__1.file = string_11;
-    item_metil_def_sizes__when__a__isa__GpuTex__pert__1.line = 14;
+    item_metil_def_sizes__when__a__isa__GpuTex__pert__1.line = 15;
     item_metil_def_sizes__when__a__isa__GpuTex__pert__1.pert = 1;
     MethodFinder<MethodName_sizes>::last = &item_metil_def_sizes__when__a__isa__GpuTex__pert__1;
 
     static MethodCond_0_is cond_metil_def_del__when__a__is__LazyOperation_append__pert__100;
     cond_metil_def_del__when__a__is__LazyOperation_append__pert__100.type = "LazyOperation_append";
 
-    static const char *string_12 = "src/Level1/TypeConstructor_LazyOperation.cpp";
+    static const char *string_12 = "src/Metil/Level1/TypeConstructor_LazyOperation.cpp";
 
     static MethodFinder<MethodName_del>::Item item_metil_def_del__when__a__is__LazyOperation_append__pert__100;
     item_metil_def_del__when__a__is__LazyOperation_append__pert__100.prev = MethodFinder<MethodName_del>::last;
@@ -2707,7 +2704,7 @@ void reg_def() {
 
     static MethodCond_0_isa<TypeConstructor_GpuImg> cond_metil_def_dim__when__a__isa__GpuImg__pert__1;
 
-    static const char *string_13 = "src/Level1/TypeConstructor_GpuImg.cpp";
+    static const char *string_13 = "src/Metil/Level1/TypeConstructor_GpuImg.cpp";
 
     static MethodFinder<MethodName_dim>::Item item_metil_def_dim__when__a__isa__GpuImg__pert__1;
     item_metil_def_dim__when__a__isa__GpuImg__pert__1.prev = MethodFinder<MethodName_dim>::last;
@@ -2731,7 +2728,7 @@ void reg_def() {
 
     static MethodCond_0_isa<TypeConstructor_FileWithoutClose> cond_metil_def_flush__when__a__isa__FileWithoutClose__pert__1;
 
-    static const char *string_14 = "src/Level1/TypeConstructor_FileWithoutClose.cpp";
+    static const char *string_14 = "src/Metil/Level1/TypeConstructor_FileWithoutClose.cpp";
 
     static MethodFinder<MethodName_flush>::Item item_metil_def_flush__when__a__isa__FileWithoutClose__pert__1;
     item_metil_def_flush__when__a__isa__FileWithoutClose__pert__1.prev = MethodFinder<MethodName_flush>::last;
@@ -2832,7 +2829,7 @@ void reg_def() {
     static MethodCond_0_is cond_metil_def_del__when__a__is__Int_s_64__pert__100;
     cond_metil_def_del__when__a__is__Int_s_64__pert__100.type = "Int_s_64";
 
-    static const char *string_15 = "src/Level1/TypeConstructor_Int.cpp";
+    static const char *string_15 = "src/Metil/Level1/TypeConstructor_Int.cpp";
 
     static MethodFinder<MethodName_del>::Item item_metil_def_del__when__a__is__Int_s_64__pert__100;
     item_metil_def_del__when__a__is__Int_s_64__pert__100.prev = MethodFinder<MethodName_del>::last;
@@ -3447,7 +3444,7 @@ void reg_def() {
 
     static MethodCond_and<MethodCond_0_isa<TypeConstructor_String>,MethodCond_1_isa<TypeConstructor_String> > cond_metil_def_append__when__a__isa__String__and__b__isa__String__pert_0;
 
-    static const char *string_16 = "src/Level1/TypeConstructor_String.cpp";
+    static const char *string_16 = "src/Metil/Level1/TypeConstructor_String.cpp";
 
     static MethodFinder<MethodName_append>::Item item_metil_def_append__when__a__isa__String__and__b__isa__String__pert_0;
     item_metil_def_append__when__a__isa__String__and__b__isa__String__pert_0.prev = MethodFinder<MethodName_append>::last;
@@ -3546,7 +3543,7 @@ void reg_def() {
     static MethodCond_and<MethodCond_0_isa<TypeConstructor_String>,MethodCond_1_is > cond_metil_def_self_append__when__a__isa__String__and__b__is__Flt_0_23_23_8_31_1_127__pert__1000;
     cond_metil_def_self_append__when__a__isa__String__and__b__is__Flt_0_23_23_8_31_1_127__pert__1000.cond_1.type = "Flt_0_23_23_8_31_1_127";
 
-    static const char *string_17 = "src/Level1/TypeConstructor_Flt.cpp";
+    static const char *string_17 = "src/Metil/Level1/TypeConstructor_Flt.cpp";
 
     static MethodFinder<MethodName_self_append>::Item item_metil_def_self_append__when__a__isa__String__and__b__is__Flt_0_23_23_8_31_1_127__pert__1000;
     item_metil_def_self_append__when__a__isa__String__and__b__is__Flt_0_23_23_8_31_1_127__pert__1000.prev = MethodFinder<MethodName_self_append>::last;
@@ -3573,7 +3570,7 @@ void reg_def() {
 
     static MethodCond_and<MethodCond_0_isa<TypeConstructor_String>,MethodCond_1_isa<TypeConstructor_StringConcat> > cond_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1;
 
-    static const char *string_18 = "src/Level1/TypeConstructor_StringConcat.cpp";
+    static const char *string_18 = "src/Metil/Level1/TypeConstructor_StringConcat.cpp";
 
     static MethodFinder<MethodName_self_append>::Item item_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1;
     item_metil_def_self_append__when__a__isa__String__and__b__isa__StringConcat__pert__1.prev = MethodFinder<MethodName_self_append>::last;
@@ -3971,7 +3968,7 @@ void reg_def() {
     item_metil_def_infz__when__a__isa__MORef__pert__10.pert = 10;
     MethodFinder<MethodName_infz>::last = &item_metil_def_infz__when__a__isa__MORef__pert__10;
 
-    static const char *string_19 = "src/Level1/DeclMethodsUnary.h";
+    static const char *string_19 = "src/Metil/Level1/DeclMethodsUnary.h";
 
     static MethodFinder<MethodName_convert_to_Bool>::Item item_metil_def_convert_to_Bool__when__a__isa__MORef__pert__10;
     item_metil_def_convert_to_Bool__when__a__isa__MORef__pert__10.prev = MethodFinder<MethodName_convert_to_Bool>::last;
@@ -5007,7 +5004,7 @@ void reg_def() {
 
     static MethodCond_0_isa<TypeConstructor_ConstCharPtrWithSize> cond_metil_def_del__when__a__isa__ConstCharPtrWithSize;
 
-    static const char *string_20 = "src/Level1/TypeConstructor_ConstCharPtrWithSize.cpp";
+    static const char *string_20 = "src/Metil/Level1/TypeConstructor_ConstCharPtrWithSize.cpp";
 
     static MethodFinder<MethodName_del>::Item item_metil_def_del__when__a__isa__ConstCharPtrWithSize;
     item_metil_def_del__when__a__isa__ConstCharPtrWithSize.prev = MethodFinder<MethodName_del>::last;
@@ -5083,7 +5080,7 @@ void reg_def() {
 
     static TypeConstructor::C0_has_Owcp_type cond_metil_def_copy__when__a__has__Owcp_type__pert__1;
 
-    static const char *string_21 = "src/Level1/Owcp.cpp";
+    static const char *string_21 = "src/Metil/Level1/Owcp.cpp";
 
     static MethodFinder<MethodName_copy>::Item item_metil_def_copy__when__a__has__Owcp_type__pert__1;
     item_metil_def_copy__when__a__has__Owcp_type__pert__1.prev = MethodFinder<MethodName_copy>::last;
@@ -5167,7 +5164,7 @@ void reg_def() {
 
     static MethodCond_0_isa<TypeConstructor_VoidString> cond_metil_def_self_append__when__a__isa__VoidString__pert__100;
 
-    static const char *string_22 = "src/Level1/TypeConstructor_VoidString.cpp";
+    static const char *string_22 = "src/Metil/Level1/TypeConstructor_VoidString.cpp";
 
     static MethodFinder<MethodName_self_append>::Item item_metil_def_self_append__when__a__isa__VoidString__pert__100;
     item_metil_def_self_append__when__a__isa__VoidString__pert__100.prev = MethodFinder<MethodName_self_append>::last;
@@ -5637,7 +5634,7 @@ void reg_def() {
 
     static MethodCond_and<MethodCond_0_isa<TypeConstructor_ConvertToGpuTex>,MethodCond_1_isa<TypeConstructor_Array> > cond_metil_gen_select_C__when__a__isa__ConvertToGpuTex__and__b__isa__Array__pert__1;
 
-    static const char *string_23 = "src/Level1/TypeConstructor_ConvertToGpuTex.cpp";
+    static const char *string_23 = "src/Metil/Level1/TypeConstructor_ConvertToGpuTex.cpp";
 
     static MethodFinder<MethodName_select_C>::Item item_metil_gen_select_C__when__a__isa__ConvertToGpuTex__and__b__isa__Array__pert__1;
     item_metil_gen_select_C__when__a__isa__ConvertToGpuTex__and__b__isa__Array__pert__1.prev = MethodFinder<MethodName_select_C>::last;
@@ -6451,7 +6448,7 @@ void reg_def() {
 
     static MethodCond_and<TypeConstructor::C0_has_staticsize,MethodCond_1_isa<TypeConstructor_Cst> > cond_metil_gen_allocate_array__when__a__has__staticsize__and__b__isa__Cst;
 
-    static const char *string_24 = "src/Level1/TypeConstructor_Array.cpp";
+    static const char *string_24 = "src/Metil/Level1/TypeConstructor_Array.cpp";
 
     static MethodFinder<MethodName_allocate_array>::Item item_metil_gen_allocate_array__when__a__has__staticsize__and__b__isa__Cst;
     item_metil_gen_allocate_array__when__a__has__staticsize__and__b__isa__Cst.prev = MethodFinder<MethodName_allocate_array>::last;
@@ -6567,7 +6564,7 @@ void reg_def() {
 
     static MethodCond_0_isa<TypeConstructor_Symbol> cond_metil_gen_del__when__a__isa__Symbol__pert__2;
 
-    static const char *string_25 = "src/Level1/TypeConstructor_Symbol.cpp";
+    static const char *string_25 = "src/Metil/Level1/TypeConstructor_Symbol.cpp";
 
     static MethodFinder<MethodName_del>::Item item_metil_gen_del__when__a__isa__Symbol__pert__2;
     item_metil_gen_del__when__a__isa__Symbol__pert__2.prev = MethodFinder<MethodName_del>::last;
@@ -6615,7 +6612,7 @@ void reg_def() {
 
     static MethodCond_0_isa<TypeConstructor_Select> cond_metil_gen_reassign__when__a__isa__Select__pert__1;
 
-    static const char *string_26 = "src/Level1/TypeConstructor_Select.cpp";
+    static const char *string_26 = "src/Metil/Level1/TypeConstructor_Select.cpp";
 
     static MethodFinder<MethodName_reassign>::Item item_metil_gen_reassign__when__a__isa__Select__pert__1;
     item_metil_gen_reassign__when__a__isa__Select__pert__1.prev = MethodFinder<MethodName_reassign>::last;
@@ -6651,7 +6648,7 @@ void reg_def() {
 
     static MethodCond_0_isa<TypeConstructor_TiffLoader> cond_metil_gen_exec_node__when__a__isa__TiffLoader__pert__1;
 
-    static const char *string_27 = "src/Level1/TypeConstructor_TiffLoader.cpp";
+    static const char *string_27 = "src/Metil/Level1/TypeConstructor_TiffLoader.cpp";
 
     static MethodFinder<MethodName_exec_node>::Item item_metil_gen_exec_node__when__a__isa__TiffLoader__pert__1;
     item_metil_gen_exec_node__when__a__isa__TiffLoader__pert__1.prev = MethodFinder<MethodName_exec_node>::last;

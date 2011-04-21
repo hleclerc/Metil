@@ -2,9 +2,9 @@
 import string, os, re
 
 methods = {}
-for h in os.listdir( "src/Level1/" ):
+for h in os.listdir( "src/Metil/Level1/" ):
     if "DeclMethods" in h:
-        for l in file( "src/Level1/" + h ).readlines():
+        for l in file( "src/Metil/Level1/" + h ).readlines():
             res = re.findall( '^DECL_MET\( ([^ ,]*)', l )
             if len( res ):
                 methods[ res[ 0 ] ] = 0

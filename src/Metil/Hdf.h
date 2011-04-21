@@ -121,9 +121,7 @@ public:
         hid_t dat = H5Gopen  ( h5_file, name.c_str() );
         hid_t aid = H5Screate( H5S_SCALAR );
         hid_t att = H5Acreate( dat, tag, H5_type<TTV>::res(), aid, H5P_DEFAULT );
-
         H5Awrite( att, H5_type<TTV>::res(), &tag_value );
-
         H5Sclose( aid );
         H5Aclose( att );
         H5Gclose( dat );
@@ -137,7 +135,6 @@ public:
         hid_t attr    = H5Aopen_name( dataset, tag.c_str() );
 
         H5Aread( attr, H5_type<TTV>::res(), &tag_value );
-
         H5Aclose( attr );
         if ( group )
             H5Gclose( dataset );
@@ -207,7 +204,15 @@ public:
 //         H5Aclose( att );
 //         H5Gclose( dat );
 //     }
-
+    bool dataset_exist(String &name){
+        bool exist = false;
+        if ( H5Lexists( h5_file , name.c_str(), H5P_DEFAULT ) ){
+           exist = true;
+        }
+        return exist;
+    }
+    
+    
 private:
     void check_grp( const String &name ) {
         // find grp
@@ -222,6 +227,7 @@ private:
     }
 
     hid_t h5_file;
+    
 };
 
 END_METIL_NAMESPACE;

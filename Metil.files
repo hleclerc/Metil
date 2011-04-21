@@ -305,3 +305,8 @@ src/Metil/HashSet.h
 tests/test_HashSet.cpp
 src/Metil/FcgiRecord.h
 src/Metil/FcgiRecord.cpp
+src/Metil/BitSwap.h
+src/Metil/HttpSessionServer.h
+src/Metil/HttpSessionServer.cpp
+tests/test_HttpSessionServer.cpp
+tests/test_HttpSessionServer.py
