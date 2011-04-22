@@ -310,3 +310,10 @@ src/Metil/HttpSessionServer.h
 src/Metil/HttpSessionServer.cpp
 tests/test_HttpSessionServer.cpp
 tests/test_HttpSessionServer.py
+tests/test_Mesh.cpp
+src/Metil/Geom/Mesh.h
+src/Metil/Geom/Mesh.cpp
+src/Metil/Geom/Geom.h
+src/Metil/Geom/Geom.cpp
+src/Metil/Geom/ElemList.h
+src/Metil/Geom/ElemList.cpp
