@@ -183,6 +183,13 @@ bool file_exists( const String &n ) {
     return ( stat( n.c_str(), &stat_file ) == 0 );
 }
 
+bool is_a_directory( const String &n ) {
+    struct stat stat_file;
+    if ( stat( n.c_str(), &stat_file ) )
+        return false;
+    return S_ISDIR( stat_file.st_mode );
+}
+
 //void rm( const String &n ) {
 //    unlink( n.c_str() );
 //}

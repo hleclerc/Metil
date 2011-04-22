@@ -17,6 +17,7 @@ int mkdir( const String &filename, bool check_if_exists = true );
 SI64 last_modification_time_or_zero_of_file_named( const char   *n );
 SI64 last_modification_time_or_zero_of_file_named( const String &n );
 bool file_exists( const String &n );
+bool is_a_directory( const String &n ); ///< return true if is_a_directory
 void rm( const String &file ); // rm file
 
 // system info
