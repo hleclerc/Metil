@@ -302,9 +302,12 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                                 String parm = bas_name.beg_upto( end_parm ).end_from( beg_parm );
                                 BasicVec<String> parm_list = tokenize( parm, ',' );
                                 BasicVec<String> der_vars;
+                                BasicVec<String> dim;
                                 for( int np = 0; np < parm_list.size(); ++np ) {
                                     if ( parm_list[ np ].begins_by( "name_der_vars=" ) )
                                         der_vars << parm_list[ np ].end_from( 14 );
+                                    else if ( parm_list[ np ].begins_by( "dim=" ) )
+                                        dim << parm_list[ np ].end_from( 4 );
                                 }
 
                                 File f( h_py, "w" );
@@ -328,6 +331,8 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                                 for( int nd = 0; nd < der_vars.size(); ++nd )
                                     f << ( nd ? "," : "" ) << '"' << der_vars[ nd ] << '"';
                                 f << "],\n";
+                                if ( dim.size() )
+                                    f << "    dim='" << dim[ 0 ] << "',\n";
                                 f << ")\n";
                                 // f << "    options = { 'behavior_simplification' : 'plane stress', 'behavior_law' : s },
                                 // f << "    # name_der_vars = [ "frac_E2", "frac_G12", "nu12" ] #
