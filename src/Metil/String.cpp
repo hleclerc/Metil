@@ -87,6 +87,7 @@ String String::read_line() {
         return res;
     }
     String res = beg_upto( p );
+    c_str();
     *this = this->end_from( p + 1 );
     return res;
 

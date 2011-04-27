@@ -12,7 +12,7 @@ void HttpSessionServer::Session::request( String &out, const String &addr, const
     }
 }
 
-void HttpSessionServer::Session::exec_cmd( String &out, const String &cmd, const String &post ) {
+void HttpSessionServer::Session::exec_cmd( String &out, const String &cmd, String &post ) {
     ERROR( "exec_cmd must be redefined to use default method request." );
 }
 
@@ -57,6 +57,27 @@ void HttpSessionServer::request( String &out, const String &addr, const String &
         // send commands
         Session *session = sessions[ session_id ].ptr();
         session->request( out, addr, post );
+    }
+
+    if ( addr.begins_by( "/inline_cmd?session_id=" ) ) {
+        // get session
+        String session_id = addr.end_from( 23 );
+        session_id = session_id.beg_upto( session_id.find( "&" ) );
+        if ( not sessions.count( session_id ) ) {
+            cerrn << "Session not active.";
+            return;
+        }
+
+        // get cmd
+        String cmd = addr.end_from( addr.find( "cmd=" ) + 4 );
+        int e_cmd = cmd.find( "&" );
+        if ( e_cmd >= 0 )
+            cmd = cmd.beg_upto( e_cmd );
+
+        // send commands
+        Session *session = sessions[ session_id ].ptr();
+        String cp_post = post;
+        session->exec_cmd( out, cmd, cp_post );
     }
 }
 

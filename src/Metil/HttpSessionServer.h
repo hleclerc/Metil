@@ -14,7 +14,7 @@ class HttpSessionServer : public HttpServer {
 public:
     struct Session : public ObjectWithCptUse {
         virtual void request ( String &out, const String &addr, const String &post );
-        virtual void exec_cmd( String &out, const String &cmd , const String &post );
+        virtual void exec_cmd( String &out, const String &cmd , String &post );
     };
     struct Factory : public ObjectWithCptUse {
         virtual Session *create( const String &type, const String &post ) const = 0;

@@ -124,7 +124,12 @@ static bool read_post_requ( String &inp, String &dat, int sd_current ) {
     ST length = String::read_int( extr_c );
 
     // find start of post data
-    while ( not find_beg_post( extr_c ) ) {
+    while ( true ) {
+        const char *t = extr.c_str();
+        if ( find_beg_post( t ) ) {
+            dat = extr.end_from( t - extr.c_str() );
+            break;
+        }
         char data[ 1024 ];
         int size = read( sd_current, data, 1024 );
         if ( size <= 0 )
@@ -133,12 +138,12 @@ static bool read_post_requ( String &inp, String &dat, int sd_current ) {
         extr_c = extr.c_str();
     }
 
+
     // read post data
-    dat = NewString( extr_c );
     length -= dat.size();
     while ( length > 0 ) {
-        char data[ 1024 ];
-        int size = read( sd_current, data, 1024 );
+        char data[ 8192 ];
+        int size = read( sd_current, data, 8192 );
         if ( size <= 0 )
             return false;
         dat << String( NewString( data, data + size ) );
