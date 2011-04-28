@@ -93,6 +93,14 @@ String String::read_line() {
 
 }
 
+int String::atoi() const {
+    return ::atoi( c_str() );
+}
+double String::atof() const {
+    return ::atof( c_str() );
+}
+
+
 /// for i in range( 256 ): print str( i ) + "," + 0 + ","
 char String::char_ptr[] = {
     0  ,0, 1  ,0, 2  ,0, 3  ,0, 4  ,0, 5  ,0, 6  ,0, 7  ,0,

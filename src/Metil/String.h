@@ -113,6 +113,9 @@ struct String : public Level1::MO {
     void seek( ST pos ) { CM_1( seek, *this, pos ); }
     String read_line();
 
+    int atoi() const; ///< tmp helper
+    double atof() const; ///< tmp helper
+
     operator bool() const { return CM_1( convert_to_Bool, *this ); }
     operator SI32() const { return CM_1( convert_to_SI32, *this ); }
     operator SI64() const { return CM_1( convert_to_SI64, *this ); }
