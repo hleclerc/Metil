@@ -87,10 +87,19 @@ String String::read_line() {
         return res;
     }
     String res = beg_upto( p );
+    c_str();
     *this = this->end_from( p + 1 );
     return res;
 
 }
+
+int String::atoi() const {
+    return ::atoi( c_str() );
+}
+double String::atof() const {
+    return ::atof( c_str() );
+}
+
 
 /// for i in range( 256 ): print str( i ) + "," + 0 + ","
 char String::char_ptr[] = {
