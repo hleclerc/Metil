@@ -2,8 +2,7 @@
 #define MESH_H
 
 #include "Geom.h"
-#include "ElemList.h"
-#include "../BasicVec.h"
+#include "MeshItem.h"
 
 BEG_METIL_NAMESPACE;
 
@@ -15,7 +14,7 @@ public:
     Mesh();
 
 protected:
-    BasicVec<Ptr<ElemList> > elem_lists;
+    Ptr<MeshItem> item() { return static_cast<MeshItem *>( this->_item.ptr() ); }
 };
 
 END_METIL_NAMESPACE;

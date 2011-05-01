@@ -317,3 +317,8 @@ src/Metil/Geom/Geom.h
 src/Metil/Geom/Geom.cpp
 src/Metil/Geom/ElemList.h
 src/Metil/Geom/ElemList.cpp
+src/Metil/Geom/GeomItem.h
+src/Metil/Geom/GeomItem.cpp
+src/Metil/Geom/MeshItem.h
+src/Metil/Geom/MeshItem.cpp
+src/Metil/AutoPtr.h

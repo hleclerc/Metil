@@ -55,7 +55,12 @@ public:
     static const int static_size = _static_size;
     static const int static_prer = static_rese;
 
-    __inline__ BasicVec() {}
+    #ifdef __CUDACC__
+    // __device__ BasicVec() {}
+    __host__ BasicVec() {}
+    #else
+    BasicVec() {}
+    #endif
 
     template<class T0>
     __inline__ void _init_using_1_arg( const T0 &v0, Number<0> ) {
