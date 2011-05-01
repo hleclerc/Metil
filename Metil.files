@@ -317,3 +317,4 @@ src/Metil/Geom/Geom.h
 src/Metil/Geom/Geom.cpp
 src/Metil/Geom/ElemList.h
 src/Metil/Geom/ElemList.cpp
+src/Metil/ConjugateGradient.h
