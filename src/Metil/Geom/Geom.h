@@ -1,15 +1,19 @@
 #ifndef GEOM_H
 #define GEOM_H
 
-#include "../Ptr.h"
+#include "GeomItem.h"
 
 BEG_METIL_NAMESPACE;
 
 /**
 
 */
-class Geom : ObjectWithCptUse {
+class Geom {
 public:
+
+
+protected:
+    Ptr<GeomItem> _item;
 };
 
 END_METIL_NAMESPACE;
