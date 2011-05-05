@@ -1,7 +1,11 @@
 #ifndef BASICVECGPU_H
 #define BASICVECGPU_H
 
+#ifdef __CUDACC__
 #include "CudaScalarOp.h"
+#else
+#include "CudaMetil.h"
+#endif
 #include "BasicVec.h"
 
 BEG_METIL_NAMESPACE;
@@ -21,12 +25,14 @@ struct BasicVecGpu {
         }
     }
 
+    #ifdef __CUDACC__
     BasicVecGpu( Size, ST size, T val ) : _rese( size ), _size( size ) {
         if ( size ) {
             cudaMalloc( &_data, sizeof( T ) * _rese );
             cuda_scalar_op( _data, size, SetVal<T>( val ) );
         }
     }
+    #endif
 
     BasicVecGpu( const BasicVec<T> data_vec ) {
         init( data_vec );
