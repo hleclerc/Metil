@@ -75,7 +75,7 @@ public:
     static const int static_prer = static_rese;
 
     //#ifndef __CUDACC__
-    BasicVec() {}
+    __inline__ BasicVec() {}
     //#endif
 
     template<class T0>

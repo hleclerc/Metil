@@ -25,6 +25,12 @@ struct Limits {
 };
 
 template<>
+struct Limits<SI32> {
+    static __inline__ FP32 min() { return INT_MIN; }
+    static __inline__ FP32 max() { return INT_MAX; }
+};
+
+template<>
 struct Limits<FP32> {
     static __inline__ FP32 min() { return -__FLT_MAX__; }
     static __inline__ FP32 max() { return +__FLT_MAX__; }
