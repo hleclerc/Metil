@@ -1,3 +1,4 @@
+#include <Metil/BasicVec.h>
 #include "ElemType.h"
 #include "String.h"
 
