@@ -366,7 +366,12 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
             if ( c[ 1 ] == 'p' and c[ 2 ] == 'r' and c[ 3 ] == 'a' and c[ 4 ] == 'g' and c[ 5 ] == 'm' and c[ 6 ] == 'a' and c[ 7 ] == ' ' ) {
                 c += 8;
                 if ( strncmp( c, "src_file ", 9 ) == 0 ) {
-                    src_files << ce.find_src( get_pragma_arg( c += 9 ), current_dir );
+                    String o = get_pragma_arg( c += 9 );
+                    String s = ce.find_src( o, current_dir );
+                    if ( s.size() )
+                        src_files << s;
+                    else
+                        cerrn << "Impossible to find src '" << o << "'";
                     continue;
                 }
                 if ( strncmp( c, "lib_path ", 9 ) == 0 ) {

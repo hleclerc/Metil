@@ -170,12 +170,12 @@ template<class Obj> void _destroy( const Obj *obj ) { obj->~Obj(); } ///< call d
 #define NEW_AND_DEL_COMPATIBLE \
     enum { can_be_derived = 1 }; \
     virtual void _free() const { Metil::Level1::_destroy( this ); Metil::Level1::Allocator<sizeof(*this)>::free( this ); } \
-    virtual ST _size() const { return sizeof( *this ); }
+    virtual Metil::ST _size() const { return sizeof( *this ); }
 
 #define NEW_AND_DEL_COMPATIBLE_PURE_VIRTUAL \
     enum { can_be_derived = 1 }; \
     virtual void _free() const = 0; \
-    virtual ST _size() const = 0
+    virtual Metil::ST _size() const = 0
 
 #define CANNOT_BE_DERIVED \
     enum { can_be_derived = 0 }

@@ -1,8 +1,8 @@
 #ifndef CUDAREDUCTION_H
 #define CUDAREDUCTION_H
 
-#include "Limits.h"
 #include "CudaMetil.h"
+#include "Limits.h"
 #include "Math.h"
 
 BEG_METIL_NAMESPACE;
@@ -148,6 +148,10 @@ struct CudaReductionMinMax {
     __inline__ void reduction( const CudaReductionMinMax &val ) {
         mi = min( mi, val.mi );
         ma = max( ma, val.ma );
+    }
+    template<class ST>
+    void write_str( ST &os ) const {
+        os << "mi=" << mi << " ma=" << ma;
     }
     T mi, ma;
 };
