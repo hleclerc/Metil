@@ -135,6 +135,19 @@ __inline__ BasicVec<T,dim> cum( const BasicVec<T,dim> &S ) {
     return res;
 }
 
+template<class T,int dim>
+__inline__ T variance( const BasicVec<T,dim> &a ) {
+    T m = mean( a ), r = 0;
+    for( int d = 0; d < a.size(); ++d )
+        r += pow( a[ d ] - m, 2 );
+    return r / a.size();
+}
+
+template<class T,int dim>
+__inline__ T standard_deviation( const BasicVec<T,dim> &a ) {
+    return sqrt( variance( a ) );
+}
+
 END_METIL_NAMESPACE
 
 #endif // MathBasicVec_h
