@@ -93,6 +93,51 @@ struct BasicMat<T_,dim,true> {
     BasicVec<T,size> data;
 };
 
+/// non symetric
+template<class T_,int dim>
+struct BasicMat<T_,dim,false> {
+    typedef T_ T;
+    static const int size = dim * dim;
+
+    __inline__ BasicMat() {}
+    __inline__ BasicMat( T val ) : data( val ) {}
+
+    __inline__ const T &sec_sel( int r, int c ) const { return data[ r * dim + c ]; } ///< assuming c <= r
+    __inline__ T &sec_sel( int r, int c ) { return data[ r * dim + c ]; } ///< assuming c <= r
+
+    __inline__ const T &operator()( int r, int c ) const { return sec_sel( r, c ); }
+    __inline__ T &operator()( int r, int c ) { return sec_sel( r, c ); }
+
+    __inline__ void operator+=( const BasicMat &m ) {
+        data += m.data;
+    }
+
+    __inline__ void operator=( const T &v ) {
+        data = v;
+    }
+
+    __inline__ void set( T val ) { data.set( val ); }
+
+    __inline__ BasicVec<T,dim> operator*( const BasicVec<T,dim> &vec ) const {
+        BasicVec<T,dim> res( 0 );
+        for( int r = 0; r < dim; ++r )
+            for( int c = 0; c < dim; ++c )
+                res[ r ] += operator()( r, c ) * vec[ c ];
+        return res;
+    }
+
+    template<class TS>
+    void write_str( TS &os ) const {
+        for( int r = 0; r < dim; ++r ) {
+            for( int c = 0; c < dim; ++c )
+                os << ( c ? " " : "" ) << operator()( r, c );
+            os << "\n";
+        }
+    }
+
+    BasicVec<T,size> data;
+};
+
 END_METIL_NAMESPACE;
 
 #endif // BASICMAT_H
