@@ -48,6 +48,11 @@ public:
     static const int static_size = 0;
     static const int static_prer = static_rese;
 
+    __inline__ BasicVec() {}
+
+    template<class T0>
+    __inline__ BasicVec( const T0 & ) {}
+
     __inline__ const T &operator[]( int i ) const { ASSERT_IF_DEBUG( 0 ); return *dummy(); }
     __inline__ T &operator[]( int i ) { ASSERT_IF_DEBUG( 0 ); return *dummy(); }
     __inline__ S size() const { return 0; }

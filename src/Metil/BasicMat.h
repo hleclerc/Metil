@@ -17,6 +17,9 @@ struct BasicMat<T_,dim,true> {
     __inline__ BasicMat() {}
     __inline__ BasicMat( T val ) : data( val ) {}
 
+    int nb_rows() const { return dim; }
+    int nb_cols() const { return dim; }
+
     __inline__ const T &sec_sel( int r, int c ) const { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c <= r
     __inline__ T &sec_sel( int r, int c ) { return data[ r * ( r + 1 ) / 2 + c ]; } ///< assuming c <= r
 
@@ -102,6 +105,9 @@ struct BasicMat<T_,dim,false> {
     __inline__ BasicMat() {}
     __inline__ BasicMat( T val ) : data( val ) {}
 
+    int nb_rows() const { return dim; }
+    int nb_cols() const { return dim; }
+
     __inline__ const T &sec_sel( int r, int c ) const { return data[ r * dim + c ]; } ///< assuming c <= r
     __inline__ T &sec_sel( int r, int c ) { return data[ r * dim + c ]; } ///< assuming c <= r
 
@@ -133,6 +139,12 @@ struct BasicMat<T_,dim,false> {
                 os << ( c ? " " : "" ) << operator()( r, c );
             os << "\n";
         }
+    }
+
+    template<class Hdf,class TS>
+    void write_to( Hdf &hdf, const TS &name ) {
+        BasicVec<int,2> s( dim, dim );
+        hdf.write( name, data.ptr(), s );
     }
 
     BasicVec<T,size> data;
