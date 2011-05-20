@@ -141,6 +141,27 @@ extern String cerr;
 extern String cin ;
 
 /**
+*/
+template<class T,class S>
+struct Join {
+    Join( const T &t, const S &s ) : t( t ), s( s ) {}
+    void write_str( String &os ) const {
+        if ( t.size() )
+            os << t[ 0 ];
+        for( ST i = 1; i < t.size(); ++i )
+            os << s << t[ i ];
+    }
+    const T &t;
+    const S &s;
+};
+
+/**
+  cout << join( BasicVec<int>(1,2), ", " ) will give "1, 2"
+*/
+template<class T,class S>
+Join<T,S> join( const T &t, const S &s ) { return Join<T,S>( t, s ); }
+
+/**
   @brief I/O file
 */
 struct File : public String {
@@ -169,4 +190,5 @@ extern StringWithSepInCppLineMaker cerrn;
 END_METIL_NAMESPACE;
 
 #endif // STRING_H
+
 
