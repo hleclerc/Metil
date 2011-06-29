@@ -170,8 +170,6 @@ static void get_fcgi_param( String &inp, char *content_data, int content_size, c
         if ( data_len == 0 )
             break;
         const char *p = content_data + i;
-        //PRINT( String( NewString( p, p + name_len ) ) );
-        //PRINT( String( NewString( p + name_len, p + name_len + data_len ) ) );
         if ( name == String( NewString( p, p + name_len ) ) ) {
             inp = NewString( p + name_len, p + name_len + data_len );
             return;
