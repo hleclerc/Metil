@@ -16,6 +16,8 @@
 #include "Metil/Level1/CompilationEnvironment.h"
 #include "Metil/System.h"
 
+#include <stdio.h>
+
 using namespace Metil;
 
 void usage( const char *pn, const char *msg = NULL ) {
@@ -86,6 +88,7 @@ int main( int argc, char **argv ) {
     bool want_lib      = false;
     bool want_sep_libs = true;
     bool want_gprof    = false;
+    bool valgrind_pipe = false;
 
     //
     for( int i = 1; i < argc; ++i ) {
@@ -95,6 +98,7 @@ int main( int argc, char **argv ) {
             return 0;
         } else if ( arg == "--valgrind" ) {
             exec_using = "valgrind";
+            valgrind_pipe = true;
         } else if ( arg == "--gdb" ) {
             exec_using = "gdb --args";
         } else if ( arg == "--exec-using" ) {
@@ -237,6 +241,8 @@ int main( int argc, char **argv ) {
             cmd = exec_using + ' ' + out_file;
         for(int i = 0; i < exec_args.size(); ++i )
             cmd << ' ' << exec_args[ i ];
+        if ( valgrind_pipe )
+            cmd += " 2>&1| sed -e 's/^==[0-9]*==\\(.*\\)(\\(.*\\))/\\2:\\1/' 1>&2";
         return exec_cmd( cmd );
     }
 
