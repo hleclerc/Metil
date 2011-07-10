@@ -13,6 +13,9 @@
 #pragma gpu_flag -DH5Dopen_vers=1
 #pragma gpu_flag -DH5Gopen_vers=1
 
+#pragma inc_path /usr/lib/openmpi/include
+#pragma lib_name mpi++
+
 #include "BasicVec.h"
 #include "String.h"
 
@@ -43,10 +46,10 @@ template<> struct H5_type<   long double> { static hid_t res() { return H5T_NATI
 class Hdf {
 public:
     Hdf();
-    Hdf( const String &filename, bool clear_old = false );
+    Hdf( const String &filename, bool clear_old = false, bool read_only = false );
     ~Hdf();
 
-    void open( const String &filename, bool clear_old = false );
+    void open( const String &filename, bool clear_old = false, bool read_only = false );
     void close();
     BasicVec<String> list_dir( const String &dir ) const;
 

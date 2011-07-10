@@ -30,7 +30,7 @@ String get_cpu_type();
 
   Example :
 \code
-for(DirectoryIterator f("/home"); f; ++f )
+for( DirectoryIterator f("/home"); f; ++f )
     PRINT( *f );
 \endcode
 */
