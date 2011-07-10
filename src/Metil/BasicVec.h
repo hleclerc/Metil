@@ -802,10 +802,10 @@ private:
 };
 
 
-template<class T> BasicVec<T,1> svec( const T &a ) { return BasicVec<T,1>( a ); }
-template<class T> BasicVec<T,2> svec( const T &a, const T &b ) { return BasicVec<T,2>( a, b ); }
-template<class T> BasicVec<T,3> svec( const T &a, const T &b, const T &c ) { return BasicVec<T,3>( a, b, c ); }
-template<class T> BasicVec<T,4> svec( const T &a, const T &b, const T &c, const T &d ) { return BasicVec<T,4>( a, b, c, d ); }
+template<class T> __inline__ BasicVec<T,1> svec( const T &a ) { return BasicVec<T,1>( a ); }
+template<class T> __inline__ BasicVec<T,2> svec( const T &a, const T &b ) { return BasicVec<T,2>( a, b ); }
+template<class T> __inline__ BasicVec<T,3> svec( const T &a, const T &b, const T &c ) { return BasicVec<T,3>( a, b, c ); }
+template<class T> __inline__ BasicVec<T,4> svec( const T &a, const T &b, const T &c, const T &d ) { return BasicVec<T,4>( a, b, c, d ); }
 
 template<class T> BasicVec<T> dvec( const T &a ) { return BasicVec<T>( a ); }
 template<class T> BasicVec<T> dvec( const T &a, const T &b ) { return BasicVec<T>( a, b ); }
