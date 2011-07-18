@@ -12,7 +12,9 @@
 #include <fcntl.h>
 #include <map>
 
+#ifdef USE_FAST_CGI
 #include <fastcgi.h>
+#endif // USE_FAST_CGI
 
 BEG_METIL_NAMESPACE;
 
@@ -152,6 +154,7 @@ static bool read_post_requ( String &inp, String &dat, int sd_current ) {
     return true;
 }
 
+#ifdef USE_FAST_CGI
 static int get_fcgi_len( char *content_data, int &i ) {
     if ( content_data[ i ] >> 7 )
         return ((unsigned)( content_data[ i++ ] & 0x7F ) << 24 ) +
@@ -177,6 +180,7 @@ static void get_fcgi_param( String &inp, char *content_data, int content_size, c
         i += name_len + data_len;
     }
 }
+#endif // USE_FAST_CGI
 
 static bool write_to_socket( int socket_id, const char *ptr, int len ) {
     while ( len > 0 ) {
@@ -193,6 +197,7 @@ static bool write_to_socket( int socket_id, const void *ptr, int len ) {
     return write_to_socket( socket_id, (const char *)ptr, len );
 }
 
+#ifdef USE_FAST_CGI
 static void send_end_record( int socket_id, int request_id ) {
     FCGI_EndRequestRecord rec;
     rec.header.version         = 1;
@@ -258,6 +263,7 @@ struct FcgiRequest {
     String inp;
     String dat;
 };
+#endif // USE_FAST_CGI
 
 bool HttpServer::handle_incoming_request( int sd_current ) {
     // read first 4 characters
@@ -287,6 +293,7 @@ bool HttpServer::handle_incoming_request( int sd_current ) {
         return true;
     }
 
+    #ifdef USE_FAST_CGI
     // FCGI
     std::map<int,FcgiRequest> fcgi_requests;
 
@@ -331,6 +338,8 @@ bool HttpServer::handle_incoming_request( int sd_current ) {
         if ( not read_from_socket( sd_current, (char *)&header, sizeof( FCGI_Header ) ) )
             return false;
     }
+    #endif // USE_FAST_CGI
+
     return true;
 }
 
