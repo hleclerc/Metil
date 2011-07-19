@@ -15,6 +15,8 @@ public:
 
     int run( int port );
 
+    virtual void onready( int num_port ) {} ///< called when the socket is ready
+    virtual void onclose() {} ///< after a transmission
     virtual void request( String &out, const String &addr, const String &post ) = 0;
 
     static void send_http_ok( String &out, const String &mime_type ); ///< out << "HTTP/1.0 200 OK\n"...

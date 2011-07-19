@@ -10,6 +10,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <map>
 
 #ifdef USE_FAST_CGI
@@ -271,12 +272,12 @@ bool HttpServer::handle_incoming_request( int sd_current ) {
     if ( not read_from_socket( sd_current, data, 4 ) )
         return false;
 
+
     // GET
     if ( data[ 0 ] == 'G' and data[ 1 ] == 'E' and data[ 2 ] == 'T' and data[ 3 ] == ' ' ) { // GET
         String inp, dat;
         if ( read_get__requ( inp, sd_current ) ) {
             Socket out( sd_current );
-            out << "HTTP/1.0 200 OK\n";
             request( out, inp, dat );
         }
         return true;
@@ -287,7 +288,6 @@ bool HttpServer::handle_incoming_request( int sd_current ) {
         String inp, dat;
         if ( read_post_requ( inp, dat, sd_current ) ) {
             Socket out( sd_current );
-            out << "HTTP/1.0 200 OK\n";
             request( out, inp, dat );
         }
         return true;
@@ -366,6 +366,8 @@ int HttpServer::run( int port ) {
     if ( rb == -1 )
         return 2;
 
+    onready( port );
+
     // show that we are willing to listen
     SC( listen( sd, 5 ) );
     while ( true ) {
@@ -379,6 +381,8 @@ int HttpServer::run( int port ) {
 
         // close socket
         close( sd_current );
+
+        onclose();
     }
 
     close( sd );
