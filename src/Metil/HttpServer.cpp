@@ -7,9 +7,10 @@
 
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <stdio.h>
+#include <signal.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdio.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <map>
@@ -30,9 +31,11 @@ static int socket_check( int v, const char *file, int line ) {
 }
 #define SC( f ) socket_check( f, __FILE__, __LINE__ )
 
-
+static void signal_pipe( int ) {
+}
 
 HttpServer::HttpServer() {
+    signal( SIGPIPE, &signal_pipe );
     timeout = 0;
 }
 
