@@ -39,7 +39,7 @@ void HttpSessionServer::request( String &out, const String &addr, const String &
             int i = rand();
             if ( not sessions.count( i ) ) {
                 sessions[ i ] = factories[ type ]->create( type, post );
-                out << i;
+                out << i << "\n";
                 return;
             }
         }

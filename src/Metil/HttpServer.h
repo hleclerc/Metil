@@ -22,6 +22,7 @@ public:
     static void send_http_ok( String &out, const String &mime_type ); ///< out << "HTTP/1.0 200 OK\n"...
     static bool send_page( String &out, const String &addr, const String &dir ); ///< try to send page defined in adress addr from directory dir.
 
+    double timeout;
 protected:
     bool handle_incoming_request( int sd_current );
 };

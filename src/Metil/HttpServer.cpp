@@ -1,6 +1,7 @@
 #include "Level1/StringHelp.h"
 #include "HttpServer.h"
 #include "BasicVec.h"
+#include "Thread.h"
 #include "System.h"
 #include "Math.h"
 
@@ -32,6 +33,7 @@ static int socket_check( int v, const char *file, int line ) {
 
 
 HttpServer::HttpServer() {
+    timeout = 0;
 }
 
 HttpServer::~HttpServer() {
@@ -343,7 +345,27 @@ bool HttpServer::handle_incoming_request( int sd_current ) {
     return true;
 }
 
+struct CheckSessionAlive : public Thread {
+    CheckSessionAlive() {
+        date_last_event = time_of_day_in_sec();
+    }
+    virtual void run() {
+        while ( true ) {
+            sleep( 1 );
+            if ( time_of_day_in_sec() - date_last_event > server->timeout )
+                exit( 1 );
+        }
+    }
+    double date_last_event;
+    HttpServer *server;
+};
+
 int HttpServer::run( int port ) {
+    CheckSessionAlive check_session_alive;
+    check_session_alive.server = this;
+    if ( timeout )
+        check_session_alive.exec();
+
     // get an internet domain socket
     int sd = SC( socket( PF_INET, SOCK_STREAM, 0 ) );
 
@@ -376,6 +398,9 @@ int HttpServer::run( int port ) {
         sockaddr_in pin;
         int sd_current = SC( accept( sd, (struct sockaddr *)&pin, &addrlen ) );
 
+        //
+        check_session_alive.date_last_event = time_of_day_in_sec();
+
         // read input data. We assume that the message is ended by a void STDIN
         handle_incoming_request( sd_current );
 
@@ -400,7 +425,15 @@ bool HttpServer::send_page( String &out, const String &addr, const String &dir )
     if ( addr == "/" )
         return send_page( out, "index.html", dir );
 
+    // if ...?...
+    int pos_q = addr.find( '?' );
+    if ( pos_q >= 0 )
+        return send_page( out, addr.beg_upto( pos_q ), dir );
+
     String file = dir + '/' + addr;
+    if ( is_a_directory( file ) )
+        return send_page( out, addr + "/index.html", dir );
+
     if ( file_exists( file ) ) {
         if ( file.ends_with( ".js" ) )
             send_http_ok( out, "text/javascript" );
