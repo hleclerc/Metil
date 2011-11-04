@@ -54,14 +54,14 @@ inline bool is_even( FP64 a ) { FP64 tmp = a / 2; return not modf( tmp ); }
 inline bool is_even( FP80 a ) { FP80 tmp = a / 2; return not modf( tmp ); }
 
 template<class T0,class T1> __inline__ T0 floor( T0 a, T1 m ) {
-    if ( not m )
-        return a;
+    //if ( not m )
+    //    return a;
     return a / m * m;
 }
 
 template<class T0,class T1> __inline__ T0 ceil( T0 a, T1 m ) {
-    if ( not m )
-        return a;
+    //if ( not m )
+    //    return a;
     return ( a + m - 1 ) / m * m;
 }
 
