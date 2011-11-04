@@ -93,6 +93,11 @@ template<class T,int s> __inline__ void operator/=( BasicVec<T,s> &a, const T &b
 template<class T,int dim>
 __inline__ BasicVec<T,dim> ceil( const BasicVec<T,dim> &a ) { using namespace std; BasicVec<T,dim> res; for( int i = 0; i < a.size(); ++i ) res[ i ] = ceil( a[ i ] ); return res; }
 
+template<class T,int dim>
+__inline__ BasicVec<T,dim> ceil( const BasicVec<T,dim> &a, T b ) {
+    using namespace std; BasicVec<T,dim> res; for( int i = 0; i < a.size(); ++i ) res[ i ] = ceil( a[ i ], b ); return res;
+}
+
 
 template<class T,int dim>
 __inline__ BasicVec<T,dim> iDivUp( const BasicVec<T,dim> &a, const BasicVec<T,dim> &b ) {
