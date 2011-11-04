@@ -508,6 +508,23 @@ Ptr<CompilationTree> CompilationEnvironment::make_lnk_compilation_tree( const St
     return res;
 }
 
+struct GetRemp {
+    void aaadd( BasicVec<String> var_templ, BasicVec<BasicVec<String,2> > rep = BasicVec<BasicVec<String,2> >() ) {
+        if ( var_templ.size() ) {
+            BasicVec<String> t = tokenize( var_templ.back(), ' ' );
+            var_templ.pop_back();
+            
+            for( int i = 1; i < t.size(); ++i ) {
+                rep.push_back( t[ 0 ], t[ i ] );
+                aaadd( var_templ, rep );
+                rep.pop_back();
+            }
+        } else
+            res << rep;
+    }
+    BasicVec<BasicVec<BasicVec<String,2> > > res;
+};
+
 void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, const String &cpp_, bool dyn ) {
     String cpp = absolute_filename( cpp_ );
 
@@ -515,9 +532,37 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
     if ( parsed.contains( cpp ) )
         return;
     parsed << cpp;
-
+    
     // parse
     CompilationCppParser cpp_parser( *this, cpp, dep_for( cpp ) );
+    
+    if ( cpp_parser.var_templ.size() ) {
+        GetRemp gr;
+        gr.aaadd( cpp_parser.var_templ );
+        
+        File f( cpp );
+        String dat = f.c_str();
+        dat = dat.replace( "#pragma template", "// template" );
+        for( int i = 0; i < gr.res.size(); ++i ) {
+            String cp = dat;
+            for( int j = 0; j < gr.res[ i ].size(); ++j )
+                cp = cp.replace( gr.res[ i ][ j ][ 0 ], gr.res[ i ][ j ][ 1 ] );
+            
+            String nc =  cpp + '_' + String( i ) + ".cpp";
+            if ( file_exists( nc ) ) {
+                File o( nc );
+                if ( cp == o.c_str() ) {
+                    parse_cpp( obj, nc, dyn );
+                    continue;
+                }
+            }
+            
+            File o( nc, "w" );
+            o << cp;
+            parse_cpp( obj, nc, dyn );
+        }
+        return;
+    }
 
     // global flags
     for( int i = 0; i < cpp_parser.lnk_flags.size(); ++i )

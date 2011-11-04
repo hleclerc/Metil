@@ -42,7 +42,7 @@ String String::replace( const String &a, const String &b ) const { // TODO : opt
             return res;
         }
         res << tmp.beg_upto( n ) << b;
-        tmp = tmp.end_from( n + b.size() );
+        tmp = tmp.end_from( n + a.size() );
     }
 }
 
