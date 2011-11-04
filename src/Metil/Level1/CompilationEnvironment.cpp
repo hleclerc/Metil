@@ -542,13 +542,14 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         
         File f( cpp );
         String dat = f.c_str();
-        dat = dat.replace( "#pragma template", "// template" );
+        dat = dat.replace( "#pragma template ", "// template " );
         for( int i = 0; i < gr.res.size(); ++i ) {
             String cp = dat;
             for( int j = 0; j < gr.res[ i ].size(); ++j )
                 cp = cp.replace( gr.res[ i ][ j ][ 0 ], gr.res[ i ][ j ][ 1 ] );
             
-            String nc =  cpp + '_' + String( i ) + ".cpp";
+            int p = cpp.rfind( '.' );
+            String nc = cpp.beg_upto( p ) + '_' + String( i ) + cpp.end_from( p );
             if ( file_exists( nc ) ) {
                 File o( nc );
                 if ( cp == o.c_str() ) {
