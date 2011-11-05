@@ -57,6 +57,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  lib_path additionnal library (.so/.a) path, like e.g. /usr/local/lib";
     cerrn << "  lib_name additionnal library name (.so/.a), like e.g. pthread";
     cerrn << "  fra_name additionnal framework name. Means -l on most of the systems, except for Mac Os.";
+    cerrn << "  template var value_0 value_1 ... permits to generate several versions of a .cpp with var substituted by value_0, then value_1, ...";
     cerrn << "In most of the cases, pragma are included as";
     cerrn << "#ifdef METIL_COMP_DIRECTIVE";
     cerrn << "#pragma ...";

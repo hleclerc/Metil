@@ -23,6 +23,11 @@ struct BasicImgGpu {
 
     BasicImgGpu() {}
     BasicImgGpu( TV size ) : size( size ), data( Size(), product( size ) ) {}
+    
+    void set_size( TV s ) {
+         size = s;
+         data.resize_without_copy( product( s ) );
+    }
 
     void set_size( TV _size ) {
         size = _size;

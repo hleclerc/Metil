@@ -24,6 +24,8 @@ public:
     BasicVec<String> lnk_flags; ///<
     BasicVec<String> gpu_flags; ///<
 
+    BasicVec<String> var_templ; ///< template variables
+    
 private:
     struct Define {
         BasicVec<String> args;

@@ -48,6 +48,23 @@ void cuda_scalar_op( Dst *dst, const Src *src, const Srd *srd, ST size, const Op
     cuda_scalar_op_kernel<<<iDivUp( size, NB_THREADS_FOR_SCALAR_OP ),NB_THREADS_FOR_SCALAR_OP>>>( dst, src, srd, size, op );
 }
 
+/**
+  Ex:
+   cuda_scalar_op( dst, size, SetVal( 10 ) );
+
+  will set $size values of $dst to 10
+
+  cuda_scalar_op can take other vectors as argument. Ex
+
+    template<class T>
+    struct SelfAdd {
+        __inline__ void operator()( T &dst, T vec ) const { dst += 15 * vec; }
+    };
+
+    cuda_scalar_op( dst, vec, size, SelfAdd() );
+
+  will make the operation dst[ i ] += 15 * vec[ i ]; for each i in 0..size
+*/
 template<class T>
 struct SetVal {
     SetVal( T val ) : val( val ) {}

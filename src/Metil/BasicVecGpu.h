@@ -125,6 +125,8 @@ struct BasicVecGpu {
         cudaMemcpy( &res, _data + index, sizeof( T ), cudaMemcpyDeviceToHost );
         return res;
     }
+    
+    //void set( T val ) { cuda_scalar_op( _data, _size, SetVal( val ) ); }
 
 private:
     T *_data;
