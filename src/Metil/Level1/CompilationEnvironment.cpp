@@ -401,6 +401,7 @@ void CompilationEnvironment::extra_obj_cmd( String &cmd, bool dyn, bool cu, cons
 
     for( int i = 0; i < inc_paths.size(); ++i )
         cmd << " -I'" << inc_paths[ i ] << "'";
+    cmd << " -I'" << INSTALL_DIR "/src" << "'";
 
     for( int i = 0; i < def_procs.size(); ++i )
         cmd << " -D" << def_procs[ i ];
