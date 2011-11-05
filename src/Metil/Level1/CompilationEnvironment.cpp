@@ -541,7 +541,7 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         gr.aaadd( cpp_parser.var_templ );
         
         File f( cpp );
-        String dat = f.c_str();
+        String dat = "#line 1 \"" + cpp + "\"\n" + f.c_str();
         dat = dat.replace( "#pragma template ", "// template " );
         for( int i = 0; i < gr.res.size(); ++i ) {
             String cp = dat;
