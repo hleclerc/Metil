@@ -17,7 +17,18 @@ struct BasicImg {
         data.resize( product( s ) );
     }
 
+    const T &operator()( int x, int y ) const { return data[ y * size[ 0 ] + x ]; }
     T &operator()( int x, int y ) { return data[ y * size[ 0 ] + x ]; }
+    
+    template<class F>
+    T interp( F x, F y ) const {
+        int xi = x, yi = y;
+        F xf = x - xi, yf = y - yi;
+        return ( 1 - xf ) * ( 1 - yf ) * operator()( xi + 0, yi + 0 ) + 
+               ( 0 + xf ) * ( 1 - yf ) * operator()( xi + 1, yi + 0 ) + 
+               ( 1 - xf ) * ( 0 + yf ) * operator()( xi + 0, yi + 1 ) + 
+               ( 0 + xf ) * ( 0 + yf ) * operator()( xi + 1, yi + 1 );
+    }
 
     template<class Hdf,class TS>
     void write_to( Hdf &hdf, const TS &name ) {
