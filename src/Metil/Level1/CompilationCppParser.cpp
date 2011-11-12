@@ -283,6 +283,8 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                     bool syst;
                     String bas_name = get_include_filename( c += 9, syst );
                     String inc_file = ce.find_src( bas_name, current_dir, inc_paths, not syst );
+                    if ( not inc_file )
+                        inc_file = ce.find_src( bas_name, current_dir, ce_inc_paths, not syst );
 
                     // formulation.
                     if ( not inc_file ) {
