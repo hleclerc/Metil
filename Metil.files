@@ -326,3 +326,4 @@ examples/server/BasicMesh.py
 examples/server/test.py
 examples/server/server_objects.py
 src/Metil/BasicImg.h
+src/Metil/TypeChoice.h
