@@ -50,7 +50,7 @@ void cuda_scalar_op( Dst *dst, const Src *src, const Srd *srd, ST size, const Op
 
 /**
   Ex:
-   cuda_scalar_op( dst, size, SetVal( 10 ) );
+   cuda_scalar_op( dst, size, SetVal<int>( 10 ) );
 
   will set $size values of $dst to 10
 
