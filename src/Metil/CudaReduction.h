@@ -1,19 +1,20 @@
 #ifndef CUDAREDUCTION_H
 #define CUDAREDUCTION_H
 
+#include "PrevNextPow2.h"
 #include "CudaMetil.h"
 #include "Limits.h"
 #include "Math.h"
 
 BEG_METIL_NAMESPACE;
 
-#define NB_BLOCKS__FOR_REDUCTION 64
-#define NB_THREADS_FOR_REDUCTION 64
+// #define NB_BLOCKS__FOR_REDUCTION 64
+// #define NB_THREADS_FOR_REDUCTION 64
 
 //
-template<class T,int nb_threads>
-__device__ void cuda_reduction_kernel_loc( T *loc, N<nb_threads> ) {
-    for( int m = nb_threads / 2; m; m /= 2 ) {
+template<class T,int nb_th>
+__device__ void cuda_reduction_kernel_loc( T *loc, N<nb_th> ) {
+    for( int m = nb_th / 2; m; m /= 2 ) {
         syncthreads();
         if ( threadIdx.x < m )
             loc[ threadIdx.x ].reduction( loc[ threadIdx.x + m ] );
@@ -21,17 +22,17 @@ __device__ void cuda_reduction_kernel_loc( T *loc, N<nb_threads> ) {
 }
 
 // make NB_BLOCKS__FOR_REDUCTION R. 1 arg
-template<class R,class T0> __global__
-void cuda_reduction_kernel_0( R *res, const T0 *data_0, ST size ) {
-    __shared__ R loc[ NB_THREADS_FOR_REDUCTION ];
+template<class R,class T0,int nb_bl,int nb_th> __global__
+void cuda_reduction_kernel_0( R *res, const T0 *data_0, ST size, N<nb_bl>, N<nb_th> ) {
+    __shared__ R loc[ nb_th ];
 
-    // uupdate loc
+    // update loc
     syncthreads();
-    for( int index = blockIdx.x * NB_THREADS_FOR_REDUCTION + threadIdx.x; index < size; index += NB_BLOCKS__FOR_REDUCTION * NB_THREADS_FOR_REDUCTION )
+    for( int index = blockIdx.x * nb_th + threadIdx.x; index < size; index += nb_bl * nb_th )
         loc[ threadIdx.x ].reduction( data_0[ index ] );
 
     // reduction of loc
-    cuda_reduction_kernel_loc( loc, N<NB_THREADS_FOR_REDUCTION>() );
+    cuda_reduction_kernel_loc( loc, N<nb_th>() );
 
     // save
     syncthreads();
@@ -40,17 +41,17 @@ void cuda_reduction_kernel_0( R *res, const T0 *data_0, ST size ) {
 }
 
 // make NB_BLOCKS__FOR_REDUCTION R. 2 arg
-template<class R,class T0,class T1> __global__
-void cuda_reduction_kernel_0( R *res, const T0 *data_0, const T1 *data_1, ST size ) {
-    __shared__ R loc[ NB_THREADS_FOR_REDUCTION ];
+template<class R,class T0,class T1,int nb_bl,int nb_th> __global__
+void cuda_reduction_kernel_0( R *res, const T0 *data_0, const T1 *data_1, ST size, N<nb_bl>, N<nb_th> ) {
+    __shared__ R loc[ nb_th ];
 
     // uupdate loc
     syncthreads();
-    for( int index = blockIdx.x * NB_THREADS_FOR_REDUCTION + threadIdx.x; index < size; index += NB_BLOCKS__FOR_REDUCTION * NB_THREADS_FOR_REDUCTION )
+    for( int index = blockIdx.x * nb_th + threadIdx.x; index < size; index += nb_bl * nb_th )
         loc[ threadIdx.x ].reduction( data_0[ index ], data_1[ index ] );
 
     // reduction of loc
-    for( int m = NB_THREADS_FOR_REDUCTION / 2; m; m /= 2 ) {
+    for( int m = nb_th / 2; m; m /= 2 ) {
         syncthreads();
         if ( threadIdx.x < m )
             loc[ threadIdx.x ].reduction( loc[ threadIdx.x + m ] );
@@ -63,17 +64,17 @@ void cuda_reduction_kernel_0( R *res, const T0 *data_0, const T1 *data_1, ST siz
 }
 
 // make NB_BLOCKS__FOR_REDUCTION R. 3 arg
-template<class R,class T0,class T1,class T2> __global__
-void cuda_reduction_kernel_0( R *res, const T0 *data_0, const T1 *data_1, const T2 *data_2, ST size ) {
-    __shared__ R loc[ NB_THREADS_FOR_REDUCTION ];
+template<class R,class T0,class T1,class T2,int nb_bl,int nb_th> __global__
+void cuda_reduction_kernel_0( R *res, const T0 *data_0, const T1 *data_1, const T2 *data_2, ST size, N<nb_bl>, N<nb_th> ) {
+    __shared__ R loc[ nb_th ];
 
     // uupdate loc
     syncthreads();
-    for( int index = blockIdx.x * NB_THREADS_FOR_REDUCTION + threadIdx.x; index < size; index += NB_BLOCKS__FOR_REDUCTION * NB_THREADS_FOR_REDUCTION )
+    for( int index = blockIdx.x * nb_th + threadIdx.x; index < size; index += nb_bl * nb_th )
         loc[ threadIdx.x ].reduction( data_0[ index ], data_1[ index ], data_2[ index ] );
 
     // reduction of loc
-    for( int m = NB_THREADS_FOR_REDUCTION / 2; m; m /= 2 ) {
+    for( int m = nb_th / 2; m; m /= 2 ) {
         syncthreads();
         if ( threadIdx.x < m )
             loc[ threadIdx.x ].reduction( loc[ threadIdx.x + m ] );
@@ -86,14 +87,14 @@ void cuda_reduction_kernel_0( R *res, const T0 *data_0, const T1 *data_1, const 
 }
 
 // reduction of NB_BLOCKS__FOR_REDUCTION R
-template<class R> __global__
-void cuda_reduction_kernel_1( R *res ) {
+template<class R,int nb_th> __global__
+void cuda_reduction_kernel_1( R *res, N<nb_th> ) {
     // copy in loc
-    __shared__ R loc[ NB_BLOCKS__FOR_REDUCTION ];
+    __shared__ R loc[ nb_th ];
     loc[ threadIdx.x ] = res[ threadIdx.x ];
 
     // reduction of loc
-    for( int m = NB_BLOCKS__FOR_REDUCTION / 2; m; m /= 2 ) {
+    for( int m = nb_th / 2; m; m /= 2 ) {
         syncthreads();
         if ( threadIdx.x < m )
             loc[ threadIdx.x ].reduction( loc[ threadIdx.x + m ] );
@@ -108,9 +109,11 @@ void cuda_reduction_kernel_1( R *res ) {
 /// 1 arg
 template<class R,class T0>
 void cuda_reduction( R &res, const T0 *data_0, ST size ) {
-    R *tmp; cudaMalloc( &tmp, sizeof( R ) * NB_BLOCKS__FOR_REDUCTION );
-    cuda_reduction_kernel_0<<<NB_BLOCKS__FOR_REDUCTION,NB_THREADS_FOR_REDUCTION>>>( tmp, data_0, size );
-    cuda_reduction_kernel_1<<<                       1,NB_BLOCKS__FOR_REDUCTION>>>( tmp );
+    const int nb_bl = PrevPow2< ( 0x4000 - 1 ) / sizeof( R ) >::res;
+    const int nb_th = nb_bl;
+    R *tmp; cudaMalloc( &tmp, sizeof( R ) * nb_bl );
+    cuda_reduction_kernel_0<<<nb_bl,nb_th>>>( tmp, data_0, size, N<nb_bl>(), N<nb_th>() );
+    cuda_reduction_kernel_1<<<    1,nb_bl>>>( tmp, N<nb_bl>() );
     cudaMemcpy( &res, tmp, sizeof( R ), cudaMemcpyDeviceToHost );
     cudaFree( tmp );
 }
@@ -118,9 +121,11 @@ void cuda_reduction( R &res, const T0 *data_0, ST size ) {
 /// 2 arg
 template<class R,class T0,class T1>
 void cuda_reduction( R &res, const T0 *data_0, const T1 *data_1, ST size ) {
-    R *tmp; cudaMalloc( &tmp, sizeof( R ) * NB_BLOCKS__FOR_REDUCTION );
-    cuda_reduction_kernel_0<<<NB_BLOCKS__FOR_REDUCTION,NB_THREADS_FOR_REDUCTION>>>( tmp, data_0, data_1, size );
-    cuda_reduction_kernel_1<<<                       1,NB_BLOCKS__FOR_REDUCTION>>>( tmp );
+    const int nb_bl = PrevPow2< ( 0x4000 - 1 ) / sizeof( R ) >::res;
+    const int nb_th = nb_bl;
+    R *tmp; cudaMalloc( &tmp, sizeof( R ) * nb_bl );
+    cuda_reduction_kernel_0<<<nb_bl,nb_th>>>( tmp, data_0, data_1, size, N<nb_bl>(), N<nb_th>() );
+    cuda_reduction_kernel_1<<<    1,nb_bl>>>( tmp, N<nb_bl>() );
     cudaMemcpy( &res, tmp, sizeof( R ), cudaMemcpyDeviceToHost );
     cudaFree( tmp );
 }
@@ -128,9 +133,11 @@ void cuda_reduction( R &res, const T0 *data_0, const T1 *data_1, ST size ) {
 /// 3 arg
 template<class R,class T0,class T1,class T2>
 void cuda_reduction( R &res, const T0 *data_0, const T1 *data_1, const T2 *data_2, ST size ) {
-    R *tmp; cudaMalloc( &tmp, sizeof( R ) * NB_BLOCKS__FOR_REDUCTION );
-    cuda_reduction_kernel_0<<<NB_BLOCKS__FOR_REDUCTION,NB_THREADS_FOR_REDUCTION>>>( tmp, data_0, data_1, data_2, size );
-    cuda_reduction_kernel_1<<<                       1,NB_BLOCKS__FOR_REDUCTION>>>( tmp );
+    const int nb_bl = PrevPow2< ( 0x4000 - 1 ) / sizeof( R ) >::res;
+    const int nb_th = nb_bl;
+    R *tmp; cudaMalloc( &tmp, sizeof( R ) * nb_bl );
+    cuda_reduction_kernel_0<<<nb_bl,nb_th>>>( tmp, data_0, data_1, data_2, size, N<nb_bl>(), N<nb_th>() );
+    cuda_reduction_kernel_1<<<    1,nb_bl>>>( tmp, N<nb_bl>() );
     cudaMemcpy( &res, tmp, sizeof( R ), cudaMemcpyDeviceToHost );
     cudaFree( tmp );
 }

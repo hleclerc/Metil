@@ -320,13 +320,6 @@ public:
             return true;
     }
 
-    __inline__ bool operator!=( const BasicVec &v ) const {
-        for( int i = 0; i < static_size; ++i )
-            if ( _data[ i ] != v[ i ] )
-                return true;
-            return false;
-    }
-
     __inline__ bool operator==( const T &v ) const {
         for(int i=0;i<static_size;++i)
             if ( _data[ i ] != v )
