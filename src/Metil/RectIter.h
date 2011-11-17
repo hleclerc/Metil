@@ -50,7 +50,24 @@ public:
     __inline__ int index() const {
         return index( pos );
     }
+    
+    static __inline__ TV _reverse_index( T index, TV size, N<1> ) { return index; }
+    static __inline__ TV _reverse_index( T index, TV size, N<2> ) { return TV( index % size[ 0 ], index / size[ 0 ] ); }
+    static __inline__ TV _reverse_index( T index, TV size, N<3> ) { return TV( index % size[ 0 ], index / size[ 0 ] % size[ 1 ], index / size[ 0 ] / size[ 1 ] ); }
+    
+    static __inline__ TV reverse_index( T index, TV size ) {
+        return _reverse_index( index, size, N<dim>() );
+    }
 
+    static __inline__ int index( TV p, TV rese ) {
+        int res = 0;
+        for( int d = 0, c = 1; d < dim; ++d ) {
+            res += c * p[ d ];
+            c *= rese[ d ];
+        }
+        return res;
+    }
+    
     TV pos; ///< position
     TV beg; ///< first corner of the box
     TV end; ///< second corner of the box
