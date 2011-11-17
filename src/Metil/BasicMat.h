@@ -53,7 +53,7 @@ struct BasicMat<T_,dim,true,false> {
 
     }
 
-    __inline__ BasicVec<T,dim> solve_using_cholesky( BasicVec<T,dim> sol, int d = dim ) {
+    __inline__ BasicVec<T,dim> solve_using_cholesky( BasicVec<T,dim> sol, int d = dim ) const {
         BasicVec<T,dim> res;
         for( int r = 0; r < d; ++r ) {
             T v = sol[ r ];
@@ -181,7 +181,7 @@ struct BasicMat<T_,dim,true,true> {
             sec_sel( r, r ) = 1 / sqrt( sec_sel( r, r ) );
     }
 
-    __inline__ BasicVec<T,dim> solve_using_cholesky( BasicVec<T,dim> sol, int d = dim ) {
+    __inline__ BasicVec<T,dim> solve_using_cholesky( BasicVec<T,dim> sol, int d = dim ) const {
         BasicVec<T,dim> res;
         for( int r = 0; r < d; ++r )
             res[ r ] = sol[ r ] * sec_sel( r, r ) * sec_sel( r, r );
