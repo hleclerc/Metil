@@ -29,11 +29,6 @@ struct BasicImgGpu {
          data.resize_without_copy( product( s ) );
     }
 
-    void set_size( TV _size ) {
-        size = _size;
-        data.resize_without_copy( product( size ) );
-    }
-
     template<class Hdf,class TS>
     void write_to( Hdf &hdf, const TS &name ) {
         BasicVec<T> tmp = data;
