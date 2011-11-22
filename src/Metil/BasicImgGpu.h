@@ -4,6 +4,7 @@
 #include "MathBasicVec.h"
 #include "BasicVecGpu.h"
 #include "String.h"
+#include "Png.h"
 
 BEG_METIL_NAMESPACE
 
@@ -33,6 +34,11 @@ struct BasicImgGpu {
     void write_to( Hdf &hdf, const TS &name ) {
         BasicVec<T> tmp = data;
         hdf.write( name, tmp.ptr(), size );
+    }
+    
+    void save_png( const String &filename ) {
+        BasicVec<T> tmp = data;
+        Metil::save_png( filename, tmp.ptr(), size[ 0 ], size[ 1 ], true );
     }
 
     template<class Op,int nb_threads>
