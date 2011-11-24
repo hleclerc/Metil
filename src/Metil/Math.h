@@ -25,6 +25,7 @@ template<class T> __inline__ bool infz  ( T a ) { return a <  0; }
 
 template<class T0,class T1> __inline__ bool boolean_xor( T0 a, T1 b ) { return bool( a ) ^ bool( b ); }
 
+template<class T> __inline__ T pos_part( T a ) { return a * ( a > 0 ); }
 
 inline FP32 modf( FP32 a ) { return __builtin_modff( a, &a ); }
 inline FP64 modf( FP64 a ) { return __builtin_modf ( a, &a ); }
