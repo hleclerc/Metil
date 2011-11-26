@@ -195,8 +195,8 @@ inline FP32 pow( FP80 a, FP32 b ) { return __builtin_powf( a, b ); }
 inline FP64 pow( FP80 a, FP64 b ) { return __builtin_pow ( a, b ); }
 inline FP80 pow( FP80 a, FP80 b ) { return __builtin_powl( a, b ); }
 
-template<class T> __inline__ T min( const T &a, const T &b ) { return MIN( a, b ); }
-template<class T> __inline__ T max( const T &a, const T &b ) { return MAX( a, b ); }
+template<class T,class U> __inline__ T min( const T &a, const U &b ) { return MIN( a, b ); }
+template<class T,class U> __inline__ T max( const T &a, const U &b ) { return MAX( a, b ); }
 
 #else // __CUDACC__
 __inline__ ST min( const ST &a, const ST &b ) { return ::min( (long long)a, (long long)b ); } // hum

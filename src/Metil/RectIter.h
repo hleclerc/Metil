@@ -20,7 +20,7 @@ public:
     __inline__ operator bool() const { return ( inc[ dim - 1 ] > 0 ? pos[ dim - 1 ] < end[ dim - 1 ] : pos[ dim - 1 ] > end[ dim - 1 ] ); }
 
     __inline__ RectIter &operator++() {
-        pos[0] += inc[0];
+        pos[ 0 ] += inc[ 0 ];
         for( int d = 0; d < dim - 1; d++ ) {
             if ( inc[ d ] > 0 ? pos[ d ] >= end[ d ] : pos[ d ] <= end[ d ] ) {
                 pos[ d ] = beg[ d ];

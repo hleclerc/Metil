@@ -80,16 +80,19 @@ template<class T,int s> __inline__ BasicVec<T,s> operator+( const T &a, const Ba
 template<class T,int s> __inline__ BasicVec<T,s> operator-( const T &a, const BasicVec<T,s> &b ) { BasicVec<T,s> res( Size(), b.size() ); for( int i = 0; i < b.size(); ++i ) res[ i ] = a - b[ i ]; return res; }
 template<class T,int s> __inline__ BasicVec<T,s> operator*( const T &a, const BasicVec<T,s> &b ) { BasicVec<T,s> res( Size(), b.size() ); for( int i = 0; i < b.size(); ++i ) res[ i ] = a * b[ i ]; return res; }
 template<class T,int s> __inline__ BasicVec<T,s> operator/( const T &a, const BasicVec<T,s> &b ) { BasicVec<T,s> res( Size(), b.size() ); for( int i = 0; i < b.size(); ++i ) res[ i ] = a / b[ i ]; return res; }
+template<class T,int s> __inline__ BasicVec<T,s> operator%( const T &a, const BasicVec<T,s> &b ) { BasicVec<T,s> res( Size(), b.size() ); for( int i = 0; i < b.size(); ++i ) res[ i ] = a % b[ i ]; return res; }
 
 template<class T,int s> __inline__ BasicVec<T,s> operator+( const BasicVec<T,s> &a, const T &b ) { BasicVec<T,s> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = a[ i ] + b; return res; }
 template<class T,int s> __inline__ BasicVec<T,s> operator-( const BasicVec<T,s> &a, const T &b ) { BasicVec<T,s> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = a[ i ] - b; return res; }
 template<class T,int s> __inline__ BasicVec<T,s> operator*( const BasicVec<T,s> &a, const T &b ) { BasicVec<T,s> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = a[ i ] * b; return res; }
 template<class T,int s> __inline__ BasicVec<T,s> operator/( const BasicVec<T,s> &a, const T &b ) { BasicVec<T,s> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = a[ i ] / b; return res; }
+template<class T,int s> __inline__ BasicVec<T,s> operator%( const BasicVec<T,s> &a, const T &b ) { BasicVec<T,s> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = a[ i ] % b; return res; }
 
 template<class T,int s> __inline__ void operator+=( BasicVec<T,s> &a, const T &b ) { for( int i = 0; i < a.size(); ++i ) a[ i ] += b; }
 template<class T,int s> __inline__ void operator-=( BasicVec<T,s> &a, const T &b ) { for( int i = 0; i < a.size(); ++i ) a[ i ] -= b; }
 template<class T,int s> __inline__ void operator*=( BasicVec<T,s> &a, const T &b ) { for( int i = 0; i < a.size(); ++i ) a[ i ] *= b; }
 template<class T,int s> __inline__ void operator/=( BasicVec<T,s> &a, const T &b ) { for( int i = 0; i < a.size(); ++i ) a[ i ] /= b; }
+template<class T,int s> __inline__ void operator%=( BasicVec<T,s> &a, const T &b ) { for( int i = 0; i < a.size(); ++i ) a[ i ] %= b; }
 
 template<class T,int dim>
 __inline__ BasicVec<T,dim> ceil( const BasicVec<T,dim> &a ) { using namespace std; BasicVec<T,dim> res; for( int i = 0; i < a.size(); ++i ) res[ i ] = ceil( a[ i ] ); return res; }
@@ -114,11 +117,17 @@ __inline__ BasicVec<T,dim> abs( const BasicVec<T,dim> &a ) { using namespace std
 template<class T,int dim>
 __inline__ BasicVec<T,dim> sin( const BasicVec<T,dim> &a ) { using namespace std; BasicVec<T,dim> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = sin( a[ i ] ); return res; }
 
-template<class T,int dim>
-__inline__ BasicVec<T,dim> min( const BasicVec<T,dim> &a, const BasicVec<T,dim> &b ) { using namespace std; BasicVec<T,dim> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = min( a[ i ], b[ i ] ); return res; }
+template<class T,int dim,class F>
+__inline__ BasicVec<T,dim> min( const BasicVec<T,dim> &a, const BasicVec<F,dim> &b ) { using namespace std; BasicVec<T,dim> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = min( a[ i ], b[ i ] ); return res; }
 
-template<class T,int dim>
-__inline__ BasicVec<T,dim> max( const BasicVec<T,dim> &a, const BasicVec<T,dim> &b ) { using namespace std; BasicVec<T,dim> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = max( a[ i ], b[ i ] ); return res; }
+template<class T,int dim,class F>
+__inline__ BasicVec<T,dim> max( const BasicVec<T,dim> &a, const BasicVec<F,dim> &b ) { using namespace std; BasicVec<T,dim> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = max( a[ i ], b[ i ] ); return res; }
+
+template<class T,int dim,class F>
+__inline__ BasicVec<T,dim> min( const BasicVec<T,dim> &a, const F &b ) { using namespace std; BasicVec<T,dim> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = min( a[ i ], b ); return res; }
+
+template<class T,int dim,class F>
+__inline__ BasicVec<T,dim> max( const BasicVec<T,dim> &a, const F &b ) { using namespace std; BasicVec<T,dim> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = max( a[ i ], b ); return res; }
 
 template<class T,int dim>
 __inline__ T min( const BasicVec<T,dim> &a ) { T res = a[ 0 ]; for( int i = 1; i < a.size(); ++i ) res = min( res, a[ i ] ); return res; }
@@ -144,6 +153,40 @@ __inline__ BasicVec<T,dim> cum( const BasicVec<T,dim> &S ) {
     return res;
 }
 
+// offset in nd image
+template<class T>
+__inline__ T off_rect( const BasicVec<T,1> &pos, const BasicVec<T,1> &size ) {
+    return pos[ 0 ];
+}
+
+template<class T>
+__inline__ T off_rect( const BasicVec<T,2> &pos, const BasicVec<T,2> &size ) {
+    return size[ 0 ] * pos[ 1 ] + pos[ 0 ];
+}
+
+template<class T>
+__inline__ T off_rect( const BasicVec<T,3> &pos, const BasicVec<T,3> &size ) {
+    return size[ 0 ] * size[ 1 ] * pos[ 2 ] + size[ 0 ] * pos[ 1 ] + pos[ 0 ];
+}
+
+// position( index ) in rect image
+template<class T>
+__inline__ BasicVec<T,1> pos_rect( T ind, const BasicVec<T,1> &size ) {
+    return ind;
+}
+
+template<class T>
+__inline__ BasicVec<T,2> pos_rect( T ind, const BasicVec<T,2> &size ) {
+    return svec( ind % size[ 0 ], ind / size[ 0 ] );
+}
+
+template<class T>
+__inline__ BasicVec<T,3> pos_rect( T ind, const BasicVec<T,3> &size ) {
+    T t = ind / size[ 0 ];
+    return svec( ind % size[ 0 ], t % size[ 1 ], t / size[ 1 ] );
+}
+
+//
 template<class T,int dim>
 __inline__ T variance( const BasicVec<T,dim> &a ) {
     T m = mean( a ), r = 0;
