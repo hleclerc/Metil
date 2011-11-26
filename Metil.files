@@ -327,3 +327,6 @@ examples/server/test.py
 examples/server/server_objects.py
 src/Metil/BasicImg.h
 src/Metil/TypeChoice.h
+src/Metil/SimdVec.h
+src/Metil/TypePromote.h
+src/Metil/RefOf.h

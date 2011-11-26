@@ -87,6 +87,7 @@ template<class T,int s> __inline__ BasicVec<T,s> operator-( const BasicVec<T,s> 
 template<class T,int s> __inline__ BasicVec<T,s> operator*( const BasicVec<T,s> &a, const T &b ) { BasicVec<T,s> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = a[ i ] * b; return res; }
 template<class T,int s> __inline__ BasicVec<T,s> operator/( const BasicVec<T,s> &a, const T &b ) { BasicVec<T,s> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = a[ i ] / b; return res; }
 template<class T,int s> __inline__ BasicVec<T,s> operator%( const BasicVec<T,s> &a, const T &b ) { BasicVec<T,s> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = a[ i ] % b; return res; }
+template<class T,int s> __inline__ BasicVec<bool,s> operator>( const BasicVec<T,s> &a, const T &b ) { BasicVec<bool,s> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = a[ i ] > b; return res; }
 
 template<class T,int s> __inline__ void operator+=( BasicVec<T,s> &a, const T &b ) { for( int i = 0; i < a.size(); ++i ) a[ i ] += b; }
 template<class T,int s> __inline__ void operator-=( BasicVec<T,s> &a, const T &b ) { for( int i = 0; i < a.size(); ++i ) a[ i ] -= b; }
