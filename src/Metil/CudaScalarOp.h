@@ -33,19 +33,19 @@ void cuda_scalar_op_kernel( Dst *dst, const Src *src, const Srd *srd, ST size, O
 /// self version
 template<class Dst,class Op>
 void cuda_scalar_op( Dst *dst, ST size, const Op &op ) {
-    cuda_scalar_op_kernel<<<iDivUp( size, NB_THREADS_FOR_SCALAR_OP ),NB_THREADS_FOR_SCALAR_OP>>>( dst, size, op );
+    cuda_scalar_op_kernel<<<iDivUp( size, ST( NB_THREADS_FOR_SCALAR_OP ) ),NB_THREADS_FOR_SCALAR_OP>>>( dst, size, op );
 }
 
 /// with 1 arg
 template<class Dst,class Src,class Op>
 void cuda_scalar_op( Dst *dst, const Src *src, ST size, const Op &op ) {
-    cuda_scalar_op_kernel<<<iDivUp( size, NB_THREADS_FOR_SCALAR_OP ),NB_THREADS_FOR_SCALAR_OP>>>( dst, src, size, op );
+    cuda_scalar_op_kernel<<<iDivUp( size, ST( NB_THREADS_FOR_SCALAR_OP ) ),NB_THREADS_FOR_SCALAR_OP>>>( dst, src, size, op );
 }
 
 /// with 1 arg
 template<class Dst,class Src,class Srd,class Op>
 void cuda_scalar_op( Dst *dst, const Src *src, const Srd *srd, ST size, const Op &op ) {
-    cuda_scalar_op_kernel<<<iDivUp( size, NB_THREADS_FOR_SCALAR_OP ),NB_THREADS_FOR_SCALAR_OP>>>( dst, src, srd, size, op );
+    cuda_scalar_op_kernel<<<iDivUp( size, ST( NB_THREADS_FOR_SCALAR_OP ) ),NB_THREADS_FOR_SCALAR_OP>>>( dst, src, srd, size, op );
 }
 
 /**
