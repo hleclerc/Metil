@@ -37,6 +37,13 @@ struct BasicMat<T_,dim,true,false> {
 
     __inline__ void set( T val ) { data.set( val ); }
 
+    
+    __inline__ void complete_diag() {
+        for( int i = 0; i < dim; ++i )
+            operator()( i, i ) += operator()( i, i ) == 0;
+    }
+    
+    
     __inline__ void chol( int d = dim ) {
         for( int r = 0; r < d; ++r ) {
             for( int c = 0; c < r; ++c ) {
