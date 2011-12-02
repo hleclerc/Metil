@@ -38,9 +38,16 @@ struct BasicMat<T_,dim,true,false> {
     __inline__ void set( T val ) { data.set( val ); }
 
     
-    __inline__ void complete_diag() {
+    __inline__ void complete_diag( T c = 0 ) {
         for( int i = 0; i < dim; ++i )
             operator()( i, i ) += operator()( i, i ) == 0;
+        if ( c ) {
+            T m = 0;
+            for( int i = 0; i < dim; ++i )
+                m = max( m, abs( operator()( i, i ) ) );
+            for( int i = 0; i < dim; ++i )
+                operator()( i, i ) += c * m;
+        }
     }
     
     
