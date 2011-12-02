@@ -14,6 +14,7 @@
 #pragma gpu_flag -DH5Gopen_vers=1
 
 #pragma inc_path /usr/lib/openmpi/include
+#pragma lib_name mpi
 #pragma lib_name mpi++
 
 #include "BasicVec.h"

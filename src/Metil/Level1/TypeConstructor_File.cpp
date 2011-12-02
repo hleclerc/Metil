@@ -17,7 +17,7 @@ void metil_def_close__when__a__isa__File( MO &a ) {
 void metil_def_read__when__a__isa__File( MO &a, void *b, ST c ) {
     if ( a.data ) {
         size_t res = fread( b, 1, c, reinterpret_cast<FILE *>( a.data ) );
-        ASSERT( (ST)res == c, "problem in reading file" );
+        ASSERT( (ST)res == c, "problem in reading file res=%i c=%i", res, c );
     }
 }
 
