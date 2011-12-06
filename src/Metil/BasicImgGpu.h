@@ -41,6 +41,12 @@ struct BasicImgGpu {
         Metil::save_png( filename, tmp.ptr(), size[ 0 ], size[ 1 ], true );
     }
 
+    void save_bin( const String &filename ) {
+        BasicVec<T> tmp = data;
+        File f( filename, "w" );
+        f.write( tmp.ptr(), sizeof( T ) * tmp.size() );
+    }
+
     template<class Op,int nb_threads>
     void apply( const Op &op, N<nb_threads> n ) {
         CSC(( apply_kernel<<< iDivUp( product( size ), nb_threads ), nb_threads >>>( op, data.ptr(), size, n ) ));
