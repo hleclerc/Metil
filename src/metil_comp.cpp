@@ -40,6 +40,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  -gn : set debug level to n";
     cerrn << "  -On : set optimisation level to n";
     cerrn << "  --cxx cxx : specify compiler";
+    cerrn << "  --sep-libs : use of .so intermediate files (use .a instead)";
     cerrn << "  --no-sep-libs : avoid use of .so intermediate files (use .a instead), to obtain an independant executable";
     cerrn << "  --comp-dir dir : specify path of directory used to store tmp files (.o, ...)";
     cerrn << "  --exec-using prg : execute using prg. Example : --exec-using time to use time";
@@ -87,7 +88,7 @@ int main( int argc, char **argv ) {
     bool want_dyn      = true;
     bool want_mex      = false;
     bool want_lib      = false;
-    bool want_sep_libs = true;
+    bool want_sep_libs = false;
     bool want_gprof    = false;
     bool valgrind_pipe = false;
 
@@ -116,6 +117,8 @@ int main( int argc, char **argv ) {
             make_file = argv[ i ];
         } else if ( arg == "--no-sep-libs" ) {
             want_sep_libs = false;
+        } else if ( arg == "--sep-libs" ) {
+            want_sep_libs = true;
         } else if ( arg == "-pg" ) {
             // want_gprof = false;
             ce.add_CPPFLAG( "-pg" );
