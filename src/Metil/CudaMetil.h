@@ -33,6 +33,7 @@ inline void check_err( const char *file, int line, const char *msg ) {
 
 #define CHECK_ERR( msg ) Metil::check_err( __FILE__, __LINE__, msg );
 
+/// Cuda safe call
 #define CSC( func ) func; Metil::check_err( __FILE__, __LINE__, #func )
 
 /// copy data from str to res ( which must be pre-allocated )

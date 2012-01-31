@@ -1,5 +1,4 @@
-/*
-This library is free software; you can redistribute it and/or
+/*This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
 License version 2 as published by the Free Software Foundation.
 
@@ -441,6 +440,7 @@ public:
             new( _data + i ) T_( v0, v1 );
     }
 
+    /// init this with size = 0, but with reserved room in memory for s items.
     template<class S>
     BasicVec( Rese, S s ) : _size( 0 ), _rese( s * sizeof( T ) ), _data( _alloc() ) {
     }
