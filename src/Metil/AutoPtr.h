@@ -1,6 +1,10 @@
 #ifndef AUTOPTR_H
 #define AUTOPTR_H
 
+#include "String.h"
+
+BEG_METIL_NAMESPACE;
+
 template<class T>
 struct AutoPtr {
     AutoPtr() : data( 0 ) {}
@@ -45,5 +49,7 @@ struct AutoPtr {
 
     T *data;
 };
+
+END_METIL_NAMESPACE;
 
 #endif // AUTOPTR_H
