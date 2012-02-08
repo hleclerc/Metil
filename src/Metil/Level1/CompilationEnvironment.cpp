@@ -207,6 +207,13 @@ int CompilationEnvironment::get_device_emulation() const {
     return device_emulation >= 0 ? device_emulation : child->get_device_emulation();
 }
 
+int CompilationEnvironment::want_m32() const {
+    if ( CPPFLAGS.find( "-m32" ) >= 0 )
+        return true;
+    return child ? child->want_m32() : false;
+}
+
+
 void CompilationEnvironment::get_inc_paths( BasicVec<String> &res ) const {
     if ( child )
         child->get_inc_paths( res );
@@ -456,8 +463,10 @@ String CompilationEnvironment::obj_cmd( const String &obj, const String &cpp, bo
         if ( get_device_emulation() > 0 )
             cmd << " --device-emulation -G";
         //
-        if ( sizeof( void * ) == 8 and CPPFLAGS.find( "-m32" ) < 0 )
+        if ( sizeof( void * ) == 8 and not want_m32() )
             cmd << " --machine 64";
+        else
+            cmd << " --machine 32";
     } else {
         cmd << ( cpp.ends_with( ".c" ) ? get_CC() : get_CXX() );
         // basic flags
