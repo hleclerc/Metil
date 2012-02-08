@@ -41,6 +41,7 @@ public:
     int get_dbg_level() const;
     int get_opt_level() const;
     int get_device_emulation() const;
+    int want_m32() const;
 
     void get_inc_paths( BasicVec<String> &res ) const;
     void get_def_procs( BasicVec<String> &res ) const;
