@@ -456,7 +456,7 @@ String CompilationEnvironment::obj_cmd( const String &obj, const String &cpp, bo
         if ( get_device_emulation() > 0 )
             cmd << " --device-emulation -G";
         //
-        if ( sizeof( void * ) == 8 )
+        if ( sizeof( void * ) == 8 and CPPFLAGS.find( "-m32" ) < 0 )
             cmd << " --machine 64";
     } else {
         cmd << ( cpp.ends_with( ".c" ) ? get_CC() : get_CXX() );
