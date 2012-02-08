@@ -39,6 +39,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  -DMACRO=val : #define MACRO val";
     cerrn << "  -gn : set debug level to n";
     cerrn << "  -On : set optimisation level to n";
+    cerrn << "  -On : set optimisation level to n";
     cerrn << "  --cxx cxx : specify compiler";
     cerrn << "  --sep-libs : use of .so intermediate files (use .a instead)";
     cerrn << "  --no-sep-libs : avoid use of .so intermediate files (use .a instead), to obtain an independant executable";
@@ -68,6 +69,7 @@ void usage( const char *pn, const char *msg = NULL ) {
 
 bool is_a_CPPFLAG( const String &arg ) {
     return
+        arg == "m32" or
         arg.begins_by( "-O" ) or
         arg.begins_by( "-g" ) or
         arg.begins_by( "-march") or
@@ -157,6 +159,8 @@ int main( int argc, char **argv ) {
             ce.add_lib_path( argv[ i ] + 2 );
         } else if ( arg.begins_by( "-l" ) ) {
             ce.add_lib_name( argv[ i ] + 2 );
+        } else if ( arg == "-m32" ) {
+            ce.add_CPPFLAG ( "-m32" );
         } else if ( arg.begins_by( "--static" ) ) {
             want_dyn = false;
         } else if ( arg == "-mex" ) {
