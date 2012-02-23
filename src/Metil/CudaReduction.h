@@ -3,6 +3,7 @@
 
 #include "PrevNextPow2.h"
 #include "CudaMetil.h"
+//#include "String.h"
 #include "Limits.h"
 #include "Math.h"
 
@@ -109,8 +110,8 @@ void cuda_reduction_kernel_1( R *res, N<nb_th> ) {
 /// 1 arg
 template<class R,class T0>
 void cuda_reduction( R &res, const T0 *data_0, ST size ) {
-    const int nb_bl = PrevPow2< ( 0x4000 - 1 ) / sizeof( R ) >::res;
-    const int nb_th = nb_bl;
+    const int nb_th = MIN( 128, PrevPow2< ( 0x4000 - 1 ) / sizeof( R ) >::res );
+    const int nb_bl = 64;
     R *tmp; cudaMalloc( &tmp, sizeof( R ) * nb_bl );
     cuda_reduction_kernel_0<<<nb_bl,nb_th>>>( tmp, data_0, size, N<nb_bl>(), N<nb_th>() );
     cuda_reduction_kernel_1<<<    1,nb_bl>>>( tmp, N<nb_bl>() );
@@ -121,8 +122,8 @@ void cuda_reduction( R &res, const T0 *data_0, ST size ) {
 /// 2 arg
 template<class R,class T0,class T1>
 void cuda_reduction( R &res, const T0 *data_0, const T1 *data_1, ST size ) {
-    const int nb_bl = PrevPow2< ( 0x4000 - 1 ) / sizeof( R ) >::res;
-    const int nb_th = nb_bl;
+    const int nb_th = MIN( 128, PrevPow2< ( 0x4000 - 1 ) / sizeof( R ) >::res );
+    const int nb_bl = 64;
     R *tmp; cudaMalloc( &tmp, sizeof( R ) * nb_bl );
     cuda_reduction_kernel_0<<<nb_bl,nb_th>>>( tmp, data_0, data_1, size, N<nb_bl>(), N<nb_th>() );
     cuda_reduction_kernel_1<<<    1,nb_bl>>>( tmp, N<nb_bl>() );
@@ -133,8 +134,8 @@ void cuda_reduction( R &res, const T0 *data_0, const T1 *data_1, ST size ) {
 /// 3 arg
 template<class R,class T0,class T1,class T2>
 void cuda_reduction( R &res, const T0 *data_0, const T1 *data_1, const T2 *data_2, ST size ) {
-    const int nb_bl = PrevPow2< ( 0x4000 - 1 ) / sizeof( R ) >::res;
-    const int nb_th = nb_bl;
+    const int nb_th = MIN( 128, PrevPow2< ( 0x4000 - 1 ) / sizeof( R ) >::res );
+    const int nb_bl = 64;
     R *tmp; cudaMalloc( &tmp, sizeof( R ) * nb_bl );
     cuda_reduction_kernel_0<<<nb_bl,nb_th>>>( tmp, data_0, data_1, data_2, size, N<nb_bl>(), N<nb_th>() );
     cuda_reduction_kernel_1<<<    1,nb_bl>>>( tmp, N<nb_bl>() );
