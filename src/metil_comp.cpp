@@ -95,7 +95,7 @@ int main( int argc, char **argv ) {
     bool execution     = true;
     bool compilation   = true;
     bool want_dyn      = true;
-    bool want_sep_libs = true;
+    bool want_sep_libs = false;
     bool want_mex      = false;
     bool want_lib      = false;
     bool want_gprof    = false;
