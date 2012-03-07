@@ -1,6 +1,7 @@
 #include "Level1/CompilationEnvironment.h"
 #include "DynamicCppLib.h"
 #include "System.h"
+#include "Thread.h"
 
 BEG_METIL_NAMESPACE;
 

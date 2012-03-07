@@ -61,7 +61,14 @@ public:
                     if ( item->pert > res[ 0 ]->pert )
                         res.resize( 0 );
                 }
-                res << item;
+                for( int i = 0; ; ++i ) {
+                    if ( i == res.size() ) {
+                        res << item;
+                        break;
+                    }
+                    if ( strcmp( res[ i ]->file, item->file ) == 0 and res[ i ]->line == item->line )
+                        break;
+                }
             }
         }
 

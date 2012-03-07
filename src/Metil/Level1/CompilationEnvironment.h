@@ -68,7 +68,7 @@ public:
 
     Ptr<CompilationTree> make_compilation_tree( const String &app, const String &cpp, bool lib, bool dyn, bool make_libs = true );
     int make_app( const String &app, const String &cpp, bool lib, bool dyn, bool make_libs = true );
-    int make_lib( const String &lib, const String &cpp, bool dyn );
+    int make_lib( const String &lib, const String &cpp, bool dyn, bool want_libs = true );
     int make_exe( const String &exe, const String &cpp );
 
     static CompilationEnvironment &get_main_compilation_environment( bool no_env = false );

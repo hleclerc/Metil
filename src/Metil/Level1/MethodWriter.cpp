@@ -225,7 +225,7 @@ DynamicLibrary &MethodWriter::get_lib_for_types( Type *type_0, Type *type_1, Typ
 
         CompilationEnvironment loc_ce( &ce );
         loc_ce.add_CPPFLAG( "-DMETIL_GENE_DYLIB", cpp_name );
-        if ( loc_ce.make_lib( lib_name, cpp_name, true ) )
+        if ( loc_ce.make_lib( lib_name, cpp_name, true, false ) )
             ERROR( "Pb during compilation of %s", cpp_name.c_str() );
     }
 

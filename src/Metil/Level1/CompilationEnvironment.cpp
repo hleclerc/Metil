@@ -286,6 +286,8 @@ void CompilationEnvironment::save_env_var( bool update_LD_LIBRARY_PATH ) const {
 }
 
 void CompilationEnvironment::load_env_var() {
+    // exec_cmd( "export" );
+
     if ( String str = get_env( "METIL_INC_PATHS" ) ) {
         BasicVec<String> lst = tokenize( str, ';' );
         for( int i = 0; i < lst.size(); ++i )
@@ -658,8 +660,8 @@ int CompilationEnvironment::make_app( const String &app, const String &cpp, bool
     return res->exec( get_nb_threads(), &cout );
 }
 
-int CompilationEnvironment::make_lib( const String &lib, const String &cpp, bool dyn ) {
-    return make_app( lib, cpp, true, dyn );
+int CompilationEnvironment::make_lib( const String &lib, const String &cpp, bool dyn, bool want_libs ) {
+    return make_app( lib, cpp, true, dyn, want_libs );
 }
 
 int CompilationEnvironment::make_exe( const String &exe, const String &cpp ) {
