@@ -123,11 +123,11 @@ __inline__ BasicVec<T,dim> abs( const BasicVec<T,dim> &a ) { using namespace std
 template<class T,int dim>
 __inline__ BasicVec<T,dim> sin( const BasicVec<T,dim> &a ) { using namespace std; BasicVec<T,dim> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = sin( a[ i ] ); return res; }
 
-template<class T,int dim,class F>
-__inline__ BasicVec<T,dim> min( const BasicVec<T,dim> &a, const BasicVec<F,dim> &b ) { using namespace std; BasicVec<T,dim> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = min( a[ i ], b[ i ] ); return res; }
+template<class T,int dim>
+__inline__ BasicVec<T,dim> min( const BasicVec<T,dim> &a, const BasicVec<T,dim> &b ) { using namespace std; BasicVec<T,dim> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = min( a[ i ], b[ i ] ); return res; }
 
-template<class T,int dim,class F>
-__inline__ BasicVec<T,dim> max( const BasicVec<T,dim> &a, const BasicVec<F,dim> &b ) { using namespace std; BasicVec<T,dim> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = max( a[ i ], b[ i ] ); return res; }
+template<class T,int dim>
+__inline__ BasicVec<T,dim> max( const BasicVec<T,dim> &a, const BasicVec<T,dim> &b ) { using namespace std; BasicVec<T,dim> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = max( a[ i ], b[ i ] ); return res; }
 
 template<class T,int dim,class F>
 __inline__ BasicVec<T,dim> min( const BasicVec<T,dim> &a, const F &b ) { using namespace std; BasicVec<T,dim> res( Size(), a.size() ); for( int i = 0; i < a.size(); ++i ) res[ i ] = min( a[ i ], b ); return res; }

@@ -6,7 +6,7 @@
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
-CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch ) : child( ch ) {
+CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch, bool no_env ) : child( ch ) {
     if ( child == 0 ) {
         // inc_paths
         add_inc_path( INSTALL_DIR "/src" ); // Level1
@@ -24,7 +24,8 @@ CompilationEnvironment::CompilationEnvironment( CompilationEnvironment *ch ) : c
         dbg_level        = 0;
         opt_level        = 0;
 
-        load_env_var();
+        if ( not no_env )
+            load_env_var();
     } else {
         device_emulation = -1;
         maxrregcount     = -1;
@@ -665,8 +666,8 @@ int CompilationEnvironment::make_exe( const String &exe, const String &cpp ) {
     return make_app( exe, cpp, false, true );
 }
 
-CompilationEnvironment &CompilationEnvironment::get_main_compilation_environment() {
-    static CompilationEnvironment res;
+CompilationEnvironment &CompilationEnvironment::get_main_compilation_environment( bool no_env ) {
+    static CompilationEnvironment res( 0, no_env );
     return res;
 }
 

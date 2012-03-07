@@ -8,7 +8,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 
 class CompilationEnvironment {
 public:
-    CompilationEnvironment( CompilationEnvironment *ch = 0 );
+    CompilationEnvironment( CompilationEnvironment *ch = 0,  bool no_env = false );
 
     String find_src( const String &filename, const String &current_dir, const BasicVec<String> &add_paths = BasicVec<String>(), bool allow_cur_dir = true ) const; // use current_dir and include_dirs to find filename
     String comp_dir() const;
@@ -71,7 +71,7 @@ public:
     int make_lib( const String &lib, const String &cpp, bool dyn );
     int make_exe( const String &exe, const String &cpp );
 
-    static CompilationEnvironment &get_main_compilation_environment();
+    static CompilationEnvironment &get_main_compilation_environment( bool no_env = false );
 
 protected:
     Ptr<CompilationTree> make_cpp_compilation_tree( const String &cpp );

@@ -1,5 +1,6 @@
 #include "DynamicLibrary.h"
 #include "String.h"
+#include "System.h"
 
 #ifdef WIN32
 #include <windows.h>
@@ -42,7 +43,10 @@ bool DynamicLibrary::open( String name ) {
         dlopen( 0, RTLD_GLOBAL );
     }
 
+    PRINT( name.c_str() );
     data = dlopen( name.c_str(), RTLD_LAZY + RTLD_GLOBAL );
+    PRINT( error() );
+    exec_cmd( "export" );
     #endif
     return data;
 }

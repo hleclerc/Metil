@@ -67,12 +67,12 @@ struct CudaAccumulationParm {
     static ST room_size( ST size ) {
         if ( size <= 1 )
             return 0;
-        ST l = iDivUp( size, n );
+        ST l = iDivUp( size, ST( n ) );
         return l + room_size( l );
     }
 
     static void acc_rec( T *data, ST size, T *room ) {
-        int nb_bl = iDivUp( size, n );
+        int nb_bl = iDivUp( size, ST( n ) );
         if ( nb_bl )
             CSC(( _cuda_accumulation_kernel_loc<<<nb_bl,n>>>( data, size, room, Number<n>() ) ));
         if ( nb_bl > 1 ) {

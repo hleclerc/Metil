@@ -40,6 +40,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  -gn : set debug level to n";
     cerrn << "  -On : set optimisation level to n";
     cerrn << "  -On : set optimisation level to n";
+    cerrn << "  -no-env : do not use METIL_... environment variables for compilation";
     cerrn << "  --cxx cxx : specify compiler";
     cerrn << "  --sep-libs : use of .so intermediate files (use .a instead)";
     cerrn << "  --no-sep-libs : avoid use of .so intermediate files (use .a instead), to obtain an independant executable";
@@ -82,7 +83,12 @@ bool is_a_CPPFLAG( const String &arg ) {
 
 
 int main( int argc, char **argv ) {
-    Level1::CompilationEnvironment &ce = Level1::CompilationEnvironment::get_main_compilation_environment();
+    bool no_env = false;
+    for( int i = 1; i < argc and not no_env; ++i )
+        if ( String( argv[ i ] ) == "-no-env" )
+            no_env = true;
+
+    Level1::CompilationEnvironment &ce = Level1::CompilationEnvironment::get_main_compilation_environment( no_env );
 
     String cpp_file, out_file, exec_using, comp_dir, make_file, exec_file;
     BasicVec<String> exec_args;
@@ -162,6 +168,8 @@ int main( int argc, char **argv ) {
             ce.add_lib_name( argv[ i ] + 2 );
         } else if ( arg == "-m32" ) {
             ce.add_CPPFLAG ( "-m32" );
+        } else if ( arg == "-no-env" ) {
+            // already managed
         } else if ( arg.begins_by( "--static" ) ) {
             want_dyn = false;
         } else if ( arg == "-mex" ) {
