@@ -286,8 +286,6 @@ void CompilationEnvironment::save_env_var( bool update_LD_LIBRARY_PATH ) const {
 }
 
 void CompilationEnvironment::load_env_var() {
-    // exec_cmd( "export" );
-
     if ( String str = get_env( "METIL_INC_PATHS" ) ) {
         BasicVec<String> lst = tokenize( str, ';' );
         for( int i = 0; i < lst.size(); ++i )
