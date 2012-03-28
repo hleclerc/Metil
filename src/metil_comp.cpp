@@ -51,6 +51,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  --device-emulation : device emulation for cuda";
     cerrn << "  --maxrregcount n : device emulation for cuda";
     cerrn << "  --static : do not make dynamic objects";
+    cerrn << "  --dynamic: make dynamic objects";
     cerrn << "possible pragma in .h/.cpp/.cu files:";
     cerrn << "  inc_path additionnal include path";
     cerrn << "  lnk_flag additionnal flags explicitly passed to the linker";
@@ -172,6 +173,8 @@ int main( int argc, char **argv ) {
             // already managed
         } else if ( arg.begins_by( "--static" ) ) {
             want_dyn = false;
+        } else if ( arg.begins_by( "--dynamic" ) ) {
+            want_dyn = true;
         } else if ( arg == "-mex" ) {
             want_mex  = true;
             want_lib  = true;
