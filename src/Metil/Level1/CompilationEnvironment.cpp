@@ -520,7 +520,7 @@ Ptr<CompilationTree> CompilationEnvironment::make_lnk_compilation_tree( const St
 }
 
 struct GetRemp {
-    void aaadd( BasicVec<String> var_templ, BasicVec<BasicVec<String,2> > rep = BasicVec<BasicVec<String,2> >() ) {
+    void aaadd( BasicVec<String> var_templ, BasicVec<BasicVec<String,2> > rep ) {
         if ( var_templ.size() ) {
             BasicVec<String> t = tokenize( var_templ.back(), ' ' );
             var_templ.pop_back();
@@ -549,7 +549,8 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
     
     if ( cpp_parser.var_templ.size() ) {
         GetRemp gr;
-        gr.aaadd( cpp_parser.var_templ );
+        BasicVec<BasicVec<String,2> > rep;
+        gr.aaadd( cpp_parser.var_templ, rep );
         
         File f( cpp );
         String dat = "#line 1 \"" + cpp + "\"\n" + f.c_str();
