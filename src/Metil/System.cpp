@@ -245,7 +245,7 @@ int exec_cmd( String f, bool display ) {
         return 0;
     if ( display )
         coutn << f;
-    return system( f.c_str() );
+    return system( f.c_str() ) != 0;
 }
 
 END_METIL_NAMESPACE

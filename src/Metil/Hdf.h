@@ -42,6 +42,8 @@ template<> struct H5_type<   long double> { static hid_t res() { return H5T_NATI
 
 
 /**
+  Hdf hdf( "my_file.h5" );
+  vec.write_to( hdf, "/path/in/the/hdf/file" );
 
 */
 class Hdf {

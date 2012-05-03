@@ -77,7 +77,7 @@ int CompilationTree::exec_node( String *out ) {
             need_rebuild = true;
     }
     if ( not need_rebuild )
-        return false;
+        return 0;
 
     //
     File cmd_file( dst + ".cmd", "w" );
@@ -119,6 +119,7 @@ struct Leaves {
             if ( int res = c->exec_node( out ) ) {
                 return_code = res;
                 mutex.lock();
+                return_codes << res;
                 wait_cond.wake_all();
                 mutex.free();
                 break;
@@ -140,6 +141,7 @@ struct Leaves {
     WaitCondition wait_cond;
     String *out;
     BasicVec<CompilationTree *> data;
+    BasicVec<int> return_codes;
     int return_code, nb_threads, nb_waiting_threads;
 };
 
@@ -159,7 +161,9 @@ int CompilationTree::exec( int nb_threads, String *out ) {
     BasicVec<CompilationTreeThread> threads( Size(), nb_threads, &leaves );
     for( int i = 0; i < nb_threads; ++i ) threads[ i ].exec();
     for( int i = 0; i < nb_threads; ++i ) threads[ i ].wait();
-    return leaves.return_code;
+    if ( leaves.return_codes.size() )
+        return leaves.return_codes[ 0 ];
+    return 0;
 }
 
 END_METIL_LEVEL1_NAMESPACE;
