@@ -260,6 +260,15 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                 continue;
             }
         }
+        // QOBJECT ?
+        if ( c[ 0 ] == 'Q' ) {
+            if ( strncmp( c + 1, "_OBJECT", 7 ) == 0 ) {
+                c += 8;
+                if ( not filename.begins_by( "/usr/include/qt4" ) ) // hum !!
+                    moc_files.push_back_unique( filename );
+                continue;
+            }
+        }
         //
         if ( c[ 0 ] == '#' ) {
             if ( c[ 1 ] == 'd' and c[ 2 ] == 'e' and c[ 3 ] == 'f' and c[ 4 ] == 'i' and c[ 5 ] == 'n' and c[ 6 ] == 'e' and c[ 7 ] == ' ' ) {

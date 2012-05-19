@@ -60,6 +60,7 @@ public:
     String obj_for( const String &cpp, bool dyn ); ///< ex: toto.cpp -> compilation/toto.os
     String lib_for( const String &cpp, bool dyn ); ///< ex: toto.cpp -> compilation/toto.so
     String mex_for( const String &cpp ); ///< .mexglx
+    String moc_for( const String &hea ); ///< moc_...
     String exe_for( const String &cpp ); ///< ex: toto.cpp -> compilation/toto.cpp.exe
     String dep_for( const String &cpp ); ///< ex: toto.cpp -> compilation/toto.cpp.dep
 

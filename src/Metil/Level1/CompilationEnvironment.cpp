@@ -372,6 +372,10 @@ String CompilationEnvironment::mex_for( const String &cpp ) {
     return cpp + suffix;
 }
 
+String CompilationEnvironment::moc_for( const String &hea ) {
+    return comp_dir() + "moc_" + filename_without_dir_of( hea ) + ".cpp";
+}
+
 String CompilationEnvironment::exe_for( const String &cpp ) {
     return comp_dir() + filename_without_dir_of( cpp ) + exe_suffix();
 }
@@ -598,8 +602,20 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
 
     // command
     Ptr<CompilationTree> res = loc_ce.make_obj_compilation_tree( loc_ce.obj_for( cpp, dyn ), make_cpp_compilation_tree( cpp ), dyn );
-    for( int i = 0; i < cpp_parser.inc_files.size(); ++i )
-        res->add_child( loc_ce.make_cpp_compilation_tree( cpp_parser.inc_files[ i ] ) );
+    for( int i = 0; i < cpp_parser.inc_files.size(); ++i ) {
+        String hea = cpp_parser.inc_files[ i ];
+        Ptr<CompilationTree> r_h = loc_ce.make_cpp_compilation_tree( hea );
+        res->add_child( r_h );
+        // moc file ?
+        if ( cpp_parser.moc_files.contains( hea ) ) {
+            String moc = loc_ce.moc_for( hea );
+            if ( last_modification_time_or_zero_of_file_named( moc ) < last_modification_time_or_zero_of_file_named( hea ) ) {
+                exec_cmd( "moc-qt4 " + hea + " -o " + moc );
+                // parse_cpp( obj, moc, dyn );
+                cpp_parser.src_files.push_back_unique( moc );
+            }
+        }
+    }
     // if ( not parsed.contains( cpp ) )
     obj.push_back_unique( res );
 
