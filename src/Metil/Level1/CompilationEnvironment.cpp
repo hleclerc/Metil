@@ -609,11 +609,9 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         // moc file ?
         if ( cpp_parser.moc_files.contains( hea ) ) {
             String moc = loc_ce.moc_for( hea );
-            if ( last_modification_time_or_zero_of_file_named( moc ) < last_modification_time_or_zero_of_file_named( hea ) ) {
+            if ( last_modification_time_or_zero_of_file_named( moc ) < last_modification_time_or_zero_of_file_named( hea ) )
                 exec_cmd( "moc-qt4 " + hea + " -o " + moc );
-                // parse_cpp( obj, moc, dyn );
-                cpp_parser.src_files.push_back_unique( moc );
-            }
+            cpp_parser.src_files.push_back_unique( moc );
         }
     }
     // if ( not parsed.contains( cpp ) )
