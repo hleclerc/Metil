@@ -141,7 +141,7 @@ void cuda_reduction( R &res, const T0 *data_0, const T1 *data_1, const T2 *data_
     cuda_reduction_kernel_1<<<    1,nb_bl>>>( tmp, N<nb_bl>() );
     cudaMemcpy( &res, tmp, sizeof( R ), cudaMemcpyDeviceToHost );
     cudaFree( tmp );
-}
+}:
 
 template<class T>
 struct CudaReductionMinMax {
