@@ -116,7 +116,7 @@ void cuda_reduction( R &res, const T0 *data_0, ST size ) {
     cuda_reduction_kernel_0<<<nb_bl,nb_th>>>( tmp, data_0, size, N<nb_bl>(), N<nb_th>() );
     cuda_reduction_kernel_1<<<    1,nb_bl>>>( tmp, N<nb_bl>() );
     cudaMemcpy( &res, tmp, sizeof( R ), cudaMemcpyDeviceToHost );
-    cudaFree( tmp );
+    CSC(( cudaFree( tmp ) ));
 }
 
 /// 2 arg
@@ -128,7 +128,7 @@ void cuda_reduction( R &res, const T0 *data_0, const T1 *data_1, ST size ) {
     cuda_reduction_kernel_0<<<nb_bl,nb_th>>>( tmp, data_0, data_1, size, N<nb_bl>(), N<nb_th>() );
     cuda_reduction_kernel_1<<<    1,nb_bl>>>( tmp, N<nb_bl>() );
     cudaMemcpy( &res, tmp, sizeof( R ), cudaMemcpyDeviceToHost );
-    cudaFree( tmp );
+    CSC(( cudaFree( tmp ) ));
 }
 
 /// 3 arg
@@ -140,8 +140,8 @@ void cuda_reduction( R &res, const T0 *data_0, const T1 *data_1, const T2 *data_
     cuda_reduction_kernel_0<<<nb_bl,nb_th>>>( tmp, data_0, data_1, data_2, size, N<nb_bl>(), N<nb_th>() );
     cuda_reduction_kernel_1<<<    1,nb_bl>>>( tmp, N<nb_bl>() );
     cudaMemcpy( &res, tmp, sizeof( R ), cudaMemcpyDeviceToHost );
-    cudaFree( tmp );
-}:
+    CSC(( cudaFree( tmp ) ));
+}
 
 template<class T>
 struct CudaReductionMinMax {

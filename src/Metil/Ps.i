@@ -19,7 +19,7 @@ namespace Metil {
     %extend Ps {
          void free() {
              if ( self->pos->is_a_gpu() )
-                 cudaFree( self->ptr() );
+                 CSC(( cudaFree( self->ptr() ) ));
              else
                  FREE( self->ptr(), self->size_mem() );
          }

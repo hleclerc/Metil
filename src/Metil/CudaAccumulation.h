@@ -86,7 +86,7 @@ struct CudaAccumulationParm {
             cudaMalloc( &room, sizeof( T ) * room_size( size ) );
         acc_rec( data, size, room );
         if ( need_alloc )
-            cudaFree( room );
+            CSC(( cudaFree( room ) ));
     }
 };
 

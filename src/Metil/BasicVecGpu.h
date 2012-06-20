@@ -19,16 +19,16 @@ struct BasicVecGpu {
 
     BasicVecGpu( Size, ST size, const T *data_ptr = 0 ) : _rese( size ), _size( size ) {
         if ( size ) {
-            cudaMalloc( &_data, sizeof( T ) * _rese );
+            CSC(( cudaMalloc( &_data, sizeof( T ) * _rese ) ));
             if ( data_ptr )
-                cudaMemcpy( _data, data_ptr, sizeof( T ) * _rese, cudaMemcpyHostToDevice );
+                CSC(( cudaMemcpy( _data, data_ptr, sizeof( T ) * _rese, cudaMemcpyHostToDevice ) ));
         }
     }
 
     #ifdef __CUDACC__
     BasicVecGpu( Size, ST size, T val ) : _rese( size ), _size( size ) {
         if ( size ) {
-            cudaMalloc( &_data, sizeof( T ) * _rese );
+            CSC(( cudaMalloc( &_data, sizeof( T ) * _rese ) ));
             cuda_scalar_op( _data, size, SetVal<T>( val ) );
         }
     }
@@ -40,12 +40,12 @@ struct BasicVecGpu {
 
     BasicVecGpu &operator=( const BasicVecGpu &data_vec ) {
         if ( _rese )
-            cudaFree( _data );
+            CSC(( cudaFree( _data ) ));
         _rese = data_vec.size();
         _size = data_vec.size();
         if ( _size ) {
-            cudaMalloc( &_data, sizeof( T ) * _rese );
-            cudaMemcpy( _data, data_vec.ptr(), sizeof( T ) * _rese, cudaMemcpyDeviceToDevice );
+            CSC(( cudaMalloc( &_data, sizeof( T ) * _rese ) ));
+            CSC(( cudaMemcpy( _data, data_vec.ptr(), sizeof( T ) * _rese, cudaMemcpyDeviceToDevice ) ));
         }
         return *this;
     }
@@ -54,19 +54,22 @@ struct BasicVecGpu {
         _rese = data_vec.size();
         _size = data_vec.size();
         if ( _size ) {
-            cudaMalloc( &_data, sizeof( T ) * _rese );
-            cudaMemcpy( _data, data_vec.ptr(), sizeof( T ) * _rese, cudaMemcpyHostToDevice );
+            CSC(( cudaMalloc( &_data, sizeof( T ) * _rese ) ));
+            CSC(( cudaMemcpy( _data, data_vec.ptr(), sizeof( T ) * _rese, cudaMemcpyHostToDevice ) ));
         }
     }
 
     ~BasicVecGpu() {
-        if ( _rese )
-            cudaFree( _data );
+        if ( _rese ) {
+            PRINT( _rese );
+            PRINT( _data );
+            CSC(( cudaFree( _data ) ));
+        }
     }
 
     operator BasicVec<T>() const {
         BasicVec<T> res( Size(), _rese );
-        cudaMemcpy( res.ptr(), _data, sizeof( T ) * _rese, cudaMemcpyDeviceToHost );
+        CSC(( cudaMemcpy( res.ptr(), _data, sizeof( T ) * _rese, cudaMemcpyDeviceToHost ) ));
         return res;
     }
 
@@ -88,7 +91,7 @@ struct BasicVecGpu {
     T *reserve_without_copy_at_least( ST want ) {
         if ( want > _rese ) {
             if ( _rese )
-                cudaFree( _data );
+                CSC(( cudaFree( _data ) ));
             _rese = want;
             CSC(( cudaMalloc( &_data, sizeof( T ) * want ) ));
         }
@@ -112,7 +115,7 @@ struct BasicVecGpu {
     }
 
     void copy_to( T *res ) const {
-        cudaMemcpy( res, _data, sizeof( T ) * _size, cudaMemcpyDeviceToHost );
+        CSC(( cudaMemcpy( res, _data, sizeof( T ) * _size, cudaMemcpyDeviceToHost ) ));
     }
 
     template<class Os>
@@ -122,7 +125,7 @@ struct BasicVecGpu {
 
     T operator[]( ST index ) const {
         T res;
-        cudaMemcpy( &res, _data + index, sizeof( T ), cudaMemcpyDeviceToHost );
+        CSC(( cudaMemcpy( &res, _data + index, sizeof( T ), cudaMemcpyDeviceToHost ) ));
         return res;
     }
     
