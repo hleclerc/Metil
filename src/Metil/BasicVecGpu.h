@@ -61,8 +61,6 @@ struct BasicVecGpu {
 
     ~BasicVecGpu() {
         if ( _rese ) {
-            PRINT( _rese );
-            PRINT( _data );
             CSC(( cudaFree( _data ) ));
         }
     }
