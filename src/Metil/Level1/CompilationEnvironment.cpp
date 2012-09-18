@@ -345,23 +345,23 @@ String CompilationEnvironment::dep_suffix() {
 }
 
 String CompilationEnvironment::obj_for( const String &cpp, bool dyn ) {
-    return comp_dir() + filename_without_dir_of( cpp ) + obj_suffix( dyn );
+    return comp_dir() + filename_with_dir_of( cpp ) + obj_suffix( dyn );
 }
 
 String CompilationEnvironment::lib_for( const String &cpp, bool dyn ) {
-    return comp_dir() + filename_without_dir_of( cpp ) + lib_suffix( dyn );
+    return comp_dir() + filename_with_dir_of( cpp ) + lib_suffix( dyn );
 }
 
 String CompilationEnvironment::h_for( const String &cpp ) {
-    return comp_dir() + filename_without_dir_of( cpp ) + ".h";
+    return comp_dir() + filename_with_dir_of( cpp ) + ".h";
 }
 
 String CompilationEnvironment::cpp_for( const String &cpp ) {
-    return comp_dir() + filename_without_dir_of( cpp ) + ".cpp";
+    return comp_dir() + filename_with_dir_of( cpp ) + ".cpp";
 }
 
 String CompilationEnvironment::cu_for( const String &cpp ) {
-    return comp_dir() + filename_without_dir_of( cpp ) + ".cu";
+    return comp_dir() + filename_with_dir_of( cpp ) + ".cu";
 }
 
 String CompilationEnvironment::mex_for( const String &cpp ) {
@@ -373,15 +373,15 @@ String CompilationEnvironment::mex_for( const String &cpp ) {
 }
 
 String CompilationEnvironment::moc_for( const String &hea ) {
-    return comp_dir() + "moc_" + filename_without_dir_of( hea ) + ".cpp";
+    return comp_dir() + "moc_" + filename_with_dir_of( hea ) + ".cpp";
 }
 
 String CompilationEnvironment::exe_for( const String &cpp ) {
-    return comp_dir() + filename_without_dir_of( cpp ) + exe_suffix();
+    return comp_dir() + filename_with_dir_of( cpp ) + exe_suffix();
 }
 
 String CompilationEnvironment::dep_for( const String &cpp ) {
-    return comp_dir() + filename_without_dir_of( cpp ) + dep_suffix();
+    return comp_dir() + filename_with_dir_of( cpp ) + dep_suffix();
 }
 
 void CompilationEnvironment::extra_lnk_cmd( String &cmd, bool lib, bool dyn ) const {

@@ -3,6 +3,7 @@
 
 #define METIL_BOOSTRAP
 #define USE_STD_ALLOC
+#define WANT_METIL_NAMESPACE
 
 // Doxygen stuff
 #ifndef DOXYGEN

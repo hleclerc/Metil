@@ -80,8 +80,7 @@ String canonicalize_filename( const String &filename ) {
                         continue;
                     }
                     while ( str >= bas and not sep( *(--str) ) );
-                    str += sep( *str );
-                    ++f;
+                    f += 2;
                     continue;
                 }
             }
@@ -120,6 +119,8 @@ String canonicalize_filename( const String &filename ) {
     res.set_size( str - bas );
 
     //
+    //PRINT( filename );
+    //PRINT( res.ptr() );
     return res;
 }
 
@@ -143,6 +144,15 @@ String filename_without_dir_of( const String &filename ) {
     if ( pos < 0 )
         pos = -1;
     return filename.end_from( pos + 1 );
+}
+
+String filename_with_dir_of( const String &filename ) {
+    return canonicalize_filename( filename ).replace( '/', '_' ).replace( '.', '_' );
+    //    NewString res( filename.size(), filename.size() );
+    //    char *o = res.ptr();
+    //    for( const char *p = filename.c_str(); *p; ++p, ++o )
+    //        *o = *p == '/' or *p == '.' ? '_' : *p;
+    //    return res;
 }
 
 double time_of_day_in_sec() {
