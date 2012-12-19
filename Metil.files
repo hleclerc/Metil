@@ -332,3 +332,4 @@ src/Metil/TypePromote.h
 src/Metil/RefOf.h
 src/Metil/IDivUp.h
 src/Metil/Ceil.h
+src/Metil/WaitConditionBundle.h

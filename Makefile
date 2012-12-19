@@ -32,7 +32,7 @@ metil_gen:
 	${LOC_MC} -g3 src/Metil/Level1/metil_parse.cpp `find src -name "*.cpp" -o -name "*.h"`
 	#metil_comp -g3 --valgrind -Isrc src/metil_parse.cpp `find . -name "*.cpp"`
 
-make_unit_tests:
+unit_tests:
 	make clean
 	make -j8 metil_comp
 	cd unit_tests; python run_unit_test.py

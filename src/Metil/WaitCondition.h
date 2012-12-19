@@ -18,12 +18,12 @@ WaitCondition wait_cond;
 
 // consumer, wait for a wake up
 mutex.lock();
-wait_cond.wait();
+wait_cond.wait( mutex );
 mutex.free();
 
 // and in another thread
 mutex.lock();
-wait_cond.wake_all( mutex );
+wait_cond.wake_all();
 mutex.free();
 @endcode
 */

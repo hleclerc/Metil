@@ -20,6 +20,9 @@ struct BasicImg {
     const T &operator()( int x, int y ) const { return data[ y * size[ 0 ] + x ]; }
     T &operator()( int x, int y ) { return data[ y * size[ 0 ] + x ]; }
     
+    const T *ptr() const { return data.ptr(); }
+    T *ptr() { return data.ptr(); }
+
     template<class F>
     T interp( F x, F y ) const {
         int xi = x, yi = y;
