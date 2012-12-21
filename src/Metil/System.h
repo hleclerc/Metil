@@ -24,6 +24,8 @@ void rm( const String &file ); // rm file
 // system info
 String get_os_type();
 String get_cpu_type();
+ST get_total_system_memory();
+int get_nb_cpu_cores();
 //bool term_supports_color(); ///< return true if terminal supports escape color sequences
 
 /**

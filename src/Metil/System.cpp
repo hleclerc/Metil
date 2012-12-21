@@ -224,6 +224,16 @@ String get_cpu_type() {
     #endif
 }
 
+ST get_total_system_memory() {
+    ST pages = sysconf( _SC_PHYS_PAGES );
+    ST page_size = sysconf( _SC_PAGE_SIZE );
+    return pages * page_size;
+}
+
+int get_nb_cpu_cores() {
+    return sysconf( _SC_NPROCESSORS_ONLN );
+}
+
 //bool term_supports_color() {
 //    const char *c_term = getenv("TERM");
 //    if ( not c_term )

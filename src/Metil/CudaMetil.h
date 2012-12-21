@@ -61,7 +61,6 @@ Ps<T> strdup( const Ps<T> &src, const MachineId *dst_id ) {
     return dst;
 }
 
-
 END_METIL_NAMESPACE;
 
 #endif // CUDA_METIL_H
