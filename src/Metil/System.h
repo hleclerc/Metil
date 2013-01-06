@@ -1,6 +1,7 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
+#include "SystemBase.h"
 #include "String.h"
 
 BEG_METIL_NAMESPACE
@@ -24,8 +25,6 @@ void rm( const String &file ); // rm file
 // system info
 String get_os_type();
 String get_cpu_type();
-ST get_total_system_memory();
-int get_nb_cpu_cores();
 //bool term_supports_color(); ///< return true if terminal supports escape color sequences
 
 /**
@@ -47,9 +46,6 @@ struct DirectoryIterator {
     void *dir;
     void *dir_ent;
 };
-
-// time
-double time_of_day_in_sec();
 
 // execution
 int exec_cmd( String f, bool display = true );

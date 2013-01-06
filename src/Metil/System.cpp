@@ -1,7 +1,6 @@
 #include "System.h"
 
 #include <stdlib.h>   // system
-#include <sys/time.h> // time_of_day_in_sec()
 #include <unistd.h>   // getcwd
 #include <sys/stat.h> // mkdir...
 #include <errno.h>    // errno
@@ -155,13 +154,6 @@ String filename_with_dir_of( const String &filename ) {
     //    return res;
 }
 
-double time_of_day_in_sec() {
-    struct timeval st;
-    struct timezone toto;
-    gettimeofday( &st, &toto );
-    return st.tv_sec + st.tv_usec / 1e6;
-}
-
 int mkdir( const String &filename, bool check_if_exists ) {
     #ifdef WIN32
     if ( ::mkdir( filename.c_str()/* , S_IRWXU| S_IRWXG*/ ) ) {
@@ -222,16 +214,6 @@ String get_cpu_type() {
         uname(&utsn);
         return String( NewString( utsn.machine ) );
     #endif
-}
-
-ST get_total_system_memory() {
-    ST pages = sysconf( _SC_PHYS_PAGES );
-    ST page_size = sysconf( _SC_PAGE_SIZE );
-    return pages * page_size;
-}
-
-int get_nb_cpu_cores() {
-    return sysconf( _SC_NPROCESSORS_ONLN );
 }
 
 //bool term_supports_color() {

@@ -2,7 +2,7 @@
 #define CUDA_METIL_H
 
 #ifdef METIL_COMP_DIRECTIVE
-#pragma gpu_flag --compiler-bindir /usr/bin/g++-4.4
+#pragma gpu_flag --compiler-bindir /usr/bin/g++-4.6
 
 #pragma lib_name cudart
 #pragma lib_path /usr/local/cuda/lib64

@@ -7,6 +7,12 @@
 BEG_METIL_NAMESPACE
 
 template<class T,int s>
+__inline__ void operator+=( BasicVec<T,s> &a, const BasicVec<T,s> &b ) {
+    for( int i = 0; i < a.size(); ++i )
+        a[ i ] += b[ i ];
+}
+
+template<class T,int s>
 __inline__ void operator-=( BasicVec<T,s> &a, const BasicVec<T,s> &b ) {
     for( int i = 0; i < a.size(); ++i )
         a[ i ] -= b[ i ];

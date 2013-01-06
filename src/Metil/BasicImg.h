@@ -9,7 +9,7 @@ template<class T,int dim>
 struct BasicImg {
     typedef BasicVec<int,dim> TV;
 
-    BasicImg() {}
+    BasicImg() : size( 0 ) {}
     BasicImg( TV size ) : size( size ), data( Size(), product( size ) ) {}
 
     void resize( TV s ) {
@@ -19,7 +19,10 @@ struct BasicImg {
 
     const T &operator()( int x, int y ) const { return data[ y * size[ 0 ] + x ]; }
     T &operator()( int x, int y ) { return data[ y * size[ 0 ] + x ]; }
-    
+
+    const T &operator[]( int x ) const { return data[ x ]; }
+    T &operator[]( int x ) { return data[ x ]; }
+
     const T *ptr() const { return data.ptr(); }
     T *ptr() { return data.ptr(); }
 
