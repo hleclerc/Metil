@@ -175,10 +175,12 @@ struct Socket : public String {
     Socket( int socket_id );
 };
 
+#ifndef PRINT
 #define PRINT( A ) \
     Metil::cout << "  " << #A << " -> " << (A) << Metil::String::endl
 #define PRINTN( A ) \
     Metil::cout << "  " << #A << " ->\n" << (A) << Metil::String::endl
+#endif
 
 END_METIL_NAMESPACE;
 

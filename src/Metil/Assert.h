@@ -41,9 +41,13 @@ struct Abort {
 
     #define ASSERT( A, txt, ... ) Metil::__disp_and_abort_if_not_cond__( A, "%s:%i: assertion %s not checked -> " txt "\n", __FILE__, __LINE__, #A, ##__VA_ARGS__ )
 
+    #ifndef ERROR
     #define ERROR( txt, ... ) Metil::__disp_and_abort_if_not_cond__( 0, "%s:%i: " txt "\n", __FILE__, __LINE__, ##__VA_ARGS__ )
+    #endif // ERROR
 
+    #ifndef TODO
     #define TODO ASSERT( 0, "TODO" )
+    #endif
 #endif
 
 #ifdef NO_SIG_NAN

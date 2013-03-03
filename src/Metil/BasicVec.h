@@ -703,29 +703,29 @@ public:
     }
 
     template<class T2>
-    int first_index_equal_to( const T2 &d ) const { /// returns -1 if not found
-        for(int i=0;i<_size;++i)
+    ST first_index_equal_to( const T2 &d ) const { /// returns -1 if not found
+        for(ST i=0;i<_size;++i)
             if ( _data[ i ] == d )
                 return i;
         return -1;
     }
 
     bool operator==( const BasicVec &v ) const {
-        for(int i=0;i<_size;++i)
+        for(ST i=0;i<_size;++i)
             if ( _data[ i ] != v[ i ] )
                 return false;
         return true;
     }
 
     bool operator==( const T &v ) const {
-        for(int i=0;i<_size;++i)
+        for(ST i=0;i<_size;++i)
             if ( _data[ i ] != v )
                 return false;
             return true;
     }
 
     bool operator!=( const T &v ) const {
-        for(int i=0;i<_size;++i)
+        for(ST i=0;i<_size;++i)
             if ( _data[ i ] != v )
                 return true;
             return false;
@@ -733,14 +733,14 @@ public:
 
     BasicVec operator+( const BasicVec &vec ) const {
         BasicVec res( Size(), ( size() < vec.size() ? size() : vec.size() ) );
-        for(int i=0;i<res.size();++i)
+        for(ST i=0;i<res.size();++i)
             res[ i ] = operator[]( i ) + vec[ i ];
         return res;
     }
 
     BasicVec left_to( ST end ) const {
         BasicVec res( Rese(), end );
-        for(int i=0;i<end;++i)
+        for(ST i=0;i<end;++i)
             res << operator[]( i );
         return res;
     }
@@ -760,7 +760,7 @@ public:
 
     template<class T2>
     void replace( const T2 &a, const T2 &b ) { ///< replace a by b
-        for(int i=0;i<size();++i)
+        for(ST i=0;i<size();++i)
             if ( operator[]( i ) == a )
                 operator[]( i ) = b;
     }

@@ -1,5 +1,5 @@
-#ifndef SYSTEM_H
-#define SYSTEM_H
+#ifndef METIL_SYSTEM_H
+#define METIL_SYSTEM_H
 
 #include "SystemBase.h"
 #include "String.h"
@@ -52,4 +52,4 @@ int exec_cmd( String f, bool display = true );
 
 END_METIL_NAMESPACE
 
-#endif // SYSTEM_H
+#endif // METIL_SYSTEM_H
