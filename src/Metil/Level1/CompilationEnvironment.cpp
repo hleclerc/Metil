@@ -3,6 +3,7 @@
 
 #include "../Tokenize.h"
 #include "../System.h"
+#include <stdlib.h>
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

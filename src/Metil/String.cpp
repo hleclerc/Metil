@@ -2,6 +2,7 @@
 #include "Level1/StringHelp.h"
 #include "Level1/Owcp.h"
 
+#include <stdlib.h>
 #include <stdio.h>
 
 BEG_METIL_NAMESPACE;

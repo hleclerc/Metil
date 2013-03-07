@@ -2,6 +2,7 @@
 #define TYPESET_H
 
 #include "../String.h"
+#include <cstdlib>
 
 BEG_METIL_LEVEL1_NAMESPACE;
 

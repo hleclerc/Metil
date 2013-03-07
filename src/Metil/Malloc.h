@@ -162,7 +162,7 @@ template<class Obj> void _destroy( const Obj *obj ) { obj->~Obj(); } ///< call d
 
 #endif // USE_STD_ALLOC
 
-#define ALLOC_STATIC_VEC( T, size )    reinterpret_cast<T *>( Metil::Level1::malloc( Metil::Number< size * sizeof( T ) >() ) )
+#define ALLOC_STATIC_VEC( T, size )    reinterpret_cast<T *>( Metil::Level1::_malloc( Metil::Number< size * sizeof( T ) >() ) )
 #define NEW_VAR( r, Obj, ... )          Obj *r = NEW( Obj, ##__VA_ARGS__ )
 
 

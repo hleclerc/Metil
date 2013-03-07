@@ -1,11 +1,12 @@
 #ifndef MACHINEID_H
 #define MACHINEID_H
 
-#include "TypeConfig.h"
+#include "Malloc.h"
 
 BEG_METIL_NAMESPACE;
 
 struct MachineId {
+    CANNOT_BE_DERIVED;
     typedef enum { Cpu, Gpu } Type;
 
     virtual ~MachineId();

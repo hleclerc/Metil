@@ -38,7 +38,9 @@ struct BasicImgGpu {
     
     void save_png( const String &filename ) {
         BasicVec<T> tmp = data;
-        Metil::save_png( filename, tmp.ptr(), size[ 0 ], size[ 1 ], true );
+        BasicVec<unsigned char> cnv = tmp;
+        PRINT( tmp[ 10 ] );
+        Metil::save_png( filename, cnv.ptr(), size[ 0 ], size[ 1 ], true );
     }
 
     void save_bin( const String &filename ) {
@@ -51,6 +53,9 @@ struct BasicImgGpu {
     void apply( const Op &op, N<nb_threads> n ) {
         CSC(( apply_kernel<<< iDivUp( product( size ), nb_threads ), nb_threads >>>( op, data.ptr(), size, n ) ));
     }
+
+    const T *ptr() const { return data.ptr(); }
+    T *ptr() { return data.ptr(); }
 
     TV size;
     BasicVecGpu<T> data;

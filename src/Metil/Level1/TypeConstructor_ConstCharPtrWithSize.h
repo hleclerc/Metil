@@ -6,7 +6,9 @@
 BEG_METIL_LEVEL1_NAMESPACE;
 
 struct TypeConstructor_ConstCharPtrWithSize : public TypeConstructor_String {
+    NEW_AND_DEL_COMPATIBLE;
     struct Data {
+        CANNOT_BE_DERIVED;
         Data( const char *data, ST size ) : data( data ), size( size ) {}
         const char *data;
         ST size;

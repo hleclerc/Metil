@@ -16,6 +16,7 @@
 #include "Metil/Level1/CompilationEnvironment.h"
 #include "Metil/System.h"
 
+#include <stdlib.h>
 #include <stdio.h>
 
 using namespace Metil;

@@ -9,6 +9,7 @@ BEG_METIL_LEVEL1_NAMESPACE;
 
 class CompilationTree : public ObjectWithCptUse {
 public:
+    CANNOT_BE_DERIVED;
     CompilationTree( const String &dst );
 
     void add_child( const Ptr<CompilationTree> &ch );

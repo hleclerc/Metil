@@ -60,11 +60,17 @@ template<class T0,class T1> __inline__ T0 floor( T0 a, T1 m ) {
     return a / m * m;
 }
 
+__inline__ FP32 floor( FP32 a ) { return __builtin_floorf( a ); }
+__inline__ FP64 floor( FP64 a ) { return __builtin_floor ( a ); }
+
 template<class T0,class T1> __inline__ T0 ceil( T0 a, T1 m ) {
     //if ( not m )
     //    return a;
     return ( a + m - 1 ) / m * m;
 }
+
+__inline__ FP32 ceil( FP32 a ) { return __builtin_ceilf( a ); }
+__inline__ FP64 ceil( FP64 a ) { return __builtin_ceil ( a ); }
 
 /** ceil, but assuming that m is a power of 2 */
 template<class T0,class T1> __inline__ T0 ceil_p2( T0 a, T1 m ) {

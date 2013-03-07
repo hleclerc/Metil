@@ -10,6 +10,8 @@ BEG_METIL_LEVEL1_NAMESPACE;
 
 class TypeConstructor {
 public:
+    NEW_AND_DEL_COMPATIBLE;
+
     TypeConstructor();
     virtual ~TypeConstructor();
     virtual void init( Type *type );
