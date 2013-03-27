@@ -34,7 +34,7 @@ void *new_allocator_chunk( ST size_in_mem ) {
     #ifdef WIN32
     void *res = malloc( size_mmap );
     #else
-    void *res = mmap( 0, size_mmap, PROT_EXEC | PROT_READ | PROT_WRITE, MAP_PRIVATE, -1, 0 ); // MAP_ANONYMOUS |
+    void *res = mmap( 0, size_mmap, PROT_EXEC | PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0 ); //
     #endif
 
     // chained list
