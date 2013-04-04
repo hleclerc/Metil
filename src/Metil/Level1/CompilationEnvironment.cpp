@@ -150,6 +150,10 @@ void CompilationEnvironment::set_CXX( const String &path ) {
     CXX = path;
 }
 
+void CompilationEnvironment::set_LD( const String &path ) {
+    LD = path;
+}
+
 void CompilationEnvironment::set_device_emulation( bool flag ) {
     device_emulation = flag;
 }

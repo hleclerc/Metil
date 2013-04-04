@@ -25,6 +25,7 @@ public:
     void add_CPPFLAG ( const String &flag, const String &cpp ); ///< add flag only for cpp
 
     void set_CXX     ( const String &path );
+    void set_LD      ( const String &path );
     void set_device_emulation( bool flag );
     void set_maxrregcount( int nb_registers );
     void set_comp_dir( const String &path );

@@ -43,6 +43,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  -On : set optimisation level to n";
     cerrn << "  -no-env : do not use METIL_... environment variables for compilation";
     cerrn << "  --cxx cxx : specify compiler";
+    cerrn << "  --ld ld : specify linker";
     cerrn << "  --sep-libs : use of .so intermediate files (use .a instead)";
     cerrn << "  --no-sep-libs : avoid use of .so intermediate files (use .a instead), to obtain an independant executable";
     cerrn << "  --comp-dir dir : specify path of directory used to store tmp files (.o, ...)";
@@ -146,6 +147,12 @@ int main( int argc, char **argv ) {
                 return 5;
             }
             ce.set_CXX( argv[ i ] );
+        } else if ( arg == "--ld" ) {
+            if ( ++i >= argc ) {
+                usage( argv[ 0 ], "--ld must be followed by the name of the link editor" );
+                return 5;
+            }
+            ce.set_LD( argv[ i ] );
         } else if ( arg == "--comp-dir" ) {
             if ( ++i >= argc ) {
                 usage( argv[ 0 ], "--comp-dir must be followed by a path" );
