@@ -22,6 +22,16 @@ __device__ void cuda_reduction_kernel_loc( T *loc, N<nb_th> ) {
     }
 }
 
+//
+template<class T>
+__device__ void cuda_reduction_kernel_loc( T *loc ) {
+    for( int m = blockDim.x / 2; m; m /= 2 ) {
+        syncthreads();
+        if ( threadIdx.x < m )
+            loc[ threadIdx.x ].reduction( loc[ threadIdx.x + m ] );
+    }
+}
+
 // make NB_BLOCKS__FOR_REDUCTION R. 1 arg
 template<class R,class T0,int nb_bl,int nb_th> __global__
 void cuda_reduction_kernel_0( R *res, const T0 *data_0, ST size, N<nb_bl>, N<nb_th> ) {
