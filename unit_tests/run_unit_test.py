@@ -130,29 +130,33 @@ class Tests:
         
         if self.nbreArgument==1:
             self.racine_appli=os.getcwd() 
-            
-        elif self.nbreArgument==2:  
-            self.racine_appli=sys.argv[1]
+            self.racine=self.donne_racine(self.racine_appli)
             
             
         else:
             self.racine_appli=sys.argv[1]
-            
+            self.racine =  self.racine_appli
             if Utilitaires().returnType(sys.argv[2])=='directory':
                 self.path_test=sys.argv[2]
             elif Utilitaires().returnType(sys.argv[2])=='file':
                 position= Utilitaires().returnLastIndexChar(sys.argv[2],'/')
                 self.path_test=sys.argv[2][0:position]
-        self.nomDuProgramme=self.recupeNomDUProgramme(self.racine_appli)
+        self.nomDuProgramme=self.recupeNomDUProgramme(self.racine)
         
                 
         
         self.img=['images/no.png','images/ok.png']
         self.repertoireLog='.log'
                 
-        
+    def donne_racine(self, rep):
+        os.chdir( '..' )
+        racine = os.getcwd()
+        os.chdir(rep)
+        return racine
+    
     def find_and_exec(self,path):
-              
+            
+                
         #self.GlobalResult = False
         for dir in os.listdir(path):
             if(dir[0]!='.'):
@@ -235,27 +239,29 @@ class Tests:
         ligneTable+='<td class="report center">'+Utilitaires().create_html_link(os.path.join(r.logDir,r.fileName_log_cerr),r.fileName_log_cerr)+'</td>'
         return ligneTable
                 
-    def genererFichierCSS(self,fileNameCss):
-        css=file(fileNameCss,'w')
-        css.write('table{\ncellpadding:2;\n width :80% ;\n cellspacing:1;\n border:0;\n}\n')
-        css.write('\n th {\nfont-family: monospace;\n padding: 5px;\n background-color: #D0E3FA;\n}\n\n')
-        css.write('.file{\n width:35%;\n text-align:left;\n}\n\n')
-        css.write('.result{\n width:10%;\n}\n\n')
-        css.write('.report{\n width:20%;\n}\n\n')
-        css.write('.label{\n font-family:serif;\nfont-size: 18px;\n}\n\n')
-        css.write('.center{\ntext-align:center;\n}\n\n')
-        css.write('.espace20{\n margin-top:20px;\n}\n\n')
-        css.write('.retrait20{\n margin-left:20px;\n}\n\n')
-        css.write('.text{\n font-family:serif;\n font-size: 16px;\n}\n\n')
-        css.write('.entete{\n background-color:#046380;\n border-radius:7px;\n -moz-border-radius:7px;\n -webkit-border-radius:7px;\n padding:7px;\n color:white;\n}\n\n')
-        css.write('a{\n text-decoration:none;\n}\n\n')
+    def genererFichierCSS( self,fileNameCss ):
+        css=file( fileNameCss,'w' )
+        css.write( 'table{\ncellpadding:2;\n width :80% ;\n cellspacing:1;\n border:0;\n}\n' )
+        css.write( '\n th {\nfont-family: monospace;\n padding: 5px;\n background-color: #D0E3FA;\n}\n\n' )
+        css.write( '.file{\n width:35%;\n text-align:left;\n}\n\n' )
+        css.write( '.result{\n width:10%;\n}\n\n' )
+        css.write( '.report{\n width:20%;\n}\n\n' )
+        css.write( '.label{\n font-family:serif;\nfont-size: 18px;\n}\n\n' )
+        css.write( '.center{\ntext-align:center;\n}\n\n' )
+        css.write( '.espace20{\n margin-top:20px;\n}\n\n' )
+        css.write( '.retrait20{\n margin-left:20px;\n}\n\n' )
+        css.write( '.text{\n font-family:serif;\n font-size: 16px;\n}\n\n' )
+        css.write( '.entete{\n background-color:#046380;\n border-radius:7px;\n -moz-border-radius:7px;\n -webkit-border-radius:7px;\n padding:7px;\n color:white;\n}\n\n' )
+        css.write( 'a{\n text-decoration:none;\n}\n\n' )
         css.close()
         
     def metAjourProduction(self):
-        os.system(self.racine_appli)
-        os.system("make pull_and_push_if_valid")
-        
-        
+
+	os.chdir( '..' ) 
+	os.chdir( '..' ) 
+	os.system( ' make push_production_if_valid' )
+	
+         
     def run(self,fileNameReportHtml,fileNameCss):
         if self.path_test!='':
             path=self.path_test

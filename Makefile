@@ -33,10 +33,11 @@ metil_gen:
 	#metil_comp -g3 --valgrind -Isrc src/metil_parse.cpp `find . -name "*.cpp"`
 
 unit_tests:
-	make clean
-	make -j8 metil_comp
+#	make clean
+#	make -j8 metil_comp
 	cd unit_tests; python run_unit_test.py
-	mkdir -p html; cp unit_tests/report.html html
+	mkdir -p html; cp -r unit_tests/html/* html
+	mkdir -p .log; cp -r unit_tests/.log/* .log
 
 documentation:
 	doxygen doc/Doxyfile
@@ -46,13 +47,26 @@ documentation:
 	mkdir -p html/Level1/images; cp doc/images/* html/Level1/images
 
 pull_and_push_if_valid:
+	git pull
+	make make_unit_tests
+	make documentation
+	git push production
+
+push_production_if_valid :
 	git push production master
 
 archive:
 	git archive -o Metil-0.zip --prefix=Metil-0.0.0/ HEAD
 
+.PHONY: unit_tests
+
+
+
+
 clean:
 	rm -rf compilations 2> /dev/null
+
+
 
 metil_comp_mk:
 	${LOC_MC} --static -make metil_comp.mk -o ./metil_comp -g3 -O3 src/metil_comp.cpp
