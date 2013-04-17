@@ -1,133 +1,295 @@
+#! /usr/bin/python
 # -*- coding: utf-8 -*-
-import os, stat
 
-def create_html_link( href, text ):
-    return '<a href="' + href + '" > ' + text + ' </a>'
 
-def create_html_image( href, alt='' ):
-    return '<img src="' + href + '" alt="' + alt + '"> '
+import os
+import stat
+import sys
+import time
+import codecs
 
-def extract_leaf( s ):
-    i = s.rfind( '/' )
-    if (i >= 0):
-        return s[i+1: ]
+
+def main():
+    nbreArgument=len(sys.argv)
+    if(nbreArgument==1 or  nbreArgument== 2 or nbreArgument==3 ):
+        t=Tests()
+        t.run('report.html','reportcss.css')
+        if ( t.GlobalResult):
+            print " Unit tests Succeeded :-)"
+            t.metAjourProduction()
+        else:
+            print " Unit tests has failed :-( ... "
     else:
-        return s
-
-class ReportOfSourceFile:
-    def __init__( self, filenameCpp, compilationReturn ):
-        self.filename_cpp      = filenameCpp[2:]  # [2:] pour enlever le ./
-        self.filename_log      = filenameCpp[2:-4] + ".log"  # [2:] pour enlever le ./
-        self.filename_log_cerr = filenameCpp[2:-4] + ".logcerr"  # [2:] pour enlever le ./
-        if ( compilationReturn == 0 ):
-            self.compilationResult = True
-        else:
-            self.compilationResult = False
-        self.resultReport      = True & self.compilationResult
-        self.compilationReturn = compilationReturn
-        self.htmlReport        = ""
-    def display( self ):
-        print " source filename    = ", self.filename_cpp
-        print " filename_log       = ", self.filename_log
-        print " filename_log_cerr  = ", self.filename_log_cerr
-        print " result             = ", self.resultReport
-        print " compilation        = ", self.compilationResult
-        print " compilation return = ", self.compilationReturn
-        print " html               = <<<", self.htmlReport, ">>>"   
-        
-
-class Tests:
-    def __init__( self, relative_dir_unit_test, list_dir_include = [] ):
-        self.GlobalResult = True
-        self.icon = [ '../doc/images/red.png', '../doc/images/green.png' ]
-        self.iconDownload = '../doc/images/eye.png'
-        self.textOfIcon = [ 'FAIL', 'OK' ]
-        #self.command = 'metil_comp -DDEBUG_ALLOC_LEVEL_1 '
-        self.command = '../metil_comp -DTESTING -DNO_SIG_NAN '
-        for dir in list_dir_include:
-            self.command = self.command + ' -I' + dir + ' '
-        self.relative_dir_unit_test = relative_dir_unit_test
-        self.listResult = []
-
-    def find_and_exec( self, directory, list_forbidden_dir_source ):
-        self.GlobalResult = True
-        for filename_ in os.listdir( directory ):
-            filename = directory + "/" + filename_
-            if stat.S_ISDIR( os.stat( filename )[ stat.ST_MODE ] ) and filename_ not in list_forbidden_dir_source :
-                self.find_and_exec( filename )
-            elif filename[-4:] == ".cpp": 
-                filename_log = filename[:-4] + ".log"
-                filename_log_cerr = filename[:-4] + ".logcerr"
-                compilation_res = os.system( self.command + filename + " > " + filename_log + "  2> " + filename_log_cerr )
-                r = ReportOfSourceFile( filename, compilation_res )
-                self.listResult.append( r )
-                print filename + ' -> ' + str( compilation_res )
-                if ( compilation_res == 0 ): # compilation réussie
-                    entree = open( filename_log, 'r' )
-                    tokens = entree.read().split()
-                    entree.close()
-                    nb_tokens = len ( tokens )
-                    k = 0
-                    ### analyse du fichier log
-                    while ( k < nb_tokens ):
-                        if (tokens[k] == '__UNIT_TESTING_REPORT__'):
-                            ### détermination du nom du test
-                            name_test = ""
-                            if ( k + 1 < nb_tokens ) and tokens[k+1] == '@@':
-                                k += 2
-                                while ( k < nb_tokens ) and tokens[k] != '@@':
-                                    name_test += tokens[k]
-                                    name_test += ' '
-                                    k += 1
-                                k += 1
-                            else:
-                                name_test += tokens[k+1] 
-                                k += 2 
-                           
-                            ### Nous cherchons ensuite le token >=>=>=> pour connaître le résultat du test
-                            while ( k < nb_tokens ):
-                                if (tokens[k] == '>=>=>=>' ):
-                                    if ( tokens[k+1] == 'OK' ):
-                                        j = 1
-                                    else:
-                                        j = 0
-                                    self.GlobalResult &= j
-                                    r.resultReport &= j
-                                    r.htmlReport += ' <td> ' + name_test + ' </td> <td  align="center" >' + create_html_image( self.icon[j], tokens[k+1] ) + '</td> <td align="center" > ' + create_html_link( self.relative_dir_unit_test + r.filename_log, create_html_image( self.iconDownload ) ) + ' </td>\n\t</tr>\n'
-                                    k += 1
-                                    break
-                                k += 1
-                        k += 1
-
-    def run( self, namefile_html, directory, list_forbidden_dir_source = [] ):
-        self.find_and_exec( directory, list_forbidden_dir_source )
-        html = file( namefile_html, "w" )
-        html.write('\n<br>\n<br> Global Result   :  '+ create_html_image( self.icon[ self.GlobalResult ], self.textOfIcon[ self.GlobalResult ] ) + '\n<br>\n<br>Results :  \n<br>\n<br>' )
-        html.write('\n\n<table cellpadding="2" width="100%" cellspacing="1" border="0" class="indextable" >\n\t<tr>\n\t\t<th class="titleheader" width="40%" align="left" > Source File Test </th> <th class="titleheader" width="15%" > Compilation </th> <th class="titleheader" width="15%" > Test Result </th> <th class="titleheader" align="center" width="15%" > Log File </th> <th class="titleheader" align="center" width="15%" > Log Cerr File </th>\n\t</tr>\n' )
-        
-        for r in self.listResult:
-            #r.display()
-            if not r.compilationResult:
-                html.write( '\t<tr>\n\t\t<td>' + create_html_link( self.relative_dir_unit_test + r.filename_cpp, r.filename_cpp ) + ' </td> ' ) 
-            else:
-                html.write( '\t<tr>\n\t\t<td>' + create_html_link( '#' + r.filename_cpp, r.filename_cpp ) + ' </td> ' )
-            html.write( '<td  align="center" > ' + create_html_image( self.icon[ r.compilationResult ], self.textOfIcon[ r.compilationResult ] ) +  ' </td> <td  align="center" > ' + create_html_image( self.icon[ r.resultReport ], self.textOfIcon[ r.resultReport ] ) + ' </td> <td align="center" > ' + create_html_link( self.relative_dir_unit_test + r.filename_log, create_html_image( self.iconDownload ) ) + ' </td> <td align="center" > ' + create_html_link( self.relative_dir_unit_test + r.filename_log_cerr, create_html_image( self.iconDownload ) ) + ' </td>\n\t</tr>\n' )
-        html.write( '</table>\n<br>' )
-        
-        html.write('\n<br> Results by source file : \n<br>' )
-        displayTable = False 
-        for r in self.listResult:
-            displayTable |= r.compilationResult
-        if displayTable:
-            for r in self.listResult:
-                if r.compilationResult:
-                    html.write('\n<br> <a name ="' + r.filename_cpp + '" > </a> ' + create_html_link( self.relative_dir_unit_test + r.filename_cpp, r.filename_cpp ) + ' : \n<br>\n<br>' )
-                    html.write( '\n\n<table cellpadding="2" width="100%" cellspacing="1" border="0" class="indextable" >\n\t<tr>\n\t\t<th class="titleheader" width="70%"  align="left" > Test </th> <th class="titleheader" width="15%"  align="center" > Result </th> <th class="titleheader" width="15%"  align="center" > Log File </th>\n\t</tr>\n' )
-                    html.write( r.htmlReport )
-                    html.write( '</table>\n<br>\n<br>' )
-        else:
-            html.write( 'No result\n<br>\n<br>\n<br>' )
+        print '  erreur dans le nombre d\'arguments'
     
-t = Tests( "../unit_tests/", [ os.getcwd() + "/../src/" ] )
-t.run( "report.html", ".", [ "compilations" ] )
+        
+class ReportOfSourceFile:
+    def __init__(self,logDir,fileNameCpp,compilReturn,erreurTestReturn):
+	self.logDir=logDir
+        self.fileNameCpp=fileNameCpp+'.cpp'
+        self.fileName_log=fileNameCpp+'_result_compil'
+        self.fileName_log_cerr=fileNameCpp+'_result_test'
+	self.pathFile='../'+self.fileNameCpp
+        
+        if(compilReturn==0):
+            self.compilResult=True
+        else:
+            self.compilResult=False
+            
+        if (erreurTestReturn==0):
+            self.erreurTestResult=True
+        else:
+            self.erreurTestResult=False
+            
+class Utilitaires:
+  
+    def creerRepertoire(self,path,nomRepertoire):
+        chemin=os.path.join(path,nomRepertoire)
+        
+        if not os.path.isdir(chemin):
+            os.mkdir(chemin)
+        #os.chdir(nomRepertoire)
+    
+    def create_html_link(self,href,text):
+	return '<a href ="'+href+'">'+text+'</a>'
+    
+    def create_html_img(self,href,alt=''):
+        return '<img src="'+href+'" alt="'+alt+'"/>'
+    
+    def testExistanceFichier(self,pathFileName):
+        retour=0
+        if os.path.isfile(os.path.join(pathFileName)):
+            retour=1
+        return retour
+     
+    def returnType(self,path): 
+        mode=os.stat(path)[stat.ST_MODE]
+        if stat.S_ISDIR(mode):
+            return 'directory' 
+        elif stat.S_ISREG(mode):
+            return 'file'
+        else:
+            return ''
+            
+    def ecrireDansFichierLog(self,pathFileLog,pathFileTMP):
+        if self.testExistanceFichier(pathFileLog):
+            fichierLog=file (pathFileLog,'a')
+        else:
+            fichierLog=open(pathFileLog,'w')
+            fichierLog.write( codecs.BOM_UTF8 )
 
+        
+        fichierTmp=open(pathFileTMP,'r')
+        lignes=fichierTmp.readlines()
+        fichierTmp.close()
+        fichierLog.write('\n\r')
+        heure=time.strftime('%d/%m/%y %H:%M',time.localtime()) 
+        fichierLog.write(heure+'\n\r')
+        for ligne in lignes:
+            fichierLog.write(ligne)
+        fichierLog.close()
+        
+    def returnLastIndexChar(self,path,char):
+        i=0
+        position=0
+        
+        while i<len(path):
+            if path[i]==char:
+                position=i
+            i+=1
+        return position
+    
+    def returnResultCompil(self,pathFile):
+        fichier=open(pathFile,'r')
+        lignes=fichier.readlines()
+        fichier.close()
+        contenuFichier=''
+        for ligne in lignes:
+            uneLigne=((ligne.rstrip('\n\r')).lstrip()).rstrip()
+            
+            if uneLigne!='':
+                contenuFichier+=uneLigne
+        
+        if contenuFichier.find('.cpp')!=-1:
+            return 1
+        else:
+            return 0
+        
+            
+class Tests:
+    def __init__(self):
+        self.GlobalResult=True
+        self.text=['FAIL','OK']
+        self.command=''
+        self.resultList=[]
+        self.existFileTeste=False
+        self.path_test=''
+        self.fileLogCmpTmp='.logCmpTmp'
+        self.fileLogTestTmp='.logTestTmp'
+        self.nbreArgument=len(sys.argv)
+        
+        if self.nbreArgument==1:
+            self.racine_appli=os.getcwd() 
+            
+        elif self.nbreArgument==2:  
+            self.racine_appli=sys.argv[1]
+            
+            
+        else:
+            self.racine_appli=sys.argv[1]
+            
+            if Utilitaires().returnType(sys.argv[2])=='directory':
+                self.path_test=sys.argv[2]
+            elif Utilitaires().returnType(sys.argv[2])=='file':
+                position= Utilitaires().returnLastIndexChar(sys.argv[2],'/')
+                self.path_test=sys.argv[2][0:position]
+        self.nomDuProgramme=self.recupeNomDUProgramme(self.racine_appli)
+        
+                
+        
+        self.img=['images/no.png','images/ok.png']
+        self.repertoireLog='.log'
+                
+        
+    def find_and_exec(self,path):
+              
+        #self.GlobalResult = False
+        for dir in os.listdir(path):
+            if(dir[0]!='.'):
+                
+                pathName=os.path.join(path,dir)
+                
+                if Utilitaires().returnType(pathName)=='directory':
+                    self.find_and_exec(pathName)
+                elif (Utilitaires().returnType(pathName)=='file' and dir.endswith('.cpp') and dir.find('_test')!=-1):
+                    fileName=dir[:-4]
+                    fileName_log=fileName+'_result_compil'
+                    fileName_log_cerr=fileName+'_result_test'
+                    
+                    Utilitaires().creerRepertoire(self.racine_appli,self.repertoireLog)
+                    
+                    command=' metil_comp   -lboost_unit_test_framework '+pathName+' 2>'+os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogCmpTmp)
+                    
+                    self.existFileTeste=True
+                    os.system(command)
+                    
+                    compile_res=Utilitaires().returnResultCompil(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogCmpTmp))
+                    Utilitaires().ecrireDansFichierLog(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),fileName_log)
+                                        ,os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogCmpTmp))
+                    if(compile_res==0):
+                        
+                        index=len(dir)
+                        rep=pathName[:-index]
+                        os.chdir(os.path.join(rep,'compilations'))
+                        
+                        command='./'+( pathName.replace( "/", "_" ) ).replace( ".cpp", "_cpp.exe" )+'>'+os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogTestTmp)
+                        erreurTest=os.system(command)
+			
+                        if(erreurTest!=0):
+			    
+                            self.GlobalResult=False
+                        os.chdir(self.racine_appli)
+                    else:
+                        
+                        erreurTest=200
+                        fichier=file(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogTestTmp),'w')
+                        fichier.write('Test non réalisé cause erreurs dans la compilation ')
+                        fichier.close()
+                      
+                    Utilitaires().ecrireDansFichierLog(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),fileName_log_cerr),os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogTestTmp))
+                        
+                    r=ReportOfSourceFile(os.path.join('../',self.repertoireLog),fileName,compile_res,erreurTest)
+                    self.resultList.append(r)
+                    
+       
+    def recupeNomDUProgramme(self,path):
+        liste=path.split('/')
+        #indexDebut= path.index('/',1)  
+        #return path[indexDebut+1:-1]
+        return liste[len(liste)-1]
+    
+         
+    def donneEnteteHtml(self):
+        enteteHtml='<html>\n<head>\n'
+        enteteHtml+='<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'
+        enteteHtml+='<link rel="stylesheet" type="text/css" href="reportcss.css">'
+        enteteHtml+='</head><body>'
+        return enteteHtml
+    
+    def donneFooterHtml(self):
+        footerHtml='</table></div></body></html>'
+        return footerHtml
+    
+    def donneEnteteTable(self):
+        enteteTable='\t<tr>\n\t\t<th class="file text"> Source File Test </th>'
+        enteteTable+= '<th class="result text"  > Compilation </th> <th class="report text" >'
+        enteteTable+= 'Log File </th> <th class="result text"  >Test Result  </th>'
+        enteteTable+= '<th class="report text"> Log Cerr File </th>\n\t</tr>\n'
+        return enteteTable
+    
+    def donneLigneTable(self,r):
+        ligneTable='\t<tr class="file">\n\t\t<td>'+Utilitaires().create_html_link(r.pathFile,r.fileNameCpp)+'</td>'
+        ligneTable+='<td class="result center">'+Utilitaires().create_html_img(self.img[r.compilResult], self.text[r.compilResult]) +'</td>'
+        ligneTable+='<td class="report center">'+Utilitaires().create_html_link(os.path.join(r.logDir,r.fileName_log),r.fileName_log)+'</td>'
+        ligneTable+='<td class="result center">'+ Utilitaires().create_html_img(self.img[r.erreurTestResult], self.text[r.erreurTestResult]) +'</td>'
+        ligneTable+='<td class="report center">'+Utilitaires().create_html_link(os.path.join(r.logDir,r.fileName_log_cerr),r.fileName_log_cerr)+'</td>'
+        return ligneTable
+                
+    def genererFichierCSS(self,fileNameCss):
+        css=file(fileNameCss,'w')
+        css.write('table{\ncellpadding:2;\n width :80% ;\n cellspacing:1;\n border:0;\n}\n')
+        css.write('\n th {\nfont-family: monospace;\n padding: 5px;\n background-color: #D0E3FA;\n}\n\n')
+        css.write('.file{\n width:35%;\n text-align:left;\n}\n\n')
+        css.write('.result{\n width:10%;\n}\n\n')
+        css.write('.report{\n width:20%;\n}\n\n')
+        css.write('.label{\n font-family:serif;\nfont-size: 18px;\n}\n\n')
+        css.write('.center{\ntext-align:center;\n}\n\n')
+        css.write('.espace20{\n margin-top:20px;\n}\n\n')
+        css.write('.retrait20{\n margin-left:20px;\n}\n\n')
+        css.write('.text{\n font-family:serif;\n font-size: 16px;\n}\n\n')
+        css.write('.entete{\n background-color:#046380;\n border-radius:7px;\n -moz-border-radius:7px;\n -webkit-border-radius:7px;\n padding:7px;\n color:white;\n}\n\n')
+        css.write('a{\n text-decoration:none;\n}\n\n')
+        css.close()
+        
+    def metAjourProduction(self):
+        os.system(self.racine_appli)
+        os.system("make pull_and_push_if_valid")
+        
+        
+    def run(self,fileNameReportHtml,fileNameCss):
+        if self.path_test!='':
+            path=self.path_test
+        else:
+            path=self.racine_appli
+        self.find_and_exec(path)
+        Utilitaires().creerRepertoire(self.racine_appli,'html')
+        os.chdir(os.path.join(self.racine_appli,'html'))
+        html=file(fileNameReportHtml,'w')
+        if (self.existFileTeste==True):
+            
+            html.write(self.donneEnteteHtml())
+            html.write('<div class="center espace20 entete"><span class="label"> RAPPORT DES TESTS  </span> </div> ')
+            html.write('<div class="center espace20"><span class="label"> Nom du Programme  :</span>  '+self.nomDuProgramme+'</div>')
+            html.write('<div class="retrait20 espace20"><span class="label">Global Result  : </span> '
+                       +Utilitaires().create_html_img( self.img[self.GlobalResult], self.text[self.GlobalResult])+'</div>')
+            html.write('<div class="retrait20 espace20"><span class="label">Results  :</span></div>')
+            html.write('<div class="center" retrait20 espace 20"><table>')
+            html.write( self.donneEnteteTable())
+            
+            for r in self.resultList:
+                html.write(self.donneLigneTable(r))
+            
+            html.write(self.donneFooterHtml())
+            
+            self.genererFichierCSS(fileNameCss)
+        else:
+            html.write('<div>aucun fichier test trouv�</div>')
+        html.close()
+        
+    
+            
+main()
+            
+            
+
+  

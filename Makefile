@@ -46,10 +46,7 @@ documentation:
 	mkdir -p html/Level1/images; cp doc/images/* html/Level1/images
 
 pull_and_push_if_valid:
-	git pull
-	make make_unit_tests
-	make documentation
-	git push production
+	git push production master
 
 archive:
 	git archive -o Metil-0.zip --prefix=Metil-0.0.0/ HEAD
