@@ -7,6 +7,11 @@ import stat
 import sys
 import time
 import codecs
+import smtplib
+from email.mime.text import MIMEText
+from email.MIMEBase import MIMEBase
+from email.MIMEMultipart import MIMEMultipart
+from email import Encoders
 
 
 def main():
@@ -19,6 +24,9 @@ def main():
             t.metAjourProduction()
         else:
             print " Unit tests has failed :-( ... "
+            files=[ os.path.join(os.path.join(t.racine_appli,t.repertoireLog),t.fileLogTestTmp)]
+            text=' Bonjour, \n\r Unit tests has failed :-( ... c-joint les fichiers logs \n\r vous pouvez consulter le détail ici https://intranet.lmt.ens-cachan.fr/SAMIR/documentation/repertoireDesProgrammes/Metil-test/html/report.html\n\r cordialement'
+            Utilitaires().envoieMail( text,'erreur dans la récupération des programmes',files)
     else:
         print '  erreur dans le nombre d\'arguments'
     
@@ -99,6 +107,25 @@ class Utilitaires:
             i+=1
         return position
     
+    def envoieMail(self,text,sujet,files=[]):
+        envoieMail=1
+        if(envoieMail==1):
+            msg = MIMEMultipart()
+            msg.attach( MIMEText(text) )
+            msg['Subject'] =sujet
+            msg['From'] = 'wiki@lmt.ens-cachan.fr'
+            msg['To'] = 'samir.amrouche@lmt.ens-cachan.fr'
+            for f in files:
+                part = MIMEBase('application', "octet-stream")
+                print f
+                part.set_payload( open(f,"rb").read())
+                Encoders.encode_base64(part)
+                part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(f))
+                msg.attach(part)
+            s = smtplib.SMTP('mailhost.lmt.ens-cachan.fr')
+            s.sendmail(msg['From'], msg['To'], msg.as_string())
+            s.quit()
+    
     def returnResultCompil(self,pathFile):
         fichier=open(pathFile,'r')
         lignes=fichier.readlines()
@@ -130,38 +157,34 @@ class Tests:
         
         if self.nbreArgument==1:
             self.racine_appli=os.getcwd() 
-            self.racine=self.donne_racine(self.racine_appli)
-            
-            
+                    
         else:
-            self.racine_appli=sys.argv[1]
-            self.racine =  self.racine_appli
-            if Utilitaires().returnType(sys.argv[2])=='directory':
-                self.path_test=sys.argv[2]
-            elif Utilitaires().returnType(sys.argv[2])=='file':
-                position= Utilitaires().returnLastIndexChar(sys.argv[2],'/')
-                self.path_test=sys.argv[2][0:position]
-        self.nomDuProgramme=self.recupeNomDUProgramme(self.racine)
-        
-                
-        
+            rep_courant=os.getcwd()
+            os.chdir(sys.argv[1])
+            self.racine_appli=os.getcwd()
+            os.chdir(rep_courant)
+            
+            if ( self.nbreArgument == 3):
+                if Utilitaires().returnType(sys.argv[2])=='directory':
+                    self.path_test=sys.argv[2]
+                elif Utilitaires().returnType(sys.argv[2])=='file':
+                    position= Utilitaires().returnLastIndexChar(sys.argv[2],'/')
+                    self.path_test=sys.argv[2][0:position]
+              
+        self.nomDuProgramme=self.recupeNomDUProgramme(self.racine_appli)
         self.img=['images/no.png','images/ok.png']
         self.repertoireLog='.log'
                 
-    def donne_racine(self, rep):
-        os.chdir( '..' )
-        racine = os.getcwd()
-        os.chdir(rep)
-        return racine
+    
     
     def find_and_exec(self,path):
-            
-                
+        
         #self.GlobalResult = False
         for dir in os.listdir(path):
             if(dir[0]!='.'):
                 
                 pathName=os.path.join(path,dir)
+                
                 
                 if Utilitaires().returnType(pathName)=='directory':
                     self.find_and_exec(pathName)
@@ -190,26 +213,23 @@ class Tests:
                         erreurTest=os.system(command)
 			
                         if(erreurTest!=0):
-			    
                             self.GlobalResult=False
                         os.chdir(self.racine_appli)
                     else:
                         
                         erreurTest=200
+                        self.GlobalResult=False
                         fichier=file(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogTestTmp),'w')
                         fichier.write('Test non réalisé cause erreurs dans la compilation ')
                         fichier.close()
                       
                     Utilitaires().ecrireDansFichierLog(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),fileName_log_cerr),os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogTestTmp))
-                        
                     r=ReportOfSourceFile(os.path.join('../',self.repertoireLog),fileName,compile_res,erreurTest)
                     self.resultList.append(r)
                     
        
     def recupeNomDUProgramme(self,path):
         liste=path.split('/')
-        #indexDebut= path.index('/',1)  
-        #return path[indexDebut+1:-1]
         return liste[len(liste)-1]
     
          
@@ -256,10 +276,8 @@ class Tests:
         css.close()
         
     def metAjourProduction(self):
-
-	os.chdir( '..' ) 
-	os.chdir( '..' ) 
-	os.system( ' make push_production_if_valid' )
+        os.chdir( self.racine_appli ) 
+        os.system( ' make push_production_if_valid' )
 	
          
     def run(self,fileNameReportHtml,fileNameCss):
@@ -289,7 +307,7 @@ class Tests:
             
             self.genererFichierCSS(fileNameCss)
         else:
-            html.write('<div>aucun fichier test trouv�</div>')
+            html.write('<div>aucun fichier test trouvé</div>')
         html.close()
         
     

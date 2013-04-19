@@ -35,8 +35,8 @@ metil_gen:
 unit_tests:
 #	make clean
 #	make -j8 metil_comp
-	cd unit_tests; python run_unit_test.py
-	mkdir -p html; cp -r unit_tests/html/* html
+	cd unit_tests; python run_unit_test.py ../
+	
 	mkdir -p .log; cp -r unit_tests/.log/* .log
 
 documentation:
