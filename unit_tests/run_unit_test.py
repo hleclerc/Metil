@@ -114,7 +114,7 @@ class Utilitaires:
             msg.attach( MIMEText(text) )
             msg['Subject'] =sujet
             msg['From'] = 'wiki@lmt.ens-cachan.fr'
-            msg['To'] = 'samir.amrouche@lmt.ens-cachan.fr'
+            msg['To'] = 'samir.amrouche@lmt.ens-cachan.fr, hugo.leclerc@lmt.ens-cachan.fr'
             for f in files:
                 part = MIMEBase('application', "octet-stream")
                 print f
