@@ -51,6 +51,8 @@ metil_comp --exec-using "valgrind --leak-check=full" ex1.cpp
         - @p src_file additionnal cpp / cu files"
         - @p inc_path additionnal include path"
         - @p lnk_flag additionnal flags explicitly passed to the linker
+        - @p cxx_name specify compiler, like e.g. icpc -gxx-name=g++-4.4
+        - @p cpp_flag additionnal flags explicitly passed to the compiler
         - @p gpu_flag additionnal flags explicitly passed to nvcc
         - @p lib_path additionnal library (.so/.a) path, like e.g. /usr/local/lib
         - @p lib_name additionnal library name (.so/.a), like e.g. pthread

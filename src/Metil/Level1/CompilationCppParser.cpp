@@ -63,6 +63,7 @@ bool CompilationCppParser::init_using_dep( CompilationEnvironment &ce, const Str
     load_dep_vec( c, lnk_flags );
     load_dep_vec( c, gpu_flags );
     load_dep_vec( c, var_templ );
+    load_dep_vec( c, cxx_name  );
 
     BasicVec<String> defs;
     load_dep_vec( c, defs );
@@ -118,6 +119,7 @@ CompilationCppParser::~CompilationCppParser() {
     save_dep_vec( fd, lnk_flags );
     save_dep_vec( fd, gpu_flags );
     save_dep_vec( fd, var_templ );
+    save_dep_vec( fd, cxx_name  );
 }
 
 static void skip_spaces_but_not_cr( const char *&c ) {
@@ -420,6 +422,10 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                 }
                 if ( strncmp( c, "template ", 9 ) == 0 ) {
                     var_templ << get_pragma_arg( c += 9 );
+                    continue;
+                }
+                if ( strncmp( c, "cxx_name ", 9 ) == 0 ) {
+                    cxx_name << get_pragma_arg( c += 9 );
                     continue;
                 }
             }
