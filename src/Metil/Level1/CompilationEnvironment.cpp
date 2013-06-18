@@ -147,10 +147,13 @@ void CompilationEnvironment::add_CPPFLAG( const String &flag, const String &cpp 
 }
 
 void CompilationEnvironment::add_cxx_name( const String &name ) {
+    //if( name != ""){
     cxx_name << name;
     if ( child )
         child->set_CXX( cxx_name );
     else set_CXX( cxx_name );
+    //}
+
 }
 
 void CompilationEnvironment::set_CXX( const String &path ) {
@@ -603,7 +606,9 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         add_fra_name( cpp_parser.fra_names[ i ] );
     for( int i = 0; i < cpp_parser.lib_paths.size(); ++i )
         add_lib_path( cpp_parser.lib_paths[ i ] );
-    add_cxx_name( cpp_parser.cxx_name );
+    if ( cpp_parser.cxx_name != "" )
+        add_cxx_name( cpp_parser.cxx_name );
+
     // local flags
     CompilationEnvironment loc_ce( this );
     for( int i = 0; i < cpp_parser.inc_paths.size(); ++i )
