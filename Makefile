@@ -37,7 +37,7 @@ unit_tests:
 #	make -j8 metil_comp
 	cd unit_tests; python run_unit_test.py ../
 	
-	mkdir -p .log; cp -r unit_tests/.log/* .log
+	#mkdir -p .log; cp -r unit_tests/.log/* .log
 
 documentation:
 	doxygen doc/Doxyfile

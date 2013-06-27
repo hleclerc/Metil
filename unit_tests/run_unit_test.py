@@ -24,9 +24,9 @@ def main():
             t.metAjourProduction()
         else:
             print " Unit tests has failed :-( ... "
-            files=[ os.path.join(os.path.join(t.racine_appli,t.repertoireLog),t.fileLogTestTmp)]
-            text=' Bonjour, \n\r Unit tests has failed :-( ... c-joint les fichiers logs \n\r vous pouvez consulter le détail ici https://intranet.lmt.ens-cachan.fr/SAMIR/documentation/repertoireDesProgrammes/Metil-test/html/report.html\n\r cordialement'
-            Utilitaires().envoieMail( text,'erreur dans la récupération des programmes',files)
+            #files=[ os.path.join(os.path.join(t.racine_appli,t.repertoireLog),t.fileLogTestTmp)]
+            text=' Bonjour, \n\r Unit tests has failed :-( ... ci-joint les fichiers logs \n\r vous pouvez consulter le détail ici https://intranet.lmt.ens-cachan.fr/SAMIR/documentation/repertoireDesProgrammes/Metil-test/html/report.html\n\r cordialement'
+            Utilitaires().envoieMail( text,'erreur dans la récupération des programmes')
     else:
         print '  erreur dans le nombre d\'arguments'
     
@@ -114,7 +114,7 @@ class Utilitaires:
             msg.attach( MIMEText(text) )
             msg['Subject'] =sujet
             msg['From'] = 'wiki@lmt.ens-cachan.fr'
-            msg['To'] = 'samir.amrouche@lmt.ens-cachan.fr, hugo.leclerc@lmt.ens-cachan.fr'
+            msg['To'] = 'samir.amrouche@lmt.ens-cachan.fr'
             for f in files:
                 part = MIMEBase('application', "octet-stream")
                 print f
@@ -151,8 +151,8 @@ class Tests:
         self.resultList=[]
         self.existFileTeste=False
         self.path_test=''
-        self.fileLogCmpTmp='.logCmpTmp'
-        self.fileLogTestTmp='.logTestTmp'
+        #self.fileLogCmpTmp='.logCmpTmp'
+        #self.fileLogTestTmp='.logTestTmp'
         self.nbreArgument=len(sys.argv)
         
         if self.nbreArgument==1:
@@ -172,7 +172,7 @@ class Tests:
                     self.path_test=sys.argv[2][0:position]
               
         self.nomDuProgramme=self.recupeNomDUProgramme(self.racine_appli)
-        self.img=['images/no.png','images/ok.png']
+        self.img=['../../../repertoireDesProgrammes/images/no.png','../../../repertoireDesProgrammes/images/ok.png']
         self.repertoireLog='.log'
                 
     
@@ -195,21 +195,22 @@ class Tests:
                     
                     Utilitaires().creerRepertoire(self.racine_appli,self.repertoireLog)
                     
-                    command=' metil_comp   -lboost_unit_test_framework '+pathName+' 2>'+os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogCmpTmp)
+                    command=' metil_comp  -ne -lboost_unit_test_framework '+pathName+' > '+os.path.join(os.path.join(self.racine_appli,self.repertoireLog),fileName_log)+' 2> '+os.path.join(os.path.join(self.racine_appli,self.repertoireLog),fileName_log_cerr)
                     
                     self.existFileTeste=True
-                    os.system(command)
+                    compile_res = os.system(command)
                     
-                    compile_res=Utilitaires().returnResultCompil(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogCmpTmp))
-                    Utilitaires().ecrireDansFichierLog(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),fileName_log)
-                                        ,os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogCmpTmp))
+                    #compile_res=Utilitaires().returnResultCompil(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogCmpTmp))
+                    #Utilitaires().ecrireDansFichierLog(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),fileName_log)
+                    #                    ,os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogCmpTmp))
                     if(compile_res==0):
                         
                         index=len(dir)
                         rep=pathName[:-index]
-                        os.chdir(os.path.join(rep,'compilations'))
+			command=' metil_comp -nc  -lboost_unit_test_framework '+pathName+' > '+os.path.join(os.path.join(self.racine_appli,self.repertoireLog),fileName_log_cerr)
+                        #os.chdir(os.path.join(rep,'compilations'))
                         
-                        command='./'+( pathName.replace( "/", "_" ) ).replace( ".cpp", "_cpp.exe" )+'>'+os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogTestTmp)
+                        #command='./'+( pathName.replace( "/", "_" ) ).replace( ".cpp", "_cpp.exe" )+'>'+os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogTestTmp)
                         erreurTest=os.system(command)
 			
                         if(erreurTest!=0):
@@ -219,12 +220,12 @@ class Tests:
                         
                         erreurTest=200
                         self.GlobalResult=False
-                        fichier=file(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogTestTmp),'w')
+                        """fichier=file(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogTestTmp),'w')
                         fichier.write('Test non réalisé cause erreurs dans la compilation ')
                         fichier.close()
                       
-                    Utilitaires().ecrireDansFichierLog(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),fileName_log_cerr),os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogTestTmp))
-                    r=ReportOfSourceFile(os.path.join('../',self.repertoireLog),fileName,compile_res,erreurTest)
+                    Utilitaires().ecrireDansFichierLog(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),fileName_log_cerr),os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogTestTmp))"""
+                    r=ReportOfSourceFile(os.path.join('..',self.repertoireLog) ,fileName,compile_res,erreurTest)
                     self.resultList.append(r)
                     
        
@@ -254,9 +255,9 @@ class Tests:
     def donneLigneTable(self,r):
         ligneTable='\t<tr class="file">\n\t\t<td>'+Utilitaires().create_html_link(r.pathFile,r.fileNameCpp)+'</td>'
         ligneTable+='<td class="result center">'+Utilitaires().create_html_img(self.img[r.compilResult], self.text[r.compilResult]) +'</td>'
-        ligneTable+='<td class="report center">'+Utilitaires().create_html_link(os.path.join(r.logDir,r.fileName_log),r.fileName_log)+'</td>'
+        ligneTable+='<td class="report center">'+Utilitaires().create_html_link(os.path.join(r.logDir,r.fileName_log), Utilitaires().create_html_img('../../../repertoireDesProgrammes/images/detail1.png','file_log'))+'</td>'
         ligneTable+='<td class="result center">'+ Utilitaires().create_html_img(self.img[r.erreurTestResult], self.text[r.erreurTestResult]) +'</td>'
-        ligneTable+='<td class="report center">'+Utilitaires().create_html_link(os.path.join(r.logDir,r.fileName_log_cerr),r.fileName_log_cerr)+'</td>'
+        ligneTable+='<td class="report center">'+Utilitaires().create_html_link(os.path.join(r.logDir,r.fileName_log_cerr),Utilitaires().create_html_img('../../../repertoireDesProgrammes/images/detail2.png','file_log_cerr'))+'</td>'
         return ligneTable
                 
     def genererFichierCSS( self,fileNameCss ):
@@ -277,8 +278,8 @@ class Tests:
         
     def metAjourProduction(self):
         os.chdir( self.racine_appli ) 
-        os.system( ' make push_production_if_valid' )
-	
+        #os.system( ' make push_production_if_valid' )
+	os.system( ' git push production master ' )	
          
     def run(self,fileNameReportHtml,fileNameCss):
         if self.path_test!='':
