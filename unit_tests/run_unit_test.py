@@ -32,12 +32,12 @@ def main():
     
         
 class ReportOfSourceFile:
-    def __init__(self,logDir,fileNameCpp,compilReturn,erreurTestReturn):
+    def __init__(self,logDir, pathName, fileNameCpp, compilReturn, erreurTestReturn):
 	self.logDir=logDir
         self.fileNameCpp=fileNameCpp+'.cpp'
         self.fileName_log=fileNameCpp+'_result_compil'
         self.fileName_log_cerr=fileNameCpp+'_result_test'
-	self.pathFile='../'+self.fileNameCpp
+	self.pathFile='..'+pathName
         
         if(compilReturn==0):
             self.compilResult=True
@@ -225,7 +225,7 @@ class Tests:
                         fichier.close()
                       
                     Utilitaires().ecrireDansFichierLog(os.path.join(os.path.join(self.racine_appli,self.repertoireLog),fileName_log_cerr),os.path.join(os.path.join(self.racine_appli,self.repertoireLog),self.fileLogTestTmp))"""
-                    r=ReportOfSourceFile(os.path.join('..',self.repertoireLog) ,fileName,compile_res,erreurTest)
+                    r=ReportOfSourceFile(os.path.join('..',self.repertoireLog), pathName[len(self.racine_appli):len(pathName)], fileName, compile_res, erreurTest)
                     self.resultList.append(r)
                     
        
