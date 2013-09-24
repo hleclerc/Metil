@@ -59,7 +59,7 @@ static void png_append( char *&dst, const T &src ) {
         *(dst++) = tmp[ i ];
 }
 
-Ps<char> make_png( unsigned char *img, int w, int h, bool gray_only, const char *prelim, ST prelim_size ) {
+Ps<char> make_png( const unsigned char *img, int w, int h, bool gray_only, const char *prelim, ST prelim_size ) {
     int size_pix = gray_only ? 1 : 4;
     int ws = 1 + size_pix * w;
     ST tmp_rese = ws * h;
@@ -128,11 +128,11 @@ Ps<char> make_png( unsigned char *img, int w, int h, bool gray_only, const char 
     return res;
 }
 
-Ps<char> make_png( unsigned *img, int w, int h, bool gray_only, const char *prelim, ST prelim_size ) {
-    return make_png( (unsigned char *)img, w, h, gray_only, prelim, prelim_size );
+Ps<char> make_png( const unsigned *img, int w, int h, bool gray_only, const char *prelim, ST prelim_size ) {
+    return make_png( (const unsigned char *)img, w, h, gray_only, prelim, prelim_size );
 }
 
-void save_png( const String &filename, unsigned char *img, int w, int h, bool gray_only ) {
+void save_png( const String &filename, const unsigned char *img, int w, int h, bool gray_only ) {
     Ps<char> res = make_png( img, w, h, gray_only );
     File f( filename, "w" );
     f.write( res.ptr(), res.size_mem() );

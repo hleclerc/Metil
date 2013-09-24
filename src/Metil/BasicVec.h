@@ -16,6 +16,7 @@ Boston, MA 02110-1301, USA.
 #ifndef METIL_VEC_H
 #define METIL_VEC_H
 
+#include "TypeConfig.h"
 #include "Malloc.h"
 #include "Assert.h"
 #include "TensorOrder.h"

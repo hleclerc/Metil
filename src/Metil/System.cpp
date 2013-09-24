@@ -1,11 +1,12 @@
 #include "System.h"
 
+#include <sys/stat.h> // mkdir...
 #include <stdlib.h>   // system
 #include <unistd.h>   // getcwd
-#include <sys/stat.h> // mkdir...
-#include <errno.h>    // errno
 #include <dirent.h>   // opendir
 #include <string.h>   // strlen
+#include <errno.h>    // errno
+// #include <wait.h>     // WIFEXITED...
 #ifndef WIN32
     #include <sys/utsname.h>
 #endif
@@ -247,7 +248,8 @@ int exec_cmd( String f, bool display ) {
         return 0;
     if ( display )
         coutn << f;
-    return system( f.c_str() ) != 0;
+    int ret = system( f.c_str() );
+    return WEXITSTATUS( ret );
 }
 
 END_METIL_NAMESPACE

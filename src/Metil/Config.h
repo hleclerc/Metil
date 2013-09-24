@@ -1,5 +1,5 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef METIL_CONFIG_H
+#define METIL_CONFIG_H
 
 #define METIL_BOOSTRAP
 #define USE_STD_ALLOC
@@ -40,4 +40,4 @@
     #define __inline__ inline
 #endif // __CUDACC__
 
-#endif // CONFIG_H
+#endif // METIL_CONFIG_H
