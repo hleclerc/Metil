@@ -21,6 +21,7 @@ public:
     void add_GPUFLAG ( const String &flag );
     void add_LDFLAG  ( const String &flag );
     void add_def_proc( const String &proc );
+    void add_cxx_name( const String &name );// specify compiler with #pragma
 
     void add_CPPFLAG ( const String &flag, const String &cpp ); ///< add flag only for cpp
 
@@ -98,6 +99,7 @@ protected:
     String CPPFLAGS;
     String GPUFLAGS;
     String LDFLAGS;
+    String cxx_name;
     int device_emulation;
     int maxrregcount;
     int nb_threads;

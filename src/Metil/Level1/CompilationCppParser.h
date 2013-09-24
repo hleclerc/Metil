@@ -23,6 +23,7 @@ public:
     BasicVec<String> cpp_flags; ///<
     BasicVec<String> lnk_flags; ///<
     BasicVec<String> gpu_flags; ///<
+    BasicVec<String> cxx_name;  //
 
     BasicVec<String> var_templ; ///< template variables
     

@@ -17,7 +17,7 @@ using namespace Metil;
 //}
 
 int main() {
-    PRINT( Val( 1 ) + 2 == 3 );
+    //PRINT( Val( 1 ) + 2 == 3 );
     //    UNIT_TEST_CMP_STRING( zero + 10, 10 );
     //    UNIT_TEST_CMP_STRING( 20 + zero, 20 );
     //    UNIT_TEST_CMP_STRING( zero - 10, -10 );

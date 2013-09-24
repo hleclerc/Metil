@@ -57,6 +57,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "possible pragma in .h/.cpp/.cu files:";
     cerrn << "  inc_path additionnal include path";
     cerrn << "  lnk_flag additionnal flags explicitly passed to the linker";
+    cerrn << "  cxx_name specify compiler, like e.g. icpc -gxx-name=g++-4.4";
     cerrn << "  cpp_flag additionnal flags explicitly passed to the compiler";
     cerrn << "  gpu_flag additionnal flags explicitly passed to nvcc";
     cerrn << "  src_file additionnal cpp / cu files";

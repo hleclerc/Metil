@@ -1,5 +1,8 @@
-#include "UnitTest.h" /// pour la macro UNIT_TEST( )
-#include "String.h"
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
+
+#include "Metil/String.h"
 
 using namespace Metil;
 
@@ -18,17 +21,25 @@ bool add() {
 //}
 
 bool size() {
-    String s ("Au commencement, Dieu créa les cieux et la terre");
+    String s ( "Au commencement, Dieu créa les cieux et la terre" );
     PRINT( s.size() );
     return s.size() == 49;
 }
 
-int main() {
-   // UNIT_TEST( add() );
-    //UNIT_TEST( size() );
-    // UNIT_TEST_WITH_LABEL( "operator[]", String_1() );
-    return 0;
-}
+BOOST_AUTO_TEST_SUITE()
+
+    BOOST_AUTO_TEST_CASE( Test1 ) {
+        BOOST_REQUIRE_EQUAL( add() , true );
+    }
+
+    BOOST_AUTO_TEST_CASE( Test2 ) {
+
+        BOOST_REQUIRE_EQUAL( size() , true );
+    }
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
 
 
 

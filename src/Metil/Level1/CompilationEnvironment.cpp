@@ -146,6 +146,16 @@ void CompilationEnvironment::add_CPPFLAG( const String &flag, const String &cpp 
     res << flag;
 }
 
+void CompilationEnvironment::add_cxx_name( const String &name ) {
+    //if( name != ""){
+    cxx_name << name;
+    if ( child )
+        child->set_CXX( cxx_name );
+    else set_CXX( cxx_name );
+    //}
+
+}
+
 void CompilationEnvironment::set_CXX( const String &path ) {
     CXX = path;
 }
@@ -261,7 +271,7 @@ void CompilationEnvironment::save_env_var( bool update_LD_LIBRARY_PATH ) const {
     set_env( "METIL_NVCC"    , NVCC      );
     set_env( "METIL_CPPFLAGS", CPPFLAGS  );
     set_env( "METIL_LDFLAGS" , LDFLAGS   );
-
+    set_env( "METIL_CXX_NAME", cxx_name  );
     if ( device_emulation )
         set_env( "METIL_DEV_EMU", "1" );
     if ( maxrregcount )
@@ -325,6 +335,7 @@ void CompilationEnvironment::load_env_var() {
     if ( String str = get_env( "METIL_REG_CNT"   ) ) maxrregcount = Val( str );
     if ( String str = get_env( "METIL_DBG_LEVEL" ) ) dbg_level = Val( str );
     if ( String str = get_env( "METIL_OPT_LEVEL" ) ) opt_level = Val( str );
+    if ( String str = get_env( "METIL_CXX_NAME"  ) ) cxx_name  = str;
 }
 
 String CompilationEnvironment::obj_suffix( bool dyn ) {
@@ -595,6 +606,8 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         add_fra_name( cpp_parser.fra_names[ i ] );
     for( int i = 0; i < cpp_parser.lib_paths.size(); ++i )
         add_lib_path( cpp_parser.lib_paths[ i ] );
+    if ( cpp_parser.cxx_name != "" )
+        add_cxx_name( cpp_parser.cxx_name );
 
     // local flags
     CompilationEnvironment loc_ce( this );
