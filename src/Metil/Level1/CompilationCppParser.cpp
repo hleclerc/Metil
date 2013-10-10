@@ -372,6 +372,7 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                         //
                         if ( not already_parsed.contains( inc_file ) ) {
                             already_parsed << inc_file;
+                            PRINT( inc_file );
                             parse_src_file_rec( ce, inc_file );
                         }
                     }
