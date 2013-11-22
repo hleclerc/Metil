@@ -1,4 +1,5 @@
 #include "System.h"
+#include "Md5.h"
 
 #include <sys/stat.h> // mkdir...
 #include <stdlib.h>   // system
@@ -147,7 +148,10 @@ String filename_without_dir_of( const String &filename ) {
 }
 
 String filename_with_dir_of( const String &filename ) {
-    return canonicalize_filename( filename ).replace( '/', '_' ).replace( '.', '_' );
+    String res = canonicalize_filename( filename ).replace( '/', '_' ).replace( '.', '_' );
+    if ( res.size() > 128 )
+        res = md5_str( res );
+    return res;
     //    NewString res( filename.size(), filename.size() );
     //    char *o = res.ptr();
     //    for( const char *p = filename.c_str(); *p; ++p, ++o )

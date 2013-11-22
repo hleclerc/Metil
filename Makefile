@@ -1,4 +1,4 @@
-LOC_MC = ./metil_comp --comp-dir compilations -Isrc
+LOC_MC = metil_comp --comp-dir compilations -Isrc
 PRG = tests/test_HttpSessionServer.cpp
 INSTALL = `pwd`
 
