@@ -141,7 +141,7 @@ char String::char_ptr[] = {
 
 File::File( String filename, String mode ) {
     struct stat buf;
-    if ( stat( filename.c_str(), &buf ) == 0 and not S_ISDIR( buf.st_mode ) ) {
+    if ( stat( filename.c_str(), &buf ) == 0 or not S_ISDIR( buf.st_mode ) ) {
         data = fopen( filename.c_str(), mode.c_str() );
         type = &Level1::metil_type_bas_File;
     } else {

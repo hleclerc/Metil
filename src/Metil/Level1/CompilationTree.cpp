@@ -2,6 +2,7 @@
 #include "../WaitCondition.h"
 #include "../System.h"
 #include "../Thread.h"
+#include <fstream> // hum
 
 BEG_METIL_LEVEL1_NAMESPACE;
 
@@ -72,6 +73,7 @@ int CompilationTree::exec_node( String *out ) {
     }
     if ( not need_rebuild ) {
         File cmd_file( dst + ".cmd", "r" );
+        // PRINT( dst + ".cmd" );
         const char *cmd_data = cmd_file.c_str();
         if ( cmd_data == 0 or cmd != cmd_data )
             need_rebuild = true;
