@@ -26,7 +26,7 @@ def main():
             print " Unit tests has failed :-( ... "
             #files=[ os.path.join(os.path.join(t.racine_appli,t.repertoireLog),t.fileLogTestTmp)]
             text=' Bonjour, \n\r Unit tests has failed :-( ... ci-joint les fichiers logs \n\r vous pouvez consulter le détail ici https://intranet.lmt.ens-cachan.fr/SAMIR/documentation/repertoireDesProgrammes/Metil-test/html/report.html\n\r cordialement'
-            Utilitaires().envoieMail( text,'erreur dans la récupération des programmes')
+            # Utilitaires().envoieMail( text,'erreur dans la récupération des programmes')
     else:
         print '  erreur dans le nombre d\'arguments'
     
