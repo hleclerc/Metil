@@ -82,6 +82,7 @@ bool is_a_CPPFLAG( const String &arg ) {
         arg.begins_by( "-f" ) or
         arg.begins_by( "-W" ) or
         arg.begins_by( "-L" ) or
+        arg.begins_by( "-std=" ) or
         arg.begins_by( "-D" );
 }
 
