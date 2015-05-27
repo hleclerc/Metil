@@ -191,6 +191,43 @@ void CompilationEnvironment::set_opt_level( int level ) {
     this->opt_level = level;
 }
 
+static void load_dep_vec( const char *&c, BasicVec<String> &vec ) {
+    while ( true ) {
+        String r = String::read_sized( c );
+        if ( not r )
+            break;
+        vec << r;
+    }
+    if ( *c )
+        ++c;
+}
+
+void CompilationEnvironment::use_dylib( const String &cpp ) {
+    BasicVec<String> pending( cpp );
+    set_comp_dir( directory_of( cpp ) + "/compilations" );
+
+    while ( pending.size() ) {
+        String fpp = pending.back();
+        pending.pop_back();
+
+        parsed.push_back_unique( absolute_filename( fpp ) );
+
+        CompilationCppParser cpp_parser( *this, fpp, dep_for( fpp ) );
+
+        // .h -> .cpp or .cu ?
+        for( int i = 0; i < cpp_parser.inc_files.size(); ++i ) {
+            String h = absolute_filename( cpp_parser.inc_files[ i ] );
+            if ( h.ends_with( ".h" ) ) {
+                String base = h.beg_upto( h.size() - 2 );
+                if ( file_exists( base + ".cpp" ) and not parsed.contains( base + ".cpp" ) ) pending.push_back_unique( base + ".cpp" );
+                if ( file_exists( base + ".cu"  ) and not parsed.contains( base + ".cu"  ) ) pending.push_back_unique( base + ".cu"  );
+            }
+        }
+    }
+
+    dylibs << lib_for( cpp, true );
+}
+
 String CompilationEnvironment::get_NVCC() const {
     return NVCC ? NVCC : child->get_NVCC();
 }
@@ -468,6 +505,9 @@ String CompilationEnvironment::lnk_cmd( const String &exe, const BasicVec<String
         cmd << " '" << obj[ i ] << "'";
     // -L... -l...
     extra_lnk_cmd( cmd, lib, dyn );
+    // dylibs
+    for (int i = 0; i < dylibs.size(); ++i)
+        cmd << " " << dylibs[ i ];
     return cmd;
 }
 

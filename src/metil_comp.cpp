@@ -54,6 +54,7 @@ void usage( const char *pn, const char *msg = NULL ) {
     cerrn << "  --maxrregcount n : device emulation for cuda";
     cerrn << "  --static : do not make dynamic objects";
     cerrn << "  --dynamic: make dynamic objects";
+    cerrn << "  --use-dylib orig.cpp: use dylib generated from orig.cpp";
     cerrn << "possible pragma in .h/.cpp/.cu files:";
     cerrn << "  inc_path additionnal include path";
     cerrn << "  lnk_flag additionnal flags explicitly passed to the linker";
@@ -165,6 +166,8 @@ int main( int argc, char **argv ) {
             ce.set_device_emulation( 1 );
         } else if ( arg == "--maxrregcount" ) {
             ce.set_maxrregcount( atoi( argv[ ++i ] ) );
+        } else if ( arg == "--use-dylib" ) {
+            ce.use_dylib( argv[ ++i ] );
         } else if ( arg.begins_by( "-j" ) ) {
             ce.set_nb_threads( atoi( argv[ i ] + 2 ) );
         } else if ( arg.begins_by( "-g" ) ) {

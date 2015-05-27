@@ -21,7 +21,7 @@ public:
     void add_GPUFLAG ( const String &flag );
     void add_LDFLAG  ( const String &flag );
     void add_def_proc( const String &proc );
-    void add_cxx_name( const String &name );// specify compiler with #pragma
+    void add_cxx_name( const String &name ); // specify compiler with #pragma
 
     void add_CPPFLAG ( const String &flag, const String &cpp ); ///< add flag only for cpp
 
@@ -33,6 +33,8 @@ public:
     void set_nb_threads( int nb_threads );
     void set_dbg_level( int level );
     void set_opt_level( int level );
+
+    void use_dylib( const String &cpp );
 
     String get_NVCC() const;
     String get_CXX () const;
@@ -56,7 +58,7 @@ public:
     String exe_suffix(); ///< .exe, ... depending on the system
     String dep_suffix(); ///< .dep
 
-    String h_for( const String &bas ); ///< ex: toto -> compilation/toto.h
+    String h_for  ( const String &bas ); ///< ex: toto -> compilation/toto.h
     String cpp_for( const String &bas ); ///< ex: toto -> compilation/toto.cpp
     String cu_for ( const String &bas ); ///< ex: toto -> compilation/toto.cu
     String obj_for( const String &cpp, bool dyn ); ///< ex: toto.cpp -> compilation/toto.os
@@ -111,6 +113,8 @@ protected:
 
     CompilationEnvironment *child;
     BasicVec<String> parsed;
+    BasicVec<String> already_in_dylib;
+    BasicVec<String> dylibs;
     std::map<String,Ptr<CompilationTree> > cor_files;
 };
 
