@@ -1,11 +1,11 @@
-`metil_comp` is a small program to automate compilation, linking and execution of cpp files.
+`metil_comp` is a small program to automate compilation, linking and execution of .cpp (and .cu) files (in separate compilation directories, ...).
 
-To compile, link and execute `file.cpp`, simply type `metil_comp file.cpp`. `metil_comp` will automatically look for the needed files:
-    - if `file.cpp` includes `some_file.h` and there's a file named `some_file.cpp` in the same directory, `metil_comp` will add `some_file.o` and `some_file.cpp` to the dependencies
-    - if in the `*.h` or in the `*.cpp` files, there's a line with `#pragma lib_name a_lib_name`, `metil_comp` will add `a_lib_name` to the list of the library to be used by the linker.
-    - and so on...
+For instance, to compile, link and execute `file.cpp`, simply type `metil_comp file.cpp`. `metil_comp` will automatically look for the needed files:
+- if `file.cpp` includes `some_file.h` and there's a file named `some_file.cpp` in the same directory, `metil_comp` will add `some_file.o` and `some_file.cpp` to the dependencies
+- if in the `*.h` or in the `*.cpp` files, there's a line with `#pragma lib_name a_lib_name`, `metil_comp` will add `a_lib_name` to the list of the library to be used by the linker.
+- and so on...
 
-If e.g. `#pragma cpp_flag`, `#pragma lnk_flag`, ... are not convenient, standards compile and link flags can be passed normally in the command line. Example: `metil_comp -O3 -g3 my_file.cpp` will globally send `-O3` and `-g3` to the compiler and the linker.
+If e.g. `#pragma cpp_flag`, `#pragma lnk_flag`, ... are not convenient for some reasons (e.g. there is nothing like a `config.h` for global options in your project, ...), standard compile and link flags can be used normally in the command line. Example: `metil_comp -O3 -g3 my_file.cpp` will send `-O3` and `-g3` to the compiler and the linker.
 
 If you want to execute the code under gdb / valgrind supervision 
 - `metil_comp --gdb ex1.cpp` -> simply launch the executable using gdb
