@@ -293,7 +293,7 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
                 if ( c[ 2 ] == 'n' and c[ 3 ] == 'c' and c[ 4 ] == 'l' and c[ 5 ] == 'u' and c[ 6 ] == 'd' and c[ 7 ] == 'e' and c[ 8 ] == ' ' ) {
                     bool syst;
                     String bas_name = get_include_filename( c += 9, syst );
-                    String inc_file = ce.find_src( bas_name, current_dir, inc_paths, not syst );
+                    String inc_file =  ce.find_src( bas_name, current_dir, inc_paths, not syst );
                     if ( not inc_file )
                         inc_file = ce.find_src( bas_name, current_dir, ce_inc_paths, not syst );
 
@@ -367,6 +367,7 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
 
                     // parse rec
                     if ( inc_file ) {
+                        inc_file = canonicalize_filename( inc_file );
                         inc_files << inc_file;
 
                         //
