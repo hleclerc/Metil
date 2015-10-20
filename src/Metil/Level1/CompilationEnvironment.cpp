@@ -668,7 +668,7 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
         if ( cpp_parser.moc_files.contains( hea ) ) {
             String moc = loc_ce.moc_for( hea );
             if ( last_modification_time_or_zero_of_file_named( moc ) < last_modification_time_or_zero_of_file_named( hea ) )
-                exec_cmd( "moc-qt4 " + hea + " -o " + moc );
+                exec_cmd( "moc " + hea + " -o " + moc );
             cpp_parser.src_files.push_back_unique( moc );
         }
     }
@@ -677,7 +677,7 @@ void CompilationEnvironment::parse_cpp( BasicVec<Ptr<CompilationTree> > &obj, co
     if ( cpp_parser.moc_files.contains( cpp ) ) {
         String moc = loc_ce.moc_for( cpp );
         if ( last_modification_time_or_zero_of_file_named( moc ) < last_modification_time_or_zero_of_file_named( cpp ) )
-            exec_cmd( "moc-qt4 " + cpp + " -o " + moc );
+            exec_cmd( "moc " + cpp + " -o " + moc );
         cpp_parser.src_files.push_back_unique( moc );
     }
 

@@ -12,6 +12,8 @@ static void save_dep_vec( String &fd, const BasicVec<String> &vec ) {
 }
 
 static void load_dep_vec( const char *&c, BasicVec<String> &vec ) {
+    if ( not c )
+        return;
     while ( true ) {
         String r = String::read_sized( c );
         if ( not r )
@@ -243,6 +245,8 @@ void CompilationCppParser::make_h_py( const String &h_py, const String &inc_file
 }
 
 void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const String &filename ) {
+    if ( is_a_directory( filename ) )
+        return;
     String current_dir = directory_of( filename ) + "/";
     File file( filename, "r" );
     for ( const char *c = file.c_str(); *c; ) {
@@ -266,7 +270,7 @@ void CompilationCppParser::parse_src_file_rec( CompilationEnvironment &ce, const
         if ( c[ 0 ] == 'Q' ) {
             if ( strncmp( c + 1, "_OBJECT", 7 ) == 0 ) {
                 c += 8;
-                if ( not filename.begins_by( "/usr/include/qt4" ) ) // hum !!
+                if ( not filename.begins_by( "/usr/" ) ) // hum !!
                     moc_files.push_back_unique( filename );
                 continue;
             }
