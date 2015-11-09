@@ -75,7 +75,7 @@ void usage( const char *pn, const char *msg = NULL ) {
 
 bool is_a_CPPFLAG( const String &arg ) {
     return
-        arg == "m32" or
+        arg == "-pipe" or
         arg.begins_by( "-O" ) or
         arg.begins_by( "-g" ) or
         arg.begins_by( "-march") or

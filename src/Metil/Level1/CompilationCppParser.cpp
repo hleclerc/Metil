@@ -240,7 +240,7 @@ void CompilationCppParser::make_h_py( const String &h_py, const String &inc_file
                 cmd << ":" << ce_inc_paths[ i ].beg_upto( pi );
         }
     }
-    cmd << ":$PYTHONPATH\"; python " << h_py << " > " << inc_file;
+    cmd << ":$PYTHONPATH\"; python2.7 " << h_py << " > " << inc_file;
     exec_cmd( cmd, true );
 }
 
